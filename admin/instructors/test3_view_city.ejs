@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <% if (title) { %>
+        <title>TTA | <%= title %></title>
+    <% } else { %>
+        <title>TTA | NOT Valid Scoring - No Title Data</title>
+    <% } %>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/brix-family.css">
+
+    <link rel="stylesheet" href="/static/css/colors.css">
+        
+    <link rel="stylesheet" href="/admin/instructors/tests.css">
+    
+</head>
+<body>
+
+    <!-- All scoring is almost the same kind, but the algorithm for calculating their result is different. -->
+    <!-- Therefore, it makes sense to separate the output of the data in partial view, and leave the algorithms variable for each type of scoring -->
+    <%- include('./-scoring-part-view.ejs') %>
+   
+
+    <script>
+
+        const totals = document.getElementsByName("block-total")
+        const details = document.querySelectorAll("details")
+        const results = document.getElementsByClassName("section-result")
+
+        const transm = '<%= student.user.agreement.transmission %>'
+        const persOfPass = transm.toUpperCase() === 'Automatic Transmission'.toUpperCase() ? 26 : 31      // not more than, depending on transmission
+
+
+        function checkResult() {
+            // check current result
+            let sum = 0
+            for (let i=0; i < results.length; i++) {
+                sum += parseInt(results[i].dataset.correct)
+            }
+
+            document.querySelector('#current-result').textContent = sum
+
+            if(sum <= persOfPass) {
+                document.querySelector('#pass-fail').textContent = `Passed`
+            } else {
+                document.querySelector('#pass-fail').textContent = `Fail`
+            }
+        }
+
+        // INIT - initing blocks with qty of items
+        function InitQtyTotals() {
+            let el
+            for(let i=0; i<totals.length; i++) {
+                el = document.querySelector(`#${totals[i].dataset.id}`)
+                if (el) {
+                    el.dataset.correct = 0
+                    el.dataset.total = parseInt(totals[i].value)
+                    el.dataset.incorrect = parseInt(totals[i].value)
+                    el.textContent = 'N/A'
+                }
+            }
+            // on first opening blocks has to turn 'N/A' to '0 penalty points'
+            for(let i=0; i<details.length; i++) {
+                details[i].addEventListener("toggle", () => {
+                    let res = details[i].querySelector(".section-result")
+                    if (res.textContent === 'N/A') {
+                        res.textContent = '0 penalty points'
+                        details[i].parentElement.classList.add('-done3-3')
+                        checkResult()
+                    }
+                })
+            }
+            document.querySelector('#max-result').textContent = `${persOfPass} max penalty points allowed`
+        }
+
+
+        // updates qty of answers in block
+        function updateQty(qtyElId) {
+            const qtyEl = document.getElementById(qtyElId)
+            if (!qtyEl) { return false }
+
+            const blockInputs = document.querySelectorAll(`[data-qty='${qtyElId}']`)
+            if (!blockInputs) { return false }
+
+            let correct = 0
+            for (let i=0; i< blockInputs.length; i++) {
+                if (blockInputs[i].checked) {
+                    correct += 1
+                }
+            }
+
+            qtyEl.dataset.correct = correct
+            qtyEl.dataset.incorrect = qtyEl.dataset.total - correct
+            qtyEl.textContent = `${qtyEl.dataset.correct} penalty point(s)`
+
+            const block = document.querySelector(`[data-block='${qtyElId}']`)
+            if (!block) { return false }
+
+            function changeView(i, arr) {
+                arr.map((a, index) => {
+                    block.classList.remove(a)
+                    if (i === index) {
+                        block.classList.add(a)
+                    }
+                })
+            }
+
+            let perc = parseInt(qtyEl.dataset.correct)
+            if (perc === 0) {
+                changeView(3, ['-done1-3', '-done2-3', '-fail-test', '-done3-3'])
+            } else {
+                if (perc < 3) {
+                    changeView(0, ['-done1-3', '-done2-3', '-fail-test', '-done3-3'])
+                } else {
+                    if (perc < 6) {
+                        changeView(1, ['-done1-3', '-done2-3', '-fail-test', '-done3-3'])
+                    } else {
+                        changeView(2, ['-done1-3', '-done2-3', '-fail-test', '-done3-3'])
+                    }
+                }
+            }
+
+            // update total result
+            checkResult()
+        }
+
+        
+        // submit
+        // On submit all scoring data loads to 'scoringData' text area as a JSON
+        document.getElementById('scoring-save-form').addEventListener('submit', (e) => {
+            let allNA = true
+            for (let i=0; i<results.length; i++) {
+                allNA &&= results[i].textContent === 'N/A'
+            }
+            if (allNA) { 
+                e.preventDefault()
+                return
+            }
+
+            if (!confirm('Do you want to finish a scoring with current result?')) { 
+                e.preventDefault()
+                return
+            }
+            
+            const maxPoints = parseInt(document.querySelector('#max-result').textContent)
+            const receivedPoints = parseInt(document.querySelector('#current-result').textContent)
+
+            const jsonScoring = {
+                studentName: "<%= student.user.dataCollection.firstName %> <%= student.user.dataCollection.middleName %> <%= student.user.dataCollection.lastName %>",
+                studentEmail: "<%= student.user.email %>",
+                studentKey: "<%= student.key %>",
+
+                transmittion: "<%= student.user.agreement.transmission %>",
+                class: "<%= student.user.agreement.class %>",
+                location: "<%= student.location %>",
+                TTT: "<%= student.TTT %>",
+
+                scoringType: "<%= type %>",
+                scoringTitle: "<%= title %>",
+
+                examinerId: "<%= examiner.id %>",
+                examinerName: "<%= examiner.name %>",
+                examinerLocation: "<%= examiner.location %>",
+                examDate: new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }),
+                examTime: new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }),
+
+                maxPoints,
+                receivedPoints,
+                limit: persOfPass,
+                ifPassed: (receivedPoints <= persOfPass),
+
+                blocks: []
+            }
+
+            const blockElements = document.querySelectorAll('.test-block-box')
+            let itemElements, items
+            let skillElements, skills
+
+            blockElements.forEach(blockEl => {
+                items = []
+                itemElements = blockEl.querySelectorAll('.item-box')
+                itemElements.forEach(itemEl => {
+                    skills = []
+                    skillElements = itemEl.querySelectorAll('.skill')
+                    skillElements.forEach(skillEl => {
+                        if (skillEl.querySelector('input').checked) {
+                            skills.push({
+                                sk: skillEl.querySelector('label').textContent,
+                                checked: true
+                            })
+                        } else {
+                            skills.push({
+                                sk: skillEl.querySelector('label').textContent,
+                            })
+                        }
+                    })
+                    items.push({
+                        it: itemEl.querySelector('.item-title').textContent,
+                        skills
+                    })
+                })
+                jsonScoring.blocks.push({
+                    bl: blockEl.querySelector('.section-title').textContent,  // contains title and result 'correct/total'
+                    items
+                })
+            })
+
+            document.querySelector('[name="scoringData"]').value = JSON.stringify(jsonScoring)
+        })
+
+
+        // Entry Point
+        InitQtyTotals() //  initing totals per block
+
+    </script>
+
+</body>
+</html>

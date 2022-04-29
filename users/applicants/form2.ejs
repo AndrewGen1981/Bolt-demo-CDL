@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TORO for Applicants | APPLICATION FOR ENROLLMENT</title>
+
+    <meta name="description" content="State required Application for CDL School Enrollment">
+    <meta name="keywords" content="cdl application, toro application form, cdl enrollment">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="TTA Team">
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/users/applicants/forms-styles.css">
+    
+</head>
+<body>
+    
+    <form action="/user/form2" method="POST" class='applicant-form'>
+        <h1 class='form-title'>APPLICATION FOR ENROLLMENT</h1>
+        <h5 class='form-subtitle'>This application is a legal document; it must be printed in ink in your own handwriting</h5>
+
+        <section class='form-radio-block' id="form2-hdyfu">
+            <h3 class='section-title'>HOW DID YOU FIND US</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="hdyfu-Choice1">
+                    <input type="radio" id="hdyfu-Choice1" name="hdyfu" value="Google Search" required>
+                    <span>Google Search</span>
+                </label>
+    
+                <label class='-one-row' for="hdyfu-Choice2">
+                    <input type="radio" id="hdyfu-Choice2" name="hdyfu" value="Vehicle Wrap Advertising" required>
+                    <span>Vehicle Wrap Advertising</span>
+                </label>
+
+                <label class='-one-row' for="hdyfu-Choice3">
+                    <input type="radio" id="hdyfu-Choice3" name="hdyfu" value="Outdoor Advertising" required>
+                    <span>Outdoor Advertising</span>
+                </label>
+
+                <label class='-one-row' for="hdyfu-Choice4">
+                    <input type="radio" id="hdyfu-Choice4" name="hdyfu" value="Walk In" required>
+                    <span>Walk In</span>
+                </label>
+
+                <label class='-one-row' for="hdyfu-Choice5">
+                    <input type="radio" id="hdyfu-Choice5" name="hdyfu" value="Social Media" required>
+                    <span>Social Media</span>
+                </label>
+
+                <label class='-one-row' for="hdyfu-Choice6">
+                    <input type="radio" id="hdyfu-Choice6" name="hdyfu" value="Personal Referral" required>
+                    <span>Personal Referral</span>
+                </label>
+            </div>
+        </section>      <!-- hdyfu section -->
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>Personal Referral</h3>
+            <small class='section-note'>If you were referred by some other person, then please leave info about this person. Or you can skip this section</small>
+            <div class='form-block -align-bottom' id="form2-referral">
+                <label for="ref-person-name">Full Name of the Person,<br>You Were Referred by
+                    <input class='input-text' type="text" name="ref-person-name" id="ref-person-name">
+                </label>
+                <label for="ref-person-phone">Phone Number(Zelle)
+                    <input class='input-text' type="number" min=0 name="ref-person-phone" id="ref-person-phone" pattern="[0-9]{10}" title="10 digits phone number">
+                </label>
+                <label for="ref-person-email">Email Address(Zelle)
+                    <input class='input-text' type="email" name="ref-person-email" id="ref-person-email" title="Zelle - based digital payments network. Can be used for prompt payments at Bank of America, BB&T, Capital One, JPMorgan Chase, PNC Bank, U.S. Bank and Wells Fargo.">
+                </label>
+            </div>
+        </section>      <!-- Referral section -->
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>PERSONAL INFORMATION</h2>
+            <small class='section-note'>Filled out automatically, in order with your Data Collection Form</small>
+            <div class='form-block -align-bottom -wrap'>
+                <label for="first-name">First Name
+                    <input class='input-text' name="first-name" id="first-name" value="<%= form1.firstName %>" readonly>
+                </label>
+                <label for="last-name">Last Name
+                    <input class='input-text' name="last-name" id="last-name" value="<%= form1.lastName %>" readonly>
+                </label>
+                <label for="mid-name">Middle Name
+                    <input class='input-text' name="mid-name" id="mid-name" value="<%= form1.middleName %>" readonly>
+                </label>
+    
+                <label for="street">Street Address
+                    <input class='input-text -smaller' name="street" id="street" value="<%= form1.street %>" readonly>
+                </label>
+                <label for="city">City
+                    <input class='input-text -smaller' name="city" id="city" value="<%= form1.city %>" readonly>
+                </label>
+                <label for="state">State/Province/Region
+                    <input class='input-text -smaller' name="state" id="state" value="<%= form1.state %>" readonly>
+                </label>
+                <label for="zip">Postal/Zip Code
+                    <input class='input-text -smaller' name="zip" id="zip" value="<%= form1.zip %>" readonly>
+                </label>
+            </div>           <!-- form-block -->
+
+            <h2 class='section-title'>Additional Info</h2>
+            <small class='section-note'>Filled out automatically</small>
+            <div class='form-block -align-bottom -wrap'>  <!-- Additional Info -->
+                <label for="email">Email Address
+                    <input class='input-text -smaller' name="email" id="email" value="<%= form1.email %>" readonly>
+                </label>
+                <label for="phone">Phone Number
+                    <input class='input-text -smaller' name="phone" id="phone" value="<%= form1.phone %>" readonly>
+                </label>
+                <label for="DOB">Date of Birth
+                    <input class='input-text -smaller' name="DOB" id="DOB" value="<%= new Date(form1.DOB).toLocaleDateString() %>" readonly>
+                </label>
+                <label for="ssn">Social Security Number
+                    <input class='input-text -smaller' name="ssn" id="ssn" value="<%= form1.SSN %>" readonly>
+                </label>
+            </div>           <!-- form-block --> <!-- Additional Info -->
+
+        </section>      <!-- Personal Info section -->
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>EMERGENCY CONTACTS</h3>
+            <small class='section-note'>An emergency contact is the first person we will get in touch with in an emergency, but your emergency contact may not have the legal authority to act on your behalf unless you explicitly provide that power.</small>
+            <div class='form-block -align-bottom -wrap'>
+                <label for="emerg-person-name">Full Name of Emergency Contact
+                    <input class='input-text' type="text" name="emerg-person-name" id="emerg-person-name" required>
+                </label>
+                <label for="emerg-person-phone">Phone Number
+                    <input class='input-text' type="number" min=0 name="emerg-person-phone" id="emerg-person-phone" pattern="[0-9]{10}" title="10 digits phone number" required>
+                </label>
+                <label for="emerg-person-relation">Relationship
+                    <input class='input-text' type="text" name="emerg-person-relation" id="emerg-person-relation" required>
+                </label>
+                <label for="emerg-person-street">Street Address
+                    <input class='input-text -smaller' type="text" name="emerg-person-street" id="emerg-person-street">
+                </label>
+                <label for="emerg-person-city">City
+                    <input class='input-text -smaller' type="text" name="emerg-person-city" id="emerg-person-city">
+                </label>
+                <label for="emerg-person-state">State/Province/Region
+                    <input class='input-text -smaller' type="text" name="emerg-person-state" id="emerg-person-state">
+                </label>
+                <label for="emerg-person-zip">Postal/Zip Code
+                    <input class='input-text -smaller' type="number" min=0 name="emerg-person-zip" id="emerg-person-zip">
+                </label>
+            </div>
+        </section>      <!-- Emergency section -->
+
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>EDUCATION</h3>
+            <div class='form-block -align-bottom -wrap -even'>
+                <label for="education-highest-grade">What's Your Highest Grade Completed?
+                    <div class="range-box">
+                        <input class='input-range' type="range" name="education-highest-grade" id="education-highest-grade" min=1 max=12 value=1 oninput="indicatorGrade.textContent = this.value" required>
+                        <span class='range-value' id="indicatorGrade">1</span>
+                    </div>
+                </label>
+                <label for="education-colledge">College
+                    <div class="range-box">
+                        <input class='input-range' type="range" name="education-colledge" id="education-colledge" min=1 max=4 value=1 oninput="indicatorCollege.textContent = this.value" required>
+                        <span class='range-value' id="indicatorCollege">1</span>
+                    </div>
+                </label>
+            </div>
+
+            <section class='form-radio-block' id="form2-highGrade">
+                <h4 class='section-title'>High School Graduate?</h4>
+                <div class='form-radio-box -width20'>
+                    <label for="highSchoolGrade-Choice1">
+                        <input clas='-one-row' type="radio" id="highSchoolGrade-Choice1" name="highSchoolGrade" value="Yes" required onchange="educationGradeDate.required=true">
+                        <span>Yes</span>
+                    </label>
+        
+                    <label for="highSchoolGrade-Choice2">
+                        <input clas='-one-row' type="radio" id="highSchoolGrade-Choice2" name="highSchoolGrade" value="No" required onchange="educationGradeDate.required=false">
+                        <span>No</span>
+                    </label>
+                </div>
+                <label for="educationGradeDate">Graduation or GED Completion Date</label>
+                <input class='input-text -smaller' type="date" name="education-grade-date" id="educationGradeDate">
+                
+            </section>      <!-- highSchoolGrade section -->
+
+            <div class='form-block -align-bottom -wrap'>
+                <label for="education-last-school">Last School Attended
+                    <input class='input-text' type="text" name="education-last-school" id="education-last-school">
+                </label>
+                <label for="education-last-school-degree">Degrees/Certificates
+                    <input class='input-text' type="text" name="education-last-school-degree" id="education-last-school-degree">
+                </label>
+                <label for="education-last-school-street">Street Address
+                    <input class='input-text' type="text" name="education-last-school-street" id="education-last-school-street">
+                </label>
+                <label for="education-last-school-city">City
+                    <input class='input-text' type="text" name="education-last-school-city" id="education-last-school-city">
+                </label>
+                <label for="education-last-school-state">State/Province/Region
+                    <input class='input-text' type="text" name="education-last-school-state" id="education-last-school-state">
+                </label>
+                <label for="education-last-school-zip">Postal/Zip Code
+                    <input class='input-text' type="number" min=0 name="education-last-school-zip" id="education-last-school-zip">
+                </label>
+            </div>
+        </section>      <!-- EDUCATION section -->
+
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>MILITARY STATUS</h3>
+            <div class='form-block -align-bottom -wrap -even'>
+                <label for="military-branch">Branch of Service
+                    <input class='input-text -smaller' type="text" name="military-branch" id="military-branch">
+                </label>
+                <label for="military-from-to">FROM and TO
+                    <input class='input-text -smaller' type="text" name="military-from-to" id="military-from-to">
+                </label>
+                <label for="military-rank">Rank at Discharge
+                    <input class='input-text -smaller' type="text" name="military-rank" id="military-rank">
+                </label>
+                <label for="military-discharge-date">Date of Discharge
+                    <input class='input-text -smaller' type="date" name="military-discharge-date" id="military-discharge-date">
+                </label>
+            </div>
+        </section>      <!-- MILITARY STATUS section -->
+
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>MOTOR VEHICLE LICENSES HELD</h3>
+            <div class='form-block -align-bottom -wrap -even'>
+                <label for="vehicle-license">License
+                    <input class='input-text' type="text" name="vehicle-license" id="vehicle-license" required>
+                </label>
+                <label for="vehicle-license-state">State
+                    <input class='input-text' type="text" name="vehicle-license-state" id="vehicle-license-state" required>
+                </label>
+            </div>
+        </section>      <!-- MOTOR VEHICLE LICENSES HELD section -->
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>ACCIDENT RECORDS</h3>
+            <small class='section-note'>List ALL accidents with any motor vehicle for the past 10 years. If none, write <strong>“None”</strong>. Click "more" to add one more record.</small>
+            <div class='form-block -align-bottom -wrap' id="form2-acc-traf-crim">
+                <label class='textarea-label' for="accident-record1">1. Date of Accident. State. Nature of Accident. At Fault?
+                    <input class='input-text -max-big' type='text' name="accident-record1" id="accident-record1" required>
+                </label>
+                <span class='more-fields' for="accident-record2" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="accident-record2">2. Date of Accident. State. Nature of Accident. At Fault?
+                    <input class='input-text -max-big' type='text' name="accident-record2" id="accident-record2" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden' for="accident-record3" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="accident-record3">3. Date of Accident. State. Nature of Accident. At Fault?
+                    <input class='input-text -max-big' type='text' name="accident-record3" id="accident-record3" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden'></span>
+            </div>
+        </section>      <!-- ACCIDENT RECORDS section -->
+
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>TRAFFIC CONVICTIONS</h3>
+            <small class='section-note'>List ANY and ALL traffic convictions and forfeitures for the past 10 years. If none, write <strong>“None”</strong>. Click "more" to add one more record.</small>
+            <div class='form-block -align-bottom -wrap' id="form2-acc-traf-crim">
+                <label class='textarea-label' for="conviction-record1">1. Date. State. Violation. Penalty
+                    <input class='input-text -max-big' type='text' name="conviction-record1" id="conviction-record1" required>
+                </label>
+                <span class='more-fields' for="conviction-record2" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="conviction-record2">2. Date. State. Violation. Penalty
+                    <input class='input-text -max-big' type='text' name="conviction-record2" id="conviction-record2" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden' for="conviction-record3" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="conviction-record3">3. Date. State. Violation. Penalty
+                    <input class='input-text -max-big' type='text' name="conviction-record3" id="conviction-record3" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden'></span>
+            </div>
+            <h4 class='section-warning'>DOT FEDERAL REGULATIONS REQUIRE THAT ALL TIME BE ACCOUNTED FOR DURINGTHE LAST 10 YEARS</h4>
+        </section>      <!-- TRAFFIC CONVICTIONS section -->
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>CRIMINAL CONVICTIONS</h3>
+            <small class='section-note'>List ALL misdemeanor and felony convictions. If none, write <strong>“None”</strong>. Click "more" to add one more record.</small>
+            <div class='form-block -align-bottom -wrap' id="form2-acc-traf-crim">
+                <label class='textarea-label' for="criminal-record1">1. Date, County, Felony/Misdemeanor
+                    <input class='input-text -max-big' type='text' name="criminal-record1" id="criminal-record1" required>
+                </label>
+                <span class='more-fields' for="criminal-record2" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="criminal-record2">2. Date, County, Felony/Misdemeanor
+                    <input class='input-text -max-big' type='text' name="criminal-record2" id="criminal-record2" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden' for="criminal-record3" onclick="toggle(this)">more...</span>
+
+                <label class='textarea-label -hidden' for="criminal-record3">3. Date, County, Felony/Misdemeanor
+                    <input class='input-text -max-big' type='text' name="criminal-record3" id="criminal-record3" placeholder="additional...">
+                </label>
+                <span class='more-fields -hidden'></span>
+            </div>
+            <h4 class='section-warning'>ANY INFORMATION FOUND TO BE FALSE OR INTENTIONALLY OMITTED WILLBE CONSIDERED FALSIFICIATION OF THE APPLICATION AND WILL BE GROUNDSFOR IMMEDIATE TERMINATION</h4>
+        </section>      <!-- CRIMINAL CONVICTIONS section -->
+
+        <section class='form-block-with-note'>
+            <h3 class='section-title'>10 YEAR EMPLOYMENT HISTORY</h3>
+            <small class='section-note'>Begin with your present employer or current status and work backward in order. You must list
+                ALL of your employers, ALL periods of employment, ALL periods of military service, ALL self
+                employment for the last TEN years. <strong>THERE CAN BE NO GAPS!</strong></small>
+            
+            <div id="Employers">
+                <section class='form-block -align-bottom -wrap -even'>
+                    <h3 class='section-title'>May we contact your present employer (if any)<br>to verify your work record?</h3>
+                    <label class='-one-row' for="employer-Choice1">
+                        <input type="radio" id="employer-Choice1" name="employer-contact" value="Yes" required checked>
+                        <span>Yes</span>
+                    </label>
+
+                    <label class='-one-row' for="employer-Choice2">
+                        <input type="radio" id="employer-Choice2" name="employer-contact" value="No" required>
+                        <span>No</span>
+                    </label>
+                </section>      <!-- Employer Contact section -->
+
+                <!-- List of employers -->
+                <div class='form-block -align-bottom' id="employer1" name="employer">
+                    <label for="employer1-company">Company
+                        <input class='input-text -smaller' type="text" name="employer1-company" id="employer1-company" required/>
+                    </label>
+                    <label for="employer1-address">Address,City,State,Zip
+                        <input class='input-text -smaller' type="text" name="employer1-address" id="employer1-address" required/>
+                    </label>
+                    <label for="employer1-supervisor">Supervisor, Phone
+                        <input class='input-text -smaller' type="text" name="employer1-supervisor" id="employer1-supervisor" required/>
+                    </label>
+                    <label for="employer1-position">Position Held, From To
+                        <input class='input-text -smaller' type="text" name="employer1-position" id="employer1-position" required/>
+                    </label>
+                    <button class='more-less-btn' type="button" id="addMoreEmployer1" title="Add another one">more...</button>
+                </div>      <!-- employer1 -->
+            </div>      <!-- Employers -->
+
+        </section>      <!-- 10 YEAR EMPLOYMENT HISTORY section -->
+
+
+        <section class='form-block-with-note'>
+            <h3 class='section-warning'>ENROLLMENT LETTER</h3>
+            <h4 class='section-title'>Dear Applicant,</h4>
+            <small class='section-note'><strong>Congratulations on your application!</strong> We welcome you as an Applicant of Toro Trucking Academy. We are excited to offer you the opportunity to grow, learn, and have fun here with us. To ensure your enrollment in the CDL program, please be sure to bring in the following documents,and tuition payment to the office at your earliest convenience. <strong>The following need to be sent with your application:</strong></small>
+            <ul>
+                <li>Valid Driver’s License or Commercial License Permit (CLP)</li>
+                <li>Social Security Card</li>
+                <li>U.S. Passport or Birth Certificate</li>
+                <li>Green Card or Work Permit (if you are not an American citizen)</li>
+                <li>Five year driving abstract</li>
+                <li>DOT drug screen. This needs to have our school name on it and mailed to us</li>
+                <li>DOT Medical Card</li>
+            </ul>
+
+            <div class='form-block -even'>
+                <h4 class='section-title'>I'm certifying that I have read above</h4>
+                <label class='-one-row-pillow' for="certificate1">
+                    <input type="checkbox" id="certificate1" name="certificate1" value="Yes" onchange="toggleSignature(this, signature1)" required />
+                    <span class='-big'>Yes</span>
+                </label>
+            </div>
+            <div class='sign-box' name="signature1" id="signature1">
+                <span>/<%= `${form1.lastName} ${form1.firstName}` %>/</span>
+                <span><%= `${ new Date().toLocaleDateString() }` %></span>
+                <p class='signature'><%= `${form1.lastName} ${form1.firstName}` %></p>
+            </div>
+
+            <small class='section-note'><strong>Your first priority</strong> is to get your Commercial License Permit (CLP) as soon as possible. Practice material is available <a href="https://www.nstschool.com/clp" target="_blank">online</a> at our website (...coming soon...), you need to cover 3 topics: <strong>General Knowledge Test, Air Brakes Test, and Combination test</strong>. Also, you can download CDL Prep WA App on your phone, and study the Commercial Driver Guide book from the package. <strong>Also I'll need to:</strong></small>
+            <ul>
+                <li>Schedule an appointment and pass your DOT Medical Exam and drug screen to get your DOT Medical Card. The average cost is about $65.</li>
+                <li>Schedule an appointment at your nearest DOL location to take the CDL permit test. You will need to bring your valid WA Driver License, U.S. Passport or Birth Certificate, Green Card or Work Permit (if you are not a US citizen), and SSN Card. There is a $35 test fee and $40 permit fee.</li>
+                <li>While taking your permit test, don’t forget to obtain your five year driving abstract from DOL or you can also do it online at <a href="http://www.dol.gov" target="_blank">www.dol.gov</a></li>
+            </ul>
+    
+            <small class='section-note'><strong>On the Exam day you are required to have:</strong></small>
+            <ul>
+                <li>CDL Permit, DOT Medical Card</li>
+                <li>Have your CDL tuition paid in full</li>
+                <li>$250 testing fee</li>
+            </ul>
+
+            <h3 class='section-title'><strong>Your tuition will consist of online or classroom courses and practical driving. After you will study the pre-trip inspection and backing maneuvers. On the final week, you will practice city and freeway driving.</strong></h3>
+            <small class='section-note'>After completing your program hours, we will schedule you for the Skills Test with the state examiner. You will be tested on the Pre-trip inspection, backing maneuvers, and city driving. <strong>To get your CDL License from Department of Licensing, you will need:</strong></small>
+            <ul>
+                <li>DOT Medical Card</li>
+                <li>Driver License and CDL Permit</li>
+                <li>CDL License fee is $95.00</li>
+            </ul>
+
+
+            <div class='form-block -even'>
+                <h4 class='section-title'>I certify that all the information I have provided in this statement is accurate</h4>
+                <label class='-one-row-pillow' for="certificate2">
+                    <input type="checkbox" id="certificate2" name="certificate2" value="Yes" onchange="toggleSignature(this, signature2)" required />
+                    <span class='-big'>Yes</span>
+                </label>
+            </div>
+            <div class='sign-box' name="signature2" id="signature2">
+                <span>/<%= `${form1.lastName} ${form1.firstName}` %>/</span>
+                <span><%= `${ new Date().toLocaleDateString() }` %></span>
+                <p class='signature'><%= `${form1.lastName} ${form1.firstName}` %></p>
+            </div>
+
+        </section>      <!-- ENROLLMENT LETTER section -->
+
+
+        <div class='form-block-with-note'>
+            <small class='section-note'>On behalf of TTA, <strong>we'd to thank you in advance</strong> for your promptattention and commitment to this important next step, and look forward to helping you along your chosen career path. Best wishes for continuous success with all your future endeavors here at <strong>Toro Trucking</strong>.</small>
+            <p class='signature-vibes'>Sincerely, TTA Team</p>
+        </div>
+
+        <div class="line"></div>
+        <div class="form-button-box">
+            <button class='-btn' type="submit">Submit</button>
+            <button class='-btn' type="reset">Reset</button>
+        </div>
+
+    </form>
+
+    
+
+
+    <script defer>
+
+        function addOneMoreEmployer() {
+
+            function addLabelWithInput(text, inputName){
+                const label = document.createElement('label')
+                const input = document.createElement('input')
+
+                label.for = inputName
+                input.name = inputName
+                input.id = inputName
+                input.required = true
+                input.classList.add('input-text')
+                input.classList.add('-smaller')
+
+                label.textContent = text
+                label.appendChild(input)
+
+                return label
+            }
+
+            const qty = new Date().getTime()
+
+            const div = document.createElement('div')
+            div.id = `employer${qty}`
+            div.name = 'employer'
+            div.classList.add('form-block')
+            div.classList.add('-align-bottom')
+
+            div.appendChild(addLabelWithInput('Company', `employer${qty}-company`))
+            div.appendChild(addLabelWithInput('Address,City,State,Zip', `employer${qty}-address`))
+            div.appendChild(addLabelWithInput('Supervisor, Phone', `employer${qty}-supervisor`))
+            div.appendChild(addLabelWithInput('Position Held, From To', `employer${qty}-position`))
+            
+            const button = document.createElement('button')
+            button.type = 'button'
+            button.id = `removeEmployer${qty}`
+            button.title='Remove block'
+            button.textContent = "delete"
+            button.classList.add('more-less-btn')
+            button.classList.add('-warning')
+            button.addEventListener('click', removeEmployer)
+            div.appendChild(button)
+
+            document.querySelector('#Employers').appendChild(div)
+        }
+
+
+        function removeEmployer(e) {
+            e.target.parentElement.remove()
+        }
+
+
+        document.querySelector('#addMoreEmployer1').addEventListener('click', addOneMoreEmployer)
+
+
+        
+        function toggleSignature(radio, signature) {
+            if (radio.checked) {
+                signature.style.display = 'flex'
+            } else {
+                signature.style.display = 'none'
+            }
+        }
+
+        function toggle(item) {
+            if (item.getAttribute('for')) {
+                const label = document.querySelector(`#${item.getAttribute('for')}`).parentElement
+                const more = label.nextElementSibling
+                if (label.classList.contains('-hidden')) {
+                    label.classList.remove('-hidden')
+                    more.classList.remove('-hidden')
+                    item.textContent = 'less...'
+                } else {
+                    label.classList.add('-hidden')
+                    more.classList.add('-hidden')
+                    item.textContent = 'more...'
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>

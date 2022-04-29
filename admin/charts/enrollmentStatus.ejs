@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Chart: Enrollments Dynamics</title>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/brix-family.css">
+        
+    <link rel="stylesheet" href="/admin/charts/enrollmentStatus.css">
+</head>
+<body>
+
+    <!-- each location has own color for Chart -->
+    <% const colorArray = ['black', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'] %>
+
+    <header>
+        <h1 class="header-title">Chart: Enrollments Dynamics</h1>
+        <menu>
+            <%- include('../../static/partial/--admin-menu.ejs') %>
+        </menu>
+    </header>
+
+    <div class="dummy"></div>
+
+    <% if(locals.chartData || locals.chartData.length) { %>
+        <section class="chart-box" id="passed-chart">
+            <h1 class="chart-title">Dynamics of <span>Graduate students</span> per locations</h1>
+            <div class="analythicsChart" id="analythics-cart-passed">
+                <% chartData.map(item => { %>
+                    <% let qty = item.locationPassed.reduce((a,b) => b += a) %>
+                    <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                        <% if(qty > 0) { %>
+                            <% item.locations.map((location, index) => { %>
+                                <% if(item.locationPassed[index] > 0) { %>
+                                    <% let perc = item.locationPassed[index] *100 / qty %>
+                                    <% let href = `/admin/student/shortlist?year=${item.year}&month=${item.month}&location=${location}&graduate=passed` %>
+                                    <% let title = `${location} - ${item.locationPassed[index]}` %>
+                                    <a href='<%= href %>' class="chart-sub-column" data-value="<%= item.locationPassed[index] %>" style="--h:<%= perc %>%; --c:<%= colorArray[index - 1] %>" title="<%= title %>"><%= Math.round(perc) %>%</a>  <!-- use index-1 because 0th el. is 'All' -->
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>  <!-- analythicsChart -->
+        </section>      <!-- chart-box -->
+
+
+        <section class="chart-box" id="failed-chart">
+            <h1 class="chart-title">Dynamics of <span>Failed students</span> per locations</h1>
+            <div class="analythicsChart" id="analythics-cart-failed">
+                <% chartData.map(item => { %>
+                    <% let qty = item.locationFailed.reduce((a,b) => b += a) %>
+                    <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                        <% if(qty > 0) { %>
+                            <% item.locations.map((location, index) => { %>
+                                <% if(item.locationFailed[index] > 0) { %>
+                                    <% let perc = item.locationFailed[index] *100 / qty %>
+                                    <% let href = `/admin/student/shortlist?year=${item.year}&month=${item.month}&location=${location}&graduate=failed` %>
+                                    <% let title = `${location} - ${item.locationFailed[index]}` %>
+                                    <a href='<%= href %>' class="chart-sub-column" data-value="<%= item.locationFailed[index] %>" style="--h:<%= perc %>%; --c:<%= colorArray[index - 1] %>" title="<%= title %>"><%= Math.round(perc) %>%</a>  <!-- use index-1 because 0th el. is 'All' -->
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>  <!-- analythicsChart -->
+        </section>      <!-- chart-box -->
+
+
+        <section class="chart-box" id="declined-chart">
+            <h1 class="chart-title">Dynamics of <span>Declined students</span> per locations</h1>
+            <div class="analythicsChart" id="analythics-cart-declined">
+                <% chartData.map(item => { %>
+                    <% let qty = item.locationDeclined.reduce((a,b) => b += a) %>
+                    <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                        <% if(qty > 0) { %>
+                            <% item.locations.map((location, index) => { %>
+                                <% if(item.locationDeclined[index] > 0) { %>
+                                    <% let perc = item.locationDeclined[index] *100 / qty %>
+                                    <% let href = `/admin/student/shortlist?year=${item.year}&month=${item.month}&location=${location}&graduate=declined` %>
+                                    <% let title = `${location} - ${item.locationDeclined[index]}` %>
+                                    <a href='<%= href %>' class="chart-sub-column" data-value="<%= item.locationDeclined[index] %>" style="--h:<%= perc %>%; --c:<%= colorArray[index - 1] %>" title="<%= title %>"><%= Math.round(perc) %>%</a>  <!-- use index-1 because 0th el. is 'All' -->
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>  <!-- analythicsChart -->
+        </section>      <!-- chart-box -->
+
+
+        <section class="chart-box" id="military-chart">
+            <h1 class="chart-title">Dynamics of <span>Military leave of absence</span> per locations</h1>
+            <div class="analythicsChart" id="analythics-cart-military">
+                <% chartData.map(item => { %>
+                    <% let qty = item.locationMilitary.reduce((a,b) => b += a) %>
+                    <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                        <% if(qty > 0) { %>
+                            <% item.locations.map((location, index) => { %>
+                                <% if(item.locationMilitary[index] > 0) { %>
+                                    <% let perc = item.locationMilitary[index] *100 / qty %>
+                                    <% let href = `/admin/student/shortlist?year=${item.year}&month=${item.month}&location=${location}&graduate=military` %>
+                                    <% let title = `${location} - ${item.locationMilitary[index]}` %>
+                                    <a href='<%= href %>' class="chart-sub-column" data-value="<%= item.locationMilitary[index] %>" style="--h:<%= perc %>%; --c:<%= colorArray[index - 1] %>" title="<%= title %>"><%= Math.round(perc) %>%</a>  <!-- use index-1 because 0th el. is 'All' -->
+                                <% } %>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                <% }) %>
+            </div>  <!-- analythicsChart -->
+        </section>      <!-- chart-box -->
+
+    <% } else { %>
+        <h1>No data passed</h1>
+    <% } %>
+
+
+    <script defer>
+
+        // @drawing chart
+        // get chart div height depending on vh
+        const charts = document.querySelectorAll(".analythicsChart")
+
+        if (charts) {
+            charts.forEach(chart => {
+                const maxHeight = parseFloat(getComputedStyle(chart).height)
+                const cols = chart.querySelectorAll(".chart-column")
+                if (maxHeight && cols) {
+                    // find max value
+                    let max = 0
+                    for (let i=0; i<cols.length; i++) {
+                        if (parseInt(cols[i].dataset.value) > max) { max = parseInt(cols[i].dataset.value) }
+                    }
+                    if (max) {
+                        // setting values espectively to max                    
+                        for (let i=0; i<cols.length; i++) {
+                            cols[i].style.height = `${ parseInt(cols[i].dataset.value) * maxHeight / max }px`
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+
+</body>
+</html>

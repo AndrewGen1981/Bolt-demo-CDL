@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BoltCDL | SignUp</title>
+
+    <link rel="shortcut icon" href="/public/logo_small.png">
+    <link rel="stylesheet" href="/users/login.css">
+
+</head>
+<body>
+    
+    <div class='login-box'>
+
+        <div class="login-left">
+
+            <div class="logo-box">
+                <img class="login-logo" src="/public/logo363-149.png" alt="main BoltCDL logo">
+            </div>
+            
+            <% if (locals.isThereErrors) { %>
+                <section class='message-box'>
+                    <ol type='1'>
+                        <% errors.map(err => { %>
+                            <li><span><%= err.param.toUpperCase() %>: </span><strong><%= err.msg %></strong></li>
+                        <% }) %>
+                    </ol>
+                </section>      <!-- message box -->
+            <% } %>
+
+            <div class="sign-regist-form-box">
+                <form class='sign-form-box' action="/user/register" method="POST" id="signIn">
+                    <input class="sign-input" type="text" name='name' placeholder="Name" required />
+                    <input class="sign-input" type="email" name='email' placeholder="Email" value='@' required />
+                    <input class="sign-input" type="password" name='password' placeholder="Password" required />
+                    <button class="sign-btn" type="submit">Sign Up</button>
+                </form>
+                <a class="register-box" href="/user">Sign In</a>
+            </div>      <!-- login-form-box -->
+
+        </div>  <!-- login-left -->
+
+        <div class="login-right">
+            <div class="shadow-box">
+                <div class="right-inner"></div>
+                <div class="right-inner">
+                    <div class="right-inner-box">
+                        <h2 class="title">Welcome to</h2>
+                        <h3 class="subtitle">Bolt Trucking School</h3>
+                        <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quibusdam repudiandae beatae facilis, nobis libero maiores temporibus quaerat nulla numquam repellendus eius quisquam fuga nostrum velit impedit veniam omnis, iure obcaecati! Eius laborum excepturi doloremque.</p>
+                        <div class="indicators">
+                            <div class="indicator -on"></div>
+                            <div class="indicator"></div>
+                            <div class="indicator"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  <!-- login-right -->
+
+    </div>      <!-- login-box -->
+  
+
+    
+    <script defer>
+        const infoArray = [
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quibusdam repudiandae beatae facilis, nobis libero maiores temporibus quaerat nulla numquam repellendus eius quisquam fuga nostrum velit impedit veniam omnis, iure obcaecati! Eius laborum excepturi doloremque.",
+            "Der lorem ipsum dolor, sit amet consectetur adipisicing elit. Natus molestias rerum culpa debitis numquam impedit libero est neque sapiente magnam fugit, ipsam quam perspiciatis voluptatibus!",
+            "Consectetur adipisicing elit. Odit aliquid culpa deserunt dignissimos ut totam minima quis rem voluptatem! Alias nihil aperiam nisi at quaerat veniam nam? Explicabo dolorum ducimus hic velit ut, aperiam iure?"
+        ]
+        const infoText = document.querySelector(".right-inner-box .text")
+        const indicators = document.querySelectorAll(".indicator")
+
+        let i = 1
+
+        if (infoText && indicators) {
+            setInterval(() => {
+                infoText.classList.add("-fade")
+                setTimeout(() => {
+                    infoText.textContent = infoArray[i]
+                    infoText.classList.remove("-fade")
+                    indicators.forEach((indicator, index) => {
+                        indicator.classList.toggle("-on", i === index)
+                    })
+                    i += 1
+                    if (i >= infoArray.length) { i = 0 }
+                }, 500)
+            }, 10000)
+        }
+    </script>
+
+</body>
+</html>

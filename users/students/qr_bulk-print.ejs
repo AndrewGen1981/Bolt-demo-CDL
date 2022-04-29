@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | QR Bulk Printing</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+
+    <link rel="stylesheet" href="/users/students/qr_bulk-print.css">
+
+</head>
+<body>
+
+    <div class="qr-bulk-print-box">
+
+        <% if(!qrsToPrint) { %>
+            <h2>Inner issue: have nothing to print...</h2>
+        <% } else { %>
+
+            <% qrsToPrint.map((qr, index) => { %>
+
+                <div class="qr-card">
+                    <div class="qr-card-title">TTA</div>
+                    <div class="qr-card-title-line"></div>
+                    <div class="qr-card-subtitle">Toro Trucking Academy</div>
+                    <div class="qr-card-name"><%= qrsNamesToPrint[index] %></div>
+                    <div class="qr-card-key"><%= qrsKeysToPrint[index] %></div>
+                    <div class="qr-card-class"><%= qrsClassesToPrint[index] %></div>
+                    <div class='qr-code'>
+                        <img class='qr-code-img' src="https://chart.googleapis.com/chart?chs=177x177&cht=qr&chl=https://toro-trucking.herokuapp.com/admin/qr/<%= qr %>?choe=UTF-8&chld=H" alt="QR <%= qr %>">
+                    </div>
+                </div>
+
+            <% }) %>
+        <% } %>
+        
+    </div>
+
+</body>
+</html>

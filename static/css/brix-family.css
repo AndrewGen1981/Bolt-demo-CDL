@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "BrixSlab-BlackItalic";
+    src: url('../fonts/brix/BrixSlab-BlackItalic.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-Bold";
+    src: url('../fonts/brix/BrixSlab-Bold.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-ExtraLight";
+    src: url('../fonts/brix/BrixSlab-ExtraLight.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-ExtraLightItalic";
+    src: url('../fonts/brix/BrixSlab-ExtraLightItalic.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-Light";
+    src: url('../fonts/brix/BrixSlab-Light.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-LightItalic";
+    src: url('../fonts/brix/BrixSlab-LightItalic.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-Medium";
+    src: url('../fonts/brix/BrixSlab-Medium.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-MediumItalic";
+    src: url('../fonts/brix/BrixSlab-MediumItalic.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-Regular";
+    src: url('../fonts/brix/BrixSlab-Regular.otf');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "BrixSlab-RegularItalic";
+    src: url('../fonts/brix/BrixSlab-RegularItalic.otf');
+    font-display: swap;
+}

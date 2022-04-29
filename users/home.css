@@ -1,0 +1,754 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: "BrixSlab-Regular";
+    font-size: 15px;
+    font-weight: normal;
+}
+
+
+/* Hide Scrollbars But Keep Functionality */
+html, body {
+    width: 100vw;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    display: none;
+}
+
+.-hidden-sprite {
+    display: none;
+}
+
+
+/* @HEADER */
+header {
+    width: 100vw;
+    height: 22vw;
+
+    background-image: url('/static/images/pages/student-profile/student-home-header.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: relative;
+}
+header::before {
+    content: "";
+    position: absolute;
+
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+
+    background-color: #ef5a29;
+    opacity: 0.75;
+
+    width: 100%;
+    z-index: 1;
+}
+header::after {
+    content: "";
+    position: absolute;
+
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+
+    background-image: url('/static/images/logo-badge-black.png');
+    background-repeat: no-repeat;
+    background-size: 7.5rem;
+    background-position-y: 1rem;
+    background-position-x: 4rem;
+
+    z-index: 2;
+}
+
+
+/* NAV MENU */
+
+.nav-menu {
+    position: absolute;
+
+    top: 0; left: 10rem;
+    right: 0; bottom: 0;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+
+    z-index: 3;
+}
+.nav-item-box {
+    margin: 0 2.5rem;
+}
+.nav-item {
+    font-family: "Industrial Bold";
+    font-size: 1.53rem;
+    line-height: 2.67rem;
+
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+.nav-item:not(.-inac):hover {
+    text-shadow: 0px 0px 10px #2d2d2d;
+    transition: text-shadow .2s ease-in;
+}
+.-contact {
+    color: #2d2d2d;
+    cursor: default;
+}
+.-inac {
+    color: #d8d8d8;
+    cursor: not-allowed;
+}
+
+
+/* WELCOME BOX */
+
+.welcome-box {
+    position: absolute;
+
+    top: 50%; left: 10rem;
+    right: 0; bottom: 0;
+
+    transform: translateY(-10%);
+
+    display: block;
+    text-align: left;
+
+    z-index: 3;
+}
+.welcome-name {
+    font-family: "Industrial Bold";
+    font-size: 4rem;
+    line-height: 5rem;
+
+    text-transform: uppercase;
+    color: #2d2d2d;
+}
+.welcome-text {
+    font-family: "BrixSlab-Regular";
+    font-size: 2.333rem;
+    color: #ffffff;
+    line-height: 2.5rem;
+    text-align: left;
+}
+
+
+/* profile-box */
+.profile-box {
+    width: 70%;
+    margin: 4.5rem auto;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.left-side {
+    width: 57%;
+}
+.right-side {
+    width: 40%;
+}
+
+.no-user-issue {
+    font-family: "BrixSlab-RegularItalic";
+    font-size: 3rem;
+    color: var(--bad-todo);
+    text-align: left;
+}
+
+
+.profile-info {
+    width: 100%;
+    display: block;
+}
+.block-title {
+    font-family: "Industrial Bold";
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: #2e2e2e;
+
+    padding: 1rem 0;
+}
+.block-area {
+    width: 100%;
+}
+.block-item {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+.block-key, .block-value {
+    margin-left: 0.5rem;
+    font-family: "Industrial Medium";
+    color: #545c66;
+    text-align: justify;
+}
+.block-key {
+    font-weight: bolder;
+}
+
+.ico {
+    width: 16px;
+    height: 16px;
+}
+.-user, .-email, .-tuition {
+    fill: var(--orange-high-desert)
+}
+.-caution {
+    fill: #2e2e2e;
+    color: tomato;
+    text-transform: uppercase;
+}
+.-warning {
+    fill: red;
+    color: #a70000;
+    text-transform: uppercase;
+}
+.-trusted {
+    border-radius: 100%;
+    fill: forestgreen;
+    color:seagreen;
+}
+.-clock {
+    fill: mediumblue;
+}
+.-session {
+    fill: #333;
+}
+.-expired {
+    fill: #94a5bb;
+}
+
+.-btn {
+    margin: 5px;
+    padding: 0.2rem 0;
+    width: 100px;
+
+    background-color: #2e2e2e;
+    border-radius: 1rem;
+    border: none;
+
+    font-size: 0.93rem;
+    text-transform: uppercase;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+.-big-btn {
+    margin: 0.5rem 0;
+    padding: 0.5rem 0;
+    width: 200px;
+}
+
+
+
+/* applicants-area */
+.applicants-area {
+    width: 100%;
+    
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    flex-direction: column;
+}
+.form-done, .form-todo, .form-not-done {
+    width: 60%;
+    min-width: 335px;
+
+    margin: 0.25rem 0;
+    padding: 0.95rem 2rem;
+
+    font-family: "BrixSlab-ExtraLight";
+    text-decoration: none;
+    text-align: center;
+    color: #ffffff;
+
+    position: relative;
+}
+
+.form-done {
+    background-color: var(--good-done1);
+}
+.form-todo {
+    background-color: var(--orange-high-desert);
+}
+.form-not-done {
+    background-color: #2e2e2e;
+}
+
+
+@keyframes beatHeart {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.1);
+    }
+    40% {
+        transform: scale(1);
+    }
+    60% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.next-mark {
+    fill: #ffffff;
+
+    position: absolute;
+    left: 1rem; top: 0.95rem;
+    
+    width: 20px;
+    height: 20px;
+
+    margin-right: 7px;
+
+    animation: .8s infinite beatHeart;
+}
+
+
+/* @INFOBOX */
+.-info {
+    color: mediumblue;
+}
+.-issue {
+    color: var(--orange-high-desert);
+}
+.-success {
+    color: var(--good-done1);
+}
+
+
+/* UPDATE PASSWORD */
+.update-form {
+    width: 60%;
+    min-width: 335px;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.inputs {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+
+    margin-bottom: 0.5rem;
+}
+.inputs input {
+    width: 48%;
+    padding: 0.7rem;
+    font-size: 1.15rem;
+    
+    border: 1px solid var(--orange-high-desert);
+    border-radius: 4px;
+    color: #545c66;
+}
+.show-password {
+    padding: 0.5rem 0;
+    width: 200px;
+
+    background-color: #dddddd;
+    border-radius: 1rem;
+    border: none;
+
+    font-size: 0.93rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+.-hlt {
+    background-color: var(--orange-high-desert);
+}
+
+
+/* Clocks Table */
+.clocks-table {
+    margin: 1rem 0;
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr 1fr 2fr 1fr 1fr;
+
+    border: 1px solid #2d2d2d;
+    border-radius: 3px;
+
+    overflow: hidden;
+}
+.clocks-table-cell {
+    --hgl-color: #f7f7f7;
+
+    padding: 0.2rem 0;
+    text-align: center;
+}
+.clocks-table-cell:not(.-header):nth-child(16n+1),
+.clocks-table-cell:not(.-header):nth-child(16n+2),
+.clocks-table-cell:not(.-header):nth-child(16n+3),
+.clocks-table-cell:not(.-header):nth-child(16n+4),
+.clocks-table-cell:not(.-header):nth-child(16n+5),
+.clocks-table-cell:not(.-header):nth-child(16n+6),
+.clocks-table-cell:not(.-header):nth-child(16n+7),
+.clocks-table-cell:not(.-header):nth-child(16n+8) {
+    background-color: var(--hgl-color);
+}
+
+
+/* Scoring Table */
+.scoring-table {
+    margin: 1rem 0;
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr 1fr;
+
+    border: 1px solid #2d2d2d;
+    border-radius: 3px;
+
+    overflow: hidden;
+}
+.scoring-table-cell {
+    --hgl-color: #f7f7f7;
+
+    padding: 0.2rem 0;
+    text-align: center;
+}
+.scoring-table-cell:not(.-scoring-header):nth-child(10n+1),
+.scoring-table-cell:not(.-scoring-header):nth-child(10n+2),
+.scoring-table-cell:not(.-scoring-header):nth-child(10n+3),
+.scoring-table-cell:not(.-scoring-header):nth-child(10n+4),
+.scoring-table-cell:not(.-scoring-header):nth-child(10n+5) {
+    background-color: var(--hgl-color);
+}
+
+
+/* Skills Tests Table */
+.skills-test-table {
+    margin: 1rem 0;
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+
+    border: 1px solid #2d2d2d;
+    border-radius: 3px;
+
+    overflow: hidden;
+}
+.skills-test-table-cell {
+    --hgl-color: #f7f7f7;
+
+    padding: 0.2rem 0;
+    text-align: center;
+}
+.skills-test-table-cell:not(.-skills-test-header):nth-child(8n+1),
+.skills-test-table-cell:not(.-skills-test-header):nth-child(8n+2),
+.skills-test-table-cell:not(.-skills-test-header):nth-child(8n+3),
+.skills-test-table-cell:not(.-skills-test-header):nth-child(8n+4) {
+    background-color: var(--hgl-color);
+}
+
+/* tables headers */
+.-header, .-scoring-header,
+.-skills-test-header {
+    padding: 0.25rem 0;
+
+    font-size: 0.83rem;
+    text-transform: uppercase;
+
+    background-color: #ef5a29;
+    color: #ffffff;
+    border-bottom: 1px solid #dddddd;
+}
+.-scoring-header {
+    background-color: var(--blue-slate);
+}
+.-skills-test-header {
+    background-color: #34415a;
+}
+
+.-info1 {
+    color: #94a5bb;
+}
+.-orange {
+    color: #ef5a29;
+}
+
+.-passed {
+    color: var(--good-done1);
+    font-style: italic;
+    text-transform: capitalize;
+}
+.-failed {
+    color: var(--orange-high-desert);
+    font-style: italic;
+    text-transform: capitalize;
+}
+
+
+/* NAV BOTTOM */
+.nav-bottom {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: #2e2e2e;
+}
+.nav-bottom-box {
+    width: 61%;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+.nav-left, .nav-right {
+    width: 50%;
+    display: flex;
+}
+.nav-right {
+    justify-content: space-between;
+}
+
+.nav-left-item {
+    font-family: "Industrial Bold";
+    font-size: 0.867rem;
+    line-height: 1.867rem;
+    text-align: left;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+.nav-right-item {
+    font-family: "Industrial Medium";
+    font-size: 0.933rem;
+    line-height: 1.6rem;
+    text-align: left;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #bbbbbb;
+
+    margin-right: 2rem;
+}
+.schedule-more {
+    font-style: italic;
+    color: var(--orange-high-desert);
+}
+
+
+/* Bolt Career */
+.bolt-career-box {
+    margin: 0.5rem 0;
+    padding: 2px 4px;
+    background-color: #ef7f585e;
+    border-radius: 3px;
+}
+.bolt-text {
+    font-size: 0.93rem;
+    text-align: justify;
+    cursor: default;
+    transition: all 0.2s linear;
+}
+.bolt-text:hover {
+    transform: translateY(1px);
+}
+
+
+@media (max-width: 1510px) {
+    .profile-box, .nav-bottom-box {
+        width: 75%;
+    }
+}
+@media (max-width: 1250px) {
+    .profile-box, .nav-bottom-box {
+        width: 85%;
+    }
+}
+@media (max-width: 1100px) {
+    .profile-box, .nav-bottom-box {
+        width: 95%;
+    }
+    .nav-menu {
+        left: 6rem;
+    }
+    .nav-item {
+        font-size: 1.35rem;
+        line-height: 2rem;
+    }
+    .welcome-box {
+        left: 5rem;
+    }
+    .welcome-name {
+        font-size: 3rem;
+        line-height: 3.5rem;
+    }
+    header::after {
+        background-size: 5.5rem;
+        background-position-x: 1rem;
+    }
+}
+@media (max-width: 970px) {
+    .nav-item {
+        font-size: 1.2rem;
+    }
+    .welcome-name {
+        font-size: 2.5rem;
+        line-height: 3rem;
+    }
+    .block-title {
+        text-align: center;
+    }
+    .profile-box {
+        width: 65%;
+        flex-direction: column;
+    }
+    .applicants-area {
+        align-items: center;
+    }
+    .left-side, .right-side {
+        width: 100%;
+    }
+    .block-item {
+        margin-left: 20%;
+    }
+    form {
+        display: flex;
+        justify-content: center;
+    }
+    .update-form {
+        width: 65%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .-infobox {
+        margin-left: 0;
+    }
+    .nav-bottom-box {
+        flex-direction: column;
+    }
+    .nav-left, .nav-right {
+        width: 95%;
+        justify-content: space-around;
+    }
+}
+
+@media (max-width: 735px) {
+    header {
+        height: 35vw;
+    }
+    header::after {
+        background-image: none;
+    }
+    .nav-menu {
+        left: 0;
+    }
+    .welcome-box {
+        left: 0;
+    }
+    .welcome-name, .welcome-text {
+        text-align: center;
+    }
+    .profile-box {
+        width: 95%;
+        position: relative;
+        z-index: 2;
+    }
+    .profile-box:before {
+        content: "";
+        position: absolute;
+        left: 0; top: 0;
+        right: 0; bottom:0;
+
+        background-image: url(/static/images/logo-badge-black.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        opacity: 0.1;
+        z-index: -1;
+    }
+}
+
+@media (max-width: 600px) {
+    .update-form {
+        width: 90%;
+    }
+    .inputs {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+    .welcome-name {
+        font-size: 2rem;
+        line-height: 2.2rem;
+    }
+    .welcome-text {
+        font-size: 1.25rem;
+        line-height: 1.5rem;
+    }
+    .nav-item {
+        font-family: "Industrial Medium";
+        line-height: 1.4rem;
+        font-size: 0.933rem;
+    }
+    .profile-box {
+        margin: 2rem auto;
+    }
+    .inputs input {
+        margin-top: 10px;
+        width: 75%;
+    }
+    .nav-right-item {
+        text-align: center;
+        line-height: 1rem;
+    }
+    .nav-menu {
+        flex-wrap: wrap;
+        bottom: 100%;
+    }
+    .nav-item {
+        width: 33%;
+        text-align: center;
+        /* font-size: 0.933rem; */
+    }
+    .-hide-if-small {
+        display: none;
+    }
+    .clocks-table, .scoring-table {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .skills-test-table {
+        grid-template-columns: 1fr 2fr 2fr;
+    }
+}
+@media (max-width: 400px) {
+    .block-item {
+        margin-left: 5%;
+    }
+    .welcome-name {
+        font-size: 1.35rem;
+        line-height: 1.5rem;
+    }
+    .nav-right-item {
+        margin: 0 0.25rem;
+    }
+    .clocks-table-cell,
+    .scoring-table-cell,
+    .skills-test-table-cell {
+        font-size: 13px;
+    }
+}

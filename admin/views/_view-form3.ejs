@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Form3 Print View</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/admin/views/_view-forms-styles.css">
+
+</head>
+<body>
+
+
+     <!-- sprite -->
+     <svg class='-hidden-sprite'>
+        <symbol id="unchecked" viewBox="0 0 24 24">
+            <path d="M5.75,3 L18.25,3 C19.7687831,3 21,4.23121694 21,5.75 L21,18.25 C21,19.7687831 19.7687831,21 18.25,21 L5.75,21 C4.23121694,21 3,19.7687831 3,18.25 L3,5.75 C3,4.23121694 4.23121694,3 5.75,3 Z M5.75,4.5 C5.05964406,4.5 4.5,5.05964406 4.5,5.75 L4.5,18.25 C4.5,18.9403559 5.05964406,19.5 5.75,19.5 L18.25,19.5 C18.9403559,19.5 19.5,18.9403559 19.5,18.25 L19.5,5.75 C19.5,5.05964406 18.9403559,4.5 18.25,4.5 L5.75,4.5 Z"></path>
+        </symbol>
+    </svg>
+    <svg class='-hidden-sprite'>
+        <symbol id="checked" viewBox="0 0 498.138 498.138">
+            <path d="M493.65,109.76c-9.859-18.405-32.775-25.333-51.179-15.472 c-22.059,11.816-42.897,23.982-62.82,36.717l0.003-51.276c0-11.313-9.146-20.494-20.493-20.494H20.457 C9.164,59.235,0,68.417,0,79.729v338.7c0,11.291,9.163,20.474,20.457,20.474h338.686c11.348,0,20.496-9.183,20.496-20.474 l0.009-195.875c30.092-22.165,62.312-42.213,98.529-61.615C496.582,151.079,503.509,128.166,493.65,109.76z M338.702,397.917 H40.968V100.219h297.734v58.715c-40.715,29.649-78.022,62.759-114.834,101.677c-4.275-5.648-8.601-11.423-13.129-17.47 c-9.354-12.491-19.958-26.648-32.375-42.632c-12.81-16.487-36.561-19.468-53.05-6.659c-16.488,12.811-19.47,36.562-6.659,53.051 c12.007,15.455,21.949,28.728,31.563,41.565c13.841,18.482,26.915,35.938,42.45,54.771c7.075,8.576,17.566,13.604,28.682,13.745 c0.162,0.002,0.321,0.002,0.482,0.002c10.94,0,21.356-4.741,28.541-13.012c29.482-33.939,58.199-62.952,88.329-88.826V397.917z"/>
+        </symbol>
+    </svg>
+
+    
+    <div class="letter">
+
+        <div class="page-box">
+
+            <div class="header">
+                <div class="header-line1">Toro Trucking Academy</div>
+                <div class="header-line2">(1321 109th St.E Tacoma WA, 98445), 833-867-6235</div>
+            </div>
+
+            <h1 class="form-title">ENROLLMENT AGREEMENT FORM</h1>
+            <p class="form-note">This enrollment agreement is between the above named school and:</p>
+
+            <% if(user.dataCollection) { %>
+                <div class="main-box">
+                    <p class="main-box-title">Full applicant's name and address:</p>
+                    <h2 class="appl-full-name"><%= user.dataCollection.firstName %> <%= user.dataCollection.middleName %> <%= user.dataCollection.lastName %></h1>
+                    <h3 class="appl-address"><%= user.dataCollection.street %> <%= user.dataCollection.city %>, <%= user.dataCollection.state %> <%= user.dataCollection.zip %></h3>
+                </div>  <!-- main-box -->
+
+                <section class="section-box">
+                    <h2 class="section-title"></h2>
+                    <div class="section-fields">
+                        <div class="field-box">
+                            <h3 class="field-title">Phone Number</h3>
+                            <p class="field-value"><%= user.dataCollection.phone %></p>
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Date of Birth</h3>
+                            <p class="field-value"><%= new Date(user.dataCollection.DOB).toLocaleDateString('en-US') %></p>
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Social Security Number</h3>
+                            <p class="field-value"><%= user.dataCollection.SSN %></p>
+                        </div>
+                    </div>  <!-- section-fields -->
+                </section>  <!-- Additional info -->
+
+                <section class="section-box">
+                    <h2 class="section-title"></h2>
+                    <div class="section-fields">
+                        <div class="field-box">
+                            <h3 class="field-title">Email</h3>
+                            <p class="field-value"><%= user.dataCollection.email %></p>
+                        </div>
+                    </div>  <!-- section-fields -->
+                </section>  <!-- email info -->
+
+                <% let items %>
+
+                <!-- IF THERE IS AN AGREEMENT SECTION -->
+                <% if(user.agreement) { %>
+
+                    <section class="section-box">
+                        <h2 class="section-title">Tuition program consists of:</h2>
+                        <p class="section-note">(the object of the contract is tuition services)</p>
+                        <div class="section-fields-2 -box90">
+
+                            <% items = ['4 weeks * 40 hours/week = 160 total hours', '2 weeks * 40 hours/week = 80 total hours'] %>
+
+                            <% if (user.agreement.class === "CDL Class A") { %>
+                                <div class="field-box">
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                    <h3 class="field-title"><%= items[0] %></h3>
+                                </div>
+                                <div class="field-box">
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                    <h3 class="field-title"><%= items[1] %></h3>
+                                </div>
+                            <% } else { %>
+                                <div class="field-box">
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                    <h3 class="field-title"><%= items[0] %></h3>
+                                </div>
+                                <div class="field-box">
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                    <h3 class="field-title"><%= items[1] %></h3>
+                                </div>
+                            <% } %>
+                        </div>  <!-- section-fields -->
+                        
+                        <section class="section-box">
+                            <h2 class="section-title-hgh">Attendance Policy</h2>
+                            <div class="section-fields">
+                                <div class="field-box">
+                                    <h3 class="field-title">School Visiting Obligations:</h3>
+                                    <p class="field-value"><%= user.agreement.visiting %></p>
+                                </div>
+                            </div>  <!-- section-fields -->
+                        </section>  <!-- Visiting info -->
+
+                    </section>  <!-- Program Info -->
+
+
+                    <section class="section-box">
+                        <h2 class="section-title">The school agrees to provide the following training:</h2>
+                        <p class="section-note">Available Classes</p>
+                        <div class="section-fields-2 -box80">
+
+                            <% items = ['CDL Class A', 'CDL Class B', 'Upgrade to Class A', 'Endorsements'] %>
+
+                            <% items.map(item => { %>
+                                <div class="field-box">
+                                    <% if (item.toUpperCase() != user.agreement.class.toUpperCase()) { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#unchecked"></use> 
+                                        </svg>
+                                    <% } else { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#checked"></use> 
+                                        </svg>
+                                    <% } %>
+                                    <h3 class="field-title"><%= item %></h3>
+                                </div>
+                            <% }) %>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- Class Info -->
+
+
+                    <section class="section-box">
+                        <h2 class="section-title">Transmission Type</h2>
+                        <!-- <p class="section-note"></p> -->
+                        <div class="section-fields-2 -box80">
+
+                            <% items = ['Automatic Transmission', 'Manual Transmission'] %>
+
+                            <% items.map(item => { %>
+                                <div class="field-box">
+                                    <% if (item.toUpperCase() != user.agreement.transmission.toUpperCase()) { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#unchecked"></use> 
+                                        </svg>
+                                    <% } else { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#checked"></use> 
+                                        </svg>
+                                    <% } %>
+                                    <h3 class="field-title"><%= item %></h3>
+                                </div>
+                            <% }) %>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- Transmission Type Info -->
+
+
+                    <!-- COST of Tuition -->
+                    <section class="section-box">
+                        <h2 class="section-title-hgh">Cost of tuition</h2>
+                        <p class="section-note">(TOTAL consists of tuition cost and and fees)</p>
+                        <div class="section-fields-2 -box80">
+
+                            <% headers = ['Cost of Tuition', 'Registration Fee', 'Supplies and Materials Fee', 'Other Fees'] %>
+                            <% items = ['tuitionCost', 'regisrFee', 'supplyFee', 'otherFee'] %>
+                            <% let summ = 0 %>
+
+                            <% items.map((item, index) => { %>
+                                <div class="field-box">
+                                        <h3 class="field-title"><%= headers[index] %></h3>
+                                        <% let num = Number.isNaN(parseFloat(user.agreement[item])) ? 0 : parseFloat(user.agreement[item]) %>
+                                        <p class="field-value"><%= new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }).format(num) %></p>
+                                </div>
+                                <% summ += num %>
+                            <% }) %>
+
+                        </div>  <!-- section-fields -->
+
+                        <h2 class="section-title-hgh">TOTAL Cost</h2>
+                        <div class="section-fields">
+                            <div class="field-box">
+                                <h3 class="field-title">Topal Cost of Tuition</h3>
+                                <p class="field-value"><%= new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }).format(summ) %></p>
+                            </div>
+                        </div>  <!-- section-fields -->
+
+                    </section>  <!-- Cost Info -->
+
+
+                    <!-- Method of Payment -->
+                    <section class="section-box">
+                        <h2 class="section-title">METHOD OF PAYMENT</h2>
+                        <p class="section-note">Parties are agreed that the payment of program costs will be satisfied by:</p>
+                        <div class="section-fields-2 -box90">
+
+                            <% headers = ['Cash Payment', 'Credit Card', 'Scholarship', 'Financial Aid', 'Third Party (e.g. VA; Voc. Rehab.; LnI; Employer)'] %>
+                            <% items = ['Cash', 'Credit Card', 'Scholarship', 'Financial Aid', 'Third Party'] %>
+                            <% let applItems = user.agreement.payment.split(',') %>
+
+                            <% items.map((item, i) => { %>
+                                <div class="field-box">
+                                    <% if  (applItems.some(applItem => item.toUpperCase() === applItem.toUpperCase()) ) { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#checked"></use> 
+                                        </svg>
+                                    <% } else { %>
+                                        <svg class="check-mark">
+                                            <use xlink:href="#unchecked"></use> 
+                                        </svg>
+                                    <% } %>
+                                    <h3 class="field-title"><%= headers[i] %></h3>
+                                </div>  <!-- box -->
+                            <% }) %>
+
+                            <% if  (applItems.some(applItem => 'Third Party'.toUpperCase() === applItem.toUpperCase()) ) { %>
+                                <div class="field-box">
+                                    <h3 class="field-title">List third party payer</h3>
+                                    <p class="field-value"><%= user.agreement.thirdPartyList %></p>
+                                </div>
+                            <% } %>
+
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- Method of Payment -->
+
+                    <section class="section-box">
+                        <!-- <h2 class="section-title"></h2> -->
+                        <div class="section-fields">
+                            <% headers = ['Down Payment', 'Monthly Payment(s)', 'Loan Payment (if applicable)'] %>
+                            <% items = ['downPayment', 'monthlyPayment', 'loanPayment'] %>
+
+                            <% items.map((item, index) => { %>
+                                <div class="field-box">
+                                        <h3 class="field-title"><%= headers[index] %></h3>
+                                        <% let num = Number.isNaN(parseFloat(user.agreement[item])) ? 0 : parseFloat(user.agreement[item]) %>
+                                        <p class="field-value"><%= new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }).format(num) %></p>
+                                </div>
+                            <% }) %>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- Payments Additional Info -->
+
+                    <section class="section-box">
+                        <h2 class="section-title">AGREEMENT NOTICE</h2>
+                        <div class="section-fields">
+                            This agreement will be binding only when it has been fully completed, signed, and dated by the Applicant and an authorized representative of the school prior to the time instruction begins.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">CHANGES TO AGREEMENT NOTICE</h2>
+                        <div class="section-fields">
+                            Any changes in the agreement will not be binding on either the student or the school unless such changes are acknowledged in writing by an authorized representative of the school and by the student, or student’s parent or guardian if he/she is a minor.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title-hgh">CANCELLATION AND REFUND POLICY</h2>
+                        <!-- <div class="section-fields"></div> -->
+
+                        <ol type='1'>
+                            <li>The school must refund all monies paid if the applicant is not accepted. This includes instances where a starting class is cancelled by the school.</li>
+                            <li>The school must refund all monies paid if the applicant cancels within five business days (excluding Sundays and holidays) after the day the contract is signed or an initial payment is made, as long as the applicant has not begun training.</li>
+                            <li>The school may retain an established registration fee equal to ten percent of the total tuition cost, or one hundred dollars, whichever is less, if the applicant cancels past the fifth business day after signing the contract or making an initial payment. A registration fee is any fee charged by a school to process student applications and establish a student record system.</li>
+                            <li>If training is terminated after the student enters classes, the school may retain the registration fee established under (3) of this subsection, plus a percentage of the total tuition as described in the following table:</li>
+                            
+                            <table>
+                                <tr>
+                                    <th>If the student completes this<br>amount of traing</th>
+                                    <th>School may keep this<br>percentage tuition</th>
+                                </tr>
+                                <tr>
+                                    <td>One week or up to 10%</td>
+                                    <td>whichever is less we keep 10%</td>
+                                </tr>
+                                <tr>
+                                    <td>More than one week (or 10%)</td>
+                                    <td>whichever is less, but less than 25% we keep 25%</td>
+                                </tr>
+                                <tr>
+                                    <td>25% through 50%</td>
+                                    <td>we keep 50%</td>
+                                </tr>
+                                <tr>
+                                    <td class='-no-border'>More than 50%</td>
+                                    <td class='-no-border'>we keep 100%</td>
+                                </tr>
+                            </table>
+            
+                            <li>
+                                When calculating refunds, the official date of a student’s termination is the last day of recorded attendance:
+                                <ol type='a'>
+                                    <li class='-ml'>When the school receives notice of the student’s intention to discontinue the training program; or,</li>
+                                    <li class='-ml'>When the school receives notice of the student’s intention to discontinue the training program; or,</li>
+                                    <li class='-ml'>When a student, without notice, fails to attend classes for thirty calendar days.</li>
+                                </ol>
+                            </li>
+                            <li>All refunds must be paid within thirty calendar days of the student’s official termination date.</li>
+                        </ol>
+
+                    </section>  <!-- CANCELLATION AND REFUND POLICY -->
+
+                    <section class="section-box">
+                        <h2 class="section-title">NOTICE TO BUYER</h2>
+                        <div class="section-fields">
+                            Do not sign this agreement before you read it or if it contains any blank spaces. This is a legal instrument. All pages of this contract are binding. Read both sides of all pages before signing. You are entitled to an exact copy of the agreement, school catalog, and any other papers you may sign, and are required to sign a statement acknowledging receipt of those.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">CANCELLATION OF CONTRACT</h2>
+                        <div class="section-fields">
+                            If you have not started training, you may cancel this contract by submitting written notice of such cancellation to the school at its address shown on the contract. The notice must be postmarked no later than midnight of the fifth business day (excluding Sundays and holidays) following your signing this contract; the written notice may also be personally or otherwise delivered to the school within that time. In event of dispute over timely notice, the burden to prove service rests on the applicant.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">UNFAIR BUSINESS PRACTICES</h2>
+                        <div class="section-fields">
+                            It is an unfair business practice for the school to sell, discount, or otherwise transfer this contract or promissory note without the signed written consent of the student or his/her financial sponsors if he/she is a minor, and a written statement notifying all parties that the cancellation and refund policy continues to apply.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title-hgh">CERTIFICATION</h2>
+                        <div class="section-fields">
+                            I certify that I read and understand the cancellation and refund policy and the complaint procedure; I received a copy of the school catalog and I am entitled to an exact copy of this enrollment agreement, school catalog, and any other papers I sign.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title"></h2>
+                        <div class="section-fields -fields-side-by-side">
+                            <div class="field-box">
+                                <h3 class="field-title">Yes, I certify the above</h3>
+                                <p class="field-value">(Date of signing <%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>)</p>
+                            </div>
+                            <div class="field-box">
+                                <h3 class="field-title">Applicant signature</h3>
+                                <p class="field-signature"><%= user.dataCollection.firstName %> <%= user.dataCollection.lastName %></p>
+                            </div>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- signature info -->
+
+                    <section class="section-box">
+                        <h2 class="section-title">Parent Or Guardian Info</h2>
+                        <div class="section-fields">
+                            <% if(user.agreement.parentFirstName.length || user.agreement.parentLastName.length) { %>
+                                <div class="field-box">
+                                    <h3 class="field-title">Parent Or Guardian First Name</h3>
+                                    <p class="field-value"><%= user.agreement.parentFirstName %></p>
+                                </div>
+                                <div class="field-box">
+                                    <h3 class="field-title">Parent Or Guardian Last Name</h3>
+                                    <p class="field-value"><%= user.agreement.parentLastName %></p>
+                                </div>
+                            <% } %>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- Parent Or Guardian info -->
+
+                    <!-- signer constant uses -->
+
+                    <section class="section-box">
+                        <h2 class="section-title-hgh">Authorized School Representative:</h2>
+                        <p class="section-note">As the authorized representative of the school, I hereby agree the conditions set forth here in.</p>
+                        <div class="section-fields-2">
+                            <div class="field-box">
+                                <h3 class="field-title">Authorized Representative</h3>
+                                <p class="field-value"><%= signer.name %></p>
+                            </div>
+                            <div class="field-box">
+                                <h3 class="field-title">Representative Title</h3>
+                                <p class="field-value"><%= signer.title %></p>
+                            </div>
+                            <div class="field-box">
+                                <h3 class="field-title">Date</h3>
+                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                            </div>
+                            <div class="field-box">
+                                <h3 class="field-title">Signature</h3>
+                                <p class="field-signature"><%= signer.last %> <%= signer.first %></p>
+                            </div>
+                        </div>
+                        <div class="section-fields -fields-center">
+                            This school is licensed under Chapter 28C.10 RCW. Inquiries or complaints regarding this private vocational school may be made to:<br>
+                            Workforce Training and Education Coordinating Board 128 – 10th Avenue SW<br>
+                            Olympia, Washington 98501<br><br>
+                            <span>Phone: 360-709-4600</span>
+                            <span>Email: pvsa@wtb.wa.gov</span>
+                            <span>Web: wtb.wa.gov</span>
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">NOTICE OF FINANCIAL OBLIGATION</h2>
+                        <div class="section-fields">
+                            Washington law requires the following information to be supplied to each student enrolling in a private vocational school licensed under Chapter 28C.10 RCW. One copy of this notice bearing original signatures must be attached by the school as addenda to that individual’s enrollment agreement, as well as a copy provided to the enrollee by the school.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">ACKNOWLEDGMENT BY ENROLLEE</h2>
+                        <ol type='1'>
+                            <li>I understand and accept that any contract for training I enter into with the above named school contains legally binding obligations and responsibilities.</li>
+                            <li>I understand and accept that repayment obligations will be placed upon me by any loans or other financing arrangements I enter into as a means to pay for my training.</li>
+                            <li>I understand that any enrollment contract I enter into will not be binding or take effect for at least five days, excluding Sundays and holidays, following the last date such a contract is signed by the school and me, provided that I have not entered classes.</li>
+                        </ol>
+                        <h2 class='field-title'>STATE EXAMS</h2>
+                        <ol type='1' start="4">
+                            <li class='paragraph-hl1'>I understand the course tuition includes truck usage for up to two (2) State Exams. Students requiring more than two exams will need to pay an additional $175 truck rental fee in advance for each additional exam.</li>
+                            <li class='paragraph-hl1'>If a student cancels an exam within 2 business days of the scheduled time, or does not show up for an exam, the student will be issued his/her CDL certificate (assuming a passing grade and the fulfillment of all required hours). This will conclude the course and the student will forfeit any additional time at the school or use of equipment. In this situation the student will bear the responsibility for scheduling an exam with the State and procuring the necessary equipment.</li>
+                        </ol>
+                        <h2 class='field-title'>STUDENT CATALOG</h2>
+                        <ol type='1' start="6">
+                            <li class='paragraph-hl1'>I have reviewed and understand the <a href="../../catalog" target="_blank">Toro Trucking Academy Student Catalog</a>.</li>
+                        </ol>
+                    </section>
+
+                    <!-- SIGNATURE -->
+                    <section class="section-box">
+                        <h2 class="section-title"></h2>
+                        <div class="section-fields -fields-side-by-side">
+                            <div class="field-box">
+                                <h3 class="field-title">Date of signing</h3>
+                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                            </div>
+                            <div class="field-box">
+                                <h3 class="field-title">Applicant signature</h3>
+                                <p class="field-signature"><%= user.dataCollection.firstName %> <%= user.dataCollection.lastName %></p>
+                            </div>
+                        </div>  <!-- section-fields -->
+                    </section>  <!-- signature info -->
+
+                    <section class="section-box">
+                        <h2 class="section-title">ACKNOWLEDGMENT BY SCHOOL</h2>
+                        <div class="section-fields">
+                            Prior to being enrolled in this school, the applicant whose name and signature appears above has been made aware of the legal obligations he/she takes on by entering into a contract for training. Those discussions included cautions by the school about acquiring an excessive debt burden that might become difficult to repay given employment opportunities and average starting salaries in his/her chosen occupation.
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Signature</h3>
+                            <p class="field-signature"><%= signer.last %> <%= signer.first %></p>
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">HOW TO FILE A COMPLAINT</h2>
+                        <div class="section-fields">
+                            Washington law requires private vocational schools to inform students how to file a complaint. By signing this form you acknowledge this process has been explained to you. Below are the next steps the school must take in discussing this policy with you, along with information about the complaint process.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">DISCUSSION ABOUT COMPLAINT POLICY REQUIRED</h2>
+                        <div class="section-fields">
+                            First, a school representative must discuss the school’s complaint policy with you. Following this discussion, you will be provided with this attachment to sign. After you sign this form, the school will give you a copy for your personal records. The school will also keep a copy on file.
+                        </div>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">ACKNOWLEDGMENT OF COMPLAINT PROCESS BY APPLICANT</h2>
+                        <ol type='1'>
+                            <li>The school has described the grievance and/or complaint policy to me.</li>
+                            <li>I understand that the policy can also be found in the school catalog.</li>
+                            <li>I know I should first try to resolve a complaint or concern with my instructor or school administrator.</li>
+                            <li>I understand nothing prevents me from contacting the Workforce Board at 360-709-4600 at any time with a concern or complaint, and complaint forms are: <a target='_blank' href="http://wtb.wa.gov/PCS_Complaints.asp">http://wtb.wa.gov/PCS_Complaints.asp</a>.</li>
+                            <li>I understand that I have one year to file a complaint from my last date of attendance.</li>
+                            <li'>I further understand that in the event of a school closure, I have 60 days to file a complaint.</li>
+                            <li>I also understand that complaints are public records.</li>
+                            <li'>Finally, I acknowledge that details about the complaint process, my rights, and any restrictions on the time I have to file a complaint can be found at <a target='_blank' href="http://wtb.wa.gov/PCS_Complaints.asp">http://wtb.wa.gov/PCS_Complaints.asp</a>.</li>
+                        </ol>
+                    </section>
+
+                    <section class="section-box">
+                        <h2 class="section-title">ACKNOWLEDGMENT BY SCHOOL</h2>
+                        <div class="section-fields">
+                            Prior to being enrolled in this school, the applicant, whose name and signature appear above, has been made aware of the school’s complaint policy.
+                        </div>
+                    </section>
+
+
+                <% } else { %>
+                    <h2 class="appl-full-name">Just an Applicant</h1>
+                    <h3 class="appl-address">Agreement was not signed yet</h3>
+                <% } %>
+                <!-- IF THERE IS AN AGREEMENT SECTION -->
+
+            <% } else { %>
+                <h2 class="appl-full-name">New User</h1>
+                <h3 class="appl-address">Data Collection Form was not filled out yet</h3>
+            <% } %> 
+
+        </div>  <!-- page-box -->
+
+    </div> <!--letter-->
+    
+
+    <section class="form-info-box">
+            
+
+
+        <!-- agreement info -->
+    <div class="agreement">
+        <% if(user.agreement) { %>
+            
+
+            
+
+        <% } else { %>
+            <h3 class="student-agreement">Agreement was not signed yet</h3>
+        <% } %>
+
+        
+
+    </div>  <!-- agreement -->
+
+    </section>
+
+
+</body>
+</html>

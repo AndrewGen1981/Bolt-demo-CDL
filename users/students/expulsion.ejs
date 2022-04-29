@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Student Expulsion</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+    
+    <link rel="stylesheet" href="/users/students/explusion.css">
+
+</head>
+<body>
+
+    <!-- TOOLS -->
+    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %>
+    <% function formatDOB(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US').split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %></10>
+    <% const usNumberFormat = new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+
+    <% 
+        function checkAttend(flag, clocksQty, date) {
+            let className = ''
+            let msg = '' 
+            if (flag) {
+                if (!clocksQty) {
+                    className = '-attention-was-learning'
+                    msg = `${monthShortNames[date.getMonth()]}.${date.getFullYear()}: was enrolled, but didn't show up`
+                }
+            } else {
+                className = '-ignor-wasnot-learning'
+            }
+            return { className, msg }
+        }
+    %>
+
+    <!-- Constants -->
+    <% const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"] %>
+    <% const monthShortNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] %>
+
+    <div class="report-box">
+        <header>
+            <h1 class="main-title">Expulsion Report&bull;<span>Attendancy</span></h1>
+            <menu type="toolbar">
+                <%- include("../../static/partial/--admin-menu.ejs") %>
+                <a class="-admin-menu-btn" href="/admin/student/wbdrs" title="Reload report">
+                    <svg viewBox="0 0 512 512"><path d="M464 16c-17.67 0-32 14.31-32 32v74.09C392.1 66.52 327.4 32 256 32C161.5 32 78.59 92.34 49.58 182.2c-5.438 16.81 3.797 34.88 20.61 40.28c16.89 5.5 34.88-3.812 40.3-20.59C130.9 138.5 189.4 96 256 96c50.5 0 96.26 24.55 124.4 64H336c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32V48C496 30.31 481.7 16 464 16zM441.8 289.6c-16.92-5.438-34.88 3.812-40.3 20.59C381.1 373.5 322.6 416 256 416c-50.5 0-96.25-24.55-124.4-64H176c17.67 0 32-14.31 32-32s-14.33-32-32-32h-128c-17.67 0-32 14.31-32 32v144c0 17.69 14.33 32 32 32s32-14.31 32-32v-74.09C119.9 445.5 184.6 480 255.1 480c94.45 0 177.4-60.34 206.4-150.2C467.9 313 458.6 294.1 441.8 289.6z"/></svg>
+                </a>
+                <input type="search" id="search-bar" placeholder="search" oninput="filterColumn(this)">
+            </menu>
+        </header>
+
+        <div class="dummy-header"></div>
+
+        <div class="report-table">
+            <% if (locals.activeStudents) { %>
+                <% if (locals.date1 && locals.date2 && locals.date3) { %>
+                    <div class="table-row -table-header">
+                        <span class="cell -fullName">Student</span>
+                        <span class="cell -key">Key</span>
+                        <span class="cell -location">Location</span>
+                        <span class="cell -phone">Phone<br>click to call</span>
+                        <span class="cell -email">Email Address<br>click to email</span>
+                        <span class="cell -balance">Balance</span>
+                        <span class="cell -TTT">TTT</span>
+
+                        <span class="cell -tuitionStartDate">Tuition Start<br>Date</span>
+                        <span class="cell -lastSessionDate">Last Session<br>Date</span>
+                        <span class="cell -lastVisitedDate">Last Visited<br>Date</span>
+                        <!-- Tuition Duration as of now -->
+                        <span class="cell -tuitionDuration">Tuition<br>Duration</span>
+
+                        <span class="cell -totalClocks">Total<br>Clocks</span>
+                        <span class="cell -monthClocks"><%= `${monthShortNames[date1.getMonth()]}.${date1.getFullYear()}` %><br>visited</span>
+                        <span class="cell -monthClocks"><%= `${monthShortNames[date2.getMonth()]}.${date2.getFullYear()}` %><br>visited</span>
+                        <span class="cell -monthClocks"><%= `${monthShortNames[date3.getMonth()]}.${date3.getFullYear()}` %><br>visited</span>
+
+                        <span class="cell -absenceSolid">Absence,<br>solid period</span>
+                    </div>  <!-- row -->
+                    <% activeStudents.forEach(student => { %>
+                        <div class="table-row">
+                            <a href="/admin/user/<%= student.userId %>" class="cell -fullName" title="click to get into <%= student.fullName %> Profile"><%= student.fullName %></a>
+                            <span class="cell -key"><%= student.key %></span>
+                            <span class="cell -location"><%= student.location %></span>
+                            <a href="tel:<%= student.phone %>" class="cell -phone"><%= student.phone %></a>
+                            <a href="mailto:<%= student.email %>" class="cell -email"><%= student.email %></a>
+                            <span class="cell -balance <%= student.balance < 0 ? '' : '-no-balance' %>"><%= usNumberFormat.format(student.balance) %></span>
+                            <span class="cell -TTT"><%= Math.round(student.TTT) %></span>
+
+                            <span class="cell -tuitionStartDate"><%= formatDate(student.tuitionStartDate) %></span>
+                            <span class="cell -lastSessionDate"><%= formatDate(student.lastSessionDate) %></span>
+                            <span class="cell -lastVisitedDate"><%= formatDate(student.lastVisitedDate) %></span>
+                            
+                            <% let days = Math.round((new Date() - student.tuitionStartDate) / (24*60*60*1000)) %>
+                            <% let msg = `${days} ${days > 1 ? 'days as of now' : 'day as of now'}` %>
+                            <% let className = days > 35 ? '-long-duration' : '-short-duration' %>
+                            <span class="cell -tuitionDuration <%= className %>" title="<%= msg %>"><%= days %></span>
+
+                            <span class="cell -totalClocks"><%= student.totalClocks %></span>
+
+                            <% let month1 = checkAttend(student.month1attendFlag, student.month1Clocks, date1) %>
+                            <span class="cell -monthClocks <%= month1.className %>" title="<%= month1.msg %>"><%= student.month1Clocks %></span>
+
+                            <% let month2 = checkAttend(student.month2attendFlag, student.month2Clocks, date2) %>
+                            <span class="cell -monthClocks <%= month2.className %>" title="<%= month2.msg %>"><%= student.month2Clocks %></span>
+
+                            <% let month3 = checkAttend(student.month3attendFlag, student.month3Clocks, date3) %>
+                            <span class="cell -monthClocks <%= month3.className %>" title="<%= month3.msg %>"><%= student.month3Clocks %></span>
+
+                            <% 
+                                let solid = student.lastVisitedDate
+                                ? Math.round((new Date() - student.lastVisitedDate) / (24*60*60*1000))
+                                : Math.round((new Date() - student.tuitionStartDate) / (24*60*60*1000))
+
+                                let absenceMsg = solid > 6
+                                ? student.lastVisitedDate ? `${solid} days` : `enrolled ${solid} days ago`
+                                : ''
+                            %>
+                            <span class="cell -absenceSolid"><%= absenceMsg %></span>
+                        </div>  <!-- row -->
+                    <% }) %>
+                    <div class="table-row -table-footer"></div>
+                <% } else { %>      <!-- wrong dates -->
+                    <h1>Check please period(dates) you are tracking expulsion for...</h1>
+                <% } %>
+            <% } else { %>      <!-- no activeStudents -->
+                <h1>Looks like you have no students yet to track expulsion...</h1>
+            <% } %>
+        </div>
+    </div>  <!-- report-box -->
+
+
+    <script defer>
+
+        fitDummyHeader()
+
+        function fitDummyHeader() {
+            const dummy = document.querySelector('.dummy-header')
+            const tableHeader = document.querySelector('.-table-header')
+            const header = document.querySelector('header')
+
+            const headerHeight = window.getComputedStyle(header).getPropertyValue("height")
+            dummy.style.height = headerHeight
+            tableHeader.style.top = headerHeight
+        }
+
+        // reload a layout with a certain year
+        function reloadWithYear(yearPickerValue, a) {
+            if (!yearPickerValue || !a) { return }
+            a.setAttribute('href', `/admin/student/wbdrs?year=${yearPickerValue}`)
+            a.click()
+        }
+
+
+        // FILTERING
+        const rows = document.querySelectorAll('.table-row')
+        const fullNames = document.querySelectorAll('.-fullName')
+        const locations = document.querySelectorAll('.-location')
+
+   
+        function filterColumn(input) {
+            if (!input) { return }
+            const filter = input.value.toLowerCase()
+            if (!rows || !fullNames || !locations) { return }
+            if (rows.length < 2) { return }
+            for (let i=1; i<rows.length; i++) {     // 1st is a header
+                
+                let toShow = fullNames[i].textContent.toLowerCase().includes(filter)
+                || locations[i].textContent.toLowerCase().includes(filter)
+                
+                rows[i].classList.toggle('-hidden', !toShow)
+                rows[i].classList.toggle('-visible', toShow && filter)
+            }
+        }
+
+    </script>
+
+</body>
+</html>

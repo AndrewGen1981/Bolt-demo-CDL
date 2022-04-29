@@ -1,0 +1,181 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.scoring-box {
+    width: 95%;
+    max-width: 1535px;
+    margin: 0 auto;
+}
+
+.title {
+    margin: 20px 0 10px;
+    font-family: "Industrial Medium";
+    text-align: center;
+}
+
+.block-box {
+    margin-bottom: 10px;
+    padding: 15px;
+    
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgba(41, 41, 41, 0.03);
+}
+.-student-data {
+    align-items: center;
+    background-color: rgba(14, 231, 14, 0.25);
+}
+.-student-failed {
+    background-color: rgba(231, 14, 14, 0.25);
+}
+
+.block-box > h2{
+    font-family: "Industrial Medium";
+    margin-bottom: 3px;
+}
+.block-item {
+    display: inline-flex;
+    align-items: baseline;
+
+    font-family: "BrixSlab-Light";
+    font-size: 16px;
+}
+.block-item strong, .item-title {
+    padding-right: 5px;
+}
+.-note {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 14px;
+}
+
+/* Certificates */
+.certificate, .no-certificate {
+    width: 100%;
+    padding: 5px;
+
+    font-family: "BrixSlab-LightItalic";
+    font-size: 16px;
+    text-align: right;
+    
+    background-color: rgba(14, 231, 14, 0.25);
+    position: relative;
+}
+.no-certificate {
+    background-color: rgba(231, 14, 14, 0.25);
+}
+.fa-certificate {
+    width: 40px;
+
+    fill:#e9760ba6;
+
+    position: absolute;
+    top: 50%;
+    left: 5px;
+
+    transform: translateY(-50%);
+}
+.certificate strong, .no-certificate strong {
+    text-transform: uppercase;
+}
+
+
+/* Results Body */
+.scoring-results {
+    width: 100%;
+    display: block;
+}
+.scoring-results h2 {
+    margin: 25px 0 10px;
+    font-family: "Industrial Medium";
+    font-size: 32px;
+    text-align: center;
+}
+
+.scoring-block-box {
+    padding: 5px;
+    background-color: #d7d8ed17;
+    border-radius: 3px;
+    margin-bottom: 35px;
+}
+.scoring-block-box-title {
+    padding-bottom: 3px;
+    margin-bottom: 10px;
+
+    font-family: "BrixSlab-LightItalic";
+    font-size: 17px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgb(218, 218, 218);
+}
+.scoring-block-title {
+    font-family: "BrixSlab-Light";
+    text-transform: capitalize;
+    font-size: 16px;
+}
+
+.scoring-skills-box {
+    margin: 5px 0 10px 35px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.scoring-skill {
+    flex: 1 auto;
+
+    display: inline-flex;
+    align-items: center;
+
+    font-family: "BrixSlab-ExtraLight";
+    text-transform: capitalize;
+    font-size: 15px;
+}
+.scoring-skill p {
+    margin: 2px 5px;
+}
+.scoring-skill svg {
+    width: 15px !important;
+    min-height: 15px;
+}
+.-checked {
+    fill: #005c00db;
+}
+.-unchecked {
+    fill: #e70e0e59;
+}
+
+.comments {
+    min-height: 100px;
+    
+    font-family: "BrixSlab-LightItalic";
+    font-size: 15px;
+
+    cursor: pointer;
+}
+.comments p {
+    padding: 5px 25px;
+    font-family: "BrixSlab-RegularItalic";
+    font-size: 17px;
+    background-color: #d7d8ed17;
+}
+
+footer {
+    min-height: 150px;
+    background: linear-gradient(180deg, #fff , #1e203f7e);
+    margin-bottom: 10px;
+}
+.backlink {
+    margin: 5px 0;
+    padding: 10px 25px;
+
+    font-family: "BrixSlab-Light";
+    font-size: 16px;
+    line-height: 45px;
+    text-transform: uppercase;
+
+    color: #fff;
+    background-color: #1e203f42;
+
+    border-radius: 30px;
+}

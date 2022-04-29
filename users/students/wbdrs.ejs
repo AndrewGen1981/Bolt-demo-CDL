@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | WBDRS Report</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="/users/students/wbdrs.css">
+</head>
+<body>
+    
+    <!-- TOOLS -->
+    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %>
+    <% function formatDOB(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US').split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %></10>
+    <% const usNumberFormat = new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+    <!-- constant arrays -->
+    <%
+        const hispanic = ["Yes", "No"]
+        const disabled = ["Yes", "No"]
+        const veteran = ["Yes", "No"]
+        const race = ["White/Caucasian", "Black/African American", "American Indian or Alaska Native", "Asian", "Hawaiian Native or other Pacific Islander", "Multi-racial"]
+        const grade= ["Less than high school graduation", "GED", "High school graduate", "Some post high school, no degree/certificate", "Certificate (less than two years)", "Associate’s Degree", "Bachelor’s Degree", "Master’s Degree", "Doctoral Degree or above"]
+    %>
+
+    <div class="report-box">
+
+        <header>
+            <h1 class="main-title"><span>WBDRS</span> <%= formatDate(locals.startDate) %><span>&bull;</span><%= formatDate(locals.endDate) %></h1>
+            <% const year = locals.reportYear || parseInt(new Date().getFullYear()) %>
+            <menu type="toolbar">
+                <%- include("../../static/partial/--admin-menu.ejs") %>
+                <a class="-admin-menu-btn" href="/admin/student/wbdrs" title="Reload report">
+                    <svg viewBox="0 0 512 512"><path d="M464 16c-17.67 0-32 14.31-32 32v74.09C392.1 66.52 327.4 32 256 32C161.5 32 78.59 92.34 49.58 182.2c-5.438 16.81 3.797 34.88 20.61 40.28c16.89 5.5 34.88-3.812 40.3-20.59C130.9 138.5 189.4 96 256 96c50.5 0 96.26 24.55 124.4 64H336c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32V48C496 30.31 481.7 16 464 16zM441.8 289.6c-16.92-5.438-34.88 3.812-40.3 20.59C381.1 373.5 322.6 416 256 416c-50.5 0-96.25-24.55-124.4-64H176c17.67 0 32-14.31 32-32s-14.33-32-32-32h-128c-17.67 0-32 14.31-32 32v144c0 17.69 14.33 32 32 32s32-14.31 32-32v-74.09C119.9 445.5 184.6 480 255.1 480c94.45 0 177.4-60.34 206.4-150.2C467.9 313 458.6 294.1 441.8 289.6z"/></svg>
+                </a>
+
+                <a class="-admin-menu-btn" onclick="downloadCSV(this)" target="_blank" title="Download as CSV">
+                    <svg viewBox="0 0 384 512">
+                        <path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM128 280C128 284.4 124.4 288 120 288H112C103.1 288 96 295.1 96 304v32C96 344.9 103.1 352 112 352h8C124.4 352 128 355.6 128 360v16C128 380.4 124.4 384 120 384H112C85.5 384 64 362.5 64 336v-32C64 277.5 85.5 256 112 256h8C124.4 256 128 259.6 128 264V280zM172.3 384H160c-4.375 0-8-3.625-8-8v-16C152 355.6 155.6 352 160 352h12.25c6 0 10.38-3.5 10.38-6.625c0-1.25-.75-2.625-2.125-3.875l-21.88-18.75C150.3 315.5 145.4 305.3 145.4 294.6C145.4 273.4 164.4 256 187.8 256H200c4.375 0 8 3.625 8 8v16C208 284.4 204.4 288 200 288H187.8c-6 0-10.38 3.5-10.38 6.625c0 1.25 .75 2.625 2.125 3.875l21.88 18.75c8.375 7.25 13.25 17.5 13.25 28.12C214.6 366.6 195.6 384 172.3 384zM288 284.8V264C288 259.6 291.6 256 296 256h16C316.4 256 320 259.6 320 264v20.75c0 35.5-12.88 69-36.25 94.13C280.8 382.1 276.5 384 272 384s-8.75-1.875-11.75-5.125C236.9 353.8 224 320.3 224 284.8V264C224 259.6 227.6 256 232 256h16C252.4 256 256 259.6 256 264v20.75c0 20.38 5.75 40.25 16 56.88C282.3 325 288 305.1 288 284.8z"/>
+                    </svg>
+                </a>
+
+                <input type="search" id="search-bar" placeholder="search" oninput="filterColumn(this)">
+                <select class="year-picker" onchange="reloadWithYear(this.value, reloadHref)">
+                    <% for (let i=-10; i < 1; i++) { %>
+                        <option value="<%= year + i %>" <%= i === 0 ? 'selected' : '' %> ><%= year + i %></option>
+                    <% } %>
+                </select>
+                <a href="#" id="reloadHref" class="-hidden"></a>
+            </menu>
+        </header>
+
+        <div class="dummy-header"></div>
+
+        <div class="main-data-table">
+            <div class="table-row -table-header">
+                <span class="cell -index">#</span>
+                <span class="cell -location">Location</span>
+                <span class="cell -class">ProgramTitle</span>
+                <span class="cell -awardType">ProgramAwardType</span>
+    
+                <span class="cell -lastName">StudentLastName</span>
+                <span class="cell -firstName">StudentFirstName</span>
+                <span class="cell -mi">MI</span>
+    
+                <span class="cell -street">Address</span>
+                <span class="cell -city">City</span>
+                <span class="cell -state">State</span>
+                <span class="cell -zip">ZipCode</span>
+                <span class="cell -phone">Phone</span>
+                <span class="cell -SSN">SSN</span>
+                <span class="cell -DOB">BirthDate</span>
+    
+                <span class="cell -hispanic">Hispanic</span>
+                <span class="cell -race">Race</span>
+                <span class="cell -sex">Gender</span>
+                <span class="cell -disabled">Disability</span>
+                <span class="cell -veteran">Veteran</span>
+                <span class="cell -grade">PriorEducation</span>
+    
+                <span class="cell -startDate">StartDate</span>
+                <span class="cell -exitDate">ExitDate</span>
+    
+                <span class="cell -programEnrollmentStatus">ProgramEnrollmentStatus</span>
+                <span class="cell -earnedAwardType">EarnedAwardType</span>
+                <span class="cell -GPA">GPA</span>
+                <span class="cell -passFail">PassFail</span>
+            </div>
+
+            <% if(locals.students) { %>
+                <% students.map((student, index) => { %>
+                    <% if(student.user) { %>
+                        <% if(student.user.agreement && student.user.dataCollection) { %>
+                            <div class="table-row" id="table-row-<%= student._id %>">
+                                <span class="cell -index">
+                                    <%= index + 1 %>
+                                    <div class="delete-row" title="delete row from report" onclick="deleteRow('table-row-<%= student._id %>')">-</div>
+                                </span>
+
+                                <span class="cell -location"><%= student.location.split(',')[0] %></span>
+                                <span class="cell -class"><%= student.user.agreement.class %></span>
+                                <span class="cell -awardType">Certificate</span>
+
+                                <a href="/admin/user/<%= student.user._id %>" class="cell -lastName"><%= student.user.dataCollection.lastName %></a>
+                                <span class="cell -firstName"><%= student.user.dataCollection.firstName %></span>
+
+                                <!-- Middle name has to be cleared from spec.symbols and N/As -->
+                                <% let mi = student.user.dataCollection.middleName.replace(/[^a-z]/gi, "").toUpperCase() %>
+                                <% mi = mi != "NA" ? mi[0] : "" %>
+                                <span class="cell -mi" title="<%= student.user.dataCollection.middleName %>"><%= mi %></span>
+
+                                <span class="cell -street"><%= student.user.dataCollection.street %></span>
+                                <span class="cell -city"><%= student.user.dataCollection.city %></span>
+                                <span class="cell -state"><%= student.user.dataCollection.state[0].toUpperCase()+student.user.dataCollection.state[1].toUpperCase() %></span>
+                                <span class="cell -zip"><%= student.user.dataCollection.zip %></span>
+                                <span class="cell -phone"><%= student.user.dataCollection.phone %></span>
+                                <span class="cell -SSN"><%= student.user.dataCollection.SSN %></span>
+                                <span class="cell -DOB"><%= formatDOB(student.user.dataCollection.DOB) %></span>
+
+                                <span class="cell -hispanic" title="<%= student.user.dataCollection.hispanic %>"><%= hispanic.indexOf(student.user.dataCollection.hispanic) + 1 || " " %></span>
+                                <span class="cell -race" title="<%= student.user.dataCollection.race %>"><%= !student.user.dataCollection.race ? "9" : race.indexOf(student.user.dataCollection.race) + 1 || "8" %></span>
+                                <span class="cell -sex" title="<%= student.user.dataCollection.sex %>"><%= !student.user.dataCollection.sex ? " " : student.user.dataCollection.sex[0].toUpperCase() %></span>
+                                <span class="cell -disabled" title="<%= student.user.dataCollection.disabled %>"><%= disabled.indexOf(student.user.dataCollection.disabled) + 1 || " " %></span>
+                                <span class="cell -veteran" title="<%= student.user.dataCollection.veteran %>"><%= veteran.indexOf(student.user.dataCollection.veteran) + 1 || " " %></span>
+                                <span class="cell -grade" title="<%= student.user.dataCollection.grade %>"><%= !student.user.dataCollection.grade ? "99" : grade.indexOf(student.user.dataCollection.grade) + 1 || "90" %></span>
+
+                                <span class="cell -startDate"><%= formatDate(student.created) %></span>
+                                <span class="cell -exitDate"><%= student.graduate != 'no' ? formatDate(student.enrollmentStatusUpdate) : " " %></span>
+
+                                <% if(student.enrollmentStatus === "Graduated from the program") { %>
+                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">1</span>
+                                <% } %>
+                                <% if(student.enrollmentStatus === "Withdrew/terminated from the program" || student.enrollmentStatus === "Withdrew/terminated from the program (Declined)") { %>
+                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">2</span>
+                                <% } %>
+                                <% if(student.enrollmentStatus === "Still enrolled in the program") { %>
+                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">3</span>
+                                <% } %>
+                                <% if(student.enrollmentStatus === "Military leave of absence") { %>
+                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">4</span>
+                                <% } %>
+                                
+                                <span class="cell -earnedAwardType"><%= student.graduate === "passed" ? "Certificate " : "" %></span>
+
+                                <span class="cell -GPA"></span>
+                                <span class="cell -passFail"><%= student.graduate === "passed" ? "P" : student.graduate === "failed" ? "F" : "" %></span>
+                            </div>      <!-- table-row -->
+                        <% } %>
+                    <% } %>
+                <% }) %>
+            <% } else { %>
+                <h2 class="error-message">No student's data passed</h2>
+            <% } %>
+        </div>      <!-- main-data-table -->
+    </div>      <!-- report-box -->
+
+
+    <script defer>
+
+        fitDummyHeader()
+
+        function fitDummyHeader() {
+            const dummy = document.querySelector('.dummy-header')
+            const tableHeader = document.querySelector('.-table-header')
+            const header = document.querySelector('header')
+
+            const headerHeight = window.getComputedStyle(header).getPropertyValue("height")
+            dummy.style.height = headerHeight
+            tableHeader.style.top = headerHeight
+        }
+
+        // reload a layout with a certain year
+        function reloadWithYear(yearPickerValue, a) {
+            if (!yearPickerValue || !a) { return }
+            a.setAttribute('href', `/admin/student/wbdrs?year=${yearPickerValue}`)
+            a.click()
+        }
+
+
+        // FILTERING
+        const rows = document.querySelectorAll('.table-row')
+        const lastNames = document.querySelectorAll('.-lastName')
+        const firstNames = document.querySelectorAll('.-firstName')
+        const locations = document.querySelectorAll('.-location')
+
+   
+        function filterColumn(input) {
+            if (!input) { return }
+            const filter = input.value.toLowerCase()
+            if (!rows || !lastNames || !firstNames || !locations) { return }
+            if (rows.length < 2) { return }
+            for (let i=1; i<rows.length; i++) {     // 1st is a header
+                
+                let toShow = lastNames[i].textContent.toLowerCase().includes(filter)
+                || firstNames[i].textContent.toLowerCase().includes(filter)
+                || locations[i].textContent.toLowerCase().includes(filter)
+                
+                rows[i].classList.toggle('-hidden', !toShow)
+                rows[i].classList.toggle('-visible', toShow && filter)
+            }
+        }
+
+
+
+        // PRINTING
+        function downloadCSV(a) {
+            if (!a || !rows) { return }
+            let csv = ""
+            
+            rows.forEach(row => {
+                let cells = row.querySelectorAll('.cell')
+                cells.forEach((cell, index) => { csv += index ? `${cell.textContent.replace(/#/gi, "N")},` : "" })
+                csv += "\n"
+            })
+
+            a.setAttribute("href", 'data:text/csv;charset=utf-8,' + encodeURI(csv))
+            a.setAttribute("download", "WBDRS.csv")
+        }
+
+
+        // Delete row
+        function deleteRow(id) {
+            if (!id) { return }
+            const row = document.querySelector(`#${id}`)
+            if (!row) { return }
+            row.remove()
+        }
+
+    </script>
+
+</body>
+</html>

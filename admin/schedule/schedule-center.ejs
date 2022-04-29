@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TTA | Schedule Center</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="/admin/schedule/schedule-center.css">
+
+</head>
+<body>
+
+    <header>
+        <h1 class="main-title">Schedule&bull;<span>Center</span></h1>
+        <menu type="toolbar">
+            <%- include("../../static/partial/--admin-menu.ejs") %>
+        </menu>
+    </header>
+
+    <div class="locations-box">
+        <% if(locals.locations) { %>
+            <% locations.forEach(location => { %>
+                <section class="location-item">
+                    <h3 class="location-title"><%= location %></h3>
+                    <a href='/admin/schedule/backing1?calendarTransmission=AUTO&calendarLocation=<%= location %>'>STRAIGHT LINE BACKING Auto</a><br>
+                    <a href='/admin/schedule/backing1?calendarTransmission=MANUAL&calendarLocation=<%= location %>'>STRAIGHT LINE BACKING Manual</a><br>
+
+                    <a href='/admin/schedule/backing2?calendarTransmission=AUTO&calendarLocation=<%= location %>'>OFFSET BACKING Auto</a><br>
+                    <a href='/admin/schedule/backing2?calendarTransmission=MANUAL&calendarLocation=<%= location %>'>OFFSET BACKING Manual</a><br>
+
+                    <a href='/admin/schedule/backing3?calendarTransmission=AUTO&calendarLocation=<%= location %>'>ALLEY DOCK BACKING Auto</a><br>
+                    <a href='/admin/schedule/backing3?calendarTransmission=MANUAL&calendarLocation=<%= location %>'>ALLEY DOCK BACKING Manual</a><br>
+
+                    <a href='/admin/schedule/city?calendarTransmission=AUTO&calendarLocation=<%= location %>'>DRIVING Auto</a><br>
+                    <a href='/admin/schedule/city?calendarTransmission=MANUAL&calendarLocation=<%= location %>'>DRIVING Manual</a><br>
+                </section>
+            <% }) %>
+        <% } else { %>
+            <h2>No data about locations passed</h2>
+        <% } %>
+    </div>      <!-- locations-box -->
+
+</body>
+</html>

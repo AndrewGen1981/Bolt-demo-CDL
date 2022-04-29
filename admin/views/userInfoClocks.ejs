@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TTA | Student Clocks</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/admin/views/userInfoClocks.css">
+
+</head>
+<body>
+    
+    <!-- sprites -->
+    <svg class='-hidden-sprite'>
+        <symbol id="undo" viewBox="0 0 24 24">
+            <path d="M5.33936 4.46777H7.33936V7.02487C8.52937 6.08978 10.03 5.53207 11.6608 5.53207C15.5268 5.53207 18.6608 8.66608 18.6608 12.5321C18.6608 16.3981 15.5268 19.5321 11.6608 19.5321C9.51031 19.5321 7.58632 18.5623 6.30225 17.0363L7.92157 15.8515C8.83747 16.8825 10.1733 17.5321 11.6608 17.5321C14.4222 17.5321 16.6608 15.2935 16.6608 12.5321C16.6608 9.77065 14.4222 7.53207 11.6608 7.53207C10.574 7.53207 9.56811 7.87884 8.74785 8.46777L11.3394 8.46777V10.4678H5.33936V4.46777Z" />
+        </symbol>
+    </svg>
+    <svg class='-hidden-sprite'>
+        <symbol id="del" viewBox="0 0 455 455">
+            <rect y="217.5" width="400" height="20"/>
+        </symbol>
+    </svg>
+    <svg class='-hidden-sprite'>
+        <symbol id="add" viewBox="0 0 455 455">
+            <rect x="27.5" y="217.5" width="400" height="20"/><rect x="217.5" y="27.5" width="20" height="400"/>
+        </symbol>
+    </svg>
+
+    <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
+
+    <section class="clocks-box">
+        <h1>Clocks List of <span><%= studentName %></span></h1>
+        <h2>student key# <span><%= studentKey %></span></h2>
+        <h3>attendance type: <span><%= visiting %></span></h3>
+        <h4>Total Tuition Time is <span id='TTT'><%= strTTT(verTTT) %></span></h4>
+        <form action="/admin/clocks-update" method="POST" id="clocks-update-form">
+            <input type="hidden" name="studentId" value="<%= studentId %>" />
+            <!-- QR Clocks -->
+            <div class="clocks-table">
+                <!-- headers -->
+                <div class="clock-title">DATE</div>
+                <div class="clock-title">IN</div>
+                <div class="clock-title">OUT</div>
+                <div class="clock-title">DURATION</div>
+                <div class="clock-title">Undo</div>
+                <div class="clock-title">Del</div>
+                <div class="clock-title">Add</div>
+  
+                <!-- values -->
+
+                <% function leadZero(a) {return a.length < 2 ? `0${a}` : a} %>
+                <% function getYYYYMMDD(date) { const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/'); return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`} %>
+                <% function getHHMMSS(time) { const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':'); return `${leadZero(a[0])}:${leadZero(a[1])}` } %>
+                
+                <% if (verClocks) { %>
+                    <!-- if no clocks at all, then admin cann add, even first -->
+                    <% if (!verClocks.length) { %>
+                        <% verClocks.push({ date: new Date(), in: new Date(), inlat: '-', inlon: '-', inlocation: 'none', inDoneByAdmin: '-', inUpdatedByAdmin: '-', out: '-', outlat: '-', outlon: '-', outlocation: 'none', outDoneByAdmin: '-', outUpdatedByAdmin: '-', duration: 0 }) %>
+                    <% } %>
+
+                    <% verClocks.map((clock, index) => { %>
+                        <!-- DATE -->
+                        <input type="date" name="clockDate" id="date<%= index + 1 %>" value="<%= getYYYYMMDD(clock.date) %>" data-wasvalue="<%= getYYYYMMDD(clock.date) %>" required />
+                        <!-- IN -->
+                        <input type="time" name="clockIN" id="IN<%= index + 1%>" value="<%= getHHMMSS(clock.in) %>" data-wasvalue="<%= getHHMMSS(clock.in) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
+                        <input type="hidden" name="locationIN" id="locationIN<%= index + 1 %>" value="<%= clock.inlocation %>" />
+                        <input type="hidden" name="latIN" id="latIN<%= index + 1 %>" value="<%= clock.inlat %>" />
+                        <input type="hidden" name="lonIN" id="lonIN<%= index + 1 %>" value="<%= clock.inlon %>" />
+                        <input type="hidden" name="doneByAdminIN" id="doneByAdminIN<%= index + 1 %>" value="<%= clock.inDoneByAdmin %>" />
+                        <input type="hidden" name="updatedByAdminIN" id="updatedByAdminIN<%= index + 1 %>" value="<%= clock.inUpdatedByAdmin %>" />
+                        
+                        <!-- OUT & duration -->
+                        <% if( !isNaN(clock.out) ) { %>
+                            <input type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(clock.out) %>" data-wasvalue="<%= getHHMMSS(clock.out) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
+                            <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.outlocation %>" />
+                            <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
+                            <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
+                            <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
+                            <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
+                            <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %></div>
+                        <% } else { %>
+                            <% let newOut = new Date(clock.in) %>
+                            <% newOut.setTime(newOut.getTime() + clock.duration) %>
+                            <input class="-no-clockOUT" type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(newOut) %>" data-wasvalue="<%= getHHMMSS(newOut) %>" onchange="updateDuration(this, '<%= index + 1%>')" required/>
+                            <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.inlocation %>" />
+                            <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
+                            <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
+                            <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
+                            <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
+                            <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %>(auto)</div>
+                        <% } %>
+                        
+                        <!-- UNDO -->
+                        <svg class="ico -undo" id="undo<%= index + 1%>" onclick="restoreBtnClick(this, '<%= index + 1%>')">
+                            <use href="#undo"></use>
+                        </svg>
+                        <!-- DEL -->
+                        <svg class="ico -del" id="del<%= index + 1%>" onclick="delBtnClick(this, '<%= index + 1%>')">
+                            <use href="#del"></use>
+                        </svg>
+                        <!-- ADD should be LAST to add properly-->
+                        <svg class="ico -add" id="add<%= index + 1%>" onclick="addBtnClick(this, '<%= index + 1%>')">
+                            <use href="#add"></use>
+                        </svg>
+                    <% }) %>
+                    
+                <% } %>
+
+                <!-- add more values -->
+
+            </div>      <!-- clocks-table -->
+
+            <button class='-btn' type="submit">Update</button>
+            <button class='-btn' type="button" onclick="restoreAll()">Restore All</button>
+            <a class='-btn' href="/admin/user/<%= userId %>?activatetab=4">Cancel</a>
+            <!-- <button type="button" onclick="cancelAll()">Cancel</button> -->
+
+        </form>
+    </section>      <!-- clocks-box -->
+    
+
+
+    <script>
+
+        // tools for undo, adding and deleting
+
+        function restoreBtnClick(restoreBtn, index) {
+            // restores start values of IN and OUT for this day
+            if (!restoreBtn) { return }
+            if (!confirm('This will restore start data of this particular clock. Would you like to continue?')) { return }
+
+            function restoreInput(elID) {
+                const el = document.querySelector(elID)
+                if (!el) { return false }
+                el.value = el.dataset.wasvalue
+            }   //  restoreInput
+
+            restoreInput(`#date${index}`)
+            restoreInput(`#IN${index}`)
+            restoreInput(`#OUT${index}`)
+
+            recalculateTTT()
+        }
+
+
+        // Deleting line with clock IN and OUT
+        function delBtnClick(delBtn, index) {
+            function delEl(id) {
+                const el = document.querySelector(id)
+                if (el) { el.remove() }
+            }
+
+            // date
+            delEl(`#date${index}`)
+            
+            delEl(`#IN${index}`)
+            delEl(`#locationIN${index}`)
+            delEl(`#latIN${index}`)
+            delEl(`#lonIN${index}`)
+            delEl(`#doneByAdminIN${index}`)
+            delEl(`#updatedByAdminIN${index}`)
+
+            delEl(`#OUT${index}`)
+            delEl(`#locationOUT${index}`)
+            delEl(`#latOUT${index}`)
+            delEl(`#lonOUT${index}`)
+            delEl(`#doneByAdminOUT${index}`)
+            delEl(`#updatedByAdminOUT${index}`)
+
+            delEl(`#duration${index}`)
+            delEl(`#undo${index}`)
+            delEl(`#del${index}`)
+            delEl(`#add${index}`)
+
+            recalculateTTT()
+         }
+
+
+        // Adding line with inputs for clock IN and OUT
+        function addBtnClick(addBtn, index) {
+            
+            // all INs and OUTs inputs. Have to reload INs and OUTs each time, because their qty changes in dynamic
+            const INs = document.getElementsByName ("clockIN")
+            const OUTs = document.getElementsByName ("clockOUT")
+
+            // line date & location
+            const date = document.querySelector(`#date${index}`)
+            const locationIN = document.querySelector(`#locationIN${index}`)
+            const locationOUT = document.querySelector(`#locationOUT${index}`)
+            const lastOUT = document.querySelector(`#OUT${index}`)
+
+            if (!date || !addBtn) { return }
+            const number = INs.length + 1
+
+            // date
+            const input = document.createElement('input')
+            input.type = "date"
+            input.name = "clockDate"
+            input.id = `date${number}`
+            input.value = date.value        // prev.date
+            input.dataset.wasvalue = date.value
+            addBtn.after(input)
+            let lastElInRow = input
+                        
+            // IN
+            const inInput = document.createElement('input')
+            inInput.type = "time"
+            inInput.name = "clockIN"
+            inInput.id = `IN${number}`
+            inInput.value = lastOUT.value        // last OUT time
+            inInput.dataset.wasvalue = inInput.value
+            inInput.addEventListener('change', () => {
+                updateDuration(inInput, `${number}`)
+            })
+            lastElInRow.after(inInput)
+            lastElInRow = inInput
+
+            // IN Location
+            const inLocInput = document.createElement('input')
+            inLocInput.type = "hidden"
+            inLocInput.name = "locationIN"
+            inLocInput.id = `locationIN${number}`
+            inLocInput.value = locationIN.value        // prev.location
+            lastElInRow.after(inLocInput)
+            lastElInRow = inLocInput
+
+            // IN LAT. Geo IN contains admin ID, who updated
+            const latIN = document.createElement('input')
+            latIN.type = "hidden"
+            latIN.name = "latIN"
+            latIN.value = '<%= admin %>'
+            lastElInRow.after(latIN)
+            lastElInRow = latIN
+
+            // IN LON
+            const lonIN = document.createElement('input')
+            lonIN.type = "hidden"
+            lonIN.name = "lonIN"
+            lonIN.value = '-'
+            lastElInRow.after(lonIN)
+            lastElInRow = lonIN
+
+            // IN doneByAdminIN
+            const doneByAdminIN = document.createElement('input')
+            doneByAdminIN.type = "hidden"
+            doneByAdminIN.name = "doneByAdminIN"
+            doneByAdminIN.id = `doneByAdminIN${number}`
+            doneByAdminIN.value = '<%= admin %>'
+            lastElInRow.after(doneByAdminIN)
+            lastElInRow = doneByAdminIN
+
+            // IN updatedByAdminIN
+            const updatedByAdminIN = document.createElement('input')
+            updatedByAdminIN.type = "hidden"
+            updatedByAdminIN.name = "updatedByAdminIN"
+            updatedByAdminIN.id = `updatedByAdminIN${number}`
+            updatedByAdminIN.value = '<%= admin %>'
+            lastElInRow.after(updatedByAdminIN)
+            lastElInRow = updatedByAdminIN
+
+
+            // *** CLOCK OUT ***
+
+            // OUT
+            const outInput = document.createElement('input')
+            outInput.type = "time"
+            outInput.name = "clockOUT"
+            outInput.id = `OUT${number}`
+            outInput.value = lastOUT.value        // last OUT time
+            outInput.dataset.wasvalue = outInput.value
+            outInput.addEventListener('change', () => {
+                updateDuration(outInput, `${number}`)
+            })
+            lastElInRow.after(outInput)
+            lastElInRow = outInput
+
+            // OUT Location
+            const outLocInput = document.createElement('input')
+            outLocInput.type = "hidden"
+            outLocInput.name = "locationOUT"
+            outLocInput.id = `locationOUT${number}`
+            outLocInput.value = locationOUT.value        // prev.location
+            lastElInRow.after(outLocInput)
+            lastElInRow = outLocInput
+
+            // OUT LAT. Geo OUT contains admin ID, who updated
+            const latOUT = document.createElement('input')
+            latOUT.type = "hidden"
+            latOUT.name = "latOUT"
+            latOUT.value = '<%= admin %>'
+            lastElInRow.after(latOUT)
+            lastElInRow = latOUT
+
+            // OUT LON
+            const lonOUT = document.createElement('input')
+            lonOUT.type = "hidden"
+            lonOUT.name = "lonOUT"
+            lonOUT.value = '-'
+            lastElInRow.after(lonOUT)
+            lastElInRow = lonOUT
+
+            // OUT doneByAdminOUT
+            const doneByAdminOUT = document.createElement('input')
+            doneByAdminOUT.type = "hidden"
+            doneByAdminOUT.name = "doneByAdminOUT"
+            doneByAdminOUT.id = `doneByAdminOUT${number}`
+            doneByAdminOUT.value = '<%= admin %>'
+            lastElInRow.after(doneByAdminIN)
+            lastElInRow = doneByAdminIN
+
+            // OUT updatedByAdminOUT
+            const updatedByAdminOUT = document.createElement('input')
+            updatedByAdminOUT.type = "hidden"
+            updatedByAdminOUT.name = "updatedByAdminOUT"
+            updatedByAdminOUT.id = `updatedByAdminOUT${number}`
+            updatedByAdminOUT.value = '<%= admin %>'
+            lastElInRow.after(updatedByAdminOUT)
+            lastElInRow = updatedByAdminOUT
+
+
+            // *** Duration ***
+            const duration = document.createElement('div')
+            duration.setAttribute("name", "duration")
+            duration.id = `duration${number}`
+            duration.textContent = '0h:0m'
+            lastElInRow.after(duration)
+            lastElInRow = duration
+
+            // UNDO
+            const undo = document.createElement('div')
+            undo.classList.add('ico')
+            undo.classList.add('-undo')
+            undo.id = `undo${number}`
+            undo.addEventListener('click', () => {
+                restoreBtnClick(undo, `${number}`)
+            })
+            undo.textContent = "undo"
+            lastElInRow.after(undo)
+            lastElInRow = undo
+
+            // DEL
+            const del = document.createElement('div')
+            del.classList.add('ico')
+            del.classList.add('-del')
+            del.id = `del${number}`
+            del.addEventListener('click', () => {
+                delBtnClick(del, `${number}`)
+            })
+            del.textContent = "del"
+            lastElInRow.after(del)
+            lastElInRow = del
+
+            // ADD
+            const add = document.createElement('div')
+            add.classList.add('ico')
+            add.classList.add('-add')
+            add.id = `add${number}`
+            add.addEventListener('click', () => {
+                addBtnClick(add, `${number}`)
+            })
+            add.textContent = "add"
+            lastElInRow.after(add)
+            lastElInRow = add
+
+            recalculateTTT()
+
+        }
+
+
+
+        
+
+
+        function recalculateTTT() {
+            // all INs and OUTs inputs. Have to reload INs and OUTs each time, because their qty changes in dynamic
+            const INs = document.getElementsByName ("clockIN")
+            const OUTs = document.getElementsByName ("clockOUT")
+
+            const TTTElement = document.querySelector('#TTT')
+
+            function getTimeInSeconds(timeString) {
+                const time = timeString.split(':')
+                const hoursValue = time[0] ? parseInt(time[0]) * 3600 : 0
+                const minutesValue = time[1] ? parseInt(time[1]) * 60 : 0
+                const secondsValue = time[2] ? parseInt(time[2]) : 0
+                return hoursValue + minutesValue + secondsValue
+            }   // getTimeInSeconds
+
+            let ttt, t1, t2
+            ttt = 0
+
+            for (let i=0; i < INs.length; i++) {
+                t1 = getTimeInSeconds(INs[i].value)
+                t2 = getTimeInSeconds(OUTs[i].value)
+                ttt += t2 - t1
+            }
+
+            const TTT = ttt / 3600
+
+            const H = Math.trunc(TTT)
+            const M = Math.round(60*(TTT % 1))
+            TTTElement.textContent = M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m`
+        }
+
+
+        function updateDuration(clock, index) {
+            // updates duration and TTT due to changes
+            if (!index) { return }
+            const IN = document.querySelector(`#IN${index}`)
+            const OUT = document.querySelector(`#OUT${index}`)
+            const date = document.querySelector(`#date${index}`)
+            const duration = document.querySelector(`#duration${index}`)
+            if (!IN || !OUT || !duration) { return }
+            
+            function settime(dateString, timeString) {
+                const date = new Date(dateString)
+                const time = timeString.split(':')
+
+                const hoursValue = time[0] ? time[0] : '00'
+                const minutesValue = time[1] ? time[1] : '00'
+                const secondsValue = time[2] ? time[2] : '00'
+
+                return date.setHours(hoursValue, minutesValue, secondsValue)
+            }
+
+            const time1 = settime(date.value, IN.value)
+            const time2 = settime(date.value, OUT.value)
+            const TTT = Math.abs((time2 - time1)/(1000 * 60 *60))
+
+            const H = Math.trunc(TTT)
+            const M = Math.round(60*(TTT % 1))
+            
+            if(time2 >= time1) {
+                duration.textContent = M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m`
+                duration.classList.add('-correctDuration')
+                duration.classList.remove('-incorrectDuration')
+            } else {
+                duration.textContent = M > 9 ? `-${H}h:${M}m` : `-${H}h:0${M}m`
+                duration.classList.remove('-correctDuration')
+                duration.classList.add('-incorrectDuration')
+            }
+
+            // change updatedByAdmin
+            if (clock.name === 'clockIN') {
+                document.querySelector(`#updatedByAdminIN${index}`).value = "<%= admin %>"
+            }
+            if (clock.name === 'clockOUT') {
+                document.querySelector(`#updatedByAdminOUT${index}`).value = "<%= admin %>"
+            }
+
+            recalculateTTT()
+        }
+
+
+        function restoreAll() {
+            if(confirm('This will restore last saved student clocks. Are you sure?')) {
+                document.location.reload()
+            }
+        }
+
+
+        document.querySelector('#clocks-update-form').addEventListener('submit', (e) => {
+            // main FORM submit
+            // checking if update is needed
+
+            function checkAllInputs(collections) {
+                for (let col=0; col < collections.length; col++) {
+                    for (let i=0; i<collections[col].length; i++) {
+                        if(collections[col][i].value != collections[col][i].dataset.wasvalue) {
+                            return true
+                        }
+                    }
+                }
+                return false
+            }
+
+            // all INs and OUTs inputs. Have to reload INs and OUTs each time, because their qty changes in dynamic
+            const INs = document.getElementsByName ("clockIN")
+            const OUTs = document.getElementsByName ("clockOUT")
+            const Dates = document.getElementsByName ("clockDate")
+
+            // checking if qty is changed
+            let needed = parseInt("<%= verClocks.length %>") != Dates.length
+
+            // checking if there were changes among Dates, INs, OUTs
+            if (!needed) {
+                needed = checkAllInputs([Dates, INs, OUTs])
+            }
+
+            if (!needed) {
+                alert('Nothing was changed. Update is not needed.')
+                e.preventDefault()
+            }
+        })
+
+
+
+    </script>
+
+
+</body>
+</html>

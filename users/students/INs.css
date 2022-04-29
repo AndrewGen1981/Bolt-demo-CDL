@@ -1,0 +1,347 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');
+
+:root {
+    --header-height: 3.2rem;
+    --titles-row-height: 3.2rem;
+    --left-cols-color: #c7c7c7;
+    --borders-color: var(--gray60-pacific-cloud);
+    --max-width: 1500px;
+
+    --filter-accent: #43a84366;
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* HEADERS COLOR GROUPS */
+.-left-color-group {
+    background-color: #333 !important;
+    color: white !important;
+}
+.-clock-color-group {
+    background-color: #785e9f !important;
+    color: white !important;
+}
+.-right-color-group {
+    background-color: #292c33 !important;
+    color: yellowgreen !important;
+}
+
+/* HEADER Elements*/
+.ins-list-box {
+    width: 95%;
+    max-width: var(--max-width);
+
+    margin: 0 auto;
+}
+
+.ins-list-header {
+    width: 95%;
+    max-width: var(--max-width);
+    height: var(--header-height);
+
+    position: fixed;
+    top: 0;
+
+    padding: 3px;
+
+    background-color: #333;
+    border-bottom: 1px solid var(--borders-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    z-index: 3;
+}
+.ins-title {
+    font-family: "Industrial Medium";
+    font-size: 2rem;
+    font-weight: normal;
+
+    color: white;
+}
+.as-of-date {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+.as-of-date input {
+    margin-left: 1rem;
+    padding: 0 5px;
+
+    font-family: "Industrial Medium";
+    font-size: 1.6rem;
+
+    color: wheat;
+    background-color: var(--filter-accent);
+
+    border: 1px solid #fff;
+    outline: none;
+}
+
+
+nav {
+    display: inline-flex;
+}
+.-btn {
+    all: unset;
+
+    margin: 0 5px;
+    width: 45px;
+    height: 35px;
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.15rem;
+    font-weight: normal;
+    
+    text-decoration: none;
+    
+    color: rgba(255, 255, 255, 0.95);
+    background: transparent;
+    
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    border-radius: 30px;
+
+    cursor: pointer;
+}
+.-btn:hover {
+    color: #fff;
+    border: 2px solid #fff;
+
+    transform: translateY(-1px);
+    transition: all 0.25s linear;
+}
+
+
+/* Box Elements */
+.student-list-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+
+    border-bottom: 1px solid var(--borders-color);
+}
+.student-list-row:nth-child(even) {
+    background-color: #ebebeb;
+}
+
+#student-row-0 {
+    margin-top: var(--header-height);
+}
+
+#fixed-headers-row {
+    height: var(--titles-row-height);
+    position: sticky;
+    top: var(--header-height);
+    z-index: 2;
+}
+.-header {
+    font-family: "BrixSlab-Light" !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+    text-transform: capitalize !important;
+    cursor: default;
+}
+
+.field {
+    width: 10%;
+    padding: 0.2rem;
+    font-family: "BrixSlab-Regular";
+    border-right: 1px solid var(--borders-color);    
+}
+
+.-name {
+    width: 20%;
+    border-left: 1px solid var(--borders-color);
+}
+a.-name {
+    color: #333;
+    font-family: "BrixSlab-LightItalic";
+    text-transform: capitalize;
+}
+
+.-key {
+    text-align: center;
+    cursor: default;
+}
+.-TTT {
+    background-color: var(--orange15-high-desert);
+    text-align: center;
+    cursor: default;
+}
+.-location {
+    cursor: default;
+}
+.-presentStatus, .-in, .-out {
+    text-align: center;
+}
+.-presentStatus {
+    cursor: default;
+}
+
+.-not-present {
+    background-color: #999999 !important;
+}
+.-not-active {
+    color: #acacac !important;
+    cursor: not-allowed !important;
+}
+
+.-incab-scoring, .-outcab-scoring,
+.-backing-scoring, .-city-scoring {
+    text-align: center;
+    cursor: default;
+}
+.-incab-scoring button, .-outcab-scoring button,
+.-backing-scoring button, .-city-scoring button {
+    all: unset;
+
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    background: transparent;
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.empty-list {
+    font-family: "BrixSlab-ExtraLightItalic";
+    font-size: 2rem;
+    color: var(--bad-todo)
+}
+.-smallMsg {
+    display: none;
+}
+
+footer {
+    font-family: "BrixSlab-Bold";
+    margin: 1rem 0 3rem 0;
+}
+
+
+/* 
+@BRIX font family
+
+font-family: "BrixSlab-ExtraLight";
+font-family: "BrixSlab-ExtraLightItalic";
+
+font-family: "BrixSlab-Light";
+font-family: "BrixSlab-LightItalic";
+
+font-family: "BrixSlab-Regular";
+font-family: "BrixSlab-RegularItalic";
+
+font-family: "BrixSlab-Medium";
+font-family: "BrixSlab-MediumItalic";
+
+font-family: "BrixSlab-Bold";
+font-family: "BrixSlab-BlackItalic";
+
+*/
+
+@media (max-width: 1250px) {
+    .-key, .-TTT, .-presentStatus {
+        width: 6%;
+    }
+}
+@media (max-width: 1150px) {
+    :root {
+        font-size: 14px;
+    }
+}
+@media (max-width: 975px) {
+    :root {
+        font-size: 13px;
+    }
+    .field {
+        overflow-x: hidden;
+    }
+    .-right-color-group span {
+        display: none;
+    }
+}
+@media (max-width: 750px) {
+    :root {
+        font-size: 12px;
+        --header-height: 6rem;
+    }
+
+    .field.-clocks.-in {
+        display: none;
+    }
+    .field.-clocks.-out {
+        display: none;
+    }
+
+    .-incab-scoring, .-outcab-scoring, .-backing-scoring, .-city-scoring {
+        width: 15%;
+    }
+
+    .ins-list-header {
+        flex-direction: column;
+    }
+    .-btn {
+        width: 35px;
+        height: 25px;
+    }
+    .-clocks {
+        width: 7%;
+    }
+    .sec {
+        display: none;
+    }
+    .loc1 {
+        display: none;
+    }
+}
+@media (max-width: 650px) {
+    .-name {
+        width: 30%;
+    }
+    .-location {
+        width: 15%;
+    }
+    .-key, .-TTT, .-presentStatus {
+        width: 7%;
+    }
+    .-bigMsg {
+        display: none;
+    }
+    .-smallMsg {
+        display: block;
+    }
+}
+@media (max-width: 600px) {
+    .-name {
+        width: 27%;
+    }
+    .-location {
+        width: 14%;
+    }
+}
+@media (max-width: 450px) {
+    :root {
+        font-size: 11px;
+        --header-height: 8.5rem;
+    }
+    .as-of-date {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #clocked-as-of {
+        margin: 1px 0;
+    }
+    .-incab-scoring, .-outcab-scoring, .-backing-scoring, .-city-scoring {
+        width: 10%;
+    }
+}

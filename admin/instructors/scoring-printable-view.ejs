@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Scoring Printable View</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/admin/instructors/scoring-printable-view.css">
+</head>
+<body>
+    
+    <div class="scoring-box">
+
+        <% if(backlink) { %>
+            <a class='backlink' href="<%= backlink %>">back</a>
+        <% } else { %>
+            <a class='backlink' href="#" onclick="history.back()">back</a>
+        <% } %>
+
+        <% if(!scoring) { %>
+            <h1 class='title'>Oooopps... No scoring data were passed</h1>
+        <% } else { %>
+            <h1 class='title'><%= scoring.scoringTitle %></h1>
+
+            <section class="block-box -student-data">
+                <div class="block-item">
+                    <p class="item-title">Student</p>
+                    <h2><%= scoring.studentName %></h2>
+                </div>
+                <div class="block-item">
+                    <p class="item-title">Email</p>
+                    <h3><%= scoring.studentEmail %></h3>
+                </div>
+                <div class="block-item">
+                    <p class="item-title">Key</p>
+                    <h3><%= scoring.studentKey %></h3>
+                </div>
+                <div class="block-item">
+                    <p class="item-title">Location</p>
+                    <h4><%= scoring.location %></h4>
+                </div>
+                <br>
+                <div class="block-item -note">
+                    <span>
+                        <span class="item-title">Conducted as part of training</span>
+                        <strong><%= scoring.class %></strong>
+                        <strong><%= scoring.transmittion %></strong>
+                        as of test date student had<strong> <%= Math.round(scoring.TTT) %>h</strong>of tuition time compounded
+                    </span>
+                </div>
+            </section>      <!-- block-box -student-data -->
+
+            <section class="block-box -examiner-data">
+                <h2>Conducted by:</h2>
+                <div class="block-item">
+                    <p class="item-title">examiner</p>
+                    <h3><%= scoring.examinerName %></h3>
+                </div>
+                <div class="block-item">
+                    <p class="item-title">at</p>
+                    <strong><%= scoring.examDate %></strong>
+                    <strong><%= scoring.examTime %></strong>
+                    Pacific Time Zone
+                </div>
+                <div class="block-item">
+                    <p class="item-title">location</p>
+                    <h3><%= scoring.examinerLocation %></h3>
+                </div>
+            </section>      <!-- block-box -examiner-data -->
+
+            <section class="block-box -test-data">
+                <h2>Evaluation parameters:</h2>
+                <div class="block-item">
+                    <p class="item-title">test capacity</p>
+                    <strong><%= scoring.maxPoints %></strong>
+                    points
+                </div>
+                 <div class="block-item">
+                    <p class="item-title">test type</p>
+                    <% if(scoring.scoringType === 'INCAB' || scoring.scoringType === 'OUTCAB') { %>
+                        <p>ascending (as many points as possible), lower limit is <%= Math.round(scoring.maxPoints * scoring.limit) %> points</p>
+                    <% } else { %>
+                        <p>descending (as few points as possible, points are treated as a penalty), maximum <%= scoring.limit %> penatly points allowed</p>
+                    <% } %>
+                </div>
+                <div class="block-item">
+                    <p class="item-title">result</p>
+                    <h3 id='result'><%= scoring.ifPassed ? 'passed' : 'failed' %></h3>
+                </div>
+                <% if(scoring.importantCoveredRatio) { %>
+                    <div class="block-item">
+                        <p class="item-title">percentage of coverage of mandatory inspections</p>
+                        <h3 id='importantCoveredRatio'><%= Math.round(scoring.importantCoveredRatio * 1000) / 10 %>%</h3>
+                    </div>
+                <% } %>
+            </section>      <!-- block-box -test-data -->
+
+            <!-- Certificates -->
+            <% if(scoringCertificate.toString() === 'true') { %>
+                <p class='certificate'>
+                    <svg class="fa-certificate" viewBox="0 0 512 512"><path d="M458.622 255.92l45.985-45.005c13.708-12.977 7.316-36.039-10.664-40.339l-62.65-15.99 17.661-62.015c4.991-17.838-11.829-34.663-29.661-29.671l-61.994 17.667-15.984-62.671C337.085.197 313.765-6.276 300.99 7.228L256 53.57 211.011 7.229c-12.63-13.351-36.047-7.234-40.325 10.668l-15.984 62.671-61.995-17.667C74.87 57.907 58.056 74.738 63.046 92.572l17.661 62.015-62.65 15.99C.069 174.878-6.31 197.944 7.392 210.915l45.985 45.005-45.985 45.004c-13.708 12.977-7.316 36.039 10.664 40.339l62.65 15.99-17.661 62.015c-4.991 17.838 11.829 34.663 29.661 29.671l61.994-17.667 15.984 62.671c4.439 18.575 27.696 24.018 40.325 10.668L256 458.61l44.989 46.001c12.5 13.488 35.987 7.486 40.325-10.668l15.984-62.671 61.994 17.667c17.836 4.994 34.651-11.837 29.661-29.671l-17.661-62.015 62.65-15.99c17.987-4.302 24.366-27.367 10.664-40.339l-45.984-45.004z"></path></svg>
+                    Instructor <strong>certified</strong> student's knowledge and skills due to examining discipline
+                </p>
+            <% } else { %>
+                <p class='no-certificate'>The student's knowledge and skills are <strong>not certified</strong></p>
+            <% } %>
+            
+            <div class="scoring-results">
+                <h2>Scoring details</h2>
+                <% scoring.blocks.map(block => { %>
+                    <section class="scoring-block-box">
+                        <h4 class="scoring-block-box-title"><%= block.bl %></h4>
+                        <% block.items.map(item => { %>
+                            <div class="scoring-block">
+                                <h5 class="scoring-block-title"><%= item.it %></h5>
+                                <div class="scoring-skills-box">
+                                    <% item.skills.map(skill => { %>
+                                        <div class="scoring-skill">
+                                            <p><%= skill.sk %></p>
+                                            <% if(skill.checked) { %>
+                                                <svg class='-checked' viewBox="0 0 448 512"><path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"></path></svg>
+                                            <% } else { %>
+                                                <svg class='-unchecked' viewBox="0 0 448 512"><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>
+                                            <% } %>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </section>
+                <% }) %>
+            </div>      <!-- scoring-results -->
+
+            <!-- Comments -->
+            <% if(allowComments) { %>
+                <% if(scoringComment) { %>
+                    <details class="comments">
+                        <summary>Examiner comments</summary>
+                        <p><%= scoringComment %></p>
+                    </details>
+                <% } %>
+            <% } %>
+
+        <% } %>     <!-- scoring data passed -->
+
+        <footer>
+            <% if(backlink) { %>
+                <a class='backlink' href="<%= backlink %>">back</a>
+            <% } else { %>
+                <a class='backlink' href="#" onclick="history.back()">back</a>
+            <% } %>
+        </footer>
+
+    </div>      <!-- scoring-box -->
+
+
+    <script defer>
+        const result = document.querySelector('#result')
+        const studenData = document.querySelector('.-student-data')
+
+        // apply classes due to result
+        studenData.classList.toggle('-student-failed', result.textContent === 'failed')
+
+    </script>
+
+</body>
+</html>
+
+

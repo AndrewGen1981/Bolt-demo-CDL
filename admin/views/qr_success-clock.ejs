@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Clock Success | <%= student.user.name %> </title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/admin/views/qr-styles.css">
+
+</head>
+<body>
+    
+    <% if (student && TODClocks) { %>
+        <section class="qr-box -success">
+
+            <h1 class='qr-main-title'><span class='qr-main-type'><%= TODClocks.lastClock.type %></span> was successfully performed</h1>
+
+            <div class="inner-box">
+                <section class='qr-block'>
+                    <h2 class='qr-block-title'>Student Info</h2>
+
+                    <div class="flex-box">
+                        <div class='flex-column'>
+                            <% if (student.user.dataCollection) { %>
+                                <div>
+                                    <span class="value -name"><%= student.user.dataCollection.lastName %></span>
+                                    <span class="value -name"><%= student.user.dataCollection.firstName %></span>
+                                    <span class="value -name"><%= student.user.dataCollection.middleName %></span>
+                                    <a class="-btn" href='/admin/user/<%= student.user._id %>'>more...</a>
+                                </div>
+                            <% } %>
+
+                            <p><span class="title">key</span><span class="value"><%= student.key %></span></p>
+                            <p><span class="title">id</span><span class="value"><%= student._id %></span></p>
+                            <p><span class="title">email</span><span class="value"><%= student.email %></span></p>
+                            <p><span class="title">TTT</span><span class="value"><%= Math.trunc(student.TTT) %>h : <%= Math.round(60*(student.TTT % 1)) %>m</span></p>
+
+                        </div>  <!-- flex-column -->
+                        <div class='flex-column'>
+                            
+                            <p><span class="title">visiting</span><span class="value"><%= student.user.agreement.visiting %></span></p>
+                            <p><span class="title">class</span><span class="value"><%= student.user.agreement.class %></span></p>
+
+                            <% let form = student.user.dataCollection ? '+' : '-' %>
+                            <% let classForm = student.user.dataCollection ? '-step-done' : '-step-todo' %>
+                            <p><span class='step <%= classForm %>'><%= form %></span>Data Collection Form</p>
+
+                            <% form = student.user.application ? '+' : '-' %>
+                            <% classForm = student.user.application ? '-step-done' : '-step-todo' %>
+                            <p><span class='step <%= classForm %>'><%= form %></span>Application for Enrollment</p>
+
+                            <% form = student.user.agreement ? '+' : '-' %>
+                            <% classForm = student.user.agreement ? '-step-done' : '-step-todo' %>
+                            <p><span class='step <%= classForm %>'><%= form %></span>Enrollment Agreement</p>
+                            
+                        </div>  <!-- flex-column -->
+                    </div>  <!-- flex-box -->
+                </section>  <!-- qr-block -->
+
+                <section class='qr-block'>
+                    <h2 class='qr-block-title'>Today's Activity <%= new Date(TODClocks.lastClock.date).toLocaleDateString() %></h2>
+
+                    <% let durationForToday = 0 %>
+
+                    <% TODClocks.todayClocks.map((clock, index) => { %>
+                        
+                        <% const lastLine = index === (TODClocks.todayClocks.length-1) ? 'lastLine' : '' %>
+                        
+                        <div class="grid-table <%= lastLine %>">
+                            <span class='grid-value'>#<%= index + 1 %>.</span>
+                            <span class='grid-value'><%= clock.type %></span>
+                            <span class='grid-value -center'>[<%= new Date(clock.date).toLocaleTimeString() %>]</span>
+
+                            <% if (!isNaN(clock.lat) && !isNaN(clock.lon)) { %>
+                                <a class='grid-value -center -coord' href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
+                                    <%= Math.round(clock.lat * 10000) / 10000 %>,
+                                    <%= Math.round(clock.lon * 10000) / 10000 %>
+                                </a>
+                            <% } else { %>
+                                <span class='grid-value -center -coord'>LAT: <%= clock.lat %>, LON: <%= clock.lon %></span>
+                            <% } %>
+
+                            <a class='grid-value -center' href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
+                                <svg class="map-marker" viewBox="0 0 384 512">
+                                    <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
+                                </svg>
+                            </a>
+
+                            <span class='grid-value -right'>-location <%= clock.location %></span>
+                        </div>
+                            <% if (clock.duration) { %>
+                                <% let duration = clock.duration / (1000 * 60 * 60) %>
+                                <% durationForToday += duration %>
+                                <p><span class="title -left">Session Duration</span><span class="value"><%= Math.trunc(duration) %>h : <%= Math.round(60*(duration % 1)) %>m</span></p>
+                                <br>
+                            <% } %>
+                    <% }) %>
+
+                    <p><span class="title -left">Total for today</span><span class="value"><%= Math.trunc(durationForToday) %>h : <%= Math.round(60*(durationForToday % 1)) %>m (may fluctuate within 1 minute due to rounding)</span></p>
+                    
+                </section>  <!-- qr-block -->
+            </div>      <!-- inner-box -->
+        </section>  <!-- qx-box -->
+
+    <% } else { %>
+        <section class="qr-box -fail">
+            <h1 class="qr-main-title">Something is wrong...</h1>
+            <div class="inner-box">
+                <section class='qr-block'>
+                    <% if (!student) { %>
+                        <p><span class="title -left">Clock was not recorded</span><span class="value">because student info was not found</span></p>
+                        <p><span class="value">Are you sure you are trying to clock a student with VALID QR? If you are, then try again please, but be aware about the fact that system tracks QR activity of registered students only, with a valid QR codes.</span></p>
+                    <% } %>
+                    <% if (!TODClocks) { %>
+                        <p><span class="title -left">Clock was not recorded</span><span class="value">because of database negative respond</span></p>
+                        <p><span class="value">Most likely issue is inner, try later please. It just looks like we are not able to retrieve a clocks information for TODAY from database. We don't know yet if a clock has been recordered and just not shows up yet or it hasn't been recordered. Meanwhile you can check in student's personal records if clock was recordered or not.</span></p>
+                    <% } %>
+                </section>
+            </div>
+        </section>
+    <% } %>
+
+</body>
+</html>

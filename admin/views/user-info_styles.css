@@ -1,0 +1,773 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: 'BrixSlab-Regular';
+    font-size: 15px;
+    font-weight: normal;
+
+    color: var(--blue-slate)
+}
+:root {
+    --max-content-width: 1650px;
+    --color-calm: var(--blue-slate);
+    --color-hover: var(--orange80-high-desert);
+}
+
+.main-box {
+    width: 100%;
+    padding: 1rem 0;
+}
+.user-top-info-box {
+    width: 100%;
+    min-height: 120px;
+
+    background: #9d9d9d;
+    /* background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; */
+
+    text-align: center;
+}
+/* @media (min-width: 1535px) {
+    .user-top-info-box {
+        background-image: url('/static/images/pages/for-student-profile/watercolor_1920.jpg');
+    }
+}
+@media (max-width: 1535px) {
+    .user-top-info-box {
+        background-image: url('/static/images/pages/for-student-profile/watercolor_1535.jpg');
+    }
+}
+@media (max-width: 1150px) {
+    .user-top-info-box {
+        background-image: url('/static/images/pages/for-student-profile/watercolor_1150.jpg');
+    }
+}
+@media (max-width: 768px) {
+    .user-top-info-box {
+        background-image: url('/static/images/pages/for-student-profile/watercolor_768.jpg');
+    }
+} */
+
+.student-full-name {
+    padding-bottom: 1rem;
+    line-height: 1.2rem;
+
+    font-family: "Industrial Bold";
+    font-size: 3rem;
+    text-align: center;
+
+    text-shadow: 0px -1px 2px var(--blue-slate);
+
+    color: #fff; 
+}
+.student-address {
+    font-family: "BrixSlab-Regular";
+    font-size: 1.35rem;
+    text-align: center;
+    text-transform: capitalize;
+
+    letter-spacing: 0.05rem;
+
+    color: white;
+}
+
+.user-nick-name, .user-email, .email-verify {
+    font-family: "BrixSlab-Light";
+    font-size: 1.15rem;
+    color: white;
+}
+.user-nick-name {
+    color: #333;
+    font-style: italic;
+}
+.user-nick-name span {
+    color: #333;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.75rem;
+    text-transform: capitalize;
+    padding: 0 3px;
+}
+.user-email {
+    
+    font-style: italic;
+}
+.-trusted {
+    font-family: "BrixSlab-Regular";
+    color: lightgreen;
+}
+.-unsafe {
+    font-family: "BrixSlab-Regular";
+    color: lightcoral;
+}
+.user-profile-created, .user-last-session {
+    font-family: "BrixSlab-ExtraLightItalic";
+    line-height: 1.75rem;
+    color: whitesmoke;
+}
+
+
+/* @MENU */
+menu {
+    width: 100%;
+   
+    margin: 0 auto;
+    padding: 3px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+menu span, menu a {
+    margin: 0 5px;
+}
+.-admin-menu-btn:hover {
+    -webkit-box-shadow: 0px 0px 10px 3px rgb(227 200 245 / 61%) !important;
+    -moz-box-shadow: 0px 0px 10px 3px rgb(227 200 245 / 61%) !important;
+    box-shadow: 0px 0px 10px 3px rgb(227 200 245 / 61%) !important;
+}
+
+
+
+/* NAVBAR */
+.nav-menu {
+    width: 90%;
+    margin: 0 auto;
+    
+    position: sticky;
+    top: 0;
+    
+    background-color: rgba(255, 255, 255, 0.95);
+    border-top: 2px solid #fad465;
+
+    z-index: 10;
+}
+.nav-menu-box {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    flex-wrap: nowrap;
+}
+.block-title {
+    min-width: 20%;
+    line-height: 3rem;
+
+    font-family: 'WindSong', cursive;
+    font-size: 1.4rem;
+    text-align: center;
+
+    color: gray;
+    background-color: #fbfbfb;
+
+    cursor: pointer;
+    transition: all 0.25s linear;
+}
+
+.block-title:hover:not(.-nav-item-active) {
+    color: wheat;
+    background-color: var(--blue80-slate);
+}
+.-nav-item-active {
+    color: #fad465;
+    background-color: var(--blue-slate);
+}
+
+
+/* TOGGLER BODY */
+.block-box {
+    --col1:#fff;
+    --col2:var(--sand15-coastal);
+
+    width: 90%;
+    min-height: 78vh;
+    margin: 0 auto;
+
+    background-color: var(--col2);
+
+    background: -webkit-linear-gradient(180deg, var(--col1), var(--col2));
+    background: -moz-linear-gradient(180deg, var(--col1), var(--col2));
+    background: linear-gradient(180deg, var(--col1), var(--col2));
+
+    position: relative;
+    z-index: 1;
+}
+.block-box::after {
+    content: "";
+    
+    width: 95%;
+    max-width: calc(var(--max-content-width) * 0.75);
+    margin: 1rem auto;
+    
+    background-image: url('/static/images/water-mark.png');
+
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    z-index: -1;
+    opacity: 0.035;
+}
+.block-header {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 1.5rem;
+    color: var(--blue-slate);
+
+    text-align: center;
+    border-bottom: 1px solid var(--blue20-slate);
+}
+
+.block-box-inner {
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+}
+
+.row-item-65, .row-item-75, .row-item-85, .row-item-95 {
+    width: 65%;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.row-item-75 {
+    width: 75%;
+}
+.row-item-85 {
+    width: 85%;
+}
+.row-item-95 {
+    width: 95%;
+}
+
+.fields-set {
+    display: flex;
+    align-items: center;
+}
+.-evently {
+    flex: 1;
+}
+.-space-between {
+    justify-content: space-between
+}
+
+
+.field-title, .field-value {
+    font-family: "BrixSlab-Medium";
+    font-size: 1.3rem;
+    text-align: left;
+    text-transform: capitalize;
+
+    padding: 0.25rem;
+}
+.field-title {
+    min-width: 17rem;
+}
+.field-value {
+    min-width: 100px;
+    font-family: "BrixSlab-Light";
+}
+.field-warning,
+.field-accomplished,
+.field-yellow {
+    min-width: 100px;
+    
+    font-family: "BrixSlab-LightItalic";
+    font-size: 1.15rem;
+
+    color: var(--bad-todo1)
+}
+.field-accomplished {
+    color: var(--good-done1)
+}
+.field-yellow {
+    color: rgb(205, 156, 50);
+}
+
+.-orange {
+    color: var(--orange-high-desert);
+}
+.-email {
+    text-transform: lowercase;
+}
+.-italic {
+    font-style: italic;
+}
+.-bold {
+    font-weight: bolder;
+}
+.-small {
+    font-family: "BrixSlab-MediumItalic";
+    font-size: 1rem;
+}
+.column-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap-line {
+    width: 97%;
+    margin: 0.35rem auto;
+    border-bottom: 1px solid var(--blue20-slate);
+}
+.-right-side {
+    justify-content: right;
+}
+.-windblow {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.75rem;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+.-sm1 {
+    font-size: 1rem;
+}
+.-date-title {
+    min-width: 10rem;
+}
+.-coord, .-no-coord {
+    min-width: 11rem;
+}
+.-coord {
+    color: var(--good-done1);
+}
+.-noTextTransformation {
+    text-transform: none;
+}
+
+/* TUITION */
+.-top-align {
+    align-items: flex-start;
+}
+.-module {
+    min-width: 13rem;
+    max-width: 13rem;
+}
+.-title {
+    min-width: 14rem;
+    max-width: 14rem;
+}
+.-progress {
+    min-width: 6rem;
+    font-weight: bolder;
+    text-align: center;
+}
+.-test {
+    min-width: 4rem;
+    text-align: center;
+}
+.-test-accomplished {
+    min-width: 9rem;
+    text-align: center;
+}
+
+
+.-button-box {
+    max-width: 550px;
+    margin-right: 0;
+    padding-bottom: 1rem;
+    justify-content: space-around;
+}
+.-btn, .show-edit-btn {
+    width: 140px;
+    min-width: 140px;
+
+    border-radius: 25px;
+
+    font-size: 1rem;
+    text-transform: capitalize;
+    text-decoration: none;
+    text-align: center;
+    
+    color: white;
+    background-color: var(--color-calm);
+    border: none;
+
+    padding: 0.5em;
+    cursor: pointer;
+}
+.-btn:hover, .show-edit-btn:hover {
+    background-color: var(--color-hover);
+    transition: background-color 0.2s ease-in;
+}
+
+
+/* EDIT element */
+.edit-set {
+    display: flex;
+    align-items: center;
+}
+
+.show-edit-btn {
+    width: auto;
+    min-width:unset;
+
+    font-family: "BrixSlab-ExtraLightItalic";
+    text-transform:unset;
+
+    margin: 0 .5rem;
+    padding: 5px 10px;
+}
+.-red {
+    --color-hover: tomato;
+    margin: 0 5px 0 0;
+    padding: 4px 4px 0 4px;
+}
+.delete-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    
+    stroke:#fff;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-width:3px;
+}
+.redo-mark {
+    width: 1.25rem;
+    height: 1.25rem;
+    
+    fill: whitesmoke;
+}
+
+
+.input-box {
+    width: 17rem;
+    padding: .5rem;
+    background-color: transparent;
+
+    font-family: 'Brix', sans-serif;
+    font-size: 1rem;
+    text-transform: capitalize;
+    color: rgba(34, 60, 80, 0.8);
+    
+    border: 1px solid  var(--blue20-slate);
+    border-radius: 5px;
+}
+.input-box[type='date'] {
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.input-box[type='text']:hover,
+.input-box[type='date']:hover {
+    background-color: var(--blue20-slate);
+    transition: background-color .2s ease-in;
+}
+
+.parrot {
+    font-family: "BrixSlab-RegularItalic";
+    color: var(--good-done1);
+}
+
+.show-password {
+    font-family: "BrixSlab-ExtraLight";
+    font-size: 1rem;
+    text-transform: uppercase;
+
+    margin-right: 2rem;
+}
+
+
+.student-info-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    row-gap: 5px;
+    margin-top: 5px !important;
+}
+.student-info-table * {
+    font-size: 1.067rem;
+
+}
+
+.location-input-box {
+    max-width: 150px;
+    border: 1px solid lightgray;
+    background: transparent;
+    outline: none;
+}
+.-btn-type2 {
+    --col: var(--orange-high-desert);
+    
+    width: 150px;
+    height: 100%;
+
+    display: inline-flex;
+
+    text-decoration: none;
+    text-transform: uppercase;
+    color: var(--col);
+
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.85rem;
+
+    align-items: center;
+    justify-content: center;
+    justify-self: right;
+
+    background: transparent;
+    border: 2px solid var(--col);
+    border-radius: 1rem;
+
+    cursor: pointer;
+}
+.-btn-type2:hover {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+}
+
+
+/* Details sections */
+details {
+    background-color: rgba(51, 51, 51, 0.075);
+    
+    margin-top: 5px !important;
+    margin-bottom: 10px !important;
+    
+    padding: 5px;
+    border-radius: 3px;
+}
+summary {
+    cursor: pointer;
+}
+.details-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.65rem;
+    text-transform: capitalize;
+}
+.details-ico {
+    margin-right: 5px;
+    height: 1.2rem;
+    fill: var(--blue60-slate);
+}
+
+/* Student Data Details */
+.learning-table {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr 1fr 1fr 1fr;
+}
+.-table-header {
+    padding: 5px 0;
+    background-color: rgba(51, 51, 51, 0.075);
+    font-weight: bold;
+}
+.-cell-center {
+    text-align: center;
+}
+.-cell-right {
+    text-align: right;
+}
+.-cell-done {
+    color:rgb(77, 196, 48);
+    cursor: pointer;
+}
+
+/* Student Clock Details */
+.clock-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+/* Student Scoring Details */
+.scoring-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.scoring-details {
+    width: 100%;
+    height: 95%;
+
+    text-align: left;
+    text-decoration: underline;
+    background-color: rgba(51, 51, 51, 0.05);
+
+    border: none;
+    cursor: pointer;
+}
+
+
+/* Student Scoring Details */
+.schedule-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.schedule-details {
+    width: 100%;
+    height: 95%;
+
+    text-align: left;
+    text-decoration: underline;
+    background-color: rgba(51, 51, 51, 0.05);
+
+    border: none;
+    cursor: pointer;
+}
+
+
+/* Payments Details */
+:root {
+    --pmt-height: 30px;
+}
+.payment-table {
+    display: grid;
+    grid-template-columns: 1fr 0.35fr 1.2fr 1fr 3fr 0.35fr;
+}
+.payment-table div {
+    width: 100%;
+    max-height: var(--pmt-height);
+    overflow-y: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.payment-table input, .payment-table select {
+    padding: 5px 3px;
+    margin: 1px !important;
+    
+    height: var(--pmt-height);
+
+    font-family: "BrixSlab-Light";
+    font-size: 0.9rem;
+
+    outline: none;
+    background-color: #fafbf44a;
+    border: 1px solid rgb(195 195 195);
+    border-radius: 2px;
+}
+.pmt-ico {
+    width: var(--pmt-height);
+    height: var(--pmt-height);
+    margin: auto;
+    
+}
+.-fa-money-bill {
+    fill: #3eb73ab3;
+}
+.-fa-card {
+    fill: #ff5f00;
+}
+.-fa-check-bill {
+    fill: #798edf;
+}
+.-fa-check1-bill {
+    fill: #777;
+}
+.-fa-paypal {
+    fill: #002f86;
+}
+.-fa-wu {
+    fill: #cbb408;
+}
+.-fa-bank {
+    fill: #3a77b773;
+}
+.-fa-other {
+    fill: #edc800;
+}
+
+/* Payments + and - */
+
+.-fa-plus, .-fa-minus {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.-fa-plus {
+    background-image: url('/static/images/plus-square-regular.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.-fa-minus {
+    background-image: url('/static/images/minus-square-regular.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+@keyframes fading {
+    from {opacity: 1}
+    to {opacity: 0}
+}
+.-fading {
+    animation: fading 1.1s linear;
+}
+.payments-info {
+    height: 2rem;
+    color: orangered;
+    transition: all 1s linear;
+}
+
+
+/* Balance Box */
+#balance-box {
+    margin: 10px auto;
+    font-style: italic;
+    background-color: #33333314;
+}
+.balance-zero {
+    background-color: #5ce931a1 !important;
+}
+.balance-student-owe {
+    background-color: #ff002878 !important;
+}
+.balance-company-owe {
+    background-color: #f3da6e !important;
+}
+
+
+/* Student Data Details */
+.skills-test-table {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 3fr 1fr 1fr 1fr;
+}
+
+.divider-line {
+    margin-top: 1rem;
+    width: 100%;
+    height: 25px;
+    fill: #535b65cf;
+    transform: rotate(180deg);
+}
+
+
+#enrollmentStatus {
+    width: fit-content;
+}
+
+
+/* 
+@BRIX font family
+
+font-family: "BrixSlab-ExtraLight";
+font-family: "BrixSlab-ExtraLightItalic";
+
+font-family: "BrixSlab-Light";
+font-family: "BrixSlab-LightItalic";
+
+font-family: "BrixSlab-Regular";
+font-family: "BrixSlab-RegularItalic";
+
+font-family: "BrixSlab-Medium";
+font-family: "BrixSlab-MediumItalic";
+
+font-family: "BrixSlab-BlackItalic";
+font-family: "BrixSlab-Bold";
+
+*/
+
+.-hidden, .-hidden-sprite {
+    display: none;
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Chart: Accounts Receivables</title>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/brix-family.css">
+        
+    <link rel="stylesheet" href="/admin/charts/accountsReceivable.css">
+</head>
+<body>
+
+    <!-- each location has own color for Chart -->
+    <% const colorArray = ['black', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'] %>
+    
+    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' } %>
+    <% const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }) %>
+    <% const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+    <% const percFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) %>
+    <% function formatToPercents(ratio) { return `${percFormat.format(Math.round(ratio * 1000) / 10)}%` } %>
+
+    <header>
+        <h1 class="chart-title">Account Receivable per Locations</h1>
+        <menu>
+            <%- include('../../static/partial/--admin-menu.ejs') %>
+        </menu>
+    </header>
+
+    <div class="dummy"></div>
+    
+    <section class="chart-box">
+
+        <% if (locals.locationsData) { %>
+
+            <!-- drawing charts -->
+            <% 
+                let max = locationsData[0].totalDebt
+                let grandTotalDebt = 0
+                let locationsStr = '•'
+
+                locationsData.map(data => {
+                    if(data.totalDebt > max) { max = data.totalDebt }
+                    grandTotalDebt += data.totalDebt
+                    locationsStr += `${data.location}•`
+                }) 
+            %>
+            
+            <p class="chart-description">Comparative analysis of receivables in terms of locations<%= locationsStr %></p>
+            
+            <div class="charts-box">
+                <div class="chart">
+                    <!-- drawing grid -->
+                    <% let gridsQty = 10 %>
+                    <% for (let i=0; i<gridsQty; i++) { %>
+                        <div class="chart-grid-line" style="--top:<%= i * 100 / gridsQty %>%;"></div>
+                    <% } %>
+                    <!-- drawing columns -->
+                    <% locationsData.map((data, index) => { %>
+                        <% let heightRatio = max ? data.totalDebt / max : 0 %>
+                        <div class="chart-column" style="--heightRatio:<%= heightRatio %>;">
+                            <div class="chart-column-inner" style="--color:<%= colorArray[index] %>;"></div>
+                            <span class="column-value"><%= usCurrencyFormat.format(data.totalDebt) %></span>
+                            <span class="column-text"><%= formatToPercents(grandTotalDebt ? data.totalDebt / grandTotalDebt : 0) %></span>
+                            <span class="column-title"><%= data.location %></span>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="pie-charts-box">
+                <div class="pie-charts-box-inner">
+                    <% locationsData.map((data, index) => { %>
+                        <% let perc = grandTotalDebt ? data.totalDebt / grandTotalDebt : 0 %>
+                        <div class="pie" style="--p:<%= perc * 100 %>;--b:18px;--c:<%= colorArray[index] %>;"><%= formatToPercents(perc) %></div>
+                    <% }) %>
+                </div>
+            </div>
+            
+            
+            <h2 class="chart-subtitle">Account Receivable Details</h1>
+            <p class="chart-subtitle1">* Describes the structure of the data that form the above diagram</p>
+
+            <% locationsData.map((data, index) => { %>
+                <section class="location-data">
+                    <section class="location-data-header" style="--color:<%= colorArray[index] %>;"></section>
+                    <h2 class="location-title"><%= data.location %></h2>
+                    <div class="users-table">
+                        <!-- headers -->
+                        <span class="user-name -header">Student/Applicant</span>
+                        <span class="user-cost -header">Cost Of Tuition</span>
+                        <span class="user-paid -header">Already Paid</span>
+                        <span class="user-debt -header">Still Owes</span>
+                        <span class="user-weight -header">Weight in Total Debts</span>
+
+                        <% data.users.map(user => { %>
+                            <a class="user-name" href="/admin/user/<%= user._id %>?activatetab=3&open=payments"><%= user.name.toLowerCase() %></a>
+                            <span class="user-cost"><%= usNumberFormat.format(user.cost) %></span>
+                            <span class="user-paid"><%= usNumberFormat.format(user.paid) %></span>
+                            <span class="user-debt"><%= usNumberFormat.format(user.debt) %></span>
+                            <span class="user-weight"><%= formatToPercents(data.totalDebt ? user.debt / data.totalDebt : 0) %></span>
+                        <% }) %>
+                        <span class="total">Total</span>
+                        <span class="total-cost"><%= usCurrencyFormat.format(data.totalCost) %></span>
+                        <span class="total-paid"><%= usCurrencyFormat.format(data.totalPaid) %></span>
+                        <span class="total-debt"><%= usCurrencyFormat.format(data.totalDebt) %></span>
+                        <span class="total-weight">100.0%</span>
+
+                        <span class="average">Average Check</span>
+                        <span class="av-cost"><%= usCurrencyFormat.format(data.avCost) %></span>
+                        <span class="av-paid"><%= usCurrencyFormat.format(data.avPaid) %></span>
+                        <span class="av-debt"><%= usCurrencyFormat.format(data.avDebt) %></span>
+                        <span class="av-weight"></span>
+
+                        <span class="average">Specific Weight</span>
+                        <span class="av-cost">100.0%</span>
+                        <span class="av-paid"><%= formatToPercents(data.ratioPaid) %></span>
+                        <span class="av-debt"><%= formatToPercents(data.ratioDebt) %></span>
+                        <span class="av-weight"></span>
+                    </div>
+                </section>
+            <% }) %>
+        <% } else { %>
+            <h1>No Data Found...</h1>
+        <% } %>
+    </section>
+
+    <script type="module" defer>
+
+        // @NOTIFICATIONS from db
+        import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js"
+        const socket = io("/")
+
+        socket.on('users-collection-update', data => {
+            if (data) {
+                document.location.reload()
+            }
+        })
+
+        socket.on('agreements-update', data => {
+            if (data) {
+                document.location.reload()
+            }
+        })
+
+    </script>
+
+
+    <script defer>
+
+        // column animation
+        const columns = document.querySelectorAll(".chart-column")
+        if (columns) {
+            for(let i=0; i< columns.length; i++) {
+                
+                let col = {
+                    node: columns[i],
+                    p: columns[i].style.getPropertyValue("--heightRatio"),
+                    p1: 0.001,
+                    timer: undefined
+                }
+               
+                col.timer = setInterval(() => {
+                    col.node.style.setProperty("--heightRatio", col.p1)
+
+                    if (col.p1 > col.p) {
+                        col.p1 = col.p
+                        clearInterval(col.timer)
+                    } else {
+                        col.p1 += 0.01
+                    }
+                }, 1)
+                
+            }
+        }
+
+        // pie animation
+        const pies = document.querySelectorAll(".pie")
+        if (pies) {
+            for(let i=0; i< pies.length; i++) {
+                
+                let pie = {
+                    node: pies[i],
+                    p: pies[i].style.getPropertyValue("--p"),
+                    p1: 0.001,
+                    timer: undefined
+                }
+               
+                pie.timer = setInterval(() => {
+                    pie.node.style.setProperty("--p", pie.p1)
+
+                    if (Math.log(pie.p / pie.p1) < 0.001) {
+                        pie.p1 = pie.p
+                        clearInterval(pie.timer)
+                    } else {
+                        pie.p1 += Math.log(pie.p / pie.p1)
+                    }
+                }, 25)
+                
+            }
+        }
+
+    </script>
+
+</body>
+</html>

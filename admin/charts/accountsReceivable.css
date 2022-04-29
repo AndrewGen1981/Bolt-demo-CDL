@@ -1,0 +1,357 @@
+*, *::after, *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --header-height: 6rem;
+
+    --chart-width: min(85vw, 850px);
+    --chart-height: calc(var(--chart-width) * 0.45);
+}
+
+header {
+    position: fixed;
+
+    width: 100%;
+    height: var(--header-height);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #333;
+
+    z-index: 10;
+}
+.chart-title {
+    font-family: "Industrial Medium";
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+.dummy {
+    width: 100%;
+    height: calc(var(--header-height) + 2px);
+    background-color: #af501d;
+}
+
+.chart-box {
+    width: 95%;
+    max-width: 1550px;
+    margin: 0 auto;
+    background-color: #f8f8f8;
+}
+.chart-description {
+    margin: 1rem 0;
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.83rem;
+    color: #af501d;
+    text-align: center;
+}
+
+.charts-box {
+    width: var(--chart-width);
+    height: var(--chart-height);
+
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    background-color: #f3f3f3;
+    border-bottom: 1px solid lightgray;
+
+    margin-bottom: 2rem;
+}
+.chart {
+    width: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    justify-content: center;
+
+    position: relative;
+    z-index: 0;
+}
+.chart-grid-line {
+    width: 98%;
+    margin: 0 auto;
+
+    position: absolute;
+    top: var(--top);
+
+    border-bottom: 1px #af501d28 solid;
+    z-index: 0;
+}
+
+.chart-column {
+    --col1: lightgray;
+    --col2: #575757;
+   
+    width: 15%;
+    margin: 0 1.5%;
+    height: calc(var(--chart-height) * var(--heightRatio)*0.9);
+
+    background-color: var(--col2);
+    background: -webkit-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: -moz-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: 5px 5px 0 0;
+
+    position: relative;
+}
+.chart-column-inner {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--color);
+    border-radius: 4px 4px 0 0;
+    opacity: 0.35;
+}
+
+.column-value {
+    width: 100%;
+
+    position: absolute;
+    left: 0;
+    top: -1.35rem;
+
+    font-family: "BrixSlab-Medium";
+    font-size: 0.93rem;
+    text-align: center;
+    
+    background-color: #f3f3f333;
+    color:#575757;
+
+    padding: 2px;
+    border-radius: 2px;
+
+    z-index: 2;
+}
+.column-title {
+    width: 100%;
+
+    position: absolute;
+    left: 0;
+    bottom: -1.5rem;
+
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.93rem;
+    color: #af501d;
+    text-align: center;
+
+    z-index: 2;
+}
+.column-text {
+    font-family: "BrixSlab-Bold";
+    color: #fff;
+    text-shadow: 4px 4px 6px #333;
+    font-size: 2rem;
+}
+
+
+.chart-subtitle {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 1.5rem;
+    color: #575757;
+    text-align: center;
+}
+.chart-subtitle1 {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.83rem;
+    color: #af501d;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+
+.location-data {
+    margin: 1.5rem 0;
+    padding: 0.5rem;
+    position: relative;
+    background-color: #575757;
+}
+.location-data-header {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 1.95rem;
+
+    background-color: var(--color);
+    opacity: 0.25;
+    z-index: 0;
+}
+.location-title {
+    font-family: "BrixSlab-Bold";
+    color: #fff;
+    text-shadow: 4px 4px 6px #333;
+    font-size: 2rem;
+}
+
+.users-table {
+    width: 95%;
+    max-width: 1240px;
+
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+}
+.users-table * {
+    padding: 3px 0;
+    font-family: "BrixSlab-Light";
+    font-size: 0.93rem;
+    color: #fff;
+}
+.user-name {
+    font-family: "BrixSlab-Regular";
+    color: #ececec;
+    text-transform: capitalize;
+}
+
+.user-name:nth-last-child(odd) {
+    border-bottom: 1px solid #ececec11;
+}
+
+.user-cost:nth-last-child(even),
+.user-paid:nth-last-child(odd),
+.user-debt:nth-last-child(even),
+.user-weight:nth-last-child(odd) {
+    background-color: #ececec11;
+}
+
+.total, .total-cost, .total-paid, .total-debt, .total-weight {
+    font-size: 1.1rem;
+    background-color: #af501db8;
+}
+
+.total-cost, .total-paid, .total-debt, .total-weight,
+.user-cost, .user-paid, .user-debt, .user-weight,
+.av-cost, .av-paid, .av-debt, .av-weight {
+    text-align: right;
+}
+
+.-header {
+    color: #f39665;
+}
+
+
+/* pie chart */
+:root {
+    --pie-width: calc(var(--chart-width) / 5);
+}
+.pie-charts-box {
+    width: var(--chart-width);
+    height: calc(var(--pie-width) * 1.1);
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: #f3f3f3;
+}
+.pie {
+    --w: var(--pie-width);
+
+    width:var(--w);
+    aspect-ratio:1;
+    position:relative;
+    display:inline-grid;
+    margin:5px;
+    place-content:center;
+
+    font-family: "BrixSlab-Bold";
+    font-size: 1.65rem;
+    color: #333;
+
+    opacity: 0.5;
+    transition: all 0.5s linear;
+}
+.pie:before,
+.pie:after {
+    content:"";
+    position:absolute;
+    border-radius:50%;
+}
+.pie:before {
+    inset:0;
+    background:
+        radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat,
+        conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
+    -webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+            mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+}
+.pie:after {
+    inset:calc(50% - var(--b)/2);
+    background:var(--c);
+    transform:rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
+}
+
+
+@media (max-width:850px) {
+    :root {
+        font-size: 14px;
+    }
+}
+@media (max-width:750px) {
+    :root {
+        font-size: 13px;
+    }
+}
+@media (max-width:660px) {
+    :root {
+        font-size: 12px;
+    }
+    .total, .total-cost, .total-paid, .total-debt, .total-weight {
+        font-size: 0.9rem;
+    }
+}
+@media (max-width:500px) {
+    .chart-title {
+        font-size: 1.35rem;
+    }
+
+    .total, .total-cost, .total-paid, .total-debt, .total-weight {
+        font-size: 0.83rem;
+    }
+    .column-text {
+        font-size: 1.2rem;
+    }
+    .pie {
+        font-size: 1.15rem;
+    }
+
+    .column-value,
+    .user-paid,
+    .total-weight, 
+    .av-cost {
+        display: none;
+    }
+    .users-table {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+}
+@media (max-width:400px) {
+    .chart-column {
+        width: 22%;
+    }
+    .pie {
+        font-size: 0.9rem;
+    }
+}

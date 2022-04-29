@@ -1,0 +1,199 @@
+<!-- Partial view for scorings layouts -->
+
+<a id='close' href="/admin/student">
+    <i class="fas fa-times-circle" title='back to INs'></i>
+</a>
+
+<% if (!student) { %>
+    <h2>No student data..</h2>
+<% } else { %>
+    <% if (!student.user.dataCollection || !student.user.agreement || student.status != 'unblock') { %>
+        <h2>Cannot get Agreement or Data Collection data of student <%= student.key %>. Or Student is BLOCKED</h2>
+    <% } else { %>
+
+        <header>
+            <% if (title) { %>
+                <h1 class='scoring-title'><%= title %></h1>
+            <% } else { %>
+                <h1 class='scoring-title'>No Title Data</h1>
+            <% } %>
+    
+            <ul class="student-info">
+                <li>
+                    <i class="fas fa-user-graduate"></i>
+                    <h2 class="student">Student:
+                        <span class="first-name"><%= student.user.dataCollection.firstName %></span>
+                        <span class="middle-name"><%= student.user.dataCollection.middleName %></span>
+                        <span class="last-name"><%= student.user.dataCollection.lastName %></span>
+                    </h2>
+                </li>
+                <li>
+                    <i class="fas fa-cogs"></i>
+                    <p class="transmission"><%= student.user.agreement.transmission %></p>
+                </li>
+                <li>
+                    <i class="fas fa-user-friends"></i>
+                    <p class="class-cdl"><%= student.user.agreement.class %></p>
+                </li>
+                <li>
+                    <i class="fas fa-key"></i>
+                    <p class="key">Key: <%= student.key %></p>
+                </li>
+                <li>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p class="location">Location: <%= student.location %></p>
+                </li>
+                <li>
+                    <i class="fas fa-clock"></i>
+                    <p class="TTT">Accumulated Tuition Time as of now
+                        <span><%= Math.trunc(student.TTT) %>h:<%= Math.round(60*(student.TTT % 1)) %>m</span>
+                    </p>
+                </li>
+            </ul>
+
+            <% if (examiner) { %>
+                <h2 class='scoring-examiner'>Examiner:
+                    <span><%= examiner.name %></span>
+                    <span>(<%= examiner.title %>)</span>
+                    <span><%= examiner.location %></span>
+                </h2>
+            <% } else { %>
+                <h2 class='scoring-examiner'>Examiner _______</h2>
+            <% } %>
+    
+            <p class='scoring-date'>Date:
+                <span><%= new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></span>
+                <span>(<%= new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %>)</span>
+            </p>
+        </header>
+
+
+        <!-- TOOL: function printDateTime() -->
+        <% function printDateTime(date) { const d = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }); const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }); return `${d} (${t})` } %>
+
+        
+        <!-- SCORING Details -->
+        <% if (student.scoring) { %>
+            <details class="prev-scorings">
+                <summary>
+                    Scorings
+                </summary>
+                <div class="scoring-table">
+                    <div class="-table-header">Type</div>
+                    <div class="-table-header">Date</div>
+                    <div class="-table-header">Instructor</div>
+                    <div class="-table-header">Result</div>
+                    <div class="-table-header">Certificate</div>
+                    <!-- constants -->
+                    <% const scorings = student.scoring %>
+                    <% const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity] %>
+                    <% const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving'] %>
+                    <!-- 2D scorings array -->
+                    <% scorArrays.map((scorArray, index) => { %>
+                        <% scorArray.map(scor => { %>
+
+                            <form action="/admin/inst/scoring-print" method="POST">
+                                <textarea class='-hidden' name="scoringDetails"><%= scor.details %></textarea>
+                                <textarea class='-hidden' name="scoringComment"><%= scor.comment %></textarea>
+                                <input type="hidden" name="scoringCertificate" value="<%= scor.certificate %>" />
+                                <button class='scoring-details' type='submit'><%= scorTitles[index] %></button>
+                            </form>
+
+                            <div><%= printDateTime(scor.created) %></div>
+                            <div><%= scor.instructor %></div>
+                            <!-- Result -->
+                            <% if (scor.result) { %>
+                                <div class="field-accomplished">passed</div>
+                            <% } else { %>
+                                <div class="field-warning">failed</div>
+                            <% } %>
+                            <!-- Certificate -->
+                            <% if (scor.certificate) { %>
+                                <div class="field-accomplished">Yes</div>
+                            <% } else { %>
+                                <div class="field-yellow">No</div>
+                            <% } %>
+                        <% }) %>
+                    <% }) %>
+                </div>  <!-- scoring-table -->
+            </details>
+        <% } %>   <!-- SCORING Details -->
+
+
+        <section class="scoring-results">
+            <h2>Scoring result is <span id='current-result'>0</span>/<span id='max-result'>0</span></h2>
+            <p id='pass-fail'>Not Started</p>
+        </section>
+
+    
+        <% let count %>
+        <% let important %>
+    
+        <div class="main-test-box">
+            <% if (test) { %>
+                <% test.map((block, N) => { %>
+                    <section class="test-block-box" data-block="block_<%= N %>" data-title="<%= block.title %>">
+                        <details>
+                            <% count = 0 %>
+                            <summary>
+                                <span class="section-title"><%= block.title %> [<span class="section-result" id="block_<%= N %>" data-total=0 data-correct=0 data-incorrect=0>0</span>]</span>
+                            </summary>
+                            <% block.items.map((subblock, i) => { %>
+                                <section class="item-box">
+                                    <h3 class="item-title"><%= subblock.item %></h3>
+
+                                    <% important = subblock.important ? 'YES' : 'NO' %>
+
+                                    <div class="item">
+                                        <% count += subblock.checks.length %>
+                                        <% subblock.checks.map((check, j) => { %>
+                                            <span class="skill">            
+                                                <input class="skill-checkbox" type="checkbox" name="<%= `block${N}_item${i}_skill${j}` %>" 
+                                                    id="<%= `block${N}_item${i}_skill${j}` %>" data-qty="block_<%= N %>"
+                                                    data-value="<%= check %>" onchange="updateQty('block_<%= N %>')"
+                                                    data-important="<%= important %>" />
+
+                                                <label for="<%= `block${N}_item${i}_skill${j}` %>" data-importantlabel="<%= important %>"><%= check %></label>
+                                            </span>
+                                        <% }) %>
+                                    </div>
+                                </section>  <!-- item-box -->
+                            <% }) %>
+                            <input type="hidden" name="block-total" data-id="block_<%= N %>" value="<%= count %>" />
+                        </details>
+                    </section> <!-- test-block-box -->
+                <% }) %>
+            <% } %>     <!-- if TEST passed -->
+
+            <form action="/admin/inst/scoring-save" method="POST" id="scoring-save-form">
+
+                <input type="hidden" name="studentId" value="<%= student._id %>">
+                <input type="hidden" name="scoringType" value="<%= type %>">
+                <textarea name="scoringData" class="scoring-data"></textarea>
+                
+                <div class="comments-box">
+                    <i class="fas fa-comments fa-3x"></i>
+                    <textarea name="comments" class="comments" placeholder="for instructor's comments..."></textarea>
+                </div>
+                
+                <section class="certification">
+                    <h3>Certification is not required. Instructors should use certification only if they are completely confident in the student's knowledge.</h3>
+                    <i class="fas fa-certificate"></i>
+                    <input type="checkbox" name="certificate" id="certificate">
+                    <label for="certificate">I'm, <%= examiner.name %>, on behalf of TTA, is Certifying that the student's knowledge and skills fully meet the requirements of the State in this discipline</label>
+                    <p class="cetrSignature"><%= examiner.name %></p>
+                    <i class="fas fa-certificate"></i>
+                </section>
+
+                <div class="buttons-box">
+                    <button class="-btn -submit" type="submit">Submit</button>
+                    <p>Toro Trucking Academy © 2022</p>
+                </div>
+            </form>
+
+        </div>   <!-- main-test-box -->
+    
+        
+
+    <% } %>     <!-- NO data or Blocked -->
+<% } %>     <!-- NO student passed -->

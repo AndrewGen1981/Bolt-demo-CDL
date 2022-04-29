@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TTA | Not Enough Authorithies</title>
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/general-pages/NEA/NEA.css">
+
+</head>
+<body>
+    
+    <% const operation = auth ? auth : 'read/write' %>
+
+    <div class="main-box">
+        <h1>Sorry, your authorities are not enough.</h1>
+        <h2>To visit the requested page you must have <span class="-hgh"><%= operation %></span> authority.</h2>
+        <div onclick="history.back()">Go Back</div>
+    </div>
+
+</body>
+</html>

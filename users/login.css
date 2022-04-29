@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap');
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.login-box {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+}
+
+.login-left {
+    width: 30%;
+
+    background: #fff;
+    background-image: url('/public/logo_bg.png');
+    background-position-x: center;
+    background-position-y: bottom;
+    background-repeat: no-repeat;
+}
+.login-right {
+    width: 70%;
+    
+    background: rgba(15, 28, 47, 0.9);
+    background-image: url('/public/login_back.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    position: relative;
+}
+.shadow-box {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 28, 47, 0.9);
+}
+
+/* Right box */
+.right-inner {
+    width: 100%;
+    height: 50vh;
+}
+.right-inner-box {
+    width: 65%;
+    max-width: 43rem;
+    margin: 0 auto;
+}
+.right-inner-box .title {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.75rem;
+    line-height: 3.375rem;
+
+    color: #FF8C17;
+}
+.right-inner-box .subtitle {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2.75rem;
+    line-height: 3.375rem;
+    text-transform: uppercase;
+
+    color: #fff;
+    margin-bottom: 1.875rem;
+}
+.right-inner-box .text {
+    min-height: 6rem;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.93rem;
+    line-height: 160%;
+    text-align: justify;
+
+    color: #fff;
+    margin-bottom: 2rem;
+
+    transition: all 0.5s linear;
+}
+
+@keyframes fade {
+    from { opacity: 1 }
+    to { opacity: 0 }
+}
+.-fade {
+    animation: fade 0.5s linear
+}
+
+/* Indicators */
+.indicators {
+    display: inline-flex;
+}
+.indicator {
+    margin-right: 0.875rem;
+    width: 50px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1.0625rem;
+}
+.-on {
+    background: #fff;
+}
+
+
+/* Left box */
+/* logo-box */
+.logo-box {
+    width: 35%;
+    max-width: 9.5rem;
+    margin: 3.5rem auto;
+}
+.login-logo {
+    width: 100%;
+}
+
+/* buttons box */
+.buttons-box {
+    margin: 0 auto 1.3rem auto;
+    width: 62.2%;
+    max-width: 17.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.btn {
+    padding: 0 0.83rem;
+    width: 8.125rem;
+    height: 3.125rem;
+
+    background: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2rem;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.125;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    color: #AAAAAA;
+    cursor: pointer;
+
+    transition: all 0.25s linear;
+}
+.btn:hover {
+    background-color: #F4F4F4;
+}
+.btn svg {
+    fill: #AAAAAA;
+}
+
+.-active-btn {
+    color: #fff;
+    border: 1px solid #FFAE17;
+    background-color: #FFAE17;
+}
+.-active-btn:hover {
+    background-color: #FF8517;
+}
+.-active-btn svg {
+    fill: #fff;
+}
+
+
+/* FORMS */
+.sign-regist-form-box,
+.admin-box {
+    margin: 0 auto;
+    width: 62.2%;
+    max-width: 17.5rem;
+    
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sign-form-box,
+.regist-form-box,
+.log-form {
+    width: 100%;
+}
+
+.sign-input {
+    all: unset;
+
+    margin: 0.5rem 0;
+    width: 100%;
+    height: 4.375rem;
+
+    background-color: #F4F4F4;
+    border: 1px solid #E0E0E0;
+    border-radius: 2.25rem;
+
+    outline: none;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.125rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #AAAAAA;
+
+    transition: all 0.25s linear;
+}
+.sign-input::placeholder {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.125rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #AAAAAA;
+}
+.sign-input:not(empty) {
+    color: #151515;
+}
+.sign-input:hover {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+}
+
+.sign-btn {
+    margin: 1.5rem 0;
+    width: 100%;
+    height: 3.125rem;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #FFFFFF;
+
+    background-color: #0F1C2F;
+    border-radius: 2rem;
+    border: none;
+
+    cursor: pointer;
+}
+.sign-btn:hover {
+    background-color: #1E3049;
+}
+
+/* Reset & Register links */
+.reset-box,
+.register-box {
+    width: 100%;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.83rem;
+    line-height: 1rem;
+
+    text-align: left;
+    text-decoration: none;
+
+    color: #AAAAAA;
+    cursor: pointer;
+
+    margin-bottom: 1rem;
+    transition: all 0.25s linear;
+}
+.reset-box:hover,
+.register-box:hover {
+    color: #0F1C2F;
+}
+
+/* remind box */
+.remind-title {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-align: center;
+
+    color: #151515;
+}
+.remind-subtitle {
+    margin: 0.8rem auto;
+    width: 80%;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.83rem;
+    line-height: 1rem;
+    text-align: center;
+
+    color: #0F1C2F;
+}
+
+/* info message */
+.message-box * {
+    margin: 0 auto;
+    width: 95%;
+
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.83rem;
+    line-height: 1rem;
+
+    text-align: center;
+
+    color: #AAAAAA;
+}
+.message-box ol * {
+    list-style-position: inside;
+}
+
+.log-issue {
+    color: #AAAAAA;
+}
+
+
+.-hidden {
+    display: none
+}
+
+
+/* MEDIA REQUESTS */
+

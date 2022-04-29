@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Tuition Center</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+
+    <link rel="stylesheet" href="/users/tuition/tuition.css">
+
+</head>
+<body>
+    
+    <h1 class="tuition-center-title">~ Toro Learning Center ~</h1>
+    <h3 class="center-subtitle">Here are our video tutorials, each contains video material and a test. You have the ability to track your progress and test status. To be admitted to practical classes, a student must pass all courses and tests.</h3>
+    
+    <div class="tuition-center-box">
+        <nav class="center-nav"><a href="/user/home">back home</a></nav>
+        
+        <form action="/user/tuition" method="POST" class="videoListInner" id="videoListInner">
+
+            <% let lesson %>
+
+            <% listOfLessons.forEach( (video, index) => { %>
+                <section class="videoItem">
+                    <section class='videoSection'>
+                        <img class='videoThumb' src='//img.youtube.com/vi/<%= video %>/0.jpg' data-video='<%= video %>' onclick="videoClick(this)">
+                        <input class='videoRadio' type="radio" name='video' id='<%= video %>' value='<%= video %>' />
+
+                        <% lesson = undefined %>
+                        <% if (tuition) { %>
+                            <% for (let i=0; i < tuition.lessons.length; i++) { %>
+                                <% if (tuition.lessons[i].videoID === video) { %>
+                                    <% lesson = tuition.lessons[i] %>
+                                    <input type="hidden" name="videoProgress" value="<%= lesson.videoProgress %>" data-videoprogress='<%= video %>' />
+                                    <input type="hidden" name="testProgress" value="<%= lesson.testProgress %>" data-videotest='<%= video %>' />
+                                    <% break %>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+
+                        <% let perc = lesson ? lesson.videoProgress : 0 %>
+                        <div class="chart-box">
+                            <div class="pie" style="--p:<%= perc * 100 %>;--b:0.65rem;" title="Watching progress <%= Math.round(perc * 100) %>%"><%= index + 1 %>.</div>
+                        </div>
+
+                        <section class='videoSection_info'>
+                            <span class='videoWatching'>
+                                <% if (lesson) { %>
+                                    <% if (lesson.videoProgress < 0.5) { %>
+                                        <svg class="ico -star" viewBox="0 0 488.022 488.022">
+                                            <path d="M471.563,173.778l-145.5-20.8l-64.4-132c-8-15.4-30-12.2-35.3,0l-64.4,132l-145.6,20.8c-16.4,1-21.6,20.9-10.4,33.2 l105,102.9l-25,144.5c-2.9,17.8,16.7,27.8,28.1,20.8l129.9-68.6l129.9,67.6c13.6,7,29.8-2.8,28.1-19.7l-25-144.6l105-102.9 C494.663,193.478,485.563,175.478,471.563,173.778z M342.663,288.078c-4.2,5.2-6.2,11.4-5.2,17.7l19.7,116.4l-103.9-55.1 c-6.7-2.8-13-2.8-18.7,0l-103.9,55.1l19.7-116.4c1-7.3-1-13.5-5.2-17.7l-84.1-82.1l116.4-16.6c6.2-1,11.4-4.2,14.6-10.4l52-105 l52,105c3.1,5.2,8.3,9.4,14.6,10.4l116.2,16.6L342.663,288.078z"/>
+                                        </svg>
+                                    <% } %>
+                                    <% if (lesson.videoProgress >= 0.5 && lesson.videoProgress < 0.85) { %>
+                                        <svg class="ico -star" viewBox="0 0 36.092 36.092">
+                                            <path d="M36.043,13.909c-0.123-0.377-0.456-0.646-0.852-0.688l-11.549-1.171L18.96,1.431c-0.159-0.363-0.518-0.596-0.914-0.596 s-0.755,0.234-0.915,0.597l-4.683,10.62L0.9,13.222c-0.395,0.04-0.728,0.309-0.851,0.688c-0.122,0.377-0.011,0.791,0.285,1.055 l8.651,7.734L6.532,34.044c-0.084,0.387,0.07,0.789,0.391,1.021c0.321,0.231,0.747,0.254,1.091,0.055l10.031-5.838l10.029,5.838 c0.156,0.092,0.33,0.137,0.505,0.137c0.207,0,0.411-0.064,0.588-0.191c0.319-0.231,0.474-0.633,0.39-1.021L27.104,22.7l8.651-7.735 C36.054,14.698,36.165,14.286,36.043,13.909z M25.339,21.594c-0.271,0.24-0.39,0.604-0.312,0.957l2.099,9.699l-8.574-4.99 c-0.001,0-0.002,0-0.003-0.002V5.447l3.503,7.943c0.146,0.33,0.456,0.555,0.813,0.592l9.869,1.001L25.339,21.594z"/>
+                                        </svg>
+                                    <% } %>
+                                    <% if (lesson.videoProgress >= 0.85) { %>
+                                        <svg class="ico -star" viewBox="0 0 478.53 478.53">
+                                            <path d="M477.795,184.279c-1.765-5.431-6.458-9.389-12.108-10.209l-147.159-21.384l-65.812-133.35 c-2.527-5.12-7.741-8.361-13.451-8.361s-10.924,3.241-13.451,8.361l-65.812,133.35L12.843,174.07 c-5.65,0.82-10.344,4.778-12.108,10.209c-1.765,5.43-0.293,11.391,3.796,15.376l106.484,103.798L85.877,450.018 c-0.965,5.627,1.349,11.314,5.968,14.671c4.618,3.354,10.741,3.799,15.797,1.142l131.623-69.199l131.623,69.199 c2.195,1.153,4.592,1.723,6.979,1.723c3.11,0,6.205-0.966,8.818-2.864c4.619-3.356,6.933-9.044,5.968-14.671l-25.138-146.565 l106.484-103.798C478.088,195.669,479.56,189.708,477.795,184.279z"/>
+                                        </svg>
+                                    <% } %>
+                                    <span class='videoWatching_info'><%= Math.round(lesson.videoProgress*1000) / 10 %>%</span>
+                                <% } else { %>
+                                    <span class='videoWatching_info'>0%</span>
+                                <% } %>
+                                Watching
+                            </span>
+                            <% if (lesson) { %>
+                                <% if (lesson.testProgress > 0) { %>
+                                    <span class='videoTests'>Test
+                                        <svg class="ico -test" viewBox="0 0 30 30">
+                                            <path d="M 15 3 C 8.373 3 3 8.373 3 15 C 3 21.627 8.373 27 15 27 C 21.627 27 27 21.627 27 15 C 27 12.820623 26.409997 10.783138 25.394531 9.0214844 L 14.146484 20.267578 C 13.959484 20.454578 13.705453 20.560547 13.439453 20.560547 C 13.174453 20.560547 12.919422 20.455578 12.732422 20.267578 L 8.2792969 15.814453 C 7.8882969 15.423453 7.8882969 14.791391 8.2792969 14.400391 C 8.6702969 14.009391 9.3023594 14.009391 9.6933594 14.400391 L 13.439453 18.146484 L 24.240234 7.3457031 C 22.039234 4.6907031 18.718 3 15 3 z M 24.240234 7.3457031 C 24.671884 7.8662808 25.053743 8.4300516 25.394531 9.0195312 L 27.707031 6.7070312 C 28.098031 6.3150312 28.098031 5.6839688 27.707031 5.2929688 C 27.316031 4.9019687 26.683969 4.9019688 26.292969 5.2929688 L 24.240234 7.3457031 z"/>
+                                        </svg>
+                                    </span>
+                                <% } else { %>
+                                    <span class='videoTests -no-test'>Test</span>
+                                <% } %>
+                            <% } else { %>
+                                <span class='videoTests -no-test'>Test</span>
+                            <% } %>
+                        </section><!-- videoSection -->
+
+                    </section>  <!-- videoSection_info -->
+                    <section class="afterLine"></section>
+                </section>  <!-- videoItem -->
+            <% }) %> <!-- forEach -->
+
+        </form>    <!-- videoListInner -->
+
+    </div>
+
+
+    <script>
+
+        const inputs = document.querySelectorAll('[name="video"]')
+        let videoProgress, testProgress
+
+        function videoClick(videoThumb) {
+            // clear all inputs
+            for (let i=0; i < inputs.length; i++) {
+                inputs[i].checked = inputs[i].id === videoThumb.dataset.video
+                videoProgress = document.querySelector(`[data-videoprogress="${inputs[i].id}"]`)
+                testProgress = document.querySelector(`[data-videotest="${inputs[i].id}"]`)
+                if (videoProgress) {
+                    if (!inputs[i].checked) {
+                        videoProgress.remove()
+                    }
+                }
+                if (testProgress) {
+                    if (!inputs[i].checked) {
+                        testProgress.remove()
+                    }
+                }
+            }
+            // submiting a form without a button
+            document.forms["videoListInner"].submit()
+        }
+
+    </script>
+
+
+</body>
+</html>

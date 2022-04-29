@@ -1,0 +1,378 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    font-size: 15px;
+
+    --day-color: #3333330d;
+}
+
+body, html {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+header {
+    padding: 1rem 0;
+    width: 100%;
+    height: fit-content;
+
+    background-color: #333;
+    margin-bottom: 1rem;
+}
+.header-title {
+    font-family: "Industrial Bold";
+    font-size: 2.2rem;
+    text-align: center;
+    color: #fff;
+}
+.header-description {
+    font-family: "BrixSlab-RegularItalic";
+    font-size: 0.9rem;
+    text-align: center;
+    color: wheat;
+    margin-bottom: 10px;
+}
+
+menu {
+    width: 100%;
+    padding: 2px 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #ffffff14;
+}
+
+.-back {
+    position: relative;
+}
+.back-ico {
+    width: 40px;
+    height: 40px;
+    
+    fill: #f5f5f529;
+
+    position: absolute;
+    left: 10%; top: 50%;
+
+    transform: translateY(-50%);
+    transition: all 0.25s linear;
+
+    z-index: 1;
+}
+
+.nav-item {
+    padding: 3px 7px;
+    width: 14%;
+
+    font-family: "BrixSlab-Regular";
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    text-align: center;
+
+    color: #fff;
+    background-color: #ffffff14;
+
+    border-radius: 4px;
+    transition: all 0.25s linear;
+}
+
+/* back link moving back and forth */
+@keyframes movingBackForth {
+    from {
+        transform: translateY(-50%);
+    }
+    to {
+        transform: translateY(-50%) translateX(-10px);
+    }
+}
+
+.nav-item:not(.-current):hover .back-ico {
+    fill: #ffffffc0;
+    animation: movingBackForth 0.7s ease-in-out infinite alternate;
+}
+
+.nav-item:not(.-current):hover {
+    letter-spacing: 1px;
+    background-color: #47eb4733;
+}
+
+.-current {
+    background-color: #47eb47cf;
+}
+
+.student-schedule-box {
+    margin: 0 auto;
+    width: 95%;
+    max-width: 1550px;
+}
+
+.student-schedule {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    margin-bottom: 1rem;
+}
+
+.calendar-dateOfWeek {
+    margin: 0 1px;
+
+    font-family: "BrixSlab-Regular";
+    font-size: 1.65rem;
+    text-align: center;
+    
+    color: #242424;
+    background-color: var(--day-color);
+    border-radius: 7px 7px 0 0;
+
+    cursor: default;
+}
+.day-date {
+    margin: 0 1px;
+
+    font-family: "BrixSlab-Regular";
+    font-size: 0.8rem;
+    text-align: center;
+    
+    background-color: var(--day-color);
+    border-bottom: 1px solid #ffffffd9;
+    padding-bottom: 3px;
+
+    cursor: default;
+}
+.-header {
+    color: wheat;
+    background-color: #525252e0 !important;
+}
+
+.calendar-cell {
+    margin: 0 1px;
+    padding: 5px 0;
+
+    font-family: "BrixSlab-Regular";
+    text-align: center;
+
+    background-color: var(--day-color);
+    border-bottom: 1px solid #aaaaaa1c;
+    cursor: default;
+
+    transition: all 0.2s linear;
+}
+
+.-today-DOW {
+    background-color: #47cc4766;
+    border-radius: 7px 7px 0 0;
+    box-shadow: 0px -3px 4px -2px #169916;
+}
+.-today {
+    color: #169916;
+    background-color: #47cc4766;
+}
+
+.-occupied {
+    background-color: lightgray;
+}
+.-occupied.-by-you {
+    position: relative;
+    background-color: #47cc4766;
+}
+.-occupied.-by-you:hover .tool-bar {
+    display: inline-flex;
+}
+
+.-empty {
+    cursor: pointer;
+}
+.-empty:not(.-occupied):hover {
+    background-color: #2424242c;
+    border-bottom: 1px solid #aaaaaa9e;
+    border-radius: 3px;
+}
+
+.occupied-svg {
+    display: none;
+    margin: 0 auto;
+    width: 12px;
+    fill: #333;
+}
+.-closed {
+    text-transform: uppercase;
+    color: #fff;
+    background-color: gray;
+}
+.closed-svg {
+    display: none;
+    margin: 0 auto;
+    width: 12px;
+    fill: #fff;
+}
+.empty-svg {
+    display: none;
+    margin: 0 auto;
+    width: 12px;
+    fill: #259b5e;
+    transition: all 0.5s linear;
+}
+
+.tool-bar {
+    padding: 2px 3px;
+    display: none;
+
+    position: absolute;
+    top: 1px; left: 2px;
+    z-index: 10;
+
+    background-color: #333333e0;
+    border-radius: 3px;
+
+    transition: all 0.2s linear;
+}
+.delete-btn {
+    width: 14px;
+    height: 14px;
+    
+    fill: #ff8c8c;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    fill: #ff7575;
+    transform: rotate(180deg);
+}
+
+.limits-box .title {
+    font-family: "BrixSlab-RegularItalic";
+    font-size: 1.2rem;
+    color: #7e7e7e;
+}
+#limits-qty {
+    font-family: "BrixSlab-BlackItalic";
+    font-size: 1.75rem;
+    color: #20c120;
+}
+
+
+
+/* Modal window */
+.modal-window-wait {
+    padding: 10px;
+
+    position: absolute;
+    top: 50%; left: 50%;
+
+    width: 250px;
+
+    transform: translateX(-50%) translateY(-50%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #2c314a;
+    border-radius: 10px;
+}
+.modal-window-wait h3 {
+    font-family: "BrixSlab-Regular";
+    text-transform: uppercase;
+    text-align: center;
+    color: wheat;
+    margin-bottom: 5px;
+}
+.modal-window-wait p {
+    font-family: "BrixSlab-ExtraLight";
+    text-align: center;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+/* wait animation */
+@keyframes rotate {
+    to { transform: rotate(-360deg); }
+}
+.-rotate {
+    animation: rotate 3s ease-out infinite;
+}
+.modal-window-wait svg {
+    margin: 10px 0;
+
+    width: 50px;
+    height: 50px;
+
+    fill: #b4dcb4;
+}
+
+.bolt-footer {
+    padding: 10px 0 !important;
+}
+
+.-hidden {
+    display: none;
+}
+
+
+@media (max-width: 1150px) {
+    :root {
+        font-size: 14px;
+    }
+    .nav-item {
+        width: 105px;
+    }
+}
+@media (max-width: 1050px) {
+    .year {
+        display: none;
+    }
+}
+@media (max-width: 750px) {
+    :root {
+        font-size: 13px;
+    }
+    .occupied-text {
+        display: none;
+    }
+    .occupied-svg {
+        display: block;
+    }
+    .closed-text {
+        display: none;
+    }
+    .closed-svg {
+        display: block;
+    }
+}
+@media (max-width: 650px) {
+    .day-date.-header {
+        opacity: 0;
+    }
+    .calendar-dateOfWeek {
+        font-size: 1.3rem;
+    }
+    .empty-text {
+        display: none;
+    }
+    .empty-svg {
+        display: block;
+    }
+    .calendar-cell:hover .empty-svg {
+        transform: rotate(180deg);
+    }
+}
+@media (max-width: 540px) {
+    .calendar-dateOfWeek {
+        font-size: 1.1rem;
+    }
+    .month-date {
+        font-size: 0.7rem;
+    }
+}

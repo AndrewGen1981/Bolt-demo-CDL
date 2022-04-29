@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | INs</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+
+    <link rel="stylesheet" href="/users/students/INs.css">
+
+</head>
+<body>
+    
+    <% function printTime24(date) { return new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).split(':') } %>
+
+    <% function leadingZero(digit) { return parseInt(digit) < 10 ? `0${digit}` : digit } %>
+    <% function usYYYYMMDD(date) { 
+        const d = date ? new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
+        : new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
+
+        let arr = d.split('/')
+        return arr.length > 1 ? `${arr[2]}-${leadingZero(arr[0])}-${leadingZero(arr[1])}` : false
+    } %>
+
+    <% function usDate(date) { 
+        return date ? new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
+        : new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
+    } %>
+
+    <div class="ins-list-box">
+
+        <% if(locals.inStudents) { %>
+            <header class="ins-list-header">
+                <form class="as-of-date" id="as-of-date" action="/admin/student" method="POST">
+                    <label class='ins-title' for="clocked-as-of">Clocked in as of</label>
+                    <% if(locals.today) { %>
+                        <input type="date" name="clockedAsOf" id="clocked-as-of" value="<%= usYYYYMMDD() %>" onchange="getListAsOfDate(this)">
+                    <% } else { %>
+                        <input type="date" name="clockedAsOf" id="clocked-as-of" value="<%= usYYYYMMDD(locals.date) %>" onchange="getListAsOfDate(this)">
+                    <% } %>
+                </form>
+
+
+                <!-- <h2 class='ins-title'>Clocked in as of <%= new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></h2> -->
+                <nav>
+                    <a class='-btn' href="/admin/profile/" title='HOME'>
+                        <i class="fas fa-home"></i>
+                    </a>
+                    <a class='-btn' href="/admin/student/list" title='Student List'>
+                        <i class="fas fa-address-book"></i>
+                    </a>
+                    <a class='-btn' href="/admin/user-area" title='Users Area'>
+                        <i class="fas fa-users"></i>
+                    </a>
+                    <a class='-btn' id='reload-ins' href="/admin/student/" title='Reload INs'>
+                        <i class="fas fa-sync-alt"></i>
+                    </a>
+                </nav>
+            </header>
+
+            <div class="student-list-row" id="fixed-headers-row">
+                <div class='field -name -header -left-color-group'>Student Name</div>
+
+                <div class='field -key -header -left-color-group'>Key</div>
+                <div class='field -location -header -left-color-group'>Location</div>
+
+                <div class='field -TTT -header -left-color-group'>TTT</div>
+
+                <div class="field -presentStatus -header -clock-color-group">Status</div>
+                <div class="field -clocks -in -header -clock-color-group">Clock IN</div>
+                <div class="field -clocks -out -header -clock-color-group">Clock OUT</div>
+
+                <div class="field -incab-scoring -header -right-color-group">IN-CAB <span>Scoring</span></div>
+                <div class="field -outcab-scoring -header -right-color-group">OUT-CAB <span>Scoring</span></div>
+                <div class="field -backing-scoring -header -right-color-group">Backing <span>Scoring</span></div>
+                <div class="field -city-scoring -header -right-color-group">City <span>Scoring</span></div>
+            </div>  <!-- titles -->
+
+            <% if(inStudents.length > 0) { %>
+                <% inStudents.forEach((student, index) => { %>
+                    <div class="student-list-row" id='student-row-<%= index %>' data-student='<%= student._id %>'>
+           
+                        <a href='/admin/user/<%= student.user %>' class='field -name'><%= student.fullName %></a>
+
+                        <div class='field -key'><%= student.key %></div>
+
+                        <% let locationArr = student.location.split(',') %>
+                        <div class='field -location'>
+                            <% locationArr.forEach((a, index) => { %>
+                                <span class="loc<%= index %>"><%= a %></span>
+                            <% }) %>
+                        </div>
+
+                        <div class='field -TTT'><%= Math.trunc(student.TTT) %>h</div>
+                        
+                        <% if (student.clocks.length % 2 === 0) { %>    <!-- EVEN: last is clock out -->
+
+                            <div class='field -presentStatus'>OUT</div>
+                            
+                            <% let clockIN = student.clocks[student.clocks.length - 2] %>
+                            <% let clockInArr = printTime24(clockIN.date) %>
+
+                            <% let clockOUT = student.clocks[student.clocks.length - 1] %>
+                            <% let clockOutArr = printTime24(clockOUT.date) %>
+
+                            <% if (!isNaN(clockIN.lat) && !isNaN(clockIN.lon)) { %>
+                                <a class='field -clocks -in' href="http://www.google.com/maps/place/<%= clockIN.lat %>,<%= clockIN.lon %>" target="_blank">
+                                    <span class="hours"><%= clockInArr[0] %></span><span class="minutes">:<%= clockInArr[1] %></span><span class="sec">:<%= clockInArr[2] %></span>
+                                </a>
+                            <% } else { %>
+                                <a class='field -clocks -in' target="_blank">
+                                    <span class="hours"><%= clockInArr[0] %></span><span class="minutes">:<%= clockInArr[1] %></span><span class="sec">:<%= clockInArr[2] %></span>
+                                </a>
+                            <% } %>
+
+                            <% if (!isNaN(clockOUT.lat) && !isNaN(clockOUT.lon)) { %>
+                                <a class='field -clocks -out -not-present' href="http://www.google.com/maps/place/<%= clockOUT.lat %>,<%= clockOUT.lon %>" target="_blank">
+                                    <span class="hours"><%= clockOutArr[0] %></span><span class="minutes">:<%= clockOutArr[1] %></span><span class="sec">:<%= clockOutArr[2] %></span>
+                                </a>
+                            <% } else { %>
+                                <a class='field -clocks -out -not-present' target="_blank">
+                                    <span class="hours"><%= clockOutArr[0] %></span><span class="minutes">:<%= clockOutArr[1] %></span><span class="sec">:<%= clockOutArr[2] %></span>
+                                </a>
+                            <% } %>
+
+
+                        <% } else { %>  <!-- ODD: last is clock in -->
+
+                            <div class='field -presentStatus'>IN</div>
+
+                            <% let clockIN = student.clocks[student.clocks.length - 1] %>
+                            <% let clockInArr = printTime24(clockIN.date) %>
+
+                            <% if (!isNaN(clockIN.lat) && !isNaN(clockIN.lon)) { %>
+                                <a class='field -clocks -in' href="http://www.google.com/maps/place/<%= clockIN.lat %>,<%= clockIN.lon %>" target="_blank">
+                                    <span class="hours"><%= clockInArr[0] %></span><span class="minutes">:<%= clockInArr[1] %></span><span class="sec">:<%= clockInArr[2] %></span>
+                                </a>
+                            <% } else { %>
+                                <a class='field -clocks -in' target="_blank">
+                                    <span class="hours"><%= clockInArr[0] %></span><span class="minutes">:<%= clockInArr[1] %></span><span class="sec">:<%= clockInArr[2] %></span>
+                                </a>
+                            <% } %>
+
+                            <a class='field -clocks -out' target="_blank">...</a>
+                        <% } %>
+
+
+                        <!-- Scorings -->
+                        <% let test1Info = locals.today ? 'submit' : '' %>
+                        <% let test2Info = locals.today ? 'submit' : '' %>
+                        <% let test3Info = locals.today ? 'submit' : '' %>
+                        <% let test4Info = locals.today ? 'submit' : '' %>
+
+                        <% let test1InfoSmall = locals.today ? 'S' : '' %>
+                        <% let test2InfoSmall = locals.today ? 'S' : '' %>
+                        <% let test3InfoSmall = locals.today ? 'S' : '' %>
+                        <% let test4InfoSmall = locals.today ? 'S' : '' %>
+
+                        <% if (student.scoring) { %>
+                            <% function getInfo(arr, NA) { return arr.length ? `${arr.length}[${usDate(arr[arr.length-1].created)}]` : NA } %>
+                            <% test1Info = getInfo(student.scoring.scoringsInCab, test1Info) %>
+                            <% test2Info = getInfo(student.scoring.scoringsOutCab, test2Info) %>
+                            <% test3Info = getInfo(student.scoring.scoringsBacking, test3Info) %>
+                            <% test4Info = getInfo(student.scoring.scoringsCity, test4Info) %>
+                            
+                            <% function getInfoSmall(arr, NA) { return arr.length ? arr.length : NA } %>
+                            <% test1InfoSmall = getInfoSmall(student.scoring.scoringsInCab, test1InfoSmall) %>
+                            <% test2InfoSmall = getInfoSmall(student.scoring.scoringsOutCab, test2InfoSmall) %>
+                            <% test3InfoSmall = getInfoSmall(student.scoring.scoringsBacking, test3InfoSmall) %>
+                            <% test4InfoSmall = getInfoSmall(student.scoring.scoringsCity, test4InfoSmall) %>
+                        <% } %>
+
+                        <% if (locals.today) { %>
+                            <form method='POST' action="/admin/inst/incab" class='field -incab-scoring'>
+                                <input type="hidden" name="studentId" value="<%= student._id %>" />
+                                <button class='-btn-scoring' type="submit" data-test='student-row-<%= index %>' title="<%= test1Info %>">
+                                    <span class="-bigMsg"><%= test1Info %></span>
+                                    <span class="-smallMsg"><%= test1InfoSmall %></span>
+                                </button>
+                            </form>
+                            <form method='POST' action="/admin/inst/outcab" class='field -outcab-scoring'>
+                                <input type="hidden" name="studentId" value="<%= student._id %>" />
+                                <button class='-btn-scoring' type="submit" data-test='student-row-<%= index %>' title="<%= test2Info %>">
+                                    <span class="-bigMsg"><%= test2Info %></span>
+                                    <span class="-smallMsg"><%= test2InfoSmall %></span>
+                                </button>
+                            </form>
+                            <form method='POST' action="/admin/inst/backing" class='field -backing-scoring'>
+                                <input type="hidden" name="studentId" value="<%= student._id %>" />
+                                <button class='-btn-scoring' type="submit" data-test='student-row-<%= index %>' title="<%= test3Info %>">
+                                    <span class="-bigMsg"><%= test3Info %></span>
+                                    <span class="-smallMsg"><%= test3InfoSmall %></span>
+                                </button>
+                            </form>
+                            <form method='POST' action="/admin/inst/city" class='field -city-scoring'>
+                                <input type="hidden" name="studentId" value="<%= student._id %>" />
+                                <button class='-btn-scoring' type="submit" data-test='student-row-<%= index %>' title="<%= test4Info %>">
+                                    <span class="-bigMsg"><%= test4Info %></span>
+                                    <span class="-smallMsg"><%= test4InfoSmall %></span>
+                                </button>
+                            </form>
+                        <% } else { %>
+                            <div class='field -incab-scoring' title="<%= test1Info %>">
+                                <span class="-bigMsg"><%= test1Info %></span>
+                                <span class="-smallMsg"><%= test1InfoSmall %></span>
+                            </div>
+                            <div class='field -outcab-scoring' title="<%= test2Info %>">
+                                <span class="-bigMsg"><%= test2Info %></span>
+                                <span class="-smallMsg"><%= test2InfoSmall %></span>
+                            </div>
+                            <div class='field -backing-scoring' title="<%= test3Info %>">
+                                <span class="-bigMsg"><%= test3Info %></span>
+                                <span class="-smallMsg"><%= test3InfoSmall %></span>
+                            </div>
+                            <div class='field -city-scoring' title="<%= test4Info %>">
+                                <span class="-bigMsg"><%= test4Info %></span>
+                                <span class="-smallMsg"><%= test4InfoSmall %></span>
+                            </div>
+                        <% } %>
+                    </div>  <!-- student-list-row -->
+                <% }) %>
+
+            <% } else { %>
+                <div class="student-list-row" id='student-row-0' name='empty-list'>
+                    <% if (locals.today) { %>
+                        <div class="empty-list">so far no one is there...</div>
+                    <% } else { %>
+                        <div class="empty-list"></div>
+                    <% } %>
+                </div>
+            <% } %>
+        <% } %>     <!-- if inStudents is defined -->
+
+        <footer>
+            <small>
+                <span>*<%= inStudents.length %></span>
+                <span>students' record(s) found due to your location assignment</span>
+            </small>
+        </footer>
+
+    </div>  <!-- ins-list-box -->
+
+
+    <script>
+        
+        // selecting not present already
+        function disableAllWhoOut() {
+            let rowElement, testButtons
+            const allOUTs = document.querySelectorAll('.-out')
+
+            if (allOUTs) {
+                for (let i=allOUTs.length-1; i > -1; i--) {     // backwards fastest
+                    rowElement = allOUTs[i].parentElement
+                    testButtons = rowElement.querySelectorAll(`[data-test=${rowElement.id}]`)
+
+                    if (allOUTs[i].classList.contains('-not-present')) {
+                        rowElement.classList.add('-not-present')
+                        testButtons.forEach(testBtn => {    // student out, make scoring's buttons unclickable
+                            testBtn.type = 'button'
+                            testBtn.classList.add('-not-active')
+                            if (testBtn.textContent === 'submit') { testBtn.textContent = 'NO'}
+                        })
+                    } else {
+                        rowElement.classList.remove('-not-present')
+                        testButtons.forEach(testBtn => {    // student in, restore scoring's buttons functionality
+                            testBtn.type = 'submit'
+                            testBtn.classList.remove('-not-active')
+                            if (testBtn.textContent === 'NO') { testBtn.textContent = 'submit'}
+                        })
+                    }
+                }
+            }
+        }
+
+
+        // @ENTERY POINT
+        disableAllWhoOut()
+
+    </script>
+
+
+    <script type="module" defer>
+
+        // @NOTIFICATIONS from db
+        import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js"
+        const socket = io("/")
+
+
+        // server emits, so have to check if changes are related to this particular client
+        // @WHEN Students changed
+        socket.on('students-update', student => {
+            if (student) {
+                // if list was empty, then 1st row 'so far no one is there...' should be deleted
+                const emptyList = document.getElementsByClassName('empty-list')[0]
+                if (emptyList) {
+                    document.querySelector('#reload-ins').click()
+                    return
+                }
+                // update a specific field
+                const id = student.documentKey._id
+                if (student.operationType === "update") {
+                    const updatedRow = document.querySelector(`[data-student='${id}']`)
+                    if (updatedRow != null) {
+                        const fields = student.updateDescription.updatedFields
+                        for (const [key, value] of Object.entries(fields)) {
+                            let el
+                            try {
+                                el = updatedRow.querySelector(`.-${key}`)
+                                if (el) {
+                                    switch (key) {
+                                        case 'TTT':
+                                            el.textContent = `${Math.trunc(value)}h:${Math.round(60*(value % 1))}m`
+                                        break
+                                        case 'clocks':
+                                            let elIN = updatedRow.querySelector('.-in')
+                                            let elOUT = updatedRow.querySelector('.-out')
+    
+                                            let lastClock = value[value.length - 1]
+                                            let todaysClocks = value.filter(item => { return item.key === lastClock.key })
+    
+                                            if (todaysClocks.length % 2 === 0) {    //  EVEN: last is clock out
+                                                if (!isNaN(lastClock.lat) && !isNaN(lastClock.lon)) {
+                                                    elOUT.href = `http://www.google.com/maps/place/${lastClock.lat},${lastClock.lon}`
+                                                } else {
+                                                    elOUT.removeAttribute("href")
+                                                }
+                                                elOUT.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false })
+                                                elOUT.classList.add('-not-present')
+                                            } else {
+                                                if (!isNaN(lastClock.lat) && !isNaN(lastClock.lon)) {
+                                                    elIN.href = `http://www.google.com/maps/place/${lastClock.lat},${lastClock.lon}`
+                                                } else {
+                                                    elIN.removeAttribute("href")
+                                                }
+                                                elIN.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false })
+                                                elOUT.textContent ='...'    // if returned back
+                                                elOUT.removeAttribute("href")
+                                                elOUT.classList.remove('-not-present')
+                                            }
+    
+                                            disableAllWhoOut()
+    
+                                        break
+                                        default: el.textContent = value
+                                    }
+                                }
+                            } catch(e) {
+                                console.log(e.message)
+                                console.log(key)
+                                console.log(fields)
+                            }
+                        }
+                    }  else {    // new one came, indicate him
+                        document.querySelector('#reload-ins').click()
+                    }  // updatedRow != null
+
+                }   // operation is update
+            }   // if student is defined
+        })  // socket.on('students-update')
+
+    </script>
+
+
+    <script>
+
+        function getListAsOfDate(dateInput) {
+            if (dateInput.value) {
+                const form = document.querySelector('#as-of-date')
+                if (form) {
+                    form.submit()
+                }
+            }
+        }
+
+    </script>
+
+</body>
+</html>

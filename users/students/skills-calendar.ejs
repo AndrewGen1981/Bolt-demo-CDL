@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Skills Test Calendar</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+
+    <link rel="stylesheet" href="/users/students/skills-calendar.css">
+
+</head>
+<body>
+
+    <!-- TOOLS -->
+    <% const daysOfWeek = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] %>
+    <% const daysOfWeekShort = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"] %>
+    <% const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"] %>
+    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' } %>
+    <% function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' } %>
+    <% function dayColorClass(num) { return (num === 0 || num === 6) ? "-weekend" : num === 1 ? "-monday" : "-day-of-week" } %>
+    
+    <%
+        function getLocColor(searchLocation) {
+            if (locals.skillsTestLocations) {
+                for (let i=0; i < skillsTestLocations.length; i++) {
+                    if (searchLocation === skillsTestLocations[i].location) {
+                        return skillsTestLocations[i]
+                    }
+                }
+            }
+            return false
+        }
+    %>
+
+    <section class="calendar-box">
+        <% if(days && studentsKeys && studentsInRange) { %>
+            <div class="calendar-titles">
+                <!-- identify Year and Month, using 1st array element -->
+                <% const d = new Date(days[0].date) %>
+                <% const m = (d.getMonth() + 1) < 10 ? `0${d.getMonth() + 1}` : d.getMonth() + 1 %>
+                <% const link = `/admin/student/skills-calendar?year=${d.getFullYear()}&month=${m}` %>
+                <h1 class="calendar-title">Skills Test Calendar</h1>
+                <section class="data-titles">
+                    <h2 class="calendar-year-title" data-year="<%= d.getFullYear() %>"><%= d.getFullYear() %></h2>
+                    <span>&bull;</span>
+                    <h3 class="calendar-month-title" data-month="<%= m %>"><%= monthNames[d.getMonth()] %></h3>
+                </section>
+                <input type="date" id="calendar-date" value="<%= d.getFullYear() %>-<%= m %>-01" onchange="reloadCalendar(this)" />
+
+                <menu type="toolbar">
+                    <%- include("../../static/partial/--admin-menu.ejs") %>
+                    <a class="-admin-menu-btn" href="/admin/student/skills-test<%= locals.minTTT ? `?TTT=${minTTT}` : '' %>" title="Skills Test">
+                        <svg viewBox="0 0 576 512">
+                            <path d="M248.8 4.994C249.9 1.99 252.8 .0001 256 .0001C259.2 .0001 262.1 1.99 263.2 4.994L277.3 42.67L315 56.79C318 57.92 320 60.79 320 64C320 67.21 318 70.08 315 71.21L277.3 85.33L263.2 123C262.1 126 259.2 128 256 128C252.8 128 249.9 126 248.8 123L234.7 85.33L196.1 71.21C193.1 70.08 192 67.21 192 64C192 60.79 193.1 57.92 196.1 56.79L234.7 42.67L248.8 4.994zM427.4 14.06C446.2-4.686 476.6-4.686 495.3 14.06L529.9 48.64C548.6 67.38 548.6 97.78 529.9 116.5L148.5 497.9C129.8 516.6 99.38 516.6 80.64 497.9L46.06 463.3C27.31 444.6 27.31 414.2 46.06 395.4L427.4 14.06zM461.4 59.31L356.3 164.3L379.6 187.6L484.6 82.58L461.4 59.31zM7.491 117.2L64 96L85.19 39.49C86.88 34.98 91.19 32 96 32C100.8 32 105.1 34.98 106.8 39.49L128 96L184.5 117.2C189 118.9 192 123.2 192 128C192 132.8 189 137.1 184.5 138.8L128 160L106.8 216.5C105.1 221 100.8 224 96 224C91.19 224 86.88 221 85.19 216.5L64 160L7.491 138.8C2.985 137.1 0 132.8 0 128C0 123.2 2.985 118.9 7.491 117.2zM359.5 373.2L416 352L437.2 295.5C438.9 290.1 443.2 288 448 288C452.8 288 457.1 290.1 458.8 295.5L480 352L536.5 373.2C541 374.9 544 379.2 544 384C544 388.8 541 393.1 536.5 394.8L480 416L458.8 472.5C457.1 477 452.8 480 448 480C443.2 480 438.9 477 437.2 472.5L416 416L359.5 394.8C354.1 393.1 352 388.8 352 384C352 379.2 354.1 374.9 359.5 373.2z"/>
+                        </svg>
+                    </a>
+                    <a class="-admin-menu-btn" id="reload-calendar" href="<%= link %>" title="Reload Calendar">
+                        <svg viewBox="0 0 512 512">
+                            <path d="M464 16c-17.67 0-32 14.31-32 32v74.09C392.1 66.52 327.4 32 256 32C161.5 32 78.59 92.34 49.58 182.2c-5.438 16.81 3.797 34.88 20.61 40.28c16.89 5.5 34.88-3.812 40.3-20.59C130.9 138.5 189.4 96 256 96c50.5 0 96.26 24.55 124.4 64H336c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32V48C496 30.31 481.7 16 464 16zM441.8 289.6c-16.92-5.438-34.88 3.812-40.3 20.59C381.1 373.5 322.6 416 256 416c-50.5 0-96.25-24.55-124.4-64H176c17.67 0 32-14.31 32-32s-14.33-32-32-32h-128c-17.67 0-32 14.31-32 32v144c0 17.69 14.33 32 32 32s32-14.31 32-32v-74.09C119.9 445.5 184.6 480 255.1 480c94.45 0 177.4-60.34 206.4-150.2C467.9 313 458.6 294.1 441.8 289.6z"/>
+                        </svg>
+                    </a>
+                </menu>
+
+            </div>
+            <!-- table headers with dates -->
+            <% let today = new Date() %>
+            <div class="calendar-row -headers">
+                <div class="calendar-cell calendar-student-name"></div>
+                <% days.map((day, index) => { %>
+                    <% let isToday = (new Date() - day.date) >= 0 && (new Date() - day.date) <= 86400000 %>
+                    <div class="calendar-cell <%= isToday ? '-today' : '' %>" style="--d: <%= index / 20 %>s">
+                        <% dayOfWeek = day.date.getDay() %>
+                        <span class="calendar-date <%= dayColorClass(dayOfWeek) %>"><%= day.date.getDate() %></span>
+                        <span class="calendar-day <%= dayColorClass(dayOfWeek) %>"><%= daysOfWeekShort[dayOfWeek] %></span>
+                    </div>
+                <% }) %>
+            </div>
+            <!-- going through students array to place what scheduled -->
+            <% studentsKeys.map((studentKey, k) => { %>
+                <div class="calendar-row">
+                    <div class="calendar-cell calendar-student-name">
+                        <!-- getting info about all the skills tests -->
+                        <% 
+                            let stInfo = "Skills Tests:"
+                            studentsInRange[k].allSkillsTests.map(skTest => {
+                                stInfo += `\n${formatDateTime(skTest.scheduledDate)}: ${skTest.testLocation} - ${skTest.testType}; endor.${skTest.endorsements}`
+                            })
+                        %>
+                        <!-- full & short student's names -->
+                        <span class="short-name" data-studentId="<%= studentsInRange[k].studentId %>" title="<%= stInfo %>"><%= studentsInRange[k].short %></span>
+                        <span class="full-name"><%= studentsInRange[k].name.toLowerCase() %></span>
+                    </div>
+                    <% days.map((day, index) => { %>
+                        <div class="calendar-cell" style="--d: <%= index / 20 %>s">    
+                            <% if(day.students) { %>
+                                <% if(day.students.length) { %>
+                                    <% let freeSpot = true %>
+                                    <% day.students.map(stdt => { %>
+                                        <% if(stdt.key === studentKey) { %>
+                                            <% freeSpot = false %>
+                                            <!-- skillsTestLocations -->
+                                            
+                                            <% let graduate = stdt.graduate != 'no' ? '*' : '' %>
+
+                                            <% let info = `${stdt.name.toUpperCase()} - ${stdt.key}\n${stdt.testLocation}\n${stdt.testType};${stdt.vehicleType};${stdt.brakes}\n${formatDateTime(stdt.testDateTime)}` %>
+                                            <% info += stdt.graduate != 'no' ? `\n* graduated: ${stdt.graduate}` : '' %>
+                                            
+                                            <% let spot = getLocColor(stdt.testLocation) %>
+                                            <% if(!spot) { %>
+                                                <span data-test="<%= stdt.testId %>" class="calendar-spot -occupied-spot" onclick="highlightName(this)" title="<%= info %>">
+                                                    <span></span>
+                                                    <div class="tool-bar">
+                                                        <div class="-tool-btn delete-btn" title="delete test scheduled" data-student="<%= stdt.studentId %>" onclick="deleteTest(this)">
+                                                            <svg viewBox="0 0 512 512">
+                                                                <path d="M175 175C184.4 165.7 199.6 165.7 208.1 175L255.1 222.1L303 175C312.4 165.7 327.6 165.7 336.1 175C346.3 184.4 346.3 199.6 336.1 208.1L289.9 255.1L336.1 303C346.3 312.4 346.3 327.6 336.1 336.1C327.6 346.3 312.4 346.3 303 336.1L255.1 289.9L208.1 336.1C199.6 346.3 184.4 346.3 175 336.1C165.7 327.6 165.7 312.4 175 303L222.1 255.1L175 208.1C165.7 199.6 165.7 184.4 175 175V175zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="-tool-btn graduate-btn" title="make Graduated" data-student="<%= stdt.studentId %>" onclick="graduateStudent(this)">G</div>
+                                                        <div class="-tool-btn withdraw-btn" title="make Withdrew" data-student="<%= stdt.studentId %>" onclick="withdrawStudent(this)">W</div>
+                                                    </div>
+                                                </span>
+                                            <% } else { %>
+                                                <% if(stdt.testType === 'Initial') { %>
+                                                    <span data-test="<%= stdt.testId %>" class="calendar-spot -occupied-spot" onclick="highlightName(this)" title="<%= info %>" style="--c:<%= spot.initialColor %>">
+                                                        <span>I<%= graduate %></span>
+                                                        <div class="tool-bar">
+                                                            <div class="-tool-btn delete-btn" title="delete test scheduled" data-student="<%= stdt.studentId %>" onclick="deleteTest(this)">
+                                                                <svg viewBox="0 0 512 512">
+                                                                    <path d="M175 175C184.4 165.7 199.6 165.7 208.1 175L255.1 222.1L303 175C312.4 165.7 327.6 165.7 336.1 175C346.3 184.4 346.3 199.6 336.1 208.1L289.9 255.1L336.1 303C346.3 312.4 346.3 327.6 336.1 336.1C327.6 346.3 312.4 346.3 303 336.1L255.1 289.9L208.1 336.1C199.6 346.3 184.4 346.3 175 336.1C165.7 327.6 165.7 312.4 175 303L222.1 255.1L175 208.1C165.7 199.6 165.7 184.4 175 175V175zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="-tool-btn graduate-btn" title="make Graduated" data-student="<%= stdt.studentId %>" onclick="graduateStudent(this)">G</div>
+                                                            <div class="-tool-btn withdraw-btn" title="make Withdrew" data-student="<%= stdt.studentId %>" onclick="withdrawStudent(this)">W</div>
+                                                        </div>
+                                                    </span>
+                                                <% } else { %>
+                                                    <span data-test="<%= stdt.testId %>" class="calendar-spot -occupied-spot" onclick="highlightName(this)" title="<%= info %>" style="--c:<%= spot.retestColor %>">
+                                                        <% 
+                                                            let retest = stdt.testType === "Retest" ? "R"
+                                                            : stdt.testType === "Retest Bk & Rd" ? "B&R"
+                                                            : "Rd"
+                                                        %>
+                                                        <span><%= retest %><%= graduate %></span>
+                                                        <div class="tool-bar">
+                                                            <div class="-tool-btn delete-btn" title="delete test scheduled" data-student="<%= stdt.studentId %>" onclick="deleteTest(this)">
+                                                                <svg viewBox="0 0 512 512">
+                                                                    <path d="M175 175C184.4 165.7 199.6 165.7 208.1 175L255.1 222.1L303 175C312.4 165.7 327.6 165.7 336.1 175C346.3 184.4 346.3 199.6 336.1 208.1L289.9 255.1L336.1 303C346.3 312.4 346.3 327.6 336.1 336.1C327.6 346.3 312.4 346.3 303 336.1L255.1 289.9L208.1 336.1C199.6 346.3 184.4 346.3 175 336.1C165.7 327.6 165.7 312.4 175 303L222.1 255.1L175 208.1C165.7 199.6 165.7 184.4 175 175V175zM512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM256 48C141.1 48 48 141.1 48 256C48 370.9 141.1 464 256 464C370.9 464 464 370.9 464 256C464 141.1 370.9 48 256 48z"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="-tool-btn graduate-btn" title="make Graduated" data-student="<%= stdt.studentId %>" onclick="graduateStudent(this)">G</div>
+                                                            <div class="-tool-btn withdraw-btn" title="make Withdrew" data-student="<%= stdt.studentId %>" onclick="withdrawStudent(this)">W</div>
+                                                        </div>
+                                                    </span>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+                                    <% }) %>
+                                    <% if(freeSpot) { %>
+                                        <span class="calendar-spot -free-spot"></span>
+                                    <% } %>
+                                <% } else { %>
+                                    <span class="calendar-spot -free-spot"></span>
+                                <% } %>
+                            <% } else { %>
+                                <span class="calendar-spot -free-spot"></span>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% }) %>
+
+        <% } else { %>
+            <div class="error">No info was passed...</div>
+        <% } %>
+    </section>      <!-- calendar-box -->
+
+
+    <script>
+
+        // reloads due to dataInput update
+        function reloadCalendar(dateInput) {
+            if (!dateInput) { return }
+            if (!dateInput.value) { return }
+
+            const year = document.querySelector('.calendar-year-title')
+            const month = document.querySelector('.calendar-month-title')
+            if (!year || !month) { return }
+
+            const dataSplitedArr = dateInput.value.split('-')
+
+            if (year.dataset.year === dataSplitedArr[0] && month.dataset.month === dataSplitedArr[1]) { return }
+
+            const calendar = document.querySelector('#reload-calendar')
+            const link = `/admin/student/skills-calendar?year=${dataSplitedArr[0]}&month=${dataSplitedArr[1]}`
+
+            calendar.setAttribute('href', link)
+            calendar.click()
+        }
+
+
+        // deletes a specific skills-test
+        function deleteTest(deleteBtn) {
+            if (!deleteBtn) { return }
+            const spot = deleteBtn.parentElement.parentElement
+            if (!spot) { return }
+            spot.classList.toggle('-occupied-spot-to-delete')
+            setTimeout(async() => {
+                if (!confirm('Would you like to delete scheduled skills test?')) {
+                    spot.classList.toggle('-occupied-spot-to-delete')
+                    return
+                } else {
+                    // delete skills test request
+                    const dataStr = `${deleteBtn.dataset.student}&${spot.dataset.test}`
+                    const response = await fetch(`/admin/student/skills-test/${dataStr}`, {
+                        method: "DELETE",
+                    })
+                    if (response.status === 200) {
+                        spot.remove()
+                    } else {
+                        alert(`Issue, server responded: ${response.statusText}`)
+                        spot.classList.toggle('-occupied-spot-to-delete')
+                    }
+                }
+            }, 500)
+        }
+
+
+
+        // TOOL: update enrollment status
+        function updateStudentStatus(btnElement, action) {
+            if (!btnElement) { return }
+            const spot = btnElement.parentElement.parentElement
+            if (!spot) { return }
+            spot.classList.toggle('-occupied-spot-to-updateStatus')
+            setTimeout(async() => {
+                if (!confirm(`Would you like to update status to "${action}"?`)) {
+                    spot.classList.toggle('-occupied-spot-to-updateStatus')
+                    return
+                } else {
+                    const response = await fetch('/admin/user', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            studentId: btnElement.dataset.student,
+                            action
+                        })
+                    })
+                    if (response.status === 200) {
+                        alert(`Enrollment updated to "${action}"`)
+                    } else {
+                        alert(`Issue, server responded: ${response.statusText}`)
+                    }
+                    spot.classList.toggle('-occupied-spot-to-updateStatus')
+                }
+            }, 500)
+        }
+
+
+        // graduateStudent(graduateBtn)
+        function graduateStudent(graduateBtn) {
+            updateStudentStatus(graduateBtn, "Graduated from the program")
+        }
+
+
+        // withdrawStudent(withdrawBtn)
+        function withdrawStudent(withdrawBtn) {
+            updateStudentStatus(withdrawBtn, "Withdrew/terminated from the program")
+        }
+
+        // highlightinh a short-name on click
+        function highlightName(cellOcup) {
+            if (!cellOcup) return
+            
+            const row = cellOcup.parentElement.parentElement
+            if (!row) return
+            
+            const shortName = row.querySelector('.short-name')
+            if (!shortName) return
+
+            shortName.classList.toggle('-highlight')
+            setTimeout(() => {
+                shortName.classList.toggle('-highlight')
+            }, 3000)
+        }
+
+
+    </script>
+</body>
+</html>

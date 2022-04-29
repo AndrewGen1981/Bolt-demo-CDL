@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+:root {
+    --col1: #4158d0;
+    --col2: #c850c0;
+
+    --hgh-col1: #36304a;
+    --hgh-col2: #36304a4b;
+
+    font-size: 18px;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: fit-content;
+    min-height: 100vh;
+
+    background: var(--col1);
+    background: -webkit-linear-gradient(45deg, var(--col1), var(--col2));
+    background: -o-linear-gradient(45deg, var(--col1), var(--col2));
+    background: -moz-linear-gradient(45deg, var(--col1), var(--col2));
+    background: linear-gradient(45deg, var(--col1), var(--col2));
+
+}
+
+.clocks-box {
+    width: 95%;
+    max-width: 1024px;
+
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+.clocks-box h1{
+    padding: 3px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    background-color: var(--hgh-col1);
+    color: white;
+}
+.clocks-box h2{
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+.clocks-box h3, .clocks-box h4{
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+.clocks-box h4{
+    margin-bottom: 1rem;
+}
+.clocks-box span{
+    text-transform: capitalize;
+    opacity: 0.65;
+}
+
+
+
+
+.clocks-table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) repeat(3, 0.5fr);
+
+    font-size: 0.93rem;
+    background-color: #ffffff;
+    color: #808080;
+
+    border-radius: 7px;
+    overflow: hidden;
+
+    margin-bottom: 1rem;
+}
+.clock-title {
+    padding: 0.5rem 0;
+    background-color: var(--hgh-col1) !important;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.clocks-table input{
+    padding: 0.35rem 0;
+    font-size: 0.93rem;
+    color: #808080;
+
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--hgh-col2);
+    outline: transparent;
+}
+
+.clocks-table input:focus{
+    border-bottom: 1px solid var(--hgh-col1);
+}
+
+input[name='clockDate'],
+input[name='clockIN'], 
+input[name='clockOUT'] {
+    text-align: center;
+    cursor: pointer;
+}
+
+div[name='duration'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+input[name='clockDate']:nth-of-type(even),
+input[name='clockIN']:nth-of-type(odd), 
+input[name='clockOUT']:nth-of-type(odd),
+div[name='duration']:nth-of-type(odd) {
+    background-color: #f5f5f5;
+}
+
+.ico {
+    width: 30px;
+    height: 30px;
+}
+.-undo {
+    width: 35px;
+    height: 35px;
+}
+.-undo, .-del, .-add {
+    fill: #808080;
+    margin: auto;
+    cursor: pointer;
+}
+.-undo:hover, .-del:hover, .-add:hover {
+    fill: #6e6e6e;
+    transition: fill 0.2s linear;
+}
+
+.-btn {
+    width: 130px;
+    font-size: 1rem;
+    padding: 7px 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    background-color: var(--hgh-col1);
+    color: #ffffff;
+
+    border-radius: 5px;
+    border: none;
+
+    cursor: pointer;
+}
+
+.-btn:hover {
+    background-color: var(--hgh-col2);
+    transition: background-color 0.2s linear;
+}
+
+
+
+.-no-clockOUT {
+    background-color: rgba(247, 160, 178, 0.863) !important;
+}
+
+.-hidden-sprite {
+    display: none;
+}
+
+
+
+.-correctDuration {
+    color: green;
+}
+.-incorrectDuration {
+    color: red;
+}

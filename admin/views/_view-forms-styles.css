@@ -1,0 +1,265 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: 'BrixSlab-Regular';
+    font-size: 15px;
+
+    color: var(--blue-slate)
+}
+
+ol {
+    list-style-position: inside;
+}
+li {
+    padding: 0.3rem 0;
+    text-align: justify;
+}
+
+
+/* LETTER */
+.-hidden-sprite {
+    display: none;
+}
+
+.letter {
+    width: 1080px;
+    margin: 0 auto;
+
+    background-color: var(--sand15-coastal);
+    padding: 1.5% 0;
+
+    border-radius: 15px;
+
+    display: block;
+    position: relative;
+}
+
+.page-box {
+    width: 980px;
+    margin: 0 auto;
+    display: block;
+    position: relative;
+}
+.page-box::after {
+    content: "";
+    
+    background-image: url('/static/images/water-mark.png');
+
+    /* background-size: 20%;
+    background-position:center;
+    background-repeat:space; */
+
+    background-size:contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+
+    opacity: 0.035;
+}
+
+
+.header {
+    width: 100%;
+}
+
+.header-line1 {
+    font-family: "BrixSlab-Bold";
+
+    font-size: 0.8rem;
+    text-align: right;
+    text-transform: uppercase;
+}
+.header-line2 {
+    font-size: 0.8rem;
+    text-align: right;
+}
+
+.form-title {
+    font-family: "BrixSlab-Medium";
+
+    font-size: 2rem;
+    text-align: left;
+    text-transform: uppercase;
+
+    border-bottom: 2px solid var(--blue40-slate);
+}
+
+.form-note {
+    font-family: "BrixSlab-Light";
+
+    font-size: 0.8rem;
+    text-align: justify;
+
+    margin-bottom: 1.2rem;
+}
+
+.main-box {
+    width: 90%;
+    margin: 0 auto 1.2rem auto;
+    display: block;
+}
+.main-box-title, .section-title, .section-title-hgh {
+    font-family: "BrixSlab-LightItalic";
+
+    font-size: 1.2rem;
+    text-align: left;
+    text-transform: capitalize;
+    
+    margin-bottom: 0.6rem;
+}
+.section-title-hgh {
+    color: var(--orange-high-desert)
+}
+.appl-full-name, .appl-address {
+    font-family: "BrixSlab-RegularItalic";
+
+    font-size: 1.2rem;
+    text-align: right;
+    text-transform: uppercase;
+}
+.appl-address {
+    font-family: "BrixSlab-LightItalic";
+}
+
+.section-box {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.section-fields {
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    flex-wrap: wrap;
+}
+.section-fields-2 {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+.section-fields-3 {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.section-fields-4 {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+}
+.-fields-left {
+    justify-content: left;
+}
+.-fields-right {
+    justify-content: right;
+}
+.-fields-side-by-side {
+    justify-content: space-between;
+}
+.-fields-center {
+    justify-content: center;
+    text-align: center;
+}
+.-box80 {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.-box90 {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.section-note {
+    font-family: "BrixSlab-Light";
+
+    font-size: 0.8rem;
+    text-align: justify;
+
+    margin-bottom: 0.5rem;
+}
+
+.field-box {
+    display: inline-flex;
+    align-items: center;
+}
+.field-title, .field-value {
+    font-family: "BrixSlab-Medium";
+    font-size: 1.1rem;
+    text-align: center;
+    text-transform: capitalize;
+
+    padding: 0.35rem;
+}
+.field-value {
+    min-width: 100px;
+    font-family: "BrixSlab-RegularItalic";
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--blue20-slate);
+}
+.field-signature {
+    min-width: 200px;
+    font-family: 'WindSong', cursive;
+    font-size: 3rem;
+    border-bottom: 2px solid var(--blue20-slate);
+}
+.check-mark {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+#unchecked {
+    fill: var(--blue60-slate);
+}
+#checked {
+    fill: var(--blue-slate);
+}
+
+
+/* TABLE */
+table {
+    width: 80%;
+    margin: 0.5rem auto;
+
+    font-family: 'Brix', sans-serif;
+    text-align: center;
+
+    border: 2px solid var(--black40-worn);
+    border-radius: .5rem;
+}
+th,td {
+    width: 50%;
+    padding: 5px 0;
+    margin: 0;
+
+    border-bottom: 1px solid var(--black20-worn);
+}
+th {
+    background-color: var(--black15-worn);
+}
+td:nth-child(2) {
+    color: var(--orange-high-desert);
+}
+.-no-border {
+    border: none;
+}
+
+.-ml {
+    margin-left: 3rem;
+}
+

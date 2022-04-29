@@ -1,0 +1,310 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root {
+    font-size: 14px;
+    --accent1: #43a84366;
+    --accent2: #43a843;
+    --accent3: #1d1e3d;
+    --accent4: #2c314a;
+    --accent5: #2c314a47;
+    --accent6: #ef47e729;
+}
+
+header {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--accent3);
+    color: #fff;
+}
+.main-inputs, menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.main-inputs {
+    width: 100%;
+    margin: 30px 0 5px 0;
+}
+menu {
+    margin-bottom: 3px;
+}
+.back, .forth {
+    margin: 0 1px;
+
+    width: 30px;
+    height: 30px;
+
+    fill: var(--accent1);
+    transition: all 0.25s linear;
+
+    border-radius: 100%;
+}
+.forth {
+    transform: rotate(180deg);
+}
+.back:hover, .forth:hover {
+    fill: #43a843c7;
+    box-shadow: 0 0 7px 1px #ffffffde;
+}
+
+.back-button, .close-button {
+    margin: 0 4px;
+
+    width: 2.75rem;
+    height: 2.75rem;
+    fill: var(--accent4);
+    transition: all 0.25s linear;
+}
+.back-button:hover {
+    fill: #ffffffde;
+    transform: translateX(-2px) scale(1.01);
+}
+.close-button:hover {
+    fill: #ffffffde;
+    transform: translateX(1px) scale(1.01);
+}
+
+
+.main-inputs input {
+    margin: 0 1px;
+    padding: 0 2px;
+
+    width: 15%;
+    max-width: 170px;
+    height: 2.1rem;
+
+    font-family: "BrixSlab-Regular";
+    font-size: 1.1rem;
+}
+
+.schedule-box {
+    width: 95%;
+
+    min-width: 510px;
+    max-width: 1550px;
+
+    margin: 0 auto;
+
+    position: relative;
+}
+
+.calendar-box {
+    width: 100%;
+}
+.calendar-title {
+    font-family: "Industrial Bold";
+    font-size: 2.2rem;
+    color: var(--accent5);
+}
+.calendar {
+    width: 100%;
+    display: flex;
+}
+
+.calendar-column {
+    width: 14%;
+    display: flex;
+    flex-direction: column;
+}
+
+.day-of-week {
+    display: flex;
+    flex-direction: column;
+}
+.day-title {
+    font-family: "BrixSlab-Medium";
+    font-size: 1.2rem;
+}
+.day-date {
+    padding: 2px 1px;
+
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.8rem;
+    color: var(--accent2);
+    
+    border-bottom: 1px solid var(--accent1);
+    margin-bottom: 5px;
+}
+.-today {
+    color: darkgreen;
+    background-color: var(--accent1);
+    border-radius: 5px 5px 0 0;
+}
+
+.time-spot, .spot, .-spot-data {
+    padding: 0 1px;
+
+    width: 100%;
+    height: 2rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    font-family: "BrixSlab-Light";
+    font-size: 1rem;
+
+    border: none;
+    outline: none;
+}
+
+.time-spot {
+    border-bottom: 1px solid lightgrey;
+}
+
+.-blocked, .-occupied, .-empty {
+    width: 100%;
+
+    overflow-x: hidden;
+    white-space: nowrap;
+
+    position: relative;
+}
+
+.student-namekey, .closed-spot {
+    padding: 0 2px;
+
+    width: 100%;
+    height: 100%;
+    
+    cursor: default;
+}
+.student-namekey {
+    background-color: #aaaced69;
+}
+.closed-spot {
+    font-family: "BrixSlab-RegularItalic";
+    text-transform: uppercase;
+    text-align: center;
+    background-color: #a7a7a7b0;
+}
+
+.tool-bar {
+    padding: 2px 3px;
+    display: none;
+
+    position: absolute;
+    top: 1px; left: 2px;
+    z-index: 10;
+
+    background-color: #333333e0;
+    border-radius: 3px;
+
+    transition: all 0.2s linear;
+}
+
+.delete-btn {
+    width: 14px;
+    height: 14px;
+    
+    fill: #ff8c8c;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    fill: #ff7575;
+    transform: rotate(180deg);
+}
+
+.block-btn {
+    width: 14px;
+    height: 14px;
+    
+    fill: #ff8c8c;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.block-btn:hover {
+    transform: scale(1.1);
+}
+
+.-occupied:hover .tool-bar {
+    display: inline-flex;
+}
+
+.-empty:hover .tool-bar {
+    display: inline-flex;
+}
+
+.-blocked:hover .tool-bar {
+    display: inline-flex;
+}
+
+
+/* Modal window */
+.modal-window-wait {
+    padding: 10px;
+
+    position: absolute;
+    top: 50%; left: 50%;
+
+    width: 250px;
+
+    transform: translateX(-50%) translateY(-50%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #2c314a;
+    border-radius: 10px;
+}
+.modal-window-wait h3 {
+    font-family: "BrixSlab-Regular";
+    text-transform: uppercase;
+    text-align: center;
+    color: wheat;
+    margin-bottom: 5px;
+}
+.modal-window-wait p {
+    font-family: "BrixSlab-ExtraLight";
+    text-align: center;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+
+/* wait animation */
+@keyframes rotate {
+    to { transform: rotate(-360deg); }
+}
+.-rotate {
+    animation: rotate 3s ease-out infinite;
+}
+.modal-window-wait svg {
+    margin: 10px 0;
+
+    width: 50px;
+    height: 50px;
+
+    fill: #b4dcb4;
+}
+
+
+.-hidden {
+    display: none;
+}
+
+
+@media (max-width: 685px) {
+    :root {
+        font-size: 12px;
+    }
+    .day-date {
+        font-size: 0.9rem;
+    }
+    .main-inputs input {
+        width: 31%;
+    }
+}

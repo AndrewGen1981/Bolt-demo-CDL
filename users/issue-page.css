@@ -1,0 +1,58 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #484848;
+}
+
+.main-box {
+    width: 100%;
+    height: 50vh;
+
+    background-image: url('/static/images/pages/student-profile/student-home-header.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.main-box::before {
+    content: "";
+    position: absolute;
+
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+
+    background-color: #ef5a29;
+    opacity: 0.75;
+
+    width: 100%;
+    z-index: 1;
+}
+
+.main-box-title {
+    font-family: "Industrial Bold";
+    font-size: 3rem;
+
+    text-align: center;
+
+    color: #fff;
+
+    z-index: 2;
+}

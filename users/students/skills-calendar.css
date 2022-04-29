@@ -1,0 +1,262 @@
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-weight: normal;
+}
+
+:root {
+    font-size: 14px;
+    --accent-col1: #1d1e3d;
+    --accent-col2: #2c314a;
+    --accent-col3: #2c314a47;
+}
+
+body, html {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #161737;
+}
+
+.calendar-box {
+    width: 100%;
+    display: block;
+}
+
+/* HEADERS */
+.calendar-titles {
+    padding: 1rem 0;
+    width: 100%;
+    background-color: #1d1e3d;
+    text-align: center;
+    border-bottom: 1px solid var(--accent-col2);
+    margin-bottom: 0.5rem;
+
+    position: relative;
+}
+.calendar-title {
+    font-family: "Industrial Bold";
+    font-size: 2.3rem;
+    color: #fff;
+}
+.data-titles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.calendar-year-title,
+.data-titles span,
+.calendar-month-title {
+    padding: 0 2px;
+    font-family: "Industrial Medium";
+    font-size: 1.6rem;
+    color:wheat;
+}
+#calendar-date {
+    padding: 5px 12px;
+
+    font-family: "BrixSlab-Light";
+    font-size: 1.2rem;
+    letter-spacing: 0.6px;
+    color: #fff;
+
+    outline: none;
+    border: none;
+    border-radius: 1rem;
+    
+    background-color: #ffffff45;
+    cursor: pointer;
+}
+.calendar-box menu {
+    position: absolute;
+    left: 0.5rem; bottom: 0.5rem;
+}
+
+
+/* CALENDAR BODY */
+.calendar-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateX(-7px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.calendar-cell {
+    --d: 100ms;
+
+    margin: 0 1px;
+    padding: 0.65rem 0;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--accent-col3);
+
+    animation-name: appear;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-delay: var(--d);
+
+
+    /* animation: appear 0.5s linear var(--d); */
+}
+.calendar-student-name {
+    padding: 0 3px;
+    flex: 1.5;
+    align-items: flex-start;
+    position: relative;
+}
+.-headers .calendar-cell:not(.calendar-student-name) {
+    border-radius: 5px 5px 0 0;
+}
+.-today {
+    background-color: #43a84338;
+}
+.calendar-date {
+    font-family: "BrixSlab-Bold";
+    letter-spacing: 0.5px;
+    font-size: 1.1rem;
+    color: #fff;
+}
+.calendar-day {
+    font-family: "BrixSlab-Light";
+    font-size: 0.9rem;
+    color: #fff;
+    opacity: 0.85;
+}
+
+.-weekend {
+    color: wheat;
+}
+.-monday {
+    color: #43a843;
+}
+
+.short-name {
+    padding: 0.35rem 0.3rem;
+    width: 2.2rem;
+
+    font-family: "BrixSlab-Medium";
+    font-size: 0.95rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: #fff;
+
+    border: 1px solid var(--accent-col2);
+    border-radius: 1rem;
+    cursor: pointer;
+    
+    transition: all 0.3s linear;
+}
+.-highlight {
+    background-color: #22a97278;
+}
+
+.full-name {
+    --col1: #161737;
+    --col2: transparent;
+
+    padding: 3px;
+    width: 135px;
+    position: absolute;
+    top: 0; left: 2.15rem;
+
+    font-family: "BrixSlab-Light";
+    font-size: 0.7rem;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    color: #f5deb3;
+
+    background: var(--col1);
+    background: -o-linear-gradient(90deg, var(--col1), var(--col2));
+    background: -moz-linear-gradient(90deg, var(--col1), var(--col2));
+    background: -webkit-linear-gradient(90deg, var(--col1), var(--col2));
+    background: linear-gradient(90deg, var(--col1), var(--col2));
+
+    z-index: 1;
+}
+
+/* Spots */
+.-occupied-spot {
+    --c: lightgray;
+
+    width: 100%;
+
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.8px;
+    font-size: 0.85rem;
+    text-align: center;
+    color:#2f315e;
+
+    background-color: var(--c);
+    box-shadow: 0 0 8px 0px var(--c);
+    border-radius: 2px;
+    cursor: pointer;
+
+    position: relative;
+}
+.-occupied-spot-to-delete {
+    --c: red !important;
+}
+.-occupied-spot-to-updateStatus {
+    --c: yellow !important;
+}
+
+.tool-bar {
+    padding: 1px 2px;
+    display: none;
+    /* display: inline-flex; */
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: -1.1em; right: -0.8em;
+    
+    color: #fff;
+    background-color: #333333bf;
+    border-radius: 2px;
+
+    transition: all 0.25s linear;
+}
+
+.-occupied-spot:hover {
+    z-index: 10;
+}
+.-occupied-spot:hover .tool-bar {
+    display: inline-flex;
+    z-index: 100;
+}
+
+.-tool-btn {
+    margin: 1px 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+
+    width: 13px;
+    height: 13px;
+
+    transition: all 0.2s linear;
+}
+.-tool-btn:hover {
+    transform: translateY(-1px);
+}
+
+.delete-btn {
+    fill: #f38a8ad6;
+}
+.graduate-btn {
+    color: greenyellow;
+    border: 1px solid greenyellow;
+}
+.withdraw-btn {
+    color: #fbdbcf;
+    border: 1px solid #fbdbcf;
+}

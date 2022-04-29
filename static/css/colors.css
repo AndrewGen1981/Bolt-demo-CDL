@@ -1,0 +1,75 @@
+:root {
+    --blue-slate: hsla(213, 10%, 36%, 100%);
+    --blue80-slate: hsla(213, 10%, 36%, 80%);
+    --blue60-slate: hsla(213, 10%, 36%, 60%);
+    --blue40-slate: hsla(213, 10%, 36%, 40%);
+    --blue20-slate: hsla(213, 10%, 36%, 20%);
+    --blue15-slate: hsla(213, 10%, 36%, 15%);
+
+    --black-worn: hsla(0, 0%, 18%, 100%);
+    --black80-worn: hsla(0, 0%, 18%, 80%);
+    --black60-worn: hsla(0, 0%, 18%, 60%);
+    --black40-worn: hsla(0, 0%, 18%, 40%);
+    --black20-worn: hsla(0, 0%, 18%, 20%);
+    --black15-worn: hsla(0, 0%, 18%, 15%);
+
+    --sand-coastal: hsla(66, 50%, 72%, 100%);
+    --sand80-coastal: hsla(66, 50%, 72%, 80%);
+    --sand60-coastal: hsla(66, 50%, 72%, 60%);
+    --sand40-coastal: hsla(66, 50%, 72%, 40%);
+    --sand20-coastal: hsla(66, 50%, 72%, 20%);
+    --sand15-coastal: hsla(66, 50%, 72%, 15%);
+
+    --orange-high-desert: hsla(21, 76%, 55%, 100%);
+    --orange80-high-desert: hsla(21, 76%, 55%, 80%);
+    --orange60-high-desert: hsla(21, 76%, 55%, 60%);
+    --orange40-high-desert: hsla(21, 76%, 55%, 40%);
+    --orange20-high-desert: hsla(21, 76%, 55%, 20%);
+    --orange15-high-desert: hsla(21, 76%, 55%, 15%);
+
+    --gray-pacific-cloud: hsla(48, 13%, 77%, 100%);
+    --gray80-pacific-cloud: hsla(48, 13%, 77%, 80%);
+    --gray60-pacific-cloud: hsla(48, 13%, 77%, 60%);
+    --gray40-pacific-cloud: hsla(48, 13%, 77%, 40%);
+    --gray20-pacific-cloud: hsla(48, 13%, 77%, 20%);
+    --gray15-pacific-cloud: hsla(48, 13%, 77%, 15%);
+
+
+    /* HIGHLIGHTING CONST */
+    --hightight-update: var(--blue40-slate);
+    --hightight-delete: var(--orange40-high-desert);
+    --hightight-insert: var(--sand40-coastal);
+
+    /* GOOD/BAD, DONE/TODO */
+    --good-done:lightgreen;
+    --good-done1: rgb(24, 128, 24);
+    --bad-todo: lightcoral;
+    --bad-todo1: rgb(128, 24, 24);
+}
+
+
+/* HIGHLIGHTING ANIMATION CLASSES */
+@keyframes hightight-update {
+    0% { background-color: inherit }
+    50% { background-color: var(--hightight-update) }
+    100% { background-color: inherit }
+}
+@keyframes hightight-delete {
+    0% { background-color: inherit }
+    50% { background-color: var(--hightight-delete) }
+    100% { background-color: inherit }
+}
+@keyframes hightight-insert {
+    0% { background-color: inherit }
+    50% { background-color: var(--hightight-insert) }
+    100% { background-color: inherit }
+}
+.-hightight-update-row {
+    animation: hightight-update 0.4s ease-in
+}
+.-hightight-delete-row {
+    animation: hightight-delete 0.4s ease-in
+}
+.-hightight-insert-row {
+    animation: hightight-insert 0.4s ease-in
+}

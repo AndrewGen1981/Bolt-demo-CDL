@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Chart: Enrollments Dynamics</title>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/brix-family.css">
+        
+    <link rel="stylesheet" href="/admin/charts/instructorsActivity.css">
+</head>
+<body>
+
+    <!-- each location has own color for Chart -->
+    <% 
+        const colorArray = ['#2900b3', '#360062', '#5d056f', '#891c6b', '#b83157', '#e1522f', '#f77c00', '#fcbf01', '#f4f988', '#b1f988', '#88f9aa' ]
+        function getColor(i, n) {
+            return colorArray[Math.round(i * (colorArray.length - 1) / (n - 1))]
+        }
+    %>
+    
+    <!-- TOOLS -->
+    <% const percFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) %>
+    <% function formatToPercents(ratio) { return `${percFormat.format(Math.round(ratio * 1000) / 10)}%` } %>
+
+    <header>
+        <h1 class="header-title">Chart &bull; <span>Instructors' Activity</span></h1>
+        <menu>
+            <%- include('../../static/partial/--admin-menu.ejs') %>
+        </menu>
+    </header>
+
+    <div class="dummy"></div>
+
+    <% if(locals.chartData || locals.chartData.length) { %>
+
+        <div class="topic-group-box">
+            <section class="chart-box">
+                <h2 class="chart-title">Dynamics of scorings done <span>per instructors</span></h2>
+                <section class="chart-legend">
+                    <% chartData[0].instructorNames.forEach((instructor, index) => { %>
+                        <div class="instructor-box">
+                            <span class="instructor-key" style="--c:<%= getColor(index, chartData[0].instructorNames.length) %>"></span>
+                            <span class="instructor-name"><%= instructor %></span>
+                        </div>
+                    <% }) %>
+                </section>
+                <div class="analythicsChart">
+                    <% chartData.forEach(item => { %>
+                        <% let qty = item.scoringsDoneByInstructors.reduce((a,b) => b += a) %>
+                        <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                            <% if(qty > 0) { %>
+                                <% item.instructorNames.forEach((instructorName, index) => { %>
+                                    <% if(item.scoringsDoneByInstructors[index] > 0) { %>
+                                        <% let perc = item.scoringsDoneByInstructors[index] * 100 / qty %>
+                                        <% let title = `${instructorName} - ${Math.round(perc)}%` %>
+                                        <div class="chart-sub-column" data-value="<%= item.scoringsDoneByInstructors[index] %>" style="--h:<%= perc %>%; --c:<%= getColor(index, item.instructorNames.length) %>" title="<%= title %>"><%= item.scoringsDoneByInstructors[index] %></div>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>  <!-- analythicsChart -->
+            </section>      <!-- chart-box -->
+            
+            <h3 class="chart-sub-title">Structure for the last month</h3>
+            <div class="pie-charts-box">
+                <%
+                    let lastMonthScorings = chartData[chartData.length - 1].scoringsDoneByInstructors
+                    let total = lastMonthScorings.reduce((a,b) => b += a) %>
+                %>
+                <% lastMonthScorings.forEach((data, index) => { %>
+                    <% let perc = total ? data / total : 0 %>
+                    <div class="pie" style="--p:<%= perc * 100 %>;--b:18px;--c:<%= getColor(index, lastMonthScorings.length) %>;"><%= formatToPercents(perc) %></div>
+                <% }) %>
+            </div>
+        </div>      
+
+        <div class="topic-group-box">
+            <section class="chart-box">
+                <h2 class="chart-title">Dynamics of scorings done <span>per types</span></h2>
+                <section class="chart-legend">
+                    <% chartData[0].scoringTypes.forEach((scrType, index) => { %>
+                        <div class="instructor-box">
+                            <span class="instructor-key" style="--c:<%= getColor(index, chartData[0].scoringTypes.length) %>"></span>
+                            <span class="instructor-name"><%= scrType %></span>
+                        </div>
+                    <% }) %>
+                </section>
+                <div class="analythicsChart">
+                    <% chartData.forEach(item => { %>
+                        <% let qty = item.scoringsDoneByType.reduce((a,b) => b += a) %>
+                        <div class="chart-column" data-key="<%= item.month %>.<%= item.year %>" data-value="<%= qty %>">
+                            <% if(qty > 0) { %>
+                                <% item.scoringTypes.forEach((scoringType, index) => { %>
+                                    <% if(item.scoringsDoneByType[index] > 0) { %>
+                                        <% let perc = item.scoringsDoneByType[index] * 100 / qty %>
+                                        <% let title = `${scoringType} - ${Math.round(perc)}%` %>
+                                        <div class="chart-sub-column" data-value="<%= item.scoringsDoneByType[index] %>" style="--h:<%= perc %>%; --c:<%= getColor(index, item.scoringTypes.length) %>" title="<%= title %>"><%= item.scoringsDoneByType[index] %></div>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>  <!-- analythicsChart -->
+            </section>      <!-- chart-box -->
+            <h3 class="chart-sub-title">Structure for the last month</h3>
+            <div class="pie-charts-box">
+                <%
+                    lastMonthScorings = chartData[chartData.length - 1].scoringsDoneByType
+                    total = lastMonthScorings.reduce((a,b) => b += a) %>
+                %>
+                <% lastMonthScorings.forEach((data, index) => { %>
+                    <% let perc = total ? data / total : 0 %>
+                    <div class="pie" style="--p:<%= perc * 100 %>;--b:18px;--c:<%= getColor(index, lastMonthScorings.length) %>;"><%= formatToPercents(perc) %></div>
+                <% }) %>
+            </div>
+        </div> <!-- topic-group-box -->
+
+
+    <% } else { %>
+        <h1>No data passed</h1>
+    <% } %>
+
+
+    <script defer>
+
+        // @drawing chart
+        // get chart div height depending on vh
+        const charts = document.querySelectorAll(".analythicsChart")
+
+        if (charts) {
+            charts.forEach(chart => {
+                const maxHeight = parseFloat(getComputedStyle(chart).height)
+                const cols = chart.querySelectorAll(".chart-column")
+                if (maxHeight && cols) {
+                    // find max value
+                    let max = 0
+                    for (let i=0; i<cols.length; i++) {
+                        if (parseInt(cols[i].dataset.value) > max) { max = parseInt(cols[i].dataset.value) }
+                    }
+                    if (max) {
+                        // setting values espectively to max                    
+                        for (let i=0; i<cols.length; i++) {
+                            cols[i].style.height = `${ parseInt(cols[i].dataset.value) * maxHeight / max }px`
+                        }
+                    }
+                }
+            })
+        }
+
+    </script>
+
+</body>
+</html>

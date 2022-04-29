@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA | Form1 Print View</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/admin/views/_view-forms-styles.css">
+
+</head>
+<body>
+    
+    <!-- sprite -->
+    <svg class='-hidden-sprite'>
+        <symbol id="unchecked" viewBox="0 0 24 24">
+            <path d="M5.75,3 L18.25,3 C19.7687831,3 21,4.23121694 21,5.75 L21,18.25 C21,19.7687831 19.7687831,21 18.25,21 L5.75,21 C4.23121694,21 3,19.7687831 3,18.25 L3,5.75 C3,4.23121694 4.23121694,3 5.75,3 Z M5.75,4.5 C5.05964406,4.5 4.5,5.05964406 4.5,5.75 L4.5,18.25 C4.5,18.9403559 5.05964406,19.5 5.75,19.5 L18.25,19.5 C18.9403559,19.5 19.5,18.9403559 19.5,18.25 L19.5,5.75 C19.5,5.05964406 18.9403559,4.5 18.25,4.5 L5.75,4.5 Z"></path>
+        </symbol>
+    </svg>
+    <svg class='-hidden-sprite'>
+        <symbol id="checked" viewBox="0 0 498.138 498.138">
+            <path d="M493.65,109.76c-9.859-18.405-32.775-25.333-51.179-15.472 c-22.059,11.816-42.897,23.982-62.82,36.717l0.003-51.276c0-11.313-9.146-20.494-20.493-20.494H20.457 C9.164,59.235,0,68.417,0,79.729v338.7c0,11.291,9.163,20.474,20.457,20.474h338.686c11.348,0,20.496-9.183,20.496-20.474 l0.009-195.875c30.092-22.165,62.312-42.213,98.529-61.615C496.582,151.079,503.509,128.166,493.65,109.76z M338.702,397.917 H40.968V100.219h297.734v58.715c-40.715,29.649-78.022,62.759-114.834,101.677c-4.275-5.648-8.601-11.423-13.129-17.47 c-9.354-12.491-19.958-26.648-32.375-42.632c-12.81-16.487-36.561-19.468-53.05-6.659c-16.488,12.811-19.47,36.562-6.659,53.051 c12.007,15.455,21.949,28.728,31.563,41.565c13.841,18.482,26.915,35.938,42.45,54.771c7.075,8.576,17.566,13.604,28.682,13.745 c0.162,0.002,0.321,0.002,0.482,0.002c10.94,0,21.356-4.741,28.541-13.012c29.482-33.939,58.199-62.952,88.329-88.826V397.917z"/>
+        </symbol>
+    </svg>
+
+    
+    <div class="letter">
+
+        <div class="page-box">
+
+            <div class="header">
+                <div class="header-line1">Toro Trucking Academy</div>
+                <div class="header-line2">(1321 109th St.E Tacoma WA, 98445), 833-867-6235</div>
+            </div>
+
+            <h1 class="form-title">STUDENT DATA COLLECTION FORM</h1>
+            <p class="form-note">The Workforce Board (the state agency that regulates this school) requires that we ask you for this information, by law (RCW 28C.10.050). Providing your social security number is voluntary. By law, the information you provide on this form cannot be given out by any state agency as public information. The Workforce Board will not disclose data to anyone except authorized Workforce Board employees or contractors working on specific research activities, who follow strict confidentiality procedures. This format follows the information required to be submitted by the school as part of the annual student data report.</p>
+
+            <% if(user.dataCollection) { %>
+                <div class="main-box">
+                    <p class="main-box-title">Full applicant's name and address:</p>
+                    <h2 class="appl-full-name"><%= user.dataCollection.firstName %> <%= user.dataCollection.middleName %> <%= user.dataCollection.lastName %></h1>
+                    <h3 class="appl-address"><%= user.dataCollection.street %> <%= user.dataCollection.city %>, <%= user.dataCollection.state %> <%= user.dataCollection.zip %></h3>
+                </div>  <!-- main-box -->
+
+                <section class="section-box">
+                    <h2 class="section-title"></h2>
+                    <div class="section-fields">
+                        <div class="field-box">
+                            <h3 class="field-title">Phone Number</h3>
+                            <p class="field-value"><%= user.dataCollection.phone %></p>
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Date of Birth</h3>
+                            <p class="field-value"><%= new Date(user.dataCollection.DOB).toLocaleDateString('en-US') %></p>
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Social Security Number</h3>
+                            <p class="field-value"><%= user.dataCollection.SSN %></p>
+                        </div>
+                    </div>  <!-- section-fields -->
+                </section>  <!-- Additional info -->
+
+                <section class="section-box">
+                    <h2 class="section-title"></h2>
+                    <div class="section-fields">
+                        <div class="field-box">
+                            <h3 class="field-title">Email</h3>
+                            <p class="field-value"><%= user.dataCollection.email %></p>
+                        </div>
+                    </div>  <!-- section-fields -->
+                </section>  <!-- email info -->
+
+                <% let items %>
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Race (Check only one box):</h2>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['White/Caucasian', 'Black/African American', 'American Indian or Alaska Native', 'Hawaiian Native or other Pacific Islander', 'Asian', 'Multiracial'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.race.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+
+                        <% if(items.some(item => item.toUpperCase() === user.dataCollection.race.toUpperCase())) { %>
+                            <div class="field-box">
+                                <svg class="check-mark">
+                                    <use xlink:href="#unchecked"></use> 
+                                </svg>
+                                <h3 class="field-title">Other</h3>
+                            </div>
+                        <% } else { %>
+                            <div class="field-box">
+                                <svg class="check-mark">
+                                    <use xlink:href="#checked"></use> 
+                                </svg>
+                                <h3 class="field-title">Other</h3>
+                                <p class="field-value"><%= user.dataCollection.race %></p>
+                            </div>
+                        <% } %>
+
+                    </div>  <!-- section-fields -->
+                </section>  <!-- Race -->
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Are you Hispanic in origin?</h2>
+                    <p class="section-note">*Hispanic defined as a person of Mexican, Puerto Rican, Cuban, Central or South American, or other Spanish culture or origin, regardless of race.</p>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['Yes', 'No'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.hispanic.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+            
+                    </div>  <!-- section-fields -->
+                </section>  <!-- Hispanic -->
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Are you disabled?</h2>
+                    <p class="section-note">*Disability defined as a physical or mental impairment which substantially limits one or more major life activities, such as seeing, hearing, speaking, walking, learning, working, etc.</p>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['Yes', 'No'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.disabled.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+            
+                    </div>  <!-- section-fields -->
+                </section>  <!-- disabled -->
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Are you a military veteran?</h2>
+                    <p class="section-note">*Veteran defined as a student that served, in not currently serving, on active duty in the U.S. Army, Navy, Air Force, Marine Corps, or Coast Guard.</p>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['Yes', 'No'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.veteran.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+            
+                    </div>  <!-- section-fields -->
+                </section>  <!-- veteran -->
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Gender</h2>
+                    <p class="section-note"></p>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['Male', 'Female'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.sex.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+            
+                    </div>  <!-- section-fields -->
+                </section>  <!-- sex -->
+
+                <section class="section-box -box90">
+                    <h2 class="section-title">Race (Check only one box):</h2>
+                    <div class="section-fields-2 -box90">
+
+                        <% items = ['Less than high school graduation', 'High school graduate', 'GED', 'Some post high school, no degree/certificate', 'Certificate (less than two years)', 'Associate’s Degree', 'Bachelor’s Degree', 'Master’s Degree'] %>
+
+                        <% items.map(item => { %>
+                            <div class="field-box">
+                                <% if (item.toUpperCase() != user.dataCollection.grade.toUpperCase()) { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#unchecked"></use> 
+                                    </svg>
+                                <% } else { %>
+                                    <svg class="check-mark">
+                                        <use xlink:href="#checked"></use> 
+                                    </svg>
+                                <% } %>
+                                <h3 class="field-title"><%= item %></h3>
+                            </div>
+                        <% }) %>
+
+                        <% if(items.every(item => item.toUpperCase() !== user.dataCollection.grade.toUpperCase())) { %>
+                            <div class="field-box">
+                                <svg class="check-mark">
+                                    <use xlink:href="#checked"></use> 
+                                </svg>
+                                <h3 class="field-title">Other</h3>
+                                <p class="field-value"><%= user.dataCollection.grade %></p>
+                            </div>
+                        <% } %>
+
+                    </div>  <!-- section-fields -->
+                </section>  <!-- Graduation -->
+
+                <section class="section-box">
+                    <h2 class="section-title"></h2>
+                    <div class="section-fields -fields-side-by-side">
+                        <div class="field-box">
+                            <h3 class="field-title">Date of signing</h3>
+                            <p class="field-value"><%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                        </div>
+                        <div class="field-box">
+                            <h3 class="field-title">Applicant signature</h3>
+                            <p class="field-signature"><%= user.dataCollection.firstName %> <%= user.dataCollection.lastName %></p>
+                        </div>
+                    </div>  <!-- section-fields -->
+                </section>  <!-- signature info -->
+                
+            <% } else { %>
+                <h2 class="appl-full-name">New User</h1>
+                <h3 class="appl-address">Data Collection Form was not filled out yet</h3>
+            <% } %> 
+
+        </div>  <!-- page-box -->
+
+    </div> <!--letter-->
+
+</body>
+</html>

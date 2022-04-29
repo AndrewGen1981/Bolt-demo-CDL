@@ -1,0 +1,282 @@
+*, *::before, *::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+:root {
+    font-size: 14px;
+    /* for search */
+    --filter-accent: #43a84366;
+    --filter-accent1: #43a843;
+    --accent-orange: hsla(21, 76%, 55%, 100%);
+}
+
+.-visible {
+    background-color: var(--filter-accent) !important;
+}
+.-hidden {
+    display: none !important;
+}
+
+.report-box {
+    width: 100%;
+}
+
+header {
+    width: 100%;
+
+    background-color: #262626;
+    background-image: url('/static/images/scratch/scratch864-150.png');
+    background-position: center;
+    background-repeat: repeat-x;
+
+    border-bottom: 1px solid lightgrey;
+
+    position: fixed;
+    top: 0;
+
+    z-index: 10;
+}
+  
+header .main-title {
+    padding: 5px 0;
+    width: 100%;
+
+    font-family: "Industrial Medium";
+    font-size: 2rem;
+    line-height: 2.2rem;
+    text-align: center;
+
+    color: #fff;
+}
+.main-title span {
+    color: wheat;
+}
+
+menu {
+    padding: 7px 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+  
+/* search-bar */
+#search-bar {
+    min-width: 150px;
+    min-height: 2em;
+
+    margin-left: 3px;
+    padding: 3px;
+    font-family: "BrixSlab-LightItalic";
+    font-size: 0.87rem;
+    color: #fff;
+
+    max-width: 10em;
+
+    background: transparent;
+    border: 1px solid #fff;
+    outline: unset;
+}
+
+#search-bar:focus {
+    background-color: var(--filter-accent);
+}
+
+  
+/* Main Table */
+.report-table {
+    width: 95%;
+    margin: 0 auto;
+}
+.-table-header {
+    position: sticky;
+    background-color: #2c2c2c !important;
+    z-index: 10;
+}
+.-table-header * {
+    display: block !important;
+    white-space: normal !important;
+
+    font-family: "BrixSlab-LightItalic" !important;
+    font-size: 0.87rem;
+    line-height: 1.35rem;
+    text-transform: none !important;
+    color: #fff !important;
+
+    cursor: default !important;
+}
+  
+.table-row {
+    padding: 5px 10px;
+    width: 100%;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    transition: all 0.25s linear;
+}
+.table-row:nth-of-type(odd) {
+    background-color: #f0f0f0;
+}
+
+.cell {
+    display: inline-block;
+    white-space: nowrap;
+    width: 4%;
+    overflow-x: hidden;
+
+    font-family: "BrixSlab-Light";
+}
+  
+/* Columns */
+.-fullName {
+    width: 14%;
+    font-style: italic;
+    text-transform: capitalize;
+    color: #333;
+}
+.-key {
+    width: 3%;
+}
+.-location {
+    width: 7%;
+}
+.-phone {
+    width: 7%;
+    font-style: italic;
+    text-decoration: none;
+    color: var(--filter-accent1);
+}
+.-email {
+    width: 14%;
+    font-style: italic;
+    text-decoration: none;
+    color: var(--filter-accent1);
+}
+.-balance {
+    margin-right: 5px;
+    width: 4%;
+    color: crimson;
+    text-align: right;
+}
+.-no-balance {
+    color: lightgrey;
+}
+.-table-header .-balance {
+    text-align: center;
+}
+
+.-TTT {
+    width: 3%;
+    text-align: center;
+}
+
+.-tuitionStartDate,
+.-lastVisitedDate,
+.-lastSessionDate {
+    width: 6%;
+    text-align: center;
+}
+.-lastVisitedDate {
+    color: var(--accent-orange);
+}
+
+.-tuitionDuration,
+.-totalClocks,
+.-monthClocks {
+    width: 4%;
+    text-align: center;
+    cursor: pointer;
+}
+.-long-duration:hover,
+.-short-duration:hover {
+    transform: translateY(-1px);
+    text-shadow: 0px 2px 3px #333;
+}
+
+.-long-duration {
+    color: var(--accent-orange);
+}
+.-short-duration {
+    color: var(--filter-accent1);
+}
+
+.-attention-was-learning {
+    margin: -1px 1px ;
+    background-color: #ef8095 !important;
+    border-radius: 0.35rem;
+}
+.-attention-was-learning:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px 1px 4px 0px #333;
+}
+.-ignor-wasnot-learning {
+    color: lightgrey;
+}
+
+.-absenceSolid {
+    width: 10%;
+    text-align: center;
+}
+.-table-footer {
+    height: 3rem;
+    background-color: #2c2c2c !important;
+}
+
+
+@media (max-width: 1450px) {
+    .-email {
+        display: none !important;
+    }
+    .-tuitionDuration, .-totalClocks, .-monthClocks {
+        width: 7%;
+    }
+}
+@media (max-width: 1400px) {
+    .-lastSessionDate {
+        display: none !important;
+    }
+    .-tuitionStartDate, .-lastVisitedDate {
+        width: 8%;
+        text-align: center;
+    }
+}
+@media (max-width: 1165px) {
+    .-phone, .-balance {
+        display: none !important;
+    }
+    .-location {
+        width: 10%;
+    }
+    .-tuitionStartDate, .-lastVisitedDate {
+        width: 10%;
+        text-align: center;
+    }
+    .-monthClocks {
+        width: 9%;
+    }
+}
+@media (max-width: 925px) {
+    :root {
+        font-size: 13px;
+    }
+}
+@media (max-width: 850px) {
+    .-tuitionStartDate {
+        display: none !important;
+    }
+    .-fullName {
+        width: 23%;
+    }
+}
+@media (max-width: 700px) {
+    .-TTT {
+        display: none !important;
+    }
+    .-location {
+        width: 13%;
+    }
+}
+@media (max-width: 650px) {
+    :root {
+        font-size: 12px;
+    }
+}

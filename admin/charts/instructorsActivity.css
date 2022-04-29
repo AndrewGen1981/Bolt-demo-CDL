@@ -1,0 +1,348 @@
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+:root {
+    --header-height: 8rem;
+    --desktop-width: 100vw;
+
+    --chart-width: calc(var(--desktop-width) * 0.65);
+    --chart-column-width: calc(var(--chart-width) / 14);
+
+    --main-color: #263544;
+
+    --col1: #dbdbdb;
+    --col2: #6c6c6c;
+}
+
+header {
+    position: fixed;
+
+    width: 100%;
+    height: var(--header-height);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #333;
+    background-image: url('/static/images/scratch/tire_580-min.png');
+    background-position-x: -3%;
+    background-position-y: 40%;
+    background-repeat: no-repeat;    
+
+    z-index: 10;
+}
+.header-title {
+    font-family: "Industrial Medium";
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+.header-title span {
+    color: wheat;
+}
+
+.dummy {
+    width: 100%;
+    height: calc(var(--header-height) + 2px);
+    background-color: #af501d;
+}
+
+.chart-box {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 2rem;
+}
+.chart-title {
+    margin: 2rem 0;
+    padding: 3px 10px;
+
+    font-family: "BrixSlab-ExtraLightItalic";
+    letter-spacing: 0.6px;
+    font-size: 18px;
+    color: #fff;
+
+    background-color: var(--main-color);
+}
+.chart-title span {
+    color: wheat;
+}
+
+.chart-sub-title {
+    font-family: "BrixSlab-LightItalic";
+    letter-spacing: 0.5px;
+    font-size: 16px;
+    text-align: center;
+    color: var(--main-color);
+    margin-bottom: 1rem;
+}
+
+.chart-legend {
+    padding: 10px 0;
+    width: var(--chart-width);
+
+    font-family: "BrixSlab-ExtraLightItalic";
+    font-size: 0.9rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+    margin-bottom: 3rem;
+}
+.instructor-box {
+    width: 135px;
+}
+.instructor-key {
+    margin-right: 3px;
+
+    width: 1rem;
+    height: 1rem;
+
+    display: inline-flex;
+
+    background: -webkit-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: -moz-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    
+    border: 1px solid #333;
+    border-radius: 3px;
+
+    position: relative;
+}
+.instructor-key::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--c);
+    opacity: 0.35;
+}
+
+.analythicsChart {
+    padding: 1.5rem 0;
+    width: var(--chart-width);
+    height: 30vh;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    background-color: #eefff5;
+    background: linear-gradient(45deg, #ebebeb, #fdfdfd);
+    background: -o-linear-gradient(45deg, #ebebeb, #fdfdfd);
+    background: -moz-linear-gradient(45deg, #ebebeb, #fdfdfd);
+
+    position: relative;
+}
+.analythicsChart::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('/static/images/scratch/tires.png');
+    background-size: contain;
+
+    opacity: 0.1;
+}
+
+.chart-column {
+    width: var(--chart-column-width);
+    max-width: 75px;
+    padding: 0 1px;
+
+    background-color: var(--col2);
+    background: -webkit-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: -moz-linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    background: linear-gradient(90deg, var(--col1) 35%, var(--col2));
+
+    display: flex;
+    flex-direction: column;
+
+    position:relative;
+    border-bottom: 1px solid #263544;
+}
+.chart-column::before {
+    content: attr(data-value);
+
+    width: 18px;
+
+    text-align: center;
+    color: #333;
+
+    font-family: "BrixSlab-Regular";
+    font-size: 14px;
+   
+    position: absolute;
+    top: -1.5em; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+.chart-column::after {
+    content: attr(data-key);
+
+    margin-top: 5px;
+    width: 100%;
+    min-width: 75px;
+   
+    font-family: "BrixSlab-RegularItalic";
+    font-weight: bolder;
+    font-size: 12px;
+    text-align: center;
+    color: #263544;
+
+    position: absolute;
+    top: 100%; 
+    left: 0;
+}
+.chart-column[data-value='0']::before {
+    top: -1.5em;
+    color: #26354430;
+    border: none;
+}
+
+.chart-sub-column {
+    width: 100%;
+    height: var(--h);
+    background-color: var(--c);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-family: "BrixSlab-Bold";
+    font-size: calc(var(--chart-column-width) * 0.25);
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 2px 2px 2px #161616;
+    
+    opacity: 0.35;
+    border: 1px solid #26354430;
+}
+
+
+/* pie chart */
+:root {
+    --pie-width: calc(var(--chart-width) / 5);
+}
+.pie-charts-box {
+    width: var(--chart-width);
+    height: calc(var(--pie-width) * 1.1);
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pie {
+    --w: var(--pie-width);
+
+    width:var(--w);
+    aspect-ratio:1;
+    position:relative;
+    display:inline-grid;
+    margin:5px;
+    place-content:center;
+
+    font-family: "BrixSlab-Bold";
+    font-size: 1.65rem;
+    color: #333;
+    background-color: #f0f0f0;
+    border-radius: 100%;
+
+    opacity: 0.5;
+    transition: all 0.5s linear;
+}
+.pie:before,
+.pie:after {
+    content:"";
+    position:absolute;
+    border-radius:50%;
+}
+.pie:before {
+    inset:0;
+    background:
+        radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat,
+        conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
+    -webkit-mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+            mask:radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+}
+/* .pie:after {
+    inset:calc(50% - var(--b)/2);
+    background:var(--c);
+    transform:rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
+} */
+
+
+@media (max-width:1550px) {
+    :root {
+        --chart-width: calc(var(--desktop-width) * 0.8);
+    }
+}
+@media (max-width:1250px) {
+    :root {
+        --chart-width: calc(var(--desktop-width) * 0.9);
+    }
+    header {
+        background-image: none;
+    }
+}
+@media (max-width:950px) {
+    :root {
+        --chart-width: calc(var(--desktop-width) * 0.95);
+        font-size: 14px;
+    }
+}
+@media (max-width:750px) {
+    :root {
+        font-size: 13px;
+        --pie-width: calc(var(--chart-width) / 4);
+    }
+    .chart-legend {
+        flex-wrap: wrap;
+    }
+    .analythicsChart {
+        margin-bottom: 4rem;
+    }
+    .chart-column::after {
+        transform: rotate(-90deg);
+        text-align: left;
+        margin-top: 1rem;
+    }
+    .pie-charts-box {
+        flex-wrap: wrap;
+        height: fit-content;
+    }
+}
+@media (max-width:500px) {
+    .header-title {
+        font-size: 1.5rem;
+    }
+    .chart-title {
+        text-align: center;
+    }
+    .chart-sub-column {
+        font-size: calc(var(--chart-column-width) * 0.35);
+    }
+    .chart-column::after {
+        left: -1rem;
+    }
+    .pie {
+        font-size: 1.15rem;
+    }
+}
+@media (max-width:375px) {
+    .chart-column::after {
+        left: -2rem;
+    }
+}

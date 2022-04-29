@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TTA Player</title>
+
+  <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+  <!-- Styles -->
+  <link rel="stylesheet" href="../../static/css/fonts.css">
+  <link rel="stylesheet" href="../../static/css/brix-family.css">
+
+  <link rel="stylesheet" href="../../static/css/colors.css">
+
+  <link rel="stylesheet" href="/users/tuition/tuition.css">
+
+</head>
+<body>
+
+  <div class="left-side">
+    <!-- TITLES -->
+    <div class="title-box">
+      <% const closeClass = parseFloat(videoData.testProgress) ? '-close-quize-done' : '-close-quize-not-done' %>
+      <a href="/user/tuition" id="closelink" title="back to Lessons Center">
+        <svg class="close-video <%= closeClass %>" viewBox="0 0 512 512">
+          <path d="M0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256zM175 208.1L222.1 255.1L175 303C165.7 312.4 165.7 327.6 175 336.1C184.4 346.3 199.6 346.3 208.1 336.1L255.1 289.9L303 336.1C312.4 346.3 327.6 346.3 336.1 336.1C346.3 327.6 346.3 312.4 336.1 303L289.9 255.1L336.1 208.1C346.3 199.6 346.3 184.4 336.1 175C327.6 165.7 312.4 165.7 303 175L255.1 222.1L208.1 175C199.6 165.7 184.4 165.7 175 175C165.7 184.4 165.7 199.6 175 208.1V208.1z"/>
+        </svg>
+      </a>
+      <% if (videoData) { %>
+        <h1 class="lesson-title"><%= videoData.lessonTitle %></h1>
+        <h2 class="module-title"><%= videoData.lesson %></h2>
+        <div class="indicators-box">
+          <% if (videoData.videoProgress) { %>
+            <span class="progress-indicator">Progress on this lesson is <%= Math.round(parseFloat(videoData.videoProgress)*1000) / 10 %>%</span>
+          <% } else { %>
+            <span class="progress-indicator">Progress on this lesson is 0%</span>
+          <% } %>
+          <% if (parseFloat(videoData.testProgress)) { %>
+            <span class="test-indicator -quiz-done">Quiz done</span>
+          <% } else {%>
+            <span class="test-indicator">Quiz not passed</span>
+          <% } %>
+        </div>  <!-- indicators-box -->
+      <% } %>
+    </div>  <!-- title-box -->
+
+    <!-- PLAYER -->
+    <div class="player-and-tools">
+      <div class="player-box" onclick=ytPlayerClick(this)>
+        <div id="player"></div>
+      </div>
+      <div class="tools-box">
+        <input class="tool-volume" type="range" min="0" max="100" name="volume" list="tickmarks" oninput="volumeChanged(this)">
+        <datalist id="tickmarks">
+          <option value="0" label="0%">
+          <option value="10">
+          <option value="20">
+          <option value="30">
+          <option value="40">
+          <option value="50" label="50%">
+          <option value="60">
+          <option value="70">
+          <option value="80">
+          <option value="90">
+          <option value="100" label="100%">
+        </datalist>
+        <select class="tool-playbackQuality" name="playbackQuality" id="playbackQuality" data-status='empty'></select>
+      </div>  <!-- tools-box -->
+      <div class="navigation-box">
+        <input class="tool-navigation" type="range" min="0" max="0" name="navigation" onchange="navigationChanged()">
+      </div>
+      <form action="/user/tuition/update" method="POST"></form>
+    </div>  <!-- player-and-tools -->
+  </div>  <!-- left-side -->
+
+
+
+  <div class="right-side">
+    <!-- TEST -->
+    <div class="test-box-info" id="test-box-info"></div>
+    <div class="test-box -hidden" id="test-box">
+      <div class="test-inner" id="test-inner">
+        <% if (videoData) { %>
+          <% videoData.questions.map((question, Q) => { %>
+            <div class="question-block" id="Q-block<%= Q %>">
+              <h3 class="test-question"><%= question.question %></h3>
+              <div class="answers-block">
+                <% question.answers.map((answer, A) => { %>
+                  <label class="test-answer" for="Q<%= Q %>A<%= A %>" data-answer='<%= answer %>'>
+                    <input type="radio" name="Q<%= Q %>" id="Q<%= Q %>A<%= A %>" />
+                    <%= answer %>
+                  </label>
+                <% }) %>  <!-- answers map -->
+              </div>  <!-- answers-block -->
+            </div>  <!-- question-block -->
+          <% }) %>  <!-- questions map -->
+        <% } %>
+      </div>
+      <button class="submitQuizze" onclick="submitQuizze()">Submit Quizze</button>
+    </div>
+  </div>  <!-- right-side -->
+
+  
+
+  
+
+
+  <script>
+
+    const whenToShowATest = 0.85   // 0.85
+    const navigation = document.querySelector('[name="navigation"]')
+    const navigationBox = document.querySelector('.navigation-box')
+    const progressIndicator = document.querySelector('.progress-indicator')
+    const testIndicator = document.querySelector('.test-indicator')
+    const closeVideo = document.querySelector('.close-video')
+    let canGetOut = true
+
+
+    const playbackQuality = document.getElementById('playbackQuality')
+    function addQualityOptions(item) {
+      const option = document.createElement('option')
+      option.value = item
+      option.textContent = item
+      playbackQuality.appendChild(option)
+    }
+
+
+    // playback info object
+    const lesson = {
+      userId: '<%= user._id %>',
+      videoId: '<%= video %>',
+
+      updateTimer: undefined,
+      fetchTimer: undefined,
+
+      duration: 0,
+      currentTime: 0,
+      
+      maxRatio: '<%= videoData.videoProgress %>' ? parseFloat('<%= videoData.videoProgress %>') : 0,
+      currRatio: 0,
+      prevRatio: 0,
+
+      ifQuizShown: false,
+      prevQuizPassed: '<%= videoData.testProgress %>' ? parseFloat('<%= videoData.testProgress %>') : 0,
+      quiz: 0
+    }
+
+    function updateOnServer() {
+      // DO NOT put extra safety from "dry fetch", otherwise it will disable tests data fetching after video stopped
+      fetch('/user/tuition/update', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: lesson.userId,
+          videoId: lesson.videoId,
+          lesson: "<%= videoData.lesson %>",
+          lessonTitle: "<%= videoData.lessonTitle %>",
+          currentRatio: Math.round(lesson.currRatio * 10000) / 10000,
+          currentTime: lesson.currentTime,
+          testProgress: lesson.quiz
+        })
+      })
+    }
+
+
+    const tag = document.createElement('script')
+    tag.src = "https://www.youtube.com/iframe_api"
+
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+   
+    let player;
+
+    const playerOptions = {
+      videoId: '<%= video %>',
+      events: {
+        'onReady': onPlayerReady,
+        'onStateChange': onPlayerStateChange
+      },
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        iv_load_policy: 3,
+        modestbranding: 1,
+        playsinline: 1,
+        rel: 0,
+        showinfo: 0,
+        start: 0
+      }
+    }
+
+
+    function onYouTubeIframeAPIReady() {    //  loads YT-Player with options when ready
+      player = new YT.Player('player', playerOptions)
+    }
+
+
+    function onPlayerReady(event) {
+      
+      event.target.setPlaybackRate(1)   // sets normal view speed
+      event.target.playVideo()
+      
+      document.querySelector('[name="volume"]').value = event.target.getVolume()  // set a volume like user has already
+      navigationBox.style.setProperty('--progress1', `${lesson.maxRatio*100}%`)
+
+      lesson.duration = event.target.getDuration()  // saving videoDuration
+      if (lesson.duration === 0) { lesson.duration = 0.001 }  // cannot be 0, because of dividing
+      navigation.max = lesson.duration
+
+      document.getElementById('test-box-info').textContent = `The test will be available upon achievement ${Math.round(whenToShowATest*1000)/10}% of total lesson duration`
+      
+      // setting up listeners
+      lesson.updateTimer = setInterval(() => {    // recalculate RATIO each second
+        lesson.currentTime = event.target.getCurrentTime()
+        lesson.currRatio = lesson.currentTime / lesson.duration
+        if (lesson.currRatio > lesson.maxRatio) { 
+          lesson.maxRatio = lesson.currRatio 
+          navigationBox.style.setProperty('--progress1', `${lesson.maxRatio*100}%`)
+        }
+        navigation.value = lesson.currentTime
+        if (lesson.maxRatio >= whenToShowATest && !lesson.ifQuizShown) {
+          document.getElementById('test-box').classList.remove('-hidden')
+          document.getElementById('test-box-info').classList.add('-hidden')
+          lesson.ifQuizShown = true
+        }
+        // force redirection to the lessons list
+        if (lesson.currRatio > 0.995 && canGetOut) {
+          if (lesson.prevQuizPassed > 0 || lesson.quiz > 0) {
+            canGetOut = false
+            alert("Congratulations! You done here well, let's get to other lessons.")
+            document.querySelector('#closelink').click()
+          }
+        }
+      }, 1000)
+
+      lesson.fetchTimer = setInterval(() => {    // fetch to SERVER each 5 seconds
+        lesson.currentTime = event.target.getCurrentTime()
+        if (lesson.currRatio != lesson.prevRatio) {   // video not paused THIS prevents from fetching when video on pause or stoped
+          progressIndicator.textContent = `Progress on this lesson is ${Math.round(parseFloat(lesson.maxRatio)*1000) / 10}%`
+          lesson.prevRatio = lesson.currRatio
+          updateOnServer()
+        }
+      }, 5000)
+
+    }
+
+
+    function onPlayerStateChange(event) {
+      // for Quality modes - it is doesn't work from YT side
+      if (event.data  == YT.PlayerState.PLAYING) {
+        // setting up playbackQuality
+        if (playbackQuality) {
+          if (playbackQuality.dataset.status === 'empty') {
+            const modes = event.target.getAvailableQualityLevels()
+            const defaulMode = event.target.getPlaybackQuality()
+            if (defaulMode != 'unknown') {
+              addQualityOptions(defaulMode)
+              modes.map(mode => {
+                if (mode != defaulMode) {
+                  addQualityOptions(mode)
+                }
+              })
+              playbackQuality.addEventListener('change', (e) => {
+                if (player) { player.setPlaybackQuality(e.target.value) }
+              })
+              playbackQuality.dataset.status = 'filled-out'
+            }
+          }
+        }
+      }   // for Quality modes
+    }
+
+    
+    function stopVideo() {
+      player.stopVideo()
+      // DO NOT clear 'lesson.fetchTimer' here!!!
+      // it has inner block from fetching on pause or when stopped
+      // otherwise it will stop fetching when video stopped and retrieve again or rewind after stop
+    }
+
+
+    // OWN functions
+    function ytPlayerClick(playerBox) {
+      if (player.getPlayerState()  == YT.PlayerState.PLAYING) {
+        player.pauseVideo()
+        playerBox.classList.add('-paused-state')
+      } else {
+        player.playVideo()
+        playerBox.classList.remove('-paused-state')
+      }
+    }
+
+    function volumeChanged(volumeInput) {
+      player.setVolume(volumeInput.value)
+    }
+
+
+    // PROGRESS NAVIGATION
+    function navigationChanged() {
+      const maxAvPosition = Math.trunc(lesson.duration * lesson.maxRatio)
+      if (navigation.value > maxAvPosition) { navigation.value = maxAvPosition }
+      player.seekTo(navigation.value, true)
+      console.log('navigationChanged func')
+    }
+
+
+
+    // Quizze
+    let submitionMaxCount = 3   // submition takes without forn clearning
+
+
+    function submitQuizze() {
+      let correct = true  // assume all correct
+      let correctCurrent
+      let ifAnswered      // for check if aswer is given
+      let testQuestionBlock   // to design ech Q-block
+      let answersBlock    // to shufle after guessing
+      let studentAnswer   // for each input
+
+      '<% videoData.questions.map((question, Q) => { %>'
+        testQuestionBlock = document.getElementById('Q-block<%= Q %>')
+        ifAnswered = false
+        '<% question.answers.map((answer, A) => { %>'
+          studentAnswer = document.getElementById('Q<%= Q %>A<%= A %>')
+          if (studentAnswer) {
+            if (studentAnswer.checked) {
+              correctCurrent = studentAnswer.parentElement.dataset.answer === '<%= question.correctAnswer %>'
+              correct = correct ? correctCurrent : false
+              studentAnswer.parentElement.classList.remove(!correctCurrent)
+              studentAnswer.parentElement.classList.add(correctCurrent)
+
+              testQuestionBlock.classList.remove(`--block-${!correctCurrent}`)
+              testQuestionBlock.classList.add(`--block-${correctCurrent}`)
+
+              ifAnswered = true
+            }
+          }
+        '<% }) %>'
+        correct = correct && ifAnswered
+      '<% }) %>'
+
+      if (correct) {
+        // save Quizze result
+        // change close button
+        if (closeVideo) {
+          closeVideo.classList.toggle('-close-quize-not-done')
+          closeVideo.classList.toggle('-close-quize-done')
+        }
+        // change indicator
+        testIndicator.textContent = 'Quiz done'
+        testIndicator.classList.add('-quiz-done')
+        lesson.quiz = Math.round(lesson.currRatio * 10000) / 10000    // saving current ratio when quiz done
+        updateOnServer()
+      } else {
+        submitionMaxCount -= 1
+        if (submitionMaxCount < 1) {
+          // just guessing
+          alert("Are you guessing? Bad approach, let's clear up you test form.")
+          '<% videoData.questions.map((question, Q) => { %>'
+            testQuestionBlock = document.getElementById('Q-block<%= Q %>')
+            testQuestionBlock.classList.remove('--block-true')
+            testQuestionBlock.classList.remove('--block-false')
+            answersBlock = testQuestionBlock.querySelector('.answers-block')
+            '<% question.answers.map((answer, A) => { %>'
+              // shufling one more time
+              studentAnswer = document.getElementById('Q<%= Q %>A<%= A %>')
+              if (Math.random() > 0.5) {
+                answersBlock.insertBefore(answersBlock.lastElementChild, answersBlock.firstElementChild)
+              }
+              studentAnswer.checked = false
+              studentAnswer.parentElement.classList.remove('true')
+              studentAnswer.parentElement.classList.remove('false')
+            '<% }) %>'
+          '<% }) %>'
+          submitionMaxCount = 3
+        }
+      }
+    }
+
+
+  </script>
+
+</body>
+</html>
+
+

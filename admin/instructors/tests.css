@@ -1,0 +1,508 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');
+
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-size: 16px;
+}
+
+body, html {
+    position: relative;
+}
+
+header, .main-test-box, .scoring-results {
+    width: 95%;
+    max-width: 1535px;
+    margin: 10px auto;
+}
+header {
+    padding: 5px 0;
+    position: relative;
+}
+header::before {
+    content: '';
+    position:absolute;
+    inset: 0;
+    background-color: var(--blue20-slate);
+    background-image: url('/static/images/logo-badge-black.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    opacity: 0.075;
+
+    z-index: -1;
+}
+
+.scoring-title {
+    width: 100%;
+    
+    font-family: "Industrial Medium";
+    font-weight: bolder;
+    font-size: 2rem;
+    text-align: center;
+    color: #333;
+
+    margin-bottom: 1rem;
+}
+
+.student-info {
+    padding: 10px 3px;
+    width: 100%;
+
+    background-color: var(--blue20-slate);
+    border-radius: 5px;
+
+    list-style: none;
+}
+.fas {
+    width: 35px;
+    text-align: center;
+    color: var(--orange80-high-desert);
+}
+.student-info li {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 2px;
+}
+
+.student, .first-name, .middle-name, .last-name {
+    font-family: "BrixSlab-Medium";
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    color: var(--orange-high-desert);
+}
+.student {
+    font-weight: bolder;
+    color: #333;
+}
+.transmission {
+    font-family: "BrixSlab-Medium";
+    font-size: 1.1rem;
+    text-transform: uppercase;  
+}
+.class-cdl, .key, .location, .TTT {
+    font-family: "BrixSlab-Light";
+}
+.location {
+    font-weight: bolder;
+}
+
+.scoring-examiner {
+    font-family: "BrixSlab-BlackItalic";
+    font-size: 1.25rem;
+    font-weight: bolder;
+    text-align: right;
+}
+.scoring-date {
+    font-family: "BrixSlab-BlackItalic";
+    text-transform: uppercase;
+    text-align: right;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #d3d3d3;
+}
+.scoring-examiner span, .scoring-date span {
+    color: var(--orange-high-desert);
+}
+
+.fa-times-circle {
+    position: fixed;
+
+    top: 2px;
+    left: calc(97.5% - 2.5rem - 2px);
+    width: 2.5rem;
+    height: 2.5rem;
+
+    color: var(--orange-high-desert);
+    opacity: 0.5;
+    z-index: 1000;
+    cursor: pointer;
+    transition: opacity 0.3s linear;
+}
+.fa-times-circle::before {
+    
+    font-size: 2.5rem;
+}
+.fa-times-circle:hover {
+    opacity: 1;
+}
+
+.scoring-results {
+    --col1: #333333f8;
+    --col2: #ffffffd2;
+
+    padding: 0.7rem 0 1.5rem 0;
+
+    position: sticky;
+    top: 0;
+
+    text-align: center;
+    
+    background-color: var(--col1);
+    background: -webkit-linear-gradient(180deg, var(--col1) 85%, var(--col2));
+    background: -moz-linear-gradient(180deg, var(--col1) 85%, var(--col2));
+    background: linear-gradient(180deg, var(--col1) 85%, var(--col2));
+
+    z-index: 100;
+}
+.scoring-results h2 {
+    font-family: "Industrial Medium";
+    font-size: 1.15rem;
+    color: #fff;
+}
+#current-result {
+    color: #F7BF68;
+}
+#pass-fail {
+    font-family: "BrixSlab-Bold";
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: #F7BF68;
+}
+
+
+.test-block-box {
+    --col1: #a0aaaa;
+    --col2: #6a6f6f;
+
+    font-family: "BrixSlab-MediumItalic";
+    font-size: 1.1rem;
+    line-height: 2em;
+    
+    padding-left: 3px;
+    margin-bottom: 0.5rem;
+    background-color: var(--col1);
+
+    background: -webkit-linear-gradient(90deg, var(--col1), var(--col2));
+    background: -moz-linear-gradient(90deg, var(--col1), var(--col2));
+    background: linear-gradient(90deg, var(--col1), var(--col2));
+
+    border-bottom-right-radius: 10px;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+}
+.-done1-3 {
+    --col1: #ede040;
+    --col2: #a0aaaa;
+}
+.-done2-3 {
+    --col1: #F7BF68;
+    --col2: #a0aaaa;
+}
+.-done3-3 {
+    --col1: #68E4BC;
+    --col2: #a0aaaa;
+}
+.-fail-test {
+    --col1: #e46868;
+    --col2: #a0aaaa;
+}
+
+summary {
+    cursor: pointer;
+}
+summary::marker {
+    color: var(--orange80-high-desert);
+}
+.item-box {
+    margin: 0;
+    margin-top: 1px;
+    padding: 2px 0 2px 15px;
+
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    
+    background-color: #efefefc7;
+}
+.item-title {
+    width: 15%;
+    line-height: 1.2;
+}
+.item {
+    width: 85%;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.skill {
+    width: 20%;
+   
+    flex: 1 auto;
+
+    margin: 1px;
+    padding: 5px 2px;
+    
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 3px;
+}
+.skill input {
+    transform: scale(1.35);
+    margin: 0 3px;
+}
+
+.skill label {
+    width: 100%;
+    font-family: "BrixSlab-LightItalic";
+    padding-left: 3px;
+    line-height: 1.2em;
+}
+
+
+.comments-box {
+    margin: 2rem 0;
+    padding: 5px;
+
+    background-color: var(--blue20-slate);
+    border-radius: 5px;
+
+    display: flex;
+    align-items: flex-start;
+}
+.fa-comments, .fa-comments::before {
+    width: 5%;
+    min-width: 4rem;
+    font-size: 2rem;
+}
+.comments {
+    width: 100%;
+    height: 4.6rem;
+
+    /* margin: 1rem 0; */
+    padding: 5px;
+
+    font-family: "BrixSlab-RegularItalic";
+    font-size: 1.1rem;
+    color: #333;
+    background-color: rgb(253, 253, 253);
+
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    outline: none;
+}
+
+.scoring-data {
+    display: none;
+}
+
+.certification {
+    padding-bottom: 1rem;
+    text-align: center;
+    position: relative;
+}
+.certification h3 {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+.certification input {
+    transform: scale(2);
+    margin-right: 10px;
+}
+.certification label {
+    font-family: "BrixSlab-LightItalic";
+    font-size: 1.15rem;
+}
+.cetrSignature {
+    display: none;
+    
+    font-family: 'WindSong', cursive;
+    font-size: 3rem;
+    color: #7e7e7ede;
+    
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    transition: display 1s linear;
+}
+input#certificate:checked ~ .cetrSignature {
+    display: block;
+}
+
+.buttons-box {
+    width: 100%;
+    min-height: 100px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    --col1: #fff;
+    --col2: #8b8b8b;
+    
+    background-color: var(--col1);
+    background: -webkit-linear-gradient(180deg, var(--col1) 60%, var(--col2));
+    background: -moz-linear-gradient(180deg, var(--col1) 60%, var(--col2));
+    background: linear-gradient(180deg, var(--col1) 60%, var(--col2));
+
+    position: relative;
+}
+.buttons-box p {
+    font-family: 'WindSong', cursive;
+    font-size: 1.35rem;
+    color: #fff;
+    
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.-btn {
+    width: 160px;
+    padding: 15px 20px;
+    margin: 0 2%;
+    
+    font-family: "BrixSlab-Medium";
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #ffffff;
+    
+    background-color: #8C9494;
+    
+    border-radius: 35px;
+    border: none;
+    
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+
+    margin-bottom: 100px !important;
+}
+.-submit {
+    color: wheat;
+}
+
+.-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -11px rgb(122 172 172 / 73%);
+}
+
+/* Details sections */
+.prev-scorings {
+    width: 95%;
+    max-width: 1535px;
+    margin: 10px auto 25px auto;
+    padding: 5px;
+    
+    font-family: "BrixSlab-Regular";
+    color: #333;
+    background-color: rgba(51, 51, 51, 0.075);
+   
+    border-radius: 3px;
+}
+.prev-scorings summary {
+    font-family: "BrixSlab-MediumItalic";
+    text-transform: uppercase;
+    color:#00a16d;
+    cursor: pointer;
+}
+
+
+/* Student Scoring Details */
+.scoring-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    font-size: 0.83rem;
+}
+.scoring-details {
+    width: 100%;
+    height: 95%;
+
+    font-family: "BrixSlab-Regular";
+    text-align: left;
+    text-decoration: underline;
+    color: var(--orange-high-desert);
+    background-color: rgba(51, 51, 51, 0.05);
+
+    border: none;
+    cursor: pointer;
+}
+.-table-header {
+    padding: 5px 0;
+    background-color: rgba(51, 51, 51, 0.075);
+    font-weight: bold;
+}
+.field-warning {
+    color: var(--bad-todo1)
+}
+.field-accomplished {
+    color: var(--good-done1)
+}
+.field-yellow {
+    color: rgb(205, 156, 50);
+}
+.-hidden {
+    display: none;
+}
+
+
+/* IMPORTANT GROUPS */
+label[data-importantlabel="YES"] {
+    color: #e46868;
+}
+
+
+@media (max-width: 1150px) {
+    .item-title {
+        width: 20%;
+        min-width: 200px;
+    }
+    .item {
+        width: 80%;
+    }
+}
+@media (max-width: 950px) {
+    .skill {
+        width: 35%;
+    }
+}
+@media (max-width: 750px) {
+    :root {
+        font-size: 15px;
+    }
+    .item-title {
+        width: 45%;
+        min-width: unset;
+    }
+    .item {
+        width: 55%;
+    }
+}
+@media (max-width: 550px) {
+    :root {
+        font-size: 14px;
+    }
+    .scoring-title {
+        font-size: 1.5rem;
+    }
+    .item-box {
+        display: block;
+        padding-left: 0px;
+    }
+    .item-title {
+        width: 100%;
+        text-align: center;
+    }
+    .item {
+        width: 100%;
+    }
+    .skill {
+        flex: 1;
+    }
+}
+@media (max-width: 350px) {
+    :root {
+        font-size: 13px;
+    }
+}

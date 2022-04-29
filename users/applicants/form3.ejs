@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TORO for Applicants | ENROLLMENT AGREEMENT</title>
+
+    <meta name="description" content="TORO Trucking Academy Enrollment Agreement">
+    <meta name="keywords" content="cdl agreement, toro agreement form, cdl agreement">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="TTA Team">
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/users/applicants/forms-styles.css">
+
+ 
+</head>
+<body>
+    
+    <form action="/user/form3" method="POST" class='applicant-form'>
+        <h1 class='form-title'>ENROLLMENT AGREEMENT</h1>
+        
+        <h2 class='form-subtitle'>This enrollment agreement is between the Toro Trucking Academy and:</h2>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>Applicant</h2>
+            <small class='section-note'>Signer information. Filled out automatically, in order with previously provided Data Collection Form</small>
+
+            <div class='form-block -align-bottom -wrap'>
+                <label for="first-name">First Name
+                    <input class='input-text' name="first-name" id="first-name" value="<%= form1.firstName %>" readonly>
+                </label>
+                <label for="last-name">Last Name
+                    <input class='input-text' name="last-name" id="last-name" value="<%= form1.lastName %>" readonly>
+                </label>
+                <label for="mid-name">Middle Name
+                    <input class='input-text' name="mid-name" id="mid-name" value="<%= form1.middleName %>" readonly>
+                </label>
+
+                <label for="street">Street Address
+                    <input class='input-text -smaller' name="street" id="street" value="<%= form1.street %>" readonly>
+                </label>
+                <label for="city">City
+                    <input class='input-text -smaller' name="city" id="city" value="<%= form1.city %>" readonly>
+                </label>
+                <label for="state">State/Province/Region
+                    <input class='input-text -smaller' name="state" id="state" value="<%= form1.state %>" readonly>
+                </label>
+                <label for="zip">Postal/Zip Code
+                    <input class='input-text -smaller' name="zip" id="zip" value="<%= form1.zip %>" readonly>
+                </label>
+            </div>
+
+            <h2 class='section-title'>Additional Info</h2>
+            <small class='section-note'>Filled out automatically</small>
+            <div class='form-block -align-bottom -wrap'>  <!-- Additional Info -->
+                <label for="email">Email Address
+                    <input class='input-text -smaller' name="email" id="email" value="<%= form1.email %>" readonly>
+                </label>
+                <label for="phone">Phone Number
+                    <input class='input-text -smaller' name="phone" id="phone" value="<%= form1.phone %>" readonly>
+                </label>
+                <label for="DOB">Date of Birth
+                    <input class='input-text -smaller' name="DOB" id="DOB" value="<%= new Date(form1.DOB).toLocaleDateString() %>" readonly>
+                </label>
+                <label for="ssn">Social Security Number
+                    <input class='input-text -smaller' name="ssn" id="ssn" value="<%= form1.SSN %>" readonly>
+                </label>
+            </div> 
+        </section>      <!-- Applicant Info section -->
+
+
+        <section class='form-radio-block' id="form3-programm">
+            <h3 class='section-title'>The school agrees to<br>provide the following<br>training</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="class-Choice1">
+                    <input type="radio" id="class-Choice1" name="class" value="CDL Class A" required>
+                    <span>CDL Class A(160h)</span>
+                </label>
+
+                <label class='-one-row' for="class-Choice2">
+                    <input type="radio" id="class-Choice2" name="class" value="CDL Class B" required>
+                    <span>CDL Class B(80h)</span>
+                </label>
+
+                <label class='-one-row' for="class-Choice3">
+                    <input type="radio" id="class-Choice3" name="class" value="Upgrade to Class A" required>
+                    <span>Upgrade to Class A(80h)</span>
+                </label>
+
+                <label class='-one-row' for="class-Choice4">
+                    <input type="radio" id="class-Choice4" name="class" value="Endorsements" required>
+                    <span>Endorsements(80h)</span>
+                </label>
+            </div>
+        </section>      <!-- the school agrees to provide the following training -->
+
+
+        <section class='form-radio-block' id="form3-programm">
+            <h3 class='section-title'>Choose desired<br>transmission type</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="transmission-Choice1">
+                    <input type="radio" id="transmission-Choice1" name="transmission" value="Automatic Transmission" required>
+                    <span>Automatic Transmission</span>
+                </label>
+
+                <label class='-one-row' for="transmission-Choice2">
+                    <input type="radio" id="transmission-Choice2" name="transmission" value="Manual Transmission" required>
+                    <span>Manual Transmission</span>
+                </label>
+            </div>    
+        </section>      <!-- Choose your transmission type -->
+
+
+        <section class='form-radio-block' id="form3-programm">
+            <h3 class='section-title'>Visiting Type</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="visiting-Choice1">
+                    <input type="radio" id="visiting-Choice1" name="visiting" value="Full Time (at least 6h per day)" required>
+                    <span>Full Time (at least 6h per day)</span>
+                </label>
+
+               <label class='-one-row' for="visiting-Choice2"> 
+                    <input type="radio" id="visiting-Choice2" name="visiting" value="Part Time (at least 4h per day)" required>
+                    <span>Part Time (at least 4h per day)</span>
+                </label>
+            </div>    
+        </section>      <!-- Visiting Type -->
+
+
+        <section class='form-block-with-note' id="form3-pmts">
+            <h3 class='section-title'>Payments Section</h3>
+            <small class='section-note'><strong>I agree</strong> that the payment of program costs will be satisfied by (<strong>check all that apply</strong>):</small>
+            <div class='form-block -align-bottom'>
+                <label class='-one-row' for="payment-Choice1">
+                    <input type="checkbox" id="payment-Choice1" name="payment" value="Cash">
+                    <span>Cash Payment</span>
+                </label>
+
+                <label class='-one-row' for="payment-Choice2">
+                    <input type="checkbox" id="payment-Choice2" name="payment" value="Credit Card" checked>
+                    <span>Credit Card</span>
+                </label>
+
+                <label class='-one-row' for="payment-Choice3">
+                    <input type="checkbox" id="payment-Choice3" name="payment" value="Scholarship">
+                    <span>Scholarship</span>
+                </label>
+            </div>
+
+            <div class='form-block -align-top'>
+                <label class='-one-row' for="payment-Choice4">
+                    <input type="checkbox" id="payment-Choice4" name="payment" value="Financial Aid">
+                    <span>Financial Aid</span>
+                </label>
+
+                <label class='-one-row' for="payment-Choice5">
+                    <input type="checkbox" id="payment-Choice5" name="payment" value="Third Party" onchange="thirdPartyList.required = this.checked">
+                    <span>Third Party (e.g.VA;<br>Voc.Rehab.; LnI; Employer)</span>
+                </label>
+
+                <label for="third-party-list">List third party payer:
+                    <input  class='input-text' type="text" name="thirdPartyList" id="third-party-list">
+                </label>
+            </div>
+
+            <div class='form-block -align-bottom'>
+                <label for="down-payment">Down Payment
+                    <input class='input-text' type="number" step='.01' min=0 name="down-payment" id="down-payment">
+                </label>
+
+                <label for="monthly-payment">Monthly Payment(S)
+                    <input class='input-text' type="number" step='.01' min=0 name="monthly-payment" id="monthly-payment">
+                </label>
+
+                <label for="loan-payment">Loan Payment (if applicable)
+                    <input class='input-text' type="number" step='.01' min=0 name="loan-payment" id="loan-payment">
+                </label>
+            </div>
+        </section>      <!-- Payments Section -->
+
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>AGREEMENT NOTICE</h2>
+            <p class='paragraph'>This agreement will be binding only when it has been fully completed, signed, and dated by the Applicant and an authorized representative of the school prior to the time instruction begins.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>CHANGES TO AGREEMENT NOTICE</h2>
+            <p class='paragraph'>Any changes in the agreement will not be binding on either the student or the school unless such changes are acknowledged in writing by an authorized representative of the school and by the student, or student’s parent or guardian if he/she is a minor.</p>
+        </section>
+
+        <section class='form-block-with-note' id="form3-cancel">
+            <h2 class='section-title'>CANCELLATION AND REFUND POLICY</h2>
+            <ol type='1'>
+                <li class='paragraph'>The school must refund all monies paid if the applicant is not accepted. This includes instances where a starting class is cancelled by the school.</li>
+                <li class='paragraph'>The school must refund all monies paid if the applicant cancels within five business days (excluding Sundays and holidays) after the day the contract is signed or an initial payment is made, as long as the applicant has not begun training.</li>
+                <li class='paragraph'>The school may retain an established registration fee equal to ten percent of the total tuition cost, or one hundred dollars, whichever is less, if the applicant cancels past the fifth business day after signing the contract or making an initial payment. A registration fee is any fee charged by a school to process student applications and establish a student record system.</li>
+                <li class='paragraph'>If training is terminated after the student enters classes, the school may retain the registration fee established under (3) of this subsection, plus a percentage of the total tuition as described in the following table:</li>
+                
+                <table>
+                    <tr>
+                        <th>If the student completes this<br>amount of traing</th>
+                        <th>School may keep this<br>percentage tuition</th>
+                    </tr>
+                    <tr>
+                        <td>One week or up to 10%</td>
+                        <td>whichever is less we keep 10%</td>
+                    </tr>
+                    <tr>
+                        <td>More than one week (or 10%)</td>
+                        <td>whichever is less, but less than 25% we keep 25%</td>
+                    </tr>
+                    <tr>
+                        <td>25% through 50%</td>
+                        <td>we keep 50%</td>
+                    </tr>
+                    <tr>
+                        <td class='-no-border'>More than 50%</td>
+                        <td class='-no-border'>we keep 100%</td>
+                    </tr>
+                </table>
+
+                <li class='paragraph'>
+                    When calculating refunds, the official date of a student’s termination is the last day of recorded attendance:
+                    <ol type='a'>
+                        <li class='paragraph -ml'>When the school receives notice of the student’s intention to discontinue the training program; or,</li>
+                        <li class='paragraph -ml'>When the school receives notice of the student’s intention to discontinue the training program; or,</li>
+                        <li class='paragraph -ml'>When a student, without notice, fails to attend classes for thirty calendar days.</li>
+                    </ol>
+                </li>
+                <li class='paragraph'>All refunds must be paid within thirty calendar days of the student’s official termination date.</li>
+            </ol>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>NOTICE TO BUYER</h2>
+            <p class='paragraph'>Do not sign this agreement before you read it or if it contains any blank spaces. This is a legal instrument. All pages of this contract are binding. Read both sides of all pages before signing. You are entitled to an exact copy of the agreement, school catalog, and any other papers you may sign, and are required to sign a statement acknowledging receipt of those.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>CANCELLATION OF CONTRACT</h2>
+            <p class='paragraph'>If you have not started training, you may cancel this contract by submitting written notice of such cancellation to the school at its address shown on the contract. The notice must be postmarked no later than midnight of the fifth business day (excluding Sundays and holidays) following your signing this contract; the written notice may also be personally or otherwise delivered to the school within that time. In event of dispute over timely notice, the burden to prove service rests on the applicant.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>UNFAIR BUSINESS PRACTICES</h2>
+            <p class='paragraph'>It is an unfair business practice for the school to sell, discount, or otherwise transfer this contract or promissory note without the signed written consent of the student or his/her financial sponsors if he/she is a minor, and a written statement notifying all parties that the cancellation and refund policy continues to apply.</p>
+        </section>
+
+        <div class='form-block-with-note -center'>
+            <h4 class='section-title -mb'>I certify that I read and understand the cancellation and refund policy and the complaint procedure; I received a copy of the school catalog and I am entitled to an exact copy of this enrollment agreement, school catalog, and any other papers I sign.</h4>
+            <label class='-one-row-pillow -big' for="certificate1">
+                <input type="checkbox" id="certificate1" name="certificate1" value="Yes" onchange="toggleSignature(this, signature1)" required />
+                <span class='-big'>Yes, I certify the above</span>
+            </label>
+        </div>
+        <div class='sign-box' name="signature1" id="signature1">
+            <span>/<%= `${form1.lastName} ${form1.firstName}` %>/</span>
+            <span><%= `${ new Date().toLocaleDateString() }` %></span>
+            <p class='signature'><%= `${form1.lastName} ${form1.firstName}` %></p>
+        </div>
+
+
+        <section class='form-block -align-bottom' id="form3-parents">
+            <h3 class='section-title'>Parent Or Guardian Info<br>for persons with limited<br>abilities</h3>
+            <label for="parent-fn">Parent Or Guardian First Name
+                <input class='input-text' type="text" name="parent-fn" id="parent-fn"/>
+            </label>
+            <label for="parent-ln">Parent Or Guardian Last Name
+                <input class='input-text' type="text" name="parent-ln" id="parent-ln"/>
+            </label>
+        </section>
+
+        <div class='form-block-with-note'>
+            <p class='-center'>This school is licensed under Chapter 28C.10 RCW. Inquiries or complaints regarding this private vocational school may be made to:</p>
+            <p class='-center'>Workforce Training and Education Coordinating Board 128 – 10th Avenue SW</p>
+            <p class='-center'>Olympia, Washington 98501</p>
+            <p class='-center'>
+                <span>Phone: 360-709-4600</span>
+                <span>Email: pvsa@wtb.wa.gov</span>
+                <span>Web: wtb.wa.gov</span>
+            </p>
+        </div>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>NOTICE OF FINANCIAL OBLIGATION</h2>
+            <p class='paragraph'>Washington law requires the following information to be supplied to each student enrolling in a private vocational school licensed under Chapter 28C.10 RCW. One copy of this notice bearing original signatures must be attached by the school as addenda to that individual’s enrollment agreement, as well as a copy provided to the enrollee by the school.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>ACKNOWLEDGMENT BY ENROLLEE</h2>
+            <ol type='1'>
+                <li class='paragraph-hl1'>I understand and accept that any contract for training I enter into with the above named school contains legally binding obligations and responsibilities.</li>
+                <li class='paragraph-hl1'>I understand and accept that repayment obligations will be placed upon me by any loans or other financing arrangements I enter into as a means to pay for my training.</li>
+                <li class='paragraph-hl1'>I understand that any enrollment contract I enter into will not be binding or take effect for at least five days, excluding Sundays and holidays, following the last date such a contract is signed by the school and me, provided that I have not entered classes.</li>
+            </ol>
+
+            <h2 class='section-title'>STATE EXAMS</h2>
+            <ol type='1' start="4">
+                <li class='paragraph-hl1'>I understand the course tuition includes truck usage for up to two (2) State Exams. Students requiring more than two exams will need to pay an additional $175 truck rental fee in advance for each additional exam.</li>
+                <li class='paragraph-hl1'>If a student cancels an exam within 2 business days of the scheduled time, or does not show up for an exam, the student will be issued his/her CDL certificate (assuming a passing grade and the fulfillment of all required hours). This will conclude the course and the student will forfeit any additional time at the school or use of equipment. In this situation the student will bear the responsibility for scheduling an exam with the State and procuring the necessary equipment.</li>
+            </ol>
+            <h2 class='section-title'>STUDENT CATALOG</h2>
+            <ol type='1' start="6">
+                <li class='paragraph-hl1'>I have reviewed and understand the
+                    <a href="../../catalog" target="_blank" id='catalog' onclick="catalogCheckbox.checked = true">Toro Trucking Academy Student Catalog</a>. 
+                    
+                </li>
+            </ol>
+
+            <div class='form-block-with-note -center'>
+                <label class='-one-row-pillow -big' for="catalogCheckbox">
+                    <input type="checkbox" id='catalogCheckbox' name="catalogCheckbox" title="review is required" onclick="if (this.checked) { catalog.click() }" required />
+                    <span class='-big'>Yes, I certify</span>
+                </label>
+            </div>
+
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>ACKNOWLEDGMENT BY SCHOOL</h2>
+            <p class='paragraph'>Prior to being enrolled in this school, the applicant whose name and signature appears above has been made aware of the legal obligations he/she takes on by entering into a contract for training. Those discussions included cautions by the school about acquiring an excessive debt burden that might become difficult to repay given employment opportunities and average starting salaries in his/her chosen occupation.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>HOW TO FILE A COMPLAINT</h2>
+            <p class='paragraph'>Washington law requires private vocational schools to inform students how to file a complaint. By signing this form you acknowledge this process has been explained to you. Below are the next steps the school must take in discussing this policy with you, along with information about the complaint process.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>DISCUSSION ABOUT COMPLAINT POLICY REQUIRED</h2>
+            <p class='paragraph'>First, a school representative must discuss the school’s complaint policy with you. Following this discussion, you will be provided with this attachment to sign. After you sign this form, the school will give you a copy for your personal records. The school will also keep a copy on file.</p>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-title'>ACKNOWLEDGMENT OF COMPLAINT PROCESS BY STUDENT</h2>
+            <ol type='1'>
+                <li class='paragraph'>The school has described the grievance and/or complaint policy to me.</li>
+                <li class='paragraph'>I understand that the policy can also be found in the school catalog.</li>
+                <li class='paragraph'>I know I should first try to resolve a complaint or concern with my instructor or school administrator.</li>
+                <li class='paragraph'>I understand nothing prevents me from contacting the Workforce Board at 360-709-4600 at any time with a concern or complaint, and complaint forms are: <a target='_blank' href="http://wtb.wa.gov/PCS_Complaints.asp">http://wtb.wa.gov/PCS_Complaints.asp</a>.</li>
+                <li class='paragraph'>I understand that I have one year to file a complaint from my last date of attendance.</li>
+                <li class='paragraph'>I further understand that in the event of a school closure, I have 60 days to file a complaint.</li>
+                <li class='paragraph'>I also understand that complaints are public records.</li>
+                <li class='paragraph-hl1'>Finally, I acknowledge that details about the complaint process, my rights, and any restrictions on the time I have to file a complaint can be found at <a target='_blank' href="http://wtb.wa.gov/PCS_Complaints.asp">http://wtb.wa.gov/PCS_Complaints.asp</a>.</li>
+            </ol>
+        </section>
+
+        <section class='form-block-with-note'>
+            <h2 class='section-warning'>ACKNOWLEDGMENT BY SCHOOL</h2>
+            <p class='paragraph'>Prior to being enrolled in this school, the applicant, whose name and signature appear above, has been made aware of the school’s complaint policy.</p>
+        </section>
+
+        <div class="line"></div>
+        <div class="form-button-box">
+            <button class='-btn' type="submit">Submit</button>
+            <button class='-btn' type="reset">Reset</button>
+        </div>
+
+    </form>
+
+
+    <script defer>
+        
+        function toggleSignature(radio, signature) {
+            if (radio.checked) {
+                signature.style.display = 'flex'
+            } else {
+                signature.style.display = 'none'
+            }
+        }
+       
+    </script>
+
+</body>
+</html>

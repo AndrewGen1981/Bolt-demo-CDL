@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>TORO for Applicants | STUDENT DATA COLLECTION FORM</title>
+
+    <meta name="description" content="State required CDL applicants Data Collection Form">
+    <meta name="keywords" content="cdl data collection form, toro collection form, collection form">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="author" content="TTA Team">
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../static/css/fonts.css">
+    <link rel="stylesheet" href="../../static/css/colors.css">
+    
+    <link rel="stylesheet" href="/users/applicants/forms-styles.css">
+
+</head>
+<body>
+    
+    <form action="/user/form1" method="POST" class='applicant-form'>
+        <h1 class='form-title' id="form1-title">STUDENT DATA COLLECTION FORM</h1>
+        <h5 class='form-subtitle' id="form1-subtitle">The Workforce Board (the state agency that regulates this school) requires that we ask you for this information, by law (RCW 28C.10.050). Providing your social security number is voluntary. By law, the information you provide on this form cannot be given out by any state agency as public information. The Workforce Board will not disclose data to anyone except authorized Workforce Board employees or contractors working on specific research activities, who follow strict confidentiality procedures. This format follows the information required to be submitted by the school as part of the annual student data report.</h5>
+
+
+        <section class='form-personal' id='form1-personal'>
+            <h2 class='section-title'>PERSONAL<br>INFORMATION</h2>
+
+            <label for="first-name">First Name
+                <input class='input-text' type="text" name="first-name" id="first-name" required>
+            </label>
+            <label for="last-name">Last Name
+                <input class='input-text' type="text" name="last-name" id="last-name" required>
+            </label>
+            <label for="mid-name">Middle Name
+                <input class='input-text' type="text" name="mid-name" id="mid-name" required>
+            </label>
+        </section>
+
+        
+
+        <section class='form-address' id='form1-address'>
+            <h2 class='section-title'>Address<br>Section</h2>
+
+            <label for="street">Street Address
+                <input class='input-text -smaller' type="text" name="street" id="street" required>
+            </label>
+            <label for="city">City
+                <input class='input-text -smaller' type="text" name="city" id="city" required>
+            </label>
+            <label for="state">State/Province/Region
+                <select class='input-text -smaller' name="state" id="state" required>
+                    <optgroup label="locations">
+                        <option value='Washington'>Washington</option>
+                    </optgroup>
+                    <option value='Alaska'>Alaska</option>
+                    <option value='Alabama'>Alabama</option>
+                    <option value='Arkansas'>Arkansas</option>
+                    <option value='Arizona'>Arizona</option>
+                    <option value='California'>California</option>
+                    <option value='Colorado'>Colorado</option>
+                    <option value='Connecticut'>Connecticut</option>
+                    <option value='Washington DC'>Washington DC</option>
+                    <option value='Delaware'>Delaware</option>
+                    <option value='Florida'>Florida</option>
+                    <option value='Georgia'>Georgia</option>
+                    <option value='Hawaii'>Hawaii</option>
+                    <option value='Iowa'>Iowa</option>
+                    <option value='Idaho'>Idaho</option>
+                    <option value='Illinois'>Illinois</option>
+                    <option value='Indiana'>Indiana</option>
+                    <option value='Kansas'>Kansas</option>
+                    <option value='Kentucky'>Kentucky</option>
+                    <option value='Louisiana'>Louisiana</option>
+                    <option value='Massachusetts'>Massachusetts</option>
+                    <option value='Maryland'>Maryland</option>
+                    <option value='Maine'>Maine</option>
+                    <option value='Michigan'>Michigan</option>
+                    <option value='Minnesota'>Minnesota</option>
+                    <option value='Missouri'>Missouri</option>
+                    <option value='Mississippi'>Mississippi</option>
+                    <option value='Montana'>Montana</option>
+                    <option value='North Carolina'>North Carolina</option>
+                    <option value='North Dakota'>North Dakota</option>
+                    <option value='Nebraska'>Nebraska</option>
+                    <option value='New Hampshire'>New Hampshire</option>
+                    <option value='New Jersey'>New Jersey</option>
+                    <option value='New Mexico'>New Mexico</option>
+                    <option value='Nevada'>Nevada</option>
+                    <option value='New York'>New York</option>
+                    <option value='Ohio'>Ohio</option>
+                    <option value='Oklahoma'>Oklahoma</option>
+                    <option value='Oregon'>Oregon</option>
+                    <option value='Pennsylvania'>Pennsylvania</option>
+                    <option value='Rhode Island'>Rhode Island</option>
+                    <option value='South Carolina'>South Carolina</option>
+                    <option value='South Dakota'>South Dakota</option>
+                    <option value='Tennessee'>Tennessee</option>
+                    <option value='Texas'>Texas</option>
+                    <option value='Utah'>Utah</option>
+                    <option value='Virginia'>Virginia</option>
+                    <option value='Vermont'>Vermont</option>
+                    <option value='Wisconsin'>Wisconsin</option>
+                    <option value='West Virginia'>West Virginia</option>
+                    <option value='Wyoming'>Wyoming</option>
+                </select>
+            </label>
+            <label for="zip">Postal/Zip Code
+                <input class='input-text -smaller' type="number" min=0 name="zip" id="zip" required>
+            </label>
+        </section>
+
+        <section class='form-additional' id='form1-additional'>
+            <h2 class='section-title'>Additional<br>Info</h2>
+
+            <label for="phone">Phone Number
+                <input class='input-text' type="number" min=0 name="phone" id="phone" pattern="[0-9]{10}" title="10 digits of your phone number" required>
+            </label>
+            <!-- <input type="text" name="phone" id="phone" placeholder="(123) 456-7890" required="required" title="e.g (123) 456-7890" pattern="^\([0-9]{3}\)\s[0-9]{3}-[0-9]{4}$"> -->
+            <label for="DOB">Date of Birth
+                <input class='input-text' type="date" name="DOB" id="DOB" required>
+            </label>
+            <label for="SSN">Social Security Number
+                <input class='input-text' type="number" name="SSN" id="SSN" pattern="[0-9]{9}" title="9 digits SSN" required>
+            </label>
+        </section>
+
+        <section class='form-race' id='form1-race'>
+            <h3 class='section-title'>Race</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="raceChoice1">
+                    <input type="radio" id="raceChoice1" name="race" value="White/Caucasian" checked>
+                    <span>White/Caucasian</span>
+                </label>
+    
+                <label class='-one-row' for="raceChoice2">
+                    <input type="radio" id="raceChoice2" name="race" value="Black/African American">
+                    <span>Black/African American</span>
+                </label>
+    
+                <label class='-one-row' for="raceChoice3">
+                    <input type="radio" id="raceChoice3" name="race" value="American Indian or Alaska Native">
+                    <span>American Indian or Alaska Native</span>
+                </label>
+    
+                <label class='-one-row' for="raceChoice4">
+                    <input type="radio" id="raceChoice4" name="race" value="Hawaiian Native or other Pacific Islander">
+                    <span>Hawaiian Native or other Pacific Islander</span>
+                </label>
+    
+                <label class='-one-row' for="raceChoice5">
+                    <input type="radio" id="raceChoice5" name="race" value="Asian">
+                    <span>Asian</span>
+                </label>
+    
+                <label class='-one-row' for="raceChoice6">
+                    <input type="radio" id="raceChoice6" name="race" value="Multiracial">
+                    <span>Multiracial</span>
+                </label>
+                
+                <label class='-one-row' for="raceChoice7" onclick="otherRaceChoice.focus()">
+                    <input type="radio" id="raceChoice7" name="race" value="Other">
+                    <span>Other</span>
+                    <input class='input-text' type="text" name="otherRaceChoice" id="otherRaceChoice" oninput="raceChoice7.checked = true">
+                </label>
+            </div>
+        </section>      <!-- RACE section -->
+
+        <div class="form-box2x4" id="form1-hisp-disab-vet-sex">
+            <section class='form-section'>
+                <h3 class='section-title'>Are you Hispanic in origin?</h3>
+                <small>*Hispanic defined as a person of Mexican, Puerto Rican, Cuban, Central or South American, or other Spanish culture or origin, regardless of race</small>
+                <div>
+                    <label class='-one-row' for="hispanicChoice1">
+                        <input type="radio" id="hispanicChoice1" name="hispanic" value="Yes" required>
+                        <span>Yes</span>
+                    </label>
+        
+                    <label class='-one-row' for="hispanicChoice2">
+                        <input type="radio" id="hispanicChoice2" name="hispanic" value="No" required>
+                        <span>No</span>
+                    </label>
+                </div>
+            </section>      <!-- Hispanic section -->
+    
+            <section class='form-section'>
+                <h3 class='section-title'>Are you disabled?</h3>
+                <small>*Disability defined as a physical or mental impairment which substantially limits one or more major life activities, such as seeing, hearing, speaking, walking, learning, working, etc.</small>
+                <div>
+                    <label class='-one-row' for="disabledChoice1">
+                        <input type="radio" id="disabledChoice1" name="disabled" value="Yes" required>
+                        <span>Yes</span>
+                    </label>
+        
+                    <label class='-one-row' for="disabledChoice2">
+                        <input type="radio" id="disabledChoice2" name="disabled" value="No" required>
+                        <span>No</span>
+                    </label>
+                </div>
+            </section>      <!-- disabled section -->
+    
+            <section class='form-section'>
+                <h3 class='section-title'>Are you a military veteran?</h3>
+                <small>*Veteran defined as a student that served, in not currently serving, on active duty in the U.S. Army, Navy, Air Force, Marine Corps, or Coast Guard.</small>
+                <div>
+                    <label class='-one-row' for="veteranChoice1">
+                        <input type="radio" id="veteranChoice1" name="veteran" value="Yes" required>
+                        <span>Yes</span>
+                    </label>
+        
+                    <label class='-one-row' for="veteranChoice2">
+                        <input type="radio" id="veteranChoice2" name="veteran" value="No" required>
+                        <span>No</span>
+                    </label>
+                </div>
+            </section>      <!-- veteran section -->
+    
+            <section class='form-section'>
+                <h3 class='section-title'>SEX</h3>
+                <div>
+                    <label class='-one-row' for="sexChoice1">
+                        <input type="radio" id="sexChoice1" name="sex" value="Male" required>
+                        <span>Male</span>
+                    </label>
+        
+                    <label class='-one-row' for="sexChoice2">
+                        <input type="radio" id="sexChoice2" name="sex" value="Female" required>
+                        <span>Female</span>
+                    </label>
+                </div>
+            </section>      <!-- sex section -->
+        </div>  <!-- form-box2x4 -->
+
+
+        <section class='form-grade' id='form1-grade'>
+            <h3 class='section-title'>Highest grade<br>completed</h3>
+            <div class='form-radio-box'>
+                <label class='-one-row' for="gradeChoice1">
+                    <input type="radio" id="gradeChoice1" name="grade" value="Less than high school graduation" required>
+                    <span>Less than high school graduation</span>
+                </label>
+    
+                <label class='-one-row' for="gradeChoice2">
+                    <input type="radio" id="gradeChoice2" name="grade" value="High school graduate" required>
+                    <span>High school graduate</span>
+                </label>
+
+                <label class='-one-row' for="gradeChoice3">
+                    <input type="radio" id="gradeChoice3" name="grade" value="GED">
+                    <span>GED</span>
+                </label>
+
+               <label class='-one-row' for="gradeChoice4"> 
+                    <input type="radio" id="gradeChoice4" name="grade" value="Some post high school, no degree/certificate" required>
+                    <span>Some post high school, no degree/certificate</span>
+                </label>
+
+                <label class='-one-row' for="gradeChoice5">
+                    <input type="radio" id="gradeChoice5" name="grade" value="Certificate (less than two years)" required>
+                    <span>Certificate (less than two years)</span>
+                </label>
+
+                <label class='-one-row' for="gradeChoice6">
+                    <input type="radio" id="gradeChoice6" name="grade" value="Associate’s Degree" required>
+                    <span>Associate’s Degree</span>
+                </label>
+
+                <label class='-one-row' for="gradeChoice7"> 
+                    <input type="radio" id="gradeChoice7" name="grade" value="Bachelor’s Degree" required>
+                    <span>Bachelor’s Degree</span>
+                </label>
+
+                <label class='-one-row' for="gradeChoice8">
+                    <input type="radio" id="gradeChoice8" name="grade" value="Master’s Degree" required>
+                    <span>Master’s Degree</span>
+                </label>
+            </div>          <!-- form-radio-box -->
+        </section>      <!-- grade section -->
+
+        <div class="line"></div>
+        <div class="form-button-box">
+            <button class='-btn' type="submit">Submit</button>
+            <button class='-btn' type="reset">Reset</button>
+        </div>
+
+    </form>
+
+
+    <script>
+
+        document.querySelector('.applicant-form').addEventListener('submit', (e) => {
+            const raceOtherRadio = document.querySelector('#raceChoice7')
+            const raceOtherInput = document.querySelector('#otherRaceChoice')
+
+            if (raceOtherRadio.checked && !raceOtherInput.value) {
+                e.preventDefault()
+                alert(`Dear applicant, you set race choice to "Other", however didn't specify your exact race in the text field nearby. Do it please, otherwise, your form wouldn't be saved.`)
+                return 
+            }
+        })
+
+    </script>
+
+</body>
+</html>

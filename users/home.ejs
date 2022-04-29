@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTA / Student Profile</title>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+        
+    <!-- Styles -->
+    <link rel="stylesheet" href="../static/css/fonts.css">
+    <link rel="stylesheet" href="../static/css/brix-family.css">
+
+    <link rel="stylesheet" href="../static/css/colors.css">
+    <link rel="stylesheet" href="../static/css/bolt-copyright.css">
+        
+    <link rel="stylesheet" href="/users/home.css">
+
+</head>
+<body>
+
+    <!-- sprite -->
+    <svg class='-hidden-sprite'>
+        <symbol id="next" viewBox="0 0 489 489">
+            <path d="M59.7,255.005c-44,53.5-59.7,116.5-59.7,157.6c0,5.6,3.7,10.4,9.1,11.8c1,0.3,2.1,0.4,3.1,0.4c4.3,0,8.4-2.3,10.7-6.2 c62.3-109.8,179.8-115.6,256.5-115.9v79.5c0,4.7,2.7,9.1,7,11.1s9.4,1.4,13-1.6l185.2-153.2c2.8-2.3,4.4-5.8,4.4-9.4 c0-3.7-1.6-7.1-4.5-9.4l-185-152.7c-3.7-3-8.7-3.7-13-1.6c-4.3,2-7,6.3-7,11.1v79.8C161.7,160.605,95.1,211.905,59.7,255.005z M291.8,180.405c6.7-0.1,12.1-5.5,12.1-12.3v-65.7l153.6,126.7l-153.6,127.1v-65.7c0-3.2-1.3-6.4-3.6-8.7c-2.3-2.3-5.4-3.6-8.7-3.6 c-71.3,0-184.7,0-260.6,86.6C50.1,289.405,115.8,182.105,291.8,180.405z"/>
+        </symbol>
+    </svg>
+
+    
+    <!-- TOOLS -->
+    <% 
+        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
+        function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' }
+        function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
+    %>
+
+    <header>
+        <nav class="nav-menu">
+           <a class="nav-item" href="/">Home</a>
+           <a class="nav-item -inac" href="">About Us</a>
+           <a class="nav-item" href="/cdl-courses">CDL Programs</a>
+           <a class="nav-item" href="/faq">FAQs</a>
+           <a class="nav-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
+           <span class="nav-item -contact">833-867-6235</span>
+        </nav>
+
+        <% const prompt = user ? `Hello, ${user.name}` : 'Hello!' %>
+
+        <section class="welcome-box">
+            <h2 class="welcome-name"> <%= prompt %> </h2>
+            <h1 class="welcome-text">Welcome to your personal account</h1>
+        </section>
+        
+    </header>
+
+    
+    <div class="profile-box">
+
+        <% if (!user) { %>
+            <p class="no-user-issue">No info about user has been found...</p>
+            <p class="no-user-issue">try to login please properly</p>
+        <% } else { %>
+
+            <div class="left-side">
+                <h3 class="block-title">Applicants Area</h3>
+                <section class="applicants-area">
+                
+                <% if(user.token === 'verified') { %>     <!-- if email is verified, then show forms -->
+                    <% if (user.dataCollection) { %>
+                        <a class="form-done" href="/user/print-form/1">STUDENT DATA COLLECTION FORM</a>
+                        <% if (user.application) { %>
+                            <a class="form-done" href="/user/print-form/2">APPLICATION FOR ENROLLMENT</a>
+                            <% if (user.agreement) { %>
+                                <a class="form-done" href="/user/print-form/3">ENROLLMENT AGREEMENT</a>
+                            <% } else { %>
+                                <a class="form-todo" href="/user/form3">
+                                    <svg class="next-mark">
+                                        <use xlink:href="#next"></use> 
+                                    </svg>ENROLLMENT AGREEMENT
+                                </a>
+                            <% } %>
+                        <% } else { %>
+                                <a class="form-todo" href="/user/form2">
+                                    <svg class="next-mark">
+                                        <use xlink:href="#next"></use> 
+                                    </svg>APPLICATION FOR ENROLLMENT
+                                </a>
+                                <a class="form-not-done">ENROLLMENT AGREEMENT</a>
+                        <% } %>
+                    <% } else { %>
+                        <a class="form-todo" href="/user/form1">
+                            <svg class="next-mark">
+                                <use xlink:href="#next"></use> 
+                            </svg>STUDENT DATA COLLECTION FORM
+                        </a>
+                        <a class="form-not-done">APPLICATION FOR ENROLLMENT</a>
+                        <a class="form-not-done">ENROLLMENT AGREEMENT</a>
+                    <% } %>
+                <% } else { %>      <!-- email is NOT verified, show warning -->
+                    <a class="form-not-done">STUDENT DATA COLLECTION FORM</a>
+                    <a class="form-not-done">APPLICATION FOR ENROLLMENT</a>
+                    <a class="form-not-done">ENROLLMENT AGREEMENT</a>
+                    <div class="block-item">
+                        <span class="block-value">Enrollment forms cannot be available because your email still stays unverified. Please find our verification letter among your incoming emails (check spam folder, if needed) and stick with instructions given in it. Or you can generate one more verification letter, but be aware that only last generated will be valid one.</span>
+                    </div>
+                <% } %>
+                </section>  <!-- applicants-area -->
+            </div>   <!-- left-side -->
+
+            
+            <div class="right-side">
+                <section class="profile-info">
+                    <h3 class="block-title">Profile info</h3>
+
+                    <div class="block-item">    <!-- nickname -->
+                        <svg class="ico -user" viewBox="0 0 448 512">
+                            <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
+                        </svg>
+                        <span class="block-key">User Nickname<span class="block-value"><%= user.name %></span></span>
+                    </div>  <!-- nickname -->
+
+                    <div class="block-item">    <!-- email -->
+                        <svg class="ico -email" viewBox="0 0 512 512">
+                            <path d="M256 8C118.941 8 8 118.919 8 256c0 137.059 110.919 248 248 248 48.154 0 95.342-14.14 135.408-40.223 12.005-7.815 14.625-24.288 5.552-35.372l-10.177-12.433c-7.671-9.371-21.179-11.667-31.373-5.129C325.92 429.757 291.314 440 256 440c-101.458 0-184-82.542-184-184S154.542 72 256 72c100.139 0 184 57.619 184 160 0 38.786-21.093 79.742-58.17 83.693-17.349-.454-16.91-12.857-13.476-30.024l23.433-121.11C394.653 149.75 383.308 136 368.225 136h-44.981a13.518 13.518 0 0 0-13.432 11.993l-.01.092c-14.697-17.901-40.448-21.775-59.971-21.775-74.58 0-137.831 62.234-137.831 151.46 0 65.303 36.785 105.87 96 105.87 26.984 0 57.369-15.637 74.991-38.333 9.522 34.104 40.613 34.103 70.71 34.103C462.609 379.41 504 307.798 504 232 504 95.653 394.023 8 256 8zm-21.68 304.43c-22.249 0-36.07-15.623-36.07-40.771 0-44.993 30.779-72.729 58.63-72.729 22.292 0 35.601 15.241 35.601 40.77 0 45.061-33.875 72.73-58.161 72.73z"></path>
+                        </svg>
+                        <span class="block-key">Email<span class="block-value"><%= user.email %></span></span>
+                    </div>  <!-- email -->
+
+                    <div class="block-area" id="emailStatus">    <!-- token -->
+                        <% if(!user.token || user.token === 'not sent') { %>
+                            
+                            <svg class="ico -caution" viewBox="0 0 554.2 554.199">
+                                <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/>
+                            </svg>
+                            <span class="block-key">Authorized<span class="block-value -caution">Your email is not verified</span></span>
+                            <p class="block-value -caution">Verification email wasn't sent you yet</p>
+                            <form action="/user/sendToken" method="POST">
+                                <small class="block-value">You can send it manually</small>
+                                <input type="hidden" name="name" value="<%= user.name %>" readonly>
+                                <input type="hidden" name="email" value="<%= user.email %>" readonly>
+                                <button class="-btn" type="submit">Send</button>
+                            </form>
+
+                        <% } else { %>
+                            <% if(user.token === 'verified') { %>
+                                <div class="block-item">    <!-- token -->
+                                    <svg class="ico -trusted" viewBox="0 0 455 455">
+                                        <path d="M0,0v455h455V0H0z M194.93,319.897l-87.837-87.837l21.213-21.213l66.625,66.624l131.764-131.763l21.213,21.213 L194.93,319.897z"/>
+                                    </svg>
+                                    <span class="block-key">Authorized<span class="block-value -trusted">Trusted email</span></span>
+                                </div>  <!-- token -->
+                            <% } else { %>
+                                <svg class="ico -warning" viewBox="0 0 554.2 554.199">
+                                    <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/>
+                                </svg>
+                                <span class="block-key">Authorized<span class="block-value -warning">Your email is not verified</span></span>
+                                <p class="block-value -warning">Verification email was sent to you</p>
+                               
+                                <% if(user.msg.e != 'verTokenSent') { %>
+                                    <form action="/user/sendToken" method="POST">
+                                        <small class="block-value">Resend verification email</small>
+                                        <input type="hidden" name="name" value="<%= user.name %>" readonly>
+                                        <input type="hidden" name="email" value="<%= user.email %>" readonly>
+                                        <button class="-btn" type="submit">Resend</button>
+                                    </form>
+                                <% } %>
+                            <% } %>
+                        <% } %>
+                    </div>  <!-- token -->
+
+                    <div class="block-item">    <!-- created -->
+                        <svg class="ico -clock" viewBox="0 0 125.668 125.668">
+                            <path d="M84.17,76.55l-16.9-9.557V32.102c0-2.541-2.061-4.601-4.602-4.601s-4.601,2.061-4.601,4.601v37.575c0,0.059,0.016,0.115,0.017,0.174c0.006,0.162,0.025,0.319,0.048,0.479c0.021,0.146,0.042,0.291,0.076,0.433c0.035,0.141,0.082,0.277,0.129,0.414c0.051,0.146,0.1,0.287,0.164,0.426c0.061,0.133,0.134,0.257,0.208,0.383c0.075,0.127,0.148,0.254,0.234,0.374c0.088,0.122,0.188,0.235,0.288,0.349c0.097,0.11,0.192,0.217,0.299,0.317c0.107,0.101,0.222,0.19,0.339,0.28c0.126,0.098,0.253,0.191,0.39,0.276c0.052,0.031,0.092,0.073,0.145,0.102L79.64,84.562c0.716,0.404,1.493,0.597,2.261,0.597c1.605,0,3.163-0.841,4.009-2.337C87.161,80.608,86.381,77.801,84.17,76.55z"/>	
+                            <path d="M62.834,0C28.187,0,0,28.187,0,62.834c0,34.646,28.187,62.834,62.834,62.834c34.646,0,62.834-28.188,62.834-62.834C125.668,28.187,97.48,0,62.834,0z M66.834,115.501v-9.167h-8v9.167c-24.77-1.865-44.823-20.872-48.292-45.167h9.459v-8h-9.988c0.258-27.558,21.716-50.126,48.821-52.167v9.167h8v-9.167c27.104,2.041,48.563,24.609,48.821,52.167h-9.487v8h8.958C111.657,94.629,91.605,113.636,66.834,115.501z"/>
+                        </svg>
+                        <span class="block-key">Profile Created<span class="block-value"><%= new Date(user.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.created).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
+                    </div>  <!-- created -->
+
+                    <div class="block-item">    <!-- session -->
+                        <svg class="ico -session" viewBox="0 0 384 512">
+                            <path d="M360 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24 0 90.965 51.016 167.734 120.842 192C75.016 280.266 24 357.035 24 448c-13.255 0-24 10.745-24 24v16c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24 0-90.965-51.016-167.734-120.842-192C308.984 231.734 360 154.965 360 64c13.255 0 24-10.745 24-24V24c0-13.255-10.745-24-24-24zm-64 448H88c0-77.458 46.204-144 104-144 57.786 0 104 66.517 104 144z"></path>
+                        </svg>
+                        <span class="block-key">Session Started<span class="block-value"><%= new Date(user.lastSESS).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.lastSESS).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
+                    </div>  <!-- session -->
+
+                    <div class="block-item">    <!-- expired -->
+                        <svg class="ico -expired" viewBox="0 0 384 512">
+                            <path d="M360 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24 0 90.965 51.016 167.734 120.842 192C75.016 280.266 24 357.035 24 448c-13.255 0-24 10.745-24 24v16c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24 0-90.965-51.016-167.734-120.842-192C308.984 231.734 360 154.965 360 64c13.255 0 24-10.745 24-24V24c0-13.255-10.745-24-24-24zm-75.078 384H99.08c17.059-46.797 52.096-80 92.92-80 40.821 0 75.862 33.196 92.922 80zm.019-256H99.078C91.988 108.548 88 86.748 88 64h208c0 22.805-3.987 44.587-11.059 64z"></path>
+                        </svg>
+                        <span class="block-key">Session will be expired at<span class="block-value"><%= new Date(SESS_EXP).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
+                    </div>  <!-- expired -->
+
+                    <% const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }) %>
+
+                    <% if(user.balance != undefined) { %>
+                        <div class="block-item">    <!-- balance -->
+                            <% if(user.balance < 0) { %>
+                                <svg class="ico -warning" viewBox="0 0 640 512"><path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg>
+                                <span class="block-key -warning">Your balance is<span class="block-value -warning"><%= usCurrencyFormat.format(user.balance) %></span></span>
+                            <% } else { %>
+                                <svg class="ico -trusted" viewBox="0 0 640 512"><path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg>
+                                <span class="block-key">Your balance is<span class="block-value -trusted"><%= usCurrencyFormat.format(user.balance) %></span></span>
+                            <% } %>
+                        </div>  <!-- balance -->
+                    <% } %>
+
+                    <% if(user.student) { %>
+                        <div class="block-item">    <!-- tuition -->
+                            <svg class="ico -tuition" viewBox="0 0 696.662 696.663">
+                                <path d="M56.961,191.577l17.977-6.867l3.409,1.98l-14.731,8.309l-0.337,7.479c-0.006,0-14.225,84.932,1.541,119.941 c0,0,26.114,6.882,44.561-12.832L86.559,208.024l-2.389-8.308l31.004-17.036l-0.678,6.455L92.083,204.3l12.618,0.795l152.824,2.784 l127.957-83.623l85.145-61.274L209.247,40.19L0,198.47l55.322,3.497L56.961,191.577z M228.317,106.424 c15.936-4.567,31.12-0.413,33.917,9.315c2.798,9.714-7.853,21.309-23.781,25.907c-15.928,4.579-31.113,0.413-33.912-9.301 C201.737,122.618,212.388,111.022,228.317,106.424z M89.278,303.836l-5.249,1.504c0,0-5.224-27.995-5.512-58.6L89.278,303.836z"/>
+                                <path d="M696.662,622.058l-125.14-78.212V243.516H403.649c7.181-10.892,10.025-21.644,7.223-31.383 c-0.072-0.27-0.23-0.512-0.311-0.771l-20.559-71.379l-127.952,83.626l-152.823-2.787l12.239,42.514l8.537,29.65 c2.767,9.604,10.716,17.107,22.308,22.51v228.354l-125.138,78.21v34.413h669.488V622.058z M287.831,312.978 c28.315-8.164,53.579-19.371,73.847-31.921h169.175v226.735H183.596V323.877C212.137,327.469,249.122,324.122,287.831,312.978z M166.682,554.793h390.47l56.604,40.673H110.078L166.682,554.793z"/>
+                            </svg>
+                            <% if(tuition) { %>
+                                <% if(tuition.avLessonsRate < 0.25) { %>
+                                    <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -orange"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</span></a>
+                                <% } else { %>
+                                    <% if(tuition.avLessonsRate < 0.85) { %>
+                                        <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -trusted"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</span></a>
+                                    <% } else { %>
+                                        <% if(tuition.avLessonsRate > 0.849) { %>
+                                            <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -trusted">Sufficient level</span></a>
+                                        <% } else { %>
+                                            <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -orange">Unknown level</span></a>
+                                        <% } %>
+                                    <% } %>
+                                <% } %>
+                            <% } else { %>
+                                <span class="block-key">Learning Center<span class="block-value -warning">Lessons aren't scheduled</span></span>
+                            <% } %>
+                        </div>  <!-- tuition -->
+                    <% } %>
+
+                    <form action="/user/logout" method="POST">
+                        <button class="-btn -big-btn" type="submit">Logout</button>
+                    </form>
+
+                </section>  <!-- profile-info -->
+            </div>  <!-- right-side -->
+
+
+            <!-- 2ND ROW -->
+            <div class="left-side">
+                <h3 class="block-title">Update Password</h3>
+                <form class="update-form" action="/user/password" method="POST">
+                    <div class="inputs">
+                        <input type="password" name='currentPassword' placeholder="Current Password" required />
+                        <input type="password" name='newPassword' placeholder="New Password" required />
+                    </div>
+                    <label class="show-password" for="showPasswords">
+                        <input type="checkbox" id='showPasswords'/>
+                        show passwords
+                    </label>
+                    <button class="-btn -big-btn -hlt" type="submit">Submit</button>
+                </form>
+            </div>   <!-- left-side -->
+            
+            <div class="right-side">
+                <h3 class="block-title">INFOBOX</h3>
+                <div class="block-item -infobox">    <!-- Catalog -->
+                    <span class="block-key">Catalog<a href='../catalog' target="_blank" class="block-value -info">download</a></span>
+                </div>  <!-- Catalog -->
+                <div class="block-item -infobox">    <!-- INFO -->
+                    <span class="block-key"><%= user.msg.class.toUpperCase() %><span class="block-value -<%= user.msg.class %>"><%= user.msg.txt %></span></span>
+                </div>  <!-- INFO -->
+
+                <!-- Bolt Career offer if student -->
+                <% if(user.student) { %>
+                    <section class="bolt-career-box">
+                        <p class="bolt-text">After graduation, you will most likely spend extensive time looking for maximum pay job. Sign in <a href="https://www.boltcdl.com/user/register" target="_blank">Bolt Career</a> with your current email and let employers track your learning progress. Future employers will be able to see your employment preferences and contact you with job offers.</p>
+                    </section>
+                <% } %>
+            </div>  <!-- right-side -->
+
+            <% if(user.student) { %>
+                <h3 class="block-title">Attendance Info</h3>
+                
+                <!-- TTT -->
+                <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
+                <% function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` } %>
+                <% function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 } %>
+
+                <% if (verTTT) { %>
+                    <div class="block-item">    <!-- TTT -->
+                        <span class="block-key">Total Tuition Time<span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span></span>
+                    </div>  <!-- TTT -->
+                <% } %>
+
+                <div class="block-item">    <!-- Visiting Type -->
+                    <span class="block-key">Visiting Type<span class="block-value"><%= visiting %>*</span></span>
+                </div>  <!-- Visiting Type -->
+
+                
+                <!-- QR Clocks -->
+                <% if (verClocks) { %>
+
+                    <div class="clocks-table">
+                        <div class="clocks-table-cell -header">DATE</div>
+                        <div class="clocks-table-cell -header -hide-if-small">KEY</div>
+                        <div class="clocks-table-cell -header">IN</div>
+                        <div class="clocks-table-cell -header -hide-if-small">IN GEO</div>
+                        <div class="clocks-table-cell -header">OUT</div>
+                        <div class="clocks-table-cell -header -hide-if-small">OUT GEO</div>
+                        <div class="clocks-table-cell -header">Duration</div>
+                        <div class="clocks-table-cell -header -hide-if-small">Ratio</div>
+
+                        <% verClocks.forEach(clock => { %>
+                            <% let duration = clock.duration / (1000 * 60 *60) %>
+                            <!-- Date, key -->
+                            <div class="clocks-table-cell"><%= new Date(clock.date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+                            <div class="clocks-table-cell -hide-if-small"><%= clock.dateKey %></div>
+                            
+                            <!-- IN & coord -->
+                            <div class="clocks-table-cell"><%= new Date(clock.in).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+                            <% if (!isNaN(clock.inlat) && !isNaN(clock.inlon)) { %>
+                                <a class="clocks-table-cell -hide-if-small" href="http://www.google.com/maps/place/<%= clock.inlat %>,<%= clock.inlon %>" target="_blank">
+                                    <%= normCOORD(clock.inlat) %>,<%= normCOORD(clock.inlon) %>
+                                </a>
+                            <% } else { %>
+                                <div class="clocks-table-cell -hide-if-small"><%= clock.inlat %>,<%= clock.inlon %></div>
+                            <% } %>
+    
+                            <!-- OUT & coord -->
+                            <% if( !isNaN(clock.out) ) { %>
+                                <div class="clocks-table-cell"><%= new Date(clock.out).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+                            <% } else { %>
+                                <div class="clocks-table-cell -orange">NO</div>
+                            <% } %>
+    
+                            <% if (!isNaN(clock.outlat) && !isNaN(clock.outlon)) { %>
+                                <a class="clocks-table-cell -hide-if-small" href="http://www.google.com/maps/place/<%= clock.outlat %>,<%= clock.outlon %>" target="_blank">
+                                    <%= normCOORD(clock.outlat) %>,<%= normCOORD(clock.outlon) %>
+                                </a>
+                            <% } else { %>
+                                <div class="clocks-table-cell -hide-if-small"><%= clock.outlat %>,<%= clock.outlon %></div>
+                            <% } %>
+    
+                            <!-- duration -->
+                            <% if( !isNaN(clock.out) ) { %>
+                                <div class="clocks-table-cell"><%= strTTT(duration) %></div>
+                                <div class="clocks-table-cell -hide-if-small"><%= normTTT(duration) %></div>
+                            <% } else { %>
+                                <div class="clocks-table-cell -orange"><%= strTTT(duration) %></div>
+                                <div class="clocks-table-cell -orange -hide-if-small"><%= normTTT(duration) %></div>
+                            <% } %>
+                        <% }) %>
+
+                    </div>  <!-- clocks-table -->
+
+                    <span class="block-value -info1">* The duration of your presence in the TTA when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. TTA reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows TTA not to take into account the hours for such a day.</span>
+
+                <% } %>     <!-- if there are any clocks -->
+
+                <!-- SCORINGS -->
+                <% if(scorings) { %>
+                    <h3 class="block-title">Skill Scorings</h3>
+                    <div class="block-item">
+                        <span class="block-key">Can Visit Teaching<span class="block-value"><%= scorings.isAllowed ? "Yes" : "No" %></span></span>
+                    </div>
+                    <% if(scorings.lastDone) { %>
+                        <div class="block-item">
+                            <span class="block-key">
+                                Last Scoring Done
+                                <span class="block-value">
+                                    <%= new Date(scorings.lastDone).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>
+                                    <%= new Date(scorings.lastDone).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="scoring-table">
+                            <div class="scoring-table-cell -scoring-header">Type</div>
+                            <div class="scoring-table-cell -scoring-header">Date</div>
+                            <div class="scoring-table-cell -scoring-header -hide-if-small">Instructor</div>
+                            <div class="scoring-table-cell -scoring-header">Result</div>
+                            <div class="scoring-table-cell -scoring-header">Certificate</div>
+
+                            <% const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity] %>
+                            <% const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving'] %>
+
+                            <% scorArrays.forEach((scorArray, index) => { %>
+                                <% scorArray.forEach(scor => { %>
+                                    <a href="/user/scoring-print?scoring=<%= scorings._id %>&scoringform=<%= scor._id %>" class="scoring-table-cell"><%= scorTitles[index] %></a>
+                                    <div class="scoring-table-cell"><%= formatDateTime(scor.created) %></div>
+                                    <div class="scoring-table-cell -hide-if-small"><%= scor.instructor %></div>
+
+                                    <% if (scor.result) { %>
+                                        <div class="scoring-table-cell -passed">passed</div>
+                                    <% } else { %>
+                                        <div class="scoring-table-cell -failed">failed</div>
+                                    <% } %>
+
+                                    <% if (scor.certificate) { %>
+                                        <div class="scoring-table-cell -passed">Yes</div>
+                                    <% } else { %>
+                                        <div class="scoring-table-cell -failed">No</div>
+                                    <% } %>
+
+                                <% }) %>
+                            <% }) %>
+
+                        </div>  <!-- scoring-table -->
+                    <% } %>
+                <% } %>     <!-- if there are any scorings -->
+
+
+                <!-- Schedule Appointments -->
+                <%
+                    const calendarTitles = {
+                        "city": "CITY DRIVING", 
+                        "backing1": "STRAIGHT LINE BACKING",
+                        "backing2": "OFFSET BACKING",
+                        "backing3": "ALLEY DOCK BACKING"
+                    }
+                %>
+                <% if(user.student.schedule) { %>
+                    <h3 class="block-title">Scheduled Appointments</h3>
+                    <div class="block-item">
+                        <span class="block-key">
+                            Found appointments
+                            <span class="block-value">
+                                <%= user.student.schedule.appointments.length %>
+                            </span>
+                            <a class="schedule-more" href="/user/schedule">(schedule more...)</a>
+                        </span>
+                    </div>
+                    <div class="skills-test-table">
+                        <div class="skills-test-table-cell -skills-test-header">Type</div>
+                        <div class="skills-test-table-cell -skills-test-header">Date Time</div>
+                        <div class="skills-test-table-cell -skills-test-header">Location</div>
+                        <div class="skills-test-table-cell -skills-test-header -hide-if-small">Transmission</div>
+
+                        <% user.student.schedule.appointments.forEach(appointment => { %>
+                            <div class="skills-test-table-cell"><%= calendarTitles[appointment.appType] %></div>
+                            <% 
+                                let y = appointment.appDate.getUTCFullYear()
+                                let m = leadingZero(appointment.appDate.getUTCMonth())
+                                let d = leadingZero(appointment.appDate.getUTCDate())
+                                let h = leadingZero(appointment.appDate.getUTCHours())
+                                let mins = leadingZero(appointment.appDate.getUTCMinutes())
+                                let txtDate = `${d}/${m}/${y} - ${h}:${mins}`
+                            %>
+                            <div class="skills-test-table-cell"><%= txtDate %></div>
+                            <div class="skills-test-table-cell"><%= appointment.appLocation %></div>
+                            <div class="skills-test-table-cell -hide-if-small"><%= appointment.appTransmission %></div>
+                        <% }) %>
+                    </div>      <!-- skills-test table -->
+                <% } %>     <!-- if there are any scorings -->
+
+
+                <!-- Skills Tests History -->
+                <% if(user.student.skillsTest) { %>
+                    <h3 class="block-title">Scheduled Skills Test</h3>
+                    <div class="block-item">
+                        <span class="block-key">Found appointments<span class="block-value"><%= user.student.skillsTest.length %></span></span>
+                    </div>
+                    <div class="skills-test-table">
+                        <div class="skills-test-table-cell -skills-test-header">Type</div>
+                        <div class="skills-test-table-cell -skills-test-header">Date Time**</div>
+                        <div class="skills-test-table-cell -skills-test-header">Location</div>
+                        <div class="skills-test-table-cell -skills-test-header -hide-if-small">Endorsements</div>
+
+                        <% user.student.skillsTest.forEach(test => { %>
+                            <div class="skills-test-table-cell"><%= test.testType %></div>
+                            <div class="skills-test-table-cell"><%= formatDateTime(test.scheduledDate) %></div>
+                            <div class="skills-test-table-cell"><%= test.testLocation %></div>
+                            <div class="skills-test-table-cell -hide-if-small"><%= test.endorsements %></div>
+                        <% }) %>
+                    </div>      <!-- skills-test table -->
+                    <span class="block-value -info1">** Double-check exact time with the school's manager, because some skills test locations do not provide timeframes, and mentioned below is just a preliminary or general.</span>
+                <% } %>     <!-- if there are any scorings -->
+
+
+            <% } %>     <!-- USER is a STUDENT -->
+        <% } %>     <!-- USER is OK -->
+    </div>  <!--- profile-box -->
+
+
+    <div class="nav-bottom">
+        <div class="nav-bottom-box">
+            <div class="nav-left">
+                <div class="nav-left-item">Toro Trucking Academy</div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-right-item">About Us</div>
+                <a class="nav-right-item" href="/cdl-courses">CDL Programs</a>
+                <a class="nav-right-item" href="/faq">FAQs</a>
+                <a class="nav-right-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
+                <div class="nav-right-item">Contact Us</div>
+            </div>
+        </div>
+        
+        
+    </div>      <!-- nav-bottom -->
+    <div class="bolt-footer">
+        © 2022 designed by BOLT
+        <a href="https://www.boltcdl.com" target="_blank">
+            <svg class='bolt-ico' viewBox="0 0 320 512"><path d="M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-1.7 275.2 9.5 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z"></path></svg>
+        </a>
+        <a href="mailto:info@boltcdl.com">info@boltcdl.com</a>
+        <span class="bolt-tel">+1253.200.4466</span>
+    </div>
+    
+
+
+    <script defer>
+        localStorage.setItem('id', '<%- user._id %>')
+                
+        // 'show password' reaction
+        document.querySelector('#showPasswords').addEventListener('change', (e) => {
+            document.querySelector('input[name="currentPassword"]').type = e.target.checked ? 'text' : 'password'
+            document.querySelector('input[name="newPassword"]').type = e.target.checked ? 'text' : 'password'
+        })
+    </script>
+
+
+    <script type="module">
+        // @NOTIFICATIONS from db
+        import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js"
+        const socket = io("/")
+        
+        // server emits, so have to check if changes are related to this particular client
+        socket.on('users-collection-update', user => {
+            if (user) {
+                if (user.documentKey._id === localStorage.getItem('id')) {
+                    if (user.updateDescription) {
+                        if (user.updateDescription.updatedFields) {
+                            if (user.updateDescription.updatedFields.token === "verified") {
+                                alert("Congratulation! You've just passed email verification process. Now please refresh a page and forms will be available for you.")
+                                document.location.reload();
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>
