@@ -1,7 +1,7 @@
 const express = require('express')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
 const path = require('path')
-// const { Mongoose } = require('mongoose')
 
 // CONFIG
 const admin = require('./config')
@@ -21,18 +21,17 @@ const chart = require('./adminProfileCharts')
 
 // PDF
 const pdf = require('../static/pdf/pdf')
-// const { redirect } = require('express/lib/response')     do I need this?
 
 
 // @SESSION config
-const ADM_SESS_DURATION = 1000 * 60 * 60 * 6    //  6 hours
+const ADM_SESS_DURATION = 1000 * 60 * 60 * 12    //  12 hours
 
 // extracting from process.env
 const {
     NODE_ENV = 'development',
 
     SESS_NAME = 'ADMSID',
-    SESS_SECRET = '!GODMODE_FORADMINS',
+    SESS_SECRET = '!GODMODE_FORADMINS_NOmoreWar2022',
     SESS_LIFETIME = ADM_SESS_DURATION
 } = process.env
 
@@ -41,8 +40,12 @@ const IN_PROD = NODE_ENV === 'production'
 // ./admin
 const admRouter = express.Router()
 
+
+
 // adding session configuration
 admRouter.use(session({
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI_SESSA }),        // use mongo for amdins sessions
+
     name: SESS_NAME,
     resave: false,
     saveUninitialized: false,
@@ -125,13 +128,10 @@ function ifCanWriteOrInstructor (req, res, next) {
 
 // LOGIN, MAIN, PROFILE ROUTES
 admRouter.get('/', redirectToHome, (req, res) => {
-    // res.render(path.join(__dirname+'/admWelcome.ejs'), {
-    //     id: req.session.userId,
-    //     issue: admin.ISSUES[req.query.logIssue]
-    // })
     res.render(path.join(__basedir+'/users/login.ejs'), {
         id: req.session.userId,
-        issue: admin.ISSUES[req.query.logIssue]
+        issue: admin.ISSUES[req.query.logIssue],
+        baseRoute: "ADMIN",
     })
 })
 

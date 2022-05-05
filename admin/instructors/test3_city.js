@@ -293,6 +293,10 @@ const test3_city = [
                 item: 'Maintains speed',
                 checks: [ '1', '1', '1', '1', '1' ]
             },
+            {
+                item: 'Total Fail',
+                checks: [ '100' ]
+            },
         ]
     },  // end of block
 ]

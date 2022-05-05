@@ -3,10 +3,10 @@
 
 const express = require('express')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')     //  express-session will use mongo vs MemoryStore for datause, prevent memory leaks
+const path = require('path')
 
 const { body, validationResult } = require('express-validator')
-
-const path = require('path')
 const bcrypt = require('bcrypt')
 
 
@@ -15,10 +15,6 @@ const bcrypt = require('bcrypt')
 // npm install node-fetch@2
 // const fetch = require('node-fetch')
 
-
-// MONGO db via MONGOOSE
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGO_URI_USERS)
 
 // MODELS for mongoose
 const { User, Student, Schedule, tools } = require('./userModel')
@@ -32,14 +28,14 @@ const { getInfoMessage, getIssueMessage } = require('./_messages')
 const postman = require('./postman/postman')
 
 // @SESSION setup
-const SESS_DURATION = 1000 * 60 * 60 * 2    //  2 hours for Applicants and Students
+const SESS_DURATION = 1000 * 60 * 60 * 6    //  6 hours for Applicants and Students
 
 // extracting from process.env
 const {
     NODE_ENV = 'development',
 
     SESS_NAME = 'sid',
-    SESS_SECRET = 'TOROTruckingAcademy2021!',
+    SESS_SECRET = 'TOROTruckingAcademy2022!',
     SESS_LIFETIME = SESS_DURATION
 } = process.env
 
@@ -50,6 +46,8 @@ const userRouter = express.Router()
 
 // adding session configuration
 userRouter.use(session({
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI_SESSU }),        // use mongo for amdins sessions
+
     name: SESS_NAME,
     resave: false,
     saveUninitialized: false,
@@ -83,6 +81,7 @@ userRouter.get('/', redirectToHome, (req, res) => {
     // checking for income messages
     const { status, e } = req.query
     res.render(path.join(__dirname+'/login.ejs'), {
+        baseRoute: "USER",      // used for redirect if admin
         error: status === 'issue' ? getIssueMessage(e) : false,
         info: status === 'info' ? getInfoMessage(e) : false,
         isThereErrors: false,   // no errors yet

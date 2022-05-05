@@ -14,12 +14,14 @@ const { test3_city } = require('./test3_city')
 
 const { StudentScoring, InstructorScoring } = require('./scoringModel')
 
+const scoringDelayTime = 0.08    //  0.08 * 1 minute = 5 sec
+
 
 // CONFIG
 const admin = require('../config')
 
 // MODELS for mongoose
-const { User, Student, tools } = require('../../users/userModel')
+const { Student } = require('../../users/userModel')
 
 function ifInstructor (req, res, next) {
     // check Admin's Auth - if INSTRUCTOR
@@ -202,14 +204,14 @@ instRouter.post('/scoring-save', ifInstructor, async (req, res) => {
             if (!studentScoring) { return res.status(404).send(`Cannot find scoring ${student.scoring} of student id#${studentId}`) }
             // react on isAllowed flag in schema
             if (studentScoring.isAllowed) {
-                // stick with 10mins delay - the same scoring per same student by same instructor can be saved within 15min only
+                // stick with scoringDelayTime delay - the same scoring per same student by same instructor can be saved within scoringDelayTime only
                 const dt1 = new Date(studentScoring.lastDone)
                 const dt2 = new Date()
-                const diff = Math.abs(Math.round((dt2.getTime() - dt1.getTime()) / (60000)))
+                const diff = Math.abs(Math.round((dt2.getTime() - dt1.getTime()) / 60000))
                 
-                if (diff < 10 && studentScoring.lastDoneBy == result.examinerId) {
-                    studentScoring.isAllowed = false    // to skip scoring saving on Instructor's side - less than 10 mins
-                    return res.status(400).send(`${diff} minutes ago another scoring was created for this student with your instructor's ID. Too good to be real, or someone else is using your account. This result will not be recorded, you have at least 10 minutes for one scoring.`)
+                if (diff < scoringDelayTime && studentScoring.lastDoneBy == result.examinerId) {
+                    studentScoring.isAllowed = false    // to skip scoring saving on Instructor's side - less than scoringDelayTime
+                    return res.status(400).send(`${diff} minutes ago another scoring was created for this student with your instructor's ID. Too good to be real, or someone else is using your account. This result will not be recorded, you have at least ${scoringDelayTime} minutes (${scoringDelayTime * 60} seconds) for one scoring.`)
                 } else {
                     studentScoring.lastDone = new Date()
                     studentScoring.lastDoneBy = result.examinerId

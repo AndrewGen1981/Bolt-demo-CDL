@@ -93,7 +93,7 @@
             let correct = 0
             for (let i=0; i< blockInputs.length; i++) {
                 if (blockInputs[i].checked) {
-                    correct += 1
+                    correct += parseInt(blockInputs[i].dataset.value) || 1
                 }
             }
 

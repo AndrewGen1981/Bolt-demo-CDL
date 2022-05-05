@@ -103,6 +103,9 @@
             </div>
         </div>  <!-- login-right -->
     </div>      <!-- login-box -->
+
+    <!-- for redirecting if user is an admin -->
+    <a href="/admin" class="-hidden" id="admin-redirect"></a>
   
 
     <script defer>
@@ -166,6 +169,10 @@
             const role = localStorage.getItem("role")
             if (role === "admin") {
                 admin.click()
+                if ("<%= locals.baseRoute %>" === "USER") {
+                    const adminRedirectRef = document.querySelector("#admin-redirect")
+                    if (adminRedirectRef) { console.log(adminRedirectRef); adminRedirectRef.click() }
+                }
             }
         }
 

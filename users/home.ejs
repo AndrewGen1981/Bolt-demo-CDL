@@ -4,96 +4,92 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTA / Student Profile</title>
+    
+    <title>BoltCDL / Student Profile</title>
 
     <link rel="shortcut icon" href="/static/images/thumb.png">
-        
-    <!-- Styles -->
-    <link rel="stylesheet" href="../static/css/fonts.css">
-    <link rel="stylesheet" href="../static/css/brix-family.css">
-
-    <link rel="stylesheet" href="../static/css/colors.css">
-    <link rel="stylesheet" href="../static/css/bolt-copyright.css">
-        
     <link rel="stylesheet" href="/users/home.css">
-
 </head>
 <body>
 
-    <!-- sprite -->
-    <svg class='-hidden-sprite'>
-        <symbol id="next" viewBox="0 0 489 489">
-            <path d="M59.7,255.005c-44,53.5-59.7,116.5-59.7,157.6c0,5.6,3.7,10.4,9.1,11.8c1,0.3,2.1,0.4,3.1,0.4c4.3,0,8.4-2.3,10.7-6.2 c62.3-109.8,179.8-115.6,256.5-115.9v79.5c0,4.7,2.7,9.1,7,11.1s9.4,1.4,13-1.6l185.2-153.2c2.8-2.3,4.4-5.8,4.4-9.4 c0-3.7-1.6-7.1-4.5-9.4l-185-152.7c-3.7-3-8.7-3.7-13-1.6c-4.3,2-7,6.3-7,11.1v79.8C161.7,160.605,95.1,211.905,59.7,255.005z M291.8,180.405c6.7-0.1,12.1-5.5,12.1-12.3v-65.7l153.6,126.7l-153.6,127.1v-65.7c0-3.2-1.3-6.4-3.6-8.7c-2.3-2.3-5.4-3.6-8.7-3.6 c-71.3,0-184.7,0-260.6,86.6C50.1,289.405,115.8,182.105,291.8,180.405z"/>
-        </symbol>
-    </svg>
+   
+    <!-- TOOLS and constants -->
+    <%
+        const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' })
+        const hello = `Hello${locals.user ? ',' : '!'}`
+        const prompt = locals.user ? `${locals.user.name}` : ''
+        const balance = locals.user.balance = !undefined ? `${usCurrencyFormat.format(user.balance)}` : 'no data'
 
-    
-    <!-- TOOLS -->
-    <% 
         function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
         function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' }
         function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
     %>
 
     <header>
-        <nav class="nav-menu">
-           <a class="nav-item" href="/">Home</a>
-           <a class="nav-item -inac" href="">About Us</a>
-           <a class="nav-item" href="/cdl-courses">CDL Programs</a>
-           <a class="nav-item" href="/faq">FAQs</a>
-           <a class="nav-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
-           <span class="nav-item -contact">833-867-6235</span>
-        </nav>
-
-        <% const prompt = user ? `Hello, ${user.name}` : 'Hello!' %>
-
-        <section class="welcome-box">
-            <h2 class="welcome-name"> <%= prompt %> </h2>
-            <h1 class="welcome-text">Welcome to your personal account</h1>
-        </section>
-        
+        <a href="https://www.boltcdl.com" class="left-box">
+            <img src="/static/images/logo-small.png" alt="Bolt small logo">
+            <span>Home</span>
+        </a>
+        <div class="center-box">
+            <p class="welcome-prompt">
+                <span class="welcome-text"><%= hello %></span>
+                <span class="welcome-header"><%= prompt %></span>
+            </p>
+            <p class="welcome-debt">
+                <span class="welcome-text">Balance :</span>
+                <span class="welcome-header"><%= balance %></span>
+            </p>
+        </div>
+        <form class="right-box" action="/user/logout" method="POST">
+            <button type="submit">
+                <svg class="btn-ico -sign-out" viewBox="0 0 25 21">
+                    <path d="M10.2041 18.8964C10.2041 18.939 10.2094 19.0454 10.22 19.2156C10.2307 19.3859 10.2333 19.5268 10.228 19.6386C10.2227 19.7503 10.2067 19.8753 10.1802 20.0136C10.1536 20.1519 10.1004 20.2557 10.0207 20.3248C9.94101 20.394 9.83206 20.4286 9.69388 20.4286H4.59184C3.32696 20.4286 2.24543 19.979 1.34726 19.08C0.449086 18.1809 0 17.0983 0 15.8321V4.59643C0 3.33028 0.449086 2.24767 1.34726 1.3486C2.24543 0.449535 3.32696 0 4.59184 0H9.69388C9.83206 0 9.95164 0.0505394 10.0526 0.151618C10.1536 0.252697 10.2041 0.372396 10.2041 0.510714C10.2041 0.553274 10.2094 0.659673 10.22 0.829911C10.2307 1.00015 10.2333 1.14113 10.228 1.25285C10.2227 1.36456 10.2067 1.48958 10.1802 1.6279C10.1536 1.76622 10.1004 1.86996 10.0207 1.93912C9.94101 2.00828 9.83206 2.04286 9.69388 2.04286H4.59184C3.89031 2.04286 3.28975 2.29289 2.79018 2.79297C2.2906 3.29304 2.04082 3.8942 2.04082 4.59643V15.8321C2.04082 16.5344 2.2906 17.1355 2.79018 17.6356C3.28975 18.1357 3.89031 18.3857 4.59184 18.3857H9.56633L9.74968 18.4017L9.93304 18.4496L10.0606 18.5373L10.1722 18.681L10.2041 18.8964ZM25 10.2143C25 10.4909 24.899 10.7303 24.6971 10.9325L16.0236 19.6146C15.8216 19.8168 15.5825 19.9179 15.3061 19.9179C15.0298 19.9179 14.7906 19.8168 14.5886 19.6146C14.3867 19.4125 14.2857 19.1731 14.2857 18.8964V14.3H7.14286C6.8665 14.3 6.62734 14.1989 6.42538 13.9968C6.22343 13.7946 6.12245 13.5552 6.12245 13.2786V7.15C6.12245 6.87336 6.22343 6.63397 6.42538 6.43181C6.62734 6.22965 6.8665 6.12857 7.14286 6.12857H14.2857V1.53214C14.2857 1.25551 14.3867 1.01611 14.5886 0.813951C14.7906 0.611793 15.0298 0.510714 15.3061 0.510714C15.5825 0.510714 15.8216 0.611793 16.0236 0.813951L24.6971 9.49609C24.899 9.69825 25 9.93765 25 10.2143Z" />
+                </svg>
+            </button>
+        </form>
     </header>
 
     
     <div class="profile-box">
 
-        <% if (!user) { %>
-            <p class="no-user-issue">No info about user has been found...</p>
-            <p class="no-user-issue">try to login please properly</p>
+        <% if (!locals.user) { %>
+            <h2 class="no-user-issue">No info about user has been found...</h2>
+            <h3 class="no-user-issue">try to login please properly</h3>
         <% } else { %>
 
-            <div class="left-side">
-                <h3 class="block-title">Applicants Area</h3>
-                <section class="applicants-area">
-                
-                <% if(user.token === 'verified') { %>     <!-- if email is verified, then show forms -->
-                    <% if (user.dataCollection) { %>
+            <!-- title-box -->
+            <section class="title-box">
+                <h1 class="main-title">
+                    <span class="main-text">Welcome to</span>
+                    <span class="main-bold">BOLT Trucking School</span>
+                </h1>
+                <a href="tel:8338676235" class="phone-box">
+                    <svg class="main-phone-ico" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <path d="M16.7129 19.3309C16.7129 19.3309 18.8184 18.1256 19.3696 17.8359C19.9192 17.5453 20.4886 17.4719 20.8344 17.6831C21.358 18.0034 25.7552 20.9284 26.1254 21.1873C26.4956 21.4468 26.674 22.1878 26.1649 22.9137C25.6579 23.6397 23.319 26.5101 22.3278 26.4794C21.3352 26.4471 17.2079 26.3567 9.42508 18.5717C1.6438 10.7894 1.55176 6.66114 1.52004 5.66846C1.48832 4.6763 4.35872 2.33682 5.08464 1.8293C5.8116 1.3223 6.55364 1.51314 6.81156 1.86986C7.10484 2.27598 9.99604 6.65906 10.3143 7.16138C10.5322 7.50458 10.4521 8.0771 10.1614 8.62726C9.87228 9.17846 8.66692 11.2839 8.66692 11.2839C8.66692 11.2839 9.5166 12.7332 12.3901 15.6062C15.2642 18.4797 16.7129 19.3309 16.7129 19.3309Z" stroke="#9C9C9C" stroke-width="2" stroke-miterlimit="10" />
+                    </svg>
+                    <span class="main-phone">833-867-6235</span>
+                </a>
+            </section>      <!-- title-box -->
+
+            <!-- forms-box -->
+            <div class="forms-box">
+                <h3 class="small-block-title">Applicants Area</h3>
+                <% if(locals.user.token === 'verified') { %>     <!-- if email is verified, then show forms -->
+                    <% if (locals.user.dataCollection) { %>
                         <a class="form-done" href="/user/print-form/1">STUDENT DATA COLLECTION FORM</a>
-                        <% if (user.application) { %>
+                        <% if (locals.user.application) { %>
                             <a class="form-done" href="/user/print-form/2">APPLICATION FOR ENROLLMENT</a>
-                            <% if (user.agreement) { %>
+                            <% if (locals.user.agreement) { %>
                                 <a class="form-done" href="/user/print-form/3">ENROLLMENT AGREEMENT</a>
                             <% } else { %>
-                                <a class="form-todo" href="/user/form3">
-                                    <svg class="next-mark">
-                                        <use xlink:href="#next"></use> 
-                                    </svg>ENROLLMENT AGREEMENT
-                                </a>
+                                <a class="form-todo" href="/user/form3">ENROLLMENT AGREEMENT</a>
                             <% } %>
                         <% } else { %>
-                                <a class="form-todo" href="/user/form2">
-                                    <svg class="next-mark">
-                                        <use xlink:href="#next"></use> 
-                                    </svg>APPLICATION FOR ENROLLMENT
-                                </a>
+                                <a class="form-todo" href="/user/form2">APPLICATION FOR ENROLLMENT</a>
                                 <a class="form-not-done">ENROLLMENT AGREEMENT</a>
                         <% } %>
                     <% } else { %>
-                        <a class="form-todo" href="/user/form1">
-                            <svg class="next-mark">
-                                <use xlink:href="#next"></use> 
-                            </svg>STUDENT DATA COLLECTION FORM
-                        </a>
+                        <a class="form-todo" href="/user/form1">STUDENT DATA COLLECTION FORM</a>
                         <a class="form-not-done">APPLICATION FOR ENROLLMENT</a>
                         <a class="form-not-done">ENROLLMENT AGREEMENT</a>
                     <% } %>
@@ -105,192 +101,162 @@
                         <span class="block-value">Enrollment forms cannot be available because your email still stays unverified. Please find our verification letter among your incoming emails (check spam folder, if needed) and stick with instructions given in it. Or you can generate one more verification letter, but be aware that only last generated will be valid one.</span>
                     </div>
                 <% } %>
-                </section>  <!-- applicants-area -->
-            </div>   <!-- left-side -->
+            </div>   <!-- forms-box -->
 
-            
-            <div class="right-side">
-                <section class="profile-info">
-                    <h3 class="block-title">Profile info</h3>
-
-                    <div class="block-item">    <!-- nickname -->
-                        <svg class="ico -user" viewBox="0 0 448 512">
-                            <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                        </svg>
-                        <span class="block-key">User Nickname<span class="block-value"><%= user.name %></span></span>
-                    </div>  <!-- nickname -->
-
-                    <div class="block-item">    <!-- email -->
-                        <svg class="ico -email" viewBox="0 0 512 512">
-                            <path d="M256 8C118.941 8 8 118.919 8 256c0 137.059 110.919 248 248 248 48.154 0 95.342-14.14 135.408-40.223 12.005-7.815 14.625-24.288 5.552-35.372l-10.177-12.433c-7.671-9.371-21.179-11.667-31.373-5.129C325.92 429.757 291.314 440 256 440c-101.458 0-184-82.542-184-184S154.542 72 256 72c100.139 0 184 57.619 184 160 0 38.786-21.093 79.742-58.17 83.693-17.349-.454-16.91-12.857-13.476-30.024l23.433-121.11C394.653 149.75 383.308 136 368.225 136h-44.981a13.518 13.518 0 0 0-13.432 11.993l-.01.092c-14.697-17.901-40.448-21.775-59.971-21.775-74.58 0-137.831 62.234-137.831 151.46 0 65.303 36.785 105.87 96 105.87 26.984 0 57.369-15.637 74.991-38.333 9.522 34.104 40.613 34.103 70.71 34.103C462.609 379.41 504 307.798 504 232 504 95.653 394.023 8 256 8zm-21.68 304.43c-22.249 0-36.07-15.623-36.07-40.771 0-44.993 30.779-72.729 58.63-72.729 22.292 0 35.601 15.241 35.601 40.77 0 45.061-33.875 72.73-58.161 72.73z"></path>
-                        </svg>
-                        <span class="block-key">Email<span class="block-value"><%= user.email %></span></span>
-                    </div>  <!-- email -->
-
-                    <div class="block-area" id="emailStatus">    <!-- token -->
-                        <% if(!user.token || user.token === 'not sent') { %>
-                            
-                            <svg class="ico -caution" viewBox="0 0 554.2 554.199">
-                                <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/>
-                            </svg>
-                            <span class="block-key">Authorized<span class="block-value -caution">Your email is not verified</span></span>
-                            <p class="block-value -caution">Verification email wasn't sent you yet</p>
-                            <form action="/user/sendToken" method="POST">
-                                <small class="block-value">You can send it manually</small>
-                                <input type="hidden" name="name" value="<%= user.name %>" readonly>
-                                <input type="hidden" name="email" value="<%= user.email %>" readonly>
-                                <button class="-btn" type="submit">Send</button>
-                            </form>
-
+            <!-- profile-info-box -->
+            <div class="profile-info-box">
+                <section class="profile-info-left">
+                    <h3 class="block-title">Profile INFO</h3>
+                    <p class="block-item">
+                        <span class="block-key">User Nickname</span>
+                        <span class="block-value"><%= user.name %></span>
+                    </p>
+                    <p class="block-item">
+                        <span class="block-key">Profile Created</span>
+                        <span class="block-value"><%= new Date(user.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.created).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span>
+                    </p>
+                    <p class="block-item">
+                        <span class="block-key">Email</span>
+                        <span class="block-value"><%= user.email %></span>
+                    </p>
+                    <% if(!user.token || user.token === 'not sent') { %>
+                        <p class="block-item">
+                            <span class="block-key">Authorized</span>
+                            <span class="block-value">Your email is not verified</span>
+                        </p>
+                        <p class="block-value -caution">Verification email wasn't sent you yet</p>
+                        <form action="/user/sendToken" method="POST">
+                            <small class="block-value">You can send it manually</small>
+                            <input type="hidden" name="name" value="<%= user.name %>" readonly>
+                            <input type="hidden" name="email" value="<%= user.email %>" readonly>
+                            <button class="-btn" type="submit">Send</button>
+                        </form>
+                    <% } else { %>
+                        <% if(user.token === 'verified') { %>
+                            <p class="block-item">    <!-- token -->
+                                <span class="block-key">Authorized</span>
+                                <span class="block-value -trusted">Trusted email</span>
+                            </p>  <!-- token -->
                         <% } else { %>
-                            <% if(user.token === 'verified') { %>
-                                <div class="block-item">    <!-- token -->
-                                    <svg class="ico -trusted" viewBox="0 0 455 455">
-                                        <path d="M0,0v455h455V0H0z M194.93,319.897l-87.837-87.837l21.213-21.213l66.625,66.624l131.764-131.763l21.213,21.213 L194.93,319.897z"/>
-                                    </svg>
-                                    <span class="block-key">Authorized<span class="block-value -trusted">Trusted email</span></span>
-                                </div>  <!-- token -->
-                            <% } else { %>
-                                <svg class="ico -warning" viewBox="0 0 554.2 554.199">
-                                    <path d="M538.5,386.199L356.5,70.8c-16.4-28.4-46.7-45.9-79.501-45.9c-32.8,0-63.1,17.5-79.5,45.9L12.3,391.6c-16.4,28.4-16.4,63.4,0,91.8C28.7,511.8,59,529.3,91.8,529.3H462.2c0.101,0,0.2,0,0.2,0c50.7,0,91.8-41.101,91.8-91.8C554.2,418.5,548.4,400.8,538.5,386.199z M316.3,416.899c0,21.7-16.7,38.3-39.2,38.3s-39.2-16.6-39.2-38.3V416c0-21.601,16.7-38.301,39.2-38.301S316.3,394.3,316.3,416V416.899z M317.2,158.7L297.8,328.1c-1.3,12.2-9.4,19.8-20.7,19.8s-19.4-7.7-20.7-19.8L237,158.6c-1.3-13.1,5.801-23,18-23H299.1C311.3,135.7,318.5,145.6,317.2,158.7z"/>
-                                </svg>
-                                <span class="block-key">Authorized<span class="block-value -warning">Your email is not verified</span></span>
-                                <p class="block-value -warning">Verification email was sent to you</p>
-                               
-                                <% if(user.msg.e != 'verTokenSent') { %>
-                                    <form action="/user/sendToken" method="POST">
-                                        <small class="block-value">Resend verification email</small>
-                                        <input type="hidden" name="name" value="<%= user.name %>" readonly>
-                                        <input type="hidden" name="email" value="<%= user.email %>" readonly>
-                                        <button class="-btn" type="submit">Resend</button>
-                                    </form>
-                                <% } %>
+                            <p class="block-item">    <!-- token -->
+                                <span class="block-key">Authorized</span>
+                                <span class="block-value -warning">Your email is not verified</span>
+                            </p>  <!-- token -->
+                            <p class="block-value -warning">Verification email was sent to you</p>
+                            <% if(user.msg.e != 'verTokenSent') { %>
+                                <form action="/user/sendToken" method="POST">
+                                    <small class="block-value">Resend verification email</small>
+                                    <input type="hidden" name="name" value="<%= user.name %>" readonly>
+                                    <input type="hidden" name="email" value="<%= user.email %>" readonly>
+                                    <button class="-btn" type="submit">Resend</button>
+                                </form>
                             <% } %>
                         <% } %>
-                    </div>  <!-- token -->
-
-                    <div class="block-item">    <!-- created -->
-                        <svg class="ico -clock" viewBox="0 0 125.668 125.668">
-                            <path d="M84.17,76.55l-16.9-9.557V32.102c0-2.541-2.061-4.601-4.602-4.601s-4.601,2.061-4.601,4.601v37.575c0,0.059,0.016,0.115,0.017,0.174c0.006,0.162,0.025,0.319,0.048,0.479c0.021,0.146,0.042,0.291,0.076,0.433c0.035,0.141,0.082,0.277,0.129,0.414c0.051,0.146,0.1,0.287,0.164,0.426c0.061,0.133,0.134,0.257,0.208,0.383c0.075,0.127,0.148,0.254,0.234,0.374c0.088,0.122,0.188,0.235,0.288,0.349c0.097,0.11,0.192,0.217,0.299,0.317c0.107,0.101,0.222,0.19,0.339,0.28c0.126,0.098,0.253,0.191,0.39,0.276c0.052,0.031,0.092,0.073,0.145,0.102L79.64,84.562c0.716,0.404,1.493,0.597,2.261,0.597c1.605,0,3.163-0.841,4.009-2.337C87.161,80.608,86.381,77.801,84.17,76.55z"/>	
-                            <path d="M62.834,0C28.187,0,0,28.187,0,62.834c0,34.646,28.187,62.834,62.834,62.834c34.646,0,62.834-28.188,62.834-62.834C125.668,28.187,97.48,0,62.834,0z M66.834,115.501v-9.167h-8v9.167c-24.77-1.865-44.823-20.872-48.292-45.167h9.459v-8h-9.988c0.258-27.558,21.716-50.126,48.821-52.167v9.167h8v-9.167c27.104,2.041,48.563,24.609,48.821,52.167h-9.487v8h8.958C111.657,94.629,91.605,113.636,66.834,115.501z"/>
-                        </svg>
-                        <span class="block-key">Profile Created<span class="block-value"><%= new Date(user.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.created).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
-                    </div>  <!-- created -->
-
-                    <div class="block-item">    <!-- session -->
-                        <svg class="ico -session" viewBox="0 0 384 512">
-                            <path d="M360 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24 0 90.965 51.016 167.734 120.842 192C75.016 280.266 24 357.035 24 448c-13.255 0-24 10.745-24 24v16c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24 0-90.965-51.016-167.734-120.842-192C308.984 231.734 360 154.965 360 64c13.255 0 24-10.745 24-24V24c0-13.255-10.745-24-24-24zm-64 448H88c0-77.458 46.204-144 104-144 57.786 0 104 66.517 104 144z"></path>
-                        </svg>
-                        <span class="block-key">Session Started<span class="block-value"><%= new Date(user.lastSESS).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.lastSESS).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
-                    </div>  <!-- session -->
-
-                    <div class="block-item">    <!-- expired -->
-                        <svg class="ico -expired" viewBox="0 0 384 512">
-                            <path d="M360 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24 0 90.965 51.016 167.734 120.842 192C75.016 280.266 24 357.035 24 448c-13.255 0-24 10.745-24 24v16c0 13.255 10.745 24 24 24h336c13.255 0 24-10.745 24-24v-16c0-13.255-10.745-24-24-24 0-90.965-51.016-167.734-120.842-192C308.984 231.734 360 154.965 360 64c13.255 0 24-10.745 24-24V24c0-13.255-10.745-24-24-24zm-75.078 384H99.08c17.059-46.797 52.096-80 92.92-80 40.821 0 75.862 33.196 92.922 80zm.019-256H99.078C91.988 108.548 88 86.748 88 64h208c0 22.805-3.987 44.587-11.059 64z"></path>
-                        </svg>
-                        <span class="block-key">Session will be expired at<span class="block-value"><%= new Date(SESS_EXP).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span></span>
-                    </div>  <!-- expired -->
-
-                    <% const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' }) %>
-
-                    <% if(user.balance != undefined) { %>
-                        <div class="block-item">    <!-- balance -->
-                            <% if(user.balance < 0) { %>
-                                <svg class="ico -warning" viewBox="0 0 640 512"><path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg>
-                                <span class="block-key -warning">Your balance is<span class="block-value -warning"><%= usCurrencyFormat.format(user.balance) %></span></span>
-                            <% } else { %>
-                                <svg class="ico -trusted" viewBox="0 0 640 512"><path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg>
-                                <span class="block-key">Your balance is<span class="block-value -trusted"><%= usCurrencyFormat.format(user.balance) %></span></span>
-                            <% } %>
-                        </div>  <!-- balance -->
                     <% } %>
 
+                    <details class="change-password-box">
+                        <summary class="block-link">Change password</summary>
+                        <form class="update-form" action="/user/password" method="POST">
+                            <div class="inputs">
+                                <input type="password" name='currentPassword' placeholder="Current Password" required />
+                                <input type="password" name='newPassword' placeholder="New Password" required />
+                            </div>
+                            <label class="show-password" for="showPasswords">
+                                <input type="checkbox" id='showPasswords'/>
+                                show passwords
+                            </label>
+                            <button class="-btn" type="submit">Submit</button>
+                        </form>
+                    </details>
+                </section>  <!-- profile-info-left -->
+
+                <section class="profile-info-right">
+                    <h3 class="block-title -high-red">INFO box</h3>
+                    <!-- Bolt Career offer if student -->
+                    <% if(user.student) { %>
+                        <div class="block-item">
+                            <p class="bolt-text">After graduation, you will most likely spend extensive time looking for maximum pay job. Sign in <a href="https://www.boltcdl.com/user/register" target="_blank" class="-info">Bolt Career</a> with your current email and let employers track your learning progress. Future employers will be able to see your employment preferences and contact you with job offers.</p>
+                        </div>
+                    <% } %>
+                    <br>
+                    <div class="block-item">    <!-- INFO -->
+                        <span class="block-key"><%= user.msg.class.toUpperCase() %></span>
+                        <span class="block-value -<%= user.msg.class %>"><%= user.msg.txt %></span>
+                    </div>  <!-- INFO -->
+                </section>
+
+                <section class="profile-info-left -top-border -bottom-box">
                     <% if(user.student) { %>
                         <div class="block-item">    <!-- tuition -->
-                            <svg class="ico -tuition" viewBox="0 0 696.662 696.663">
-                                <path d="M56.961,191.577l17.977-6.867l3.409,1.98l-14.731,8.309l-0.337,7.479c-0.006,0-14.225,84.932,1.541,119.941 c0,0,26.114,6.882,44.561-12.832L86.559,208.024l-2.389-8.308l31.004-17.036l-0.678,6.455L92.083,204.3l12.618,0.795l152.824,2.784 l127.957-83.623l85.145-61.274L209.247,40.19L0,198.47l55.322,3.497L56.961,191.577z M228.317,106.424 c15.936-4.567,31.12-0.413,33.917,9.315c2.798,9.714-7.853,21.309-23.781,25.907c-15.928,4.579-31.113,0.413-33.912-9.301 C201.737,122.618,212.388,111.022,228.317,106.424z M89.278,303.836l-5.249,1.504c0,0-5.224-27.995-5.512-58.6L89.278,303.836z"/>
-                                <path d="M696.662,622.058l-125.14-78.212V243.516H403.649c7.181-10.892,10.025-21.644,7.223-31.383 c-0.072-0.27-0.23-0.512-0.311-0.771l-20.559-71.379l-127.952,83.626l-152.823-2.787l12.239,42.514l8.537,29.65 c2.767,9.604,10.716,17.107,22.308,22.51v228.354l-125.138,78.21v34.413h669.488V622.058z M287.831,312.978 c28.315-8.164,53.579-19.371,73.847-31.921h169.175v226.735H183.596V323.877C212.137,327.469,249.122,324.122,287.831,312.978z M166.682,554.793h390.47l56.604,40.673H110.078L166.682,554.793z"/>
-                            </svg>
                             <% if(tuition) { %>
                                 <% if(tuition.avLessonsRate < 0.25) { %>
-                                    <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -orange"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</span></a>
+                                    <span class="block-key">Learning Center</span>
+                                    <a href='/user/tuition' class="block-value -big-data -caution"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
                                 <% } else { %>
                                     <% if(tuition.avLessonsRate < 0.85) { %>
-                                        <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -trusted"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</span></a>
+                                        <span class="block-key">Learning Center</span>
+                                        <a href='/user/tuition' class="block-value -big-data -medium"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
                                     <% } else { %>
                                         <% if(tuition.avLessonsRate > 0.849) { %>
-                                            <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -trusted">Sufficient level</span></a>
+                                            <span class="block-key">Learning Center</span>
+                                            <a href='/user/tuition' class="block-value -big-data -trusted">Sufficient level</a>
                                         <% } else { %>
-                                            <a class="block-key" href='/user/tuition'>Learning Center<span class="block-value -orange">Unknown level</span></a>
+                                            <span class="block-key">Learning Center</span>
+                                            <a href='/user/tuition' class="block-value -big-data -warning">Unknown level</a>
                                         <% } %>
                                     <% } %>
                                 <% } %>
                             <% } else { %>
-                                <span class="block-key">Learning Center<span class="block-value -warning">Lessons aren't scheduled</span></span>
+                                <span class="block-key">Learning Center</span>
+                                <span class="block-value -warning">Lessons aren't scheduled</span>
                             <% } %>
                         </div>  <!-- tuition -->
                     <% } %>
+                </section>
 
-                    <form action="/user/logout" method="POST">
-                        <button class="-btn -big-btn" type="submit">Logout</button>
-                    </form>
+                <section class="profile-info-right -top-border -bottom-box -right">
+                    <div class="block-item">    <!-- Catalog -->
+                        <span class="block-key">Catalog</span>
+                        <a href='../catalog' target="_blank" class="block-value block-link">Download</a>
+                    </div>  <!-- Catalog -->
+                </section>
 
-                </section>  <!-- profile-info -->
-            </div>  <!-- right-side -->
+            </div>  <!-- profile-info-box -->
 
 
-            <!-- 2ND ROW -->
-            <div class="left-side">
-                <h3 class="block-title">Update Password</h3>
-                <form class="update-form" action="/user/password" method="POST">
-                    <div class="inputs">
-                        <input type="password" name='currentPassword' placeholder="Current Password" required />
-                        <input type="password" name='newPassword' placeholder="New Password" required />
-                    </div>
-                    <label class="show-password" for="showPasswords">
-                        <input type="checkbox" id='showPasswords'/>
-                        show passwords
-                    </label>
-                    <button class="-btn -big-btn -hlt" type="submit">Submit</button>
-                </form>
-            </div>   <!-- left-side -->
+
             
-            <div class="right-side">
-                <h3 class="block-title">INFOBOX</h3>
-                <div class="block-item -infobox">    <!-- Catalog -->
-                    <span class="block-key">Catalog<a href='../catalog' target="_blank" class="block-value -info">download</a></span>
-                </div>  <!-- Catalog -->
-                <div class="block-item -infobox">    <!-- INFO -->
-                    <span class="block-key"><%= user.msg.class.toUpperCase() %><span class="block-value -<%= user.msg.class %>"><%= user.msg.txt %></span></span>
-                </div>  <!-- INFO -->
 
-                <!-- Bolt Career offer if student -->
-                <% if(user.student) { %>
-                    <section class="bolt-career-box">
-                        <p class="bolt-text">After graduation, you will most likely spend extensive time looking for maximum pay job. Sign in <a href="https://www.boltcdl.com/user/register" target="_blank">Bolt Career</a> with your current email and let employers track your learning progress. Future employers will be able to see your employment preferences and contact you with job offers.</p>
-                    </section>
-                <% } %>
-            </div>  <!-- right-side -->
+
+
+            
 
             <% if(user.student) { %>
-                <h3 class="block-title">Attendance Info</h3>
-                
-                <!-- TTT -->
-                <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
-                <% function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` } %>
-                <% function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 } %>
+                <div class="attendance-info">
+                    <section class="profile-info-left">
+                        <h3 class="block-title">Attendance INFO</h3>
+                    </section>
+                    
+                    <!-- TTT -->
+                    <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
+                    <% function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` } %>
+                    <% function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 } %>
+    
+                    <section class="profile-info-right">
+                        <% if (verTTT) { %>
+                            <div class="block-item">    <!-- TTT -->
+                                <span class="block-key">Total Tuition Time</span>
+                                <span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span>
+                            </div>  <!-- TTT -->
+                        <% } %>
+                        <div class="block-item">    <!-- Visiting Type -->
+                            <span class="block-key">Visiting Type</span>
+                            <span class="block-value"><%= visiting %>*</span>
+                        </div>  <!-- Visiting Type -->
+                    </section>
+                </div>  <!-- attendance-info -->
 
-                <% if (verTTT) { %>
-                    <div class="block-item">    <!-- TTT -->
-                        <span class="block-key">Total Tuition Time<span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span></span>
-                    </div>  <!-- TTT -->
-                <% } %>
 
-                <div class="block-item">    <!-- Visiting Type -->
-                    <span class="block-key">Visiting Type<span class="block-value"><%= visiting %>*</span></span>
-                </div>  <!-- Visiting Type -->
-
-                
                 <!-- QR Clocks -->
                 <% if (verClocks) { %>
 
@@ -347,9 +313,10 @@
 
                     </div>  <!-- clocks-table -->
 
-                    <span class="block-value -info1">* The duration of your presence in the TTA when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. TTA reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows TTA not to take into account the hours for such a day.</span>
+                    <p class="block-value -info1">* The duration of your presence in the TTA when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. TTA reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows TTA not to take into account the hours for such a day.</p>
 
                 <% } %>     <!-- if there are any clocks -->
+
 
                 <!-- SCORINGS -->
                 <% if(scorings) { %>

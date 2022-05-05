@@ -18,6 +18,10 @@ const test2_backing = [
                 item: 'Final Position',
                 checks: [ '0', '10' ]
             },
+            {
+                item: 'Total Fail',
+                checks: [ '100' ]
+            },
         ]
     },  // end of block
     {
@@ -39,6 +43,10 @@ const test2_backing = [
                 item: 'Final Position',
                 checks: [ '0', '10' ]
             },
+            {
+                item: 'Total Fail',
+                checks: [ '100' ]
+            },
         ]
     },  // end of block
     {
@@ -59,6 +67,10 @@ const test2_backing = [
             {
                 item: 'Final Position',
                 checks: [ '0', '10' ]
+            },
+            {
+                item: 'Total Fail',
+                checks: [ '100' ]
             },
         ]
     },  // end of block

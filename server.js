@@ -20,6 +20,12 @@ if (process.env.NODE_ENV === 'production') {
 // saving ROOT DIR into globals to use in other routes
 global.__basedir = __dirname
 
+
+// MONGO db via MONGOOSE
+const mongoose = require('mongoose')
+mongoose.connect(process.env.MONGO_URI_USERS)
+
+
 // set the view engine to ejs
 app.set('view engine', 'ejs')
 
