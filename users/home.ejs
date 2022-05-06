@@ -22,6 +22,12 @@
 
         function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
         function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' }
+        function formatTime(textDate) { return textDate ? new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false, hour: '2-digit', minute:'2-digit'}) : 'NO' }
+
+        function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` }
+        function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` }
+        function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 }
+        
         function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
     %>
 
@@ -36,7 +42,7 @@
                 <span class="welcome-header"><%= prompt %></span>
             </p>
             <p class="welcome-debt">
-                <span class="welcome-text">Balance :</span>
+                <span class="welcome-text -hide-if-450">Balance :</span>
                 <span class="welcome-header"><%= balance %></span>
             </p>
         </div>
@@ -49,14 +55,15 @@
         </form>
     </header>
 
+
+    <div class="dummy-header">Dummy</div>
+
     
     <div class="profile-box">
-
         <% if (!locals.user) { %>
             <h2 class="no-user-issue">No info about user has been found...</h2>
             <h3 class="no-user-issue">try to login please properly</h3>
         <% } else { %>
-
             <!-- title-box -->
             <section class="title-box">
                 <h1 class="main-title">
@@ -180,7 +187,7 @@
                     <% } %>
                     <br>
                     <div class="block-item">    <!-- INFO -->
-                        <span class="block-key"><%= user.msg.class.toUpperCase() %></span>
+                        <span class="block-key -margin-right-big"><%= user.msg.class.toUpperCase() %></span>
                         <span class="block-value -<%= user.msg.class %>"><%= user.msg.txt %></span>
                     </div>  <!-- INFO -->
                 </section>
@@ -216,7 +223,7 @@
 
                 <section class="profile-info-right -top-border -bottom-box -right">
                     <div class="block-item">    <!-- Catalog -->
-                        <span class="block-key">Catalog</span>
+                        <span class="block-key -margin-right-big">Catalog</span>
                         <a href='../catalog' target="_blank" class="block-value block-link">Download</a>
                     </div>  <!-- Catalog -->
                 </section>
@@ -224,131 +231,93 @@
             </div>  <!-- profile-info-box -->
 
 
-
-            
-
-
-
-            
-
             <% if(user.student) { %>
                 <div class="attendance-info">
                     <section class="profile-info-left">
                         <h3 class="block-title">Attendance INFO</h3>
                     </section>
-                    
-                    <!-- TTT -->
-                    <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
-                    <% function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` } %>
-                    <% function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 } %>
-    
-                    <section class="profile-info-right">
-                        <% if (verTTT) { %>
-                            <div class="block-item">    <!-- TTT -->
-                                <span class="block-key">Total Tuition Time</span>
-                                <span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span>
-                            </div>  <!-- TTT -->
-                        <% } %>
-                        <div class="block-item">    <!-- Visiting Type -->
-                            <span class="block-key">Visiting Type</span>
-                            <span class="block-value"><%= visiting %>*</span>
-                        </div>  <!-- Visiting Type -->
+                    <section class="profile-info-right -flex-right">
+                        <div class="right-position-block">
+                            <% if (verTTT) { %>
+                                <div class="block-item">    <!-- TTT -->
+                                    <span class="block-key">Total Tuition Time</span>
+                                    <span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span>
+                                </div>  <!-- TTT -->
+                            <% } %>
+                            <div class="block-item">    <!-- Visiting Type -->
+                                <span class="block-key">Visiting Type</span>
+                                <span class="block-value"><%= visiting %>*</span>
+                            </div>  <!-- Visiting Type -->
+                        </div>
                     </section>
                 </div>  <!-- attendance-info -->
 
-
                 <!-- QR Clocks -->
                 <% if (verClocks) { %>
-
                     <div class="clocks-table">
                         <div class="clocks-table-cell -header">DATE</div>
-                        <div class="clocks-table-cell -header -hide-if-small">KEY</div>
                         <div class="clocks-table-cell -header">IN</div>
-                        <div class="clocks-table-cell -header -hide-if-small">IN GEO</div>
                         <div class="clocks-table-cell -header">OUT</div>
-                        <div class="clocks-table-cell -header -hide-if-small">OUT GEO</div>
                         <div class="clocks-table-cell -header">Duration</div>
-                        <div class="clocks-table-cell -header -hide-if-small">Ratio</div>
-
                         <% verClocks.forEach(clock => { %>
                             <% let duration = clock.duration / (1000 * 60 *60) %>
-                            <!-- Date, key -->
-                            <div class="clocks-table-cell"><%= new Date(clock.date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-                            <div class="clocks-table-cell -hide-if-small"><%= clock.dateKey %></div>
-                            
-                            <!-- IN & coord -->
-                            <div class="clocks-table-cell"><%= new Date(clock.in).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-                            <% if (!isNaN(clock.inlat) && !isNaN(clock.inlon)) { %>
-                                <a class="clocks-table-cell -hide-if-small" href="http://www.google.com/maps/place/<%= clock.inlat %>,<%= clock.inlon %>" target="_blank">
-                                    <%= normCOORD(clock.inlat) %>,<%= normCOORD(clock.inlon) %>
-                                </a>
-                            <% } else { %>
-                                <div class="clocks-table-cell -hide-if-small"><%= clock.inlat %>,<%= clock.inlon %></div>
-                            <% } %>
-    
-                            <!-- OUT & coord -->
+                            <div class="clocks-table-cell -first-col"><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                            <div class="clocks-table-cell"><%= formatTime(clock.in) %></div>
                             <% if( !isNaN(clock.out) ) { %>
-                                <div class="clocks-table-cell"><%= new Date(clock.out).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+                                <div class="clocks-table-cell"><%= formatTime(clock.out) %></div>
                             <% } else { %>
-                                <div class="clocks-table-cell -orange">NO</div>
+                                <div class="clocks-table-cell -warning">NO</div>
                             <% } %>
-    
-                            <% if (!isNaN(clock.outlat) && !isNaN(clock.outlon)) { %>
-                                <a class="clocks-table-cell -hide-if-small" href="http://www.google.com/maps/place/<%= clock.outlat %>,<%= clock.outlon %>" target="_blank">
-                                    <%= normCOORD(clock.outlat) %>,<%= normCOORD(clock.outlon) %>
-                                </a>
-                            <% } else { %>
-                                <div class="clocks-table-cell -hide-if-small"><%= clock.outlat %>,<%= clock.outlon %></div>
-                            <% } %>
-    
-                            <!-- duration -->
                             <% if( !isNaN(clock.out) ) { %>
                                 <div class="clocks-table-cell"><%= strTTT(duration) %></div>
-                                <div class="clocks-table-cell -hide-if-small"><%= normTTT(duration) %></div>
                             <% } else { %>
-                                <div class="clocks-table-cell -orange"><%= strTTT(duration) %></div>
-                                <div class="clocks-table-cell -orange -hide-if-small"><%= normTTT(duration) %></div>
+                                <div class="clocks-table-cell -warning"><%= strTTT(duration) %></div>
                             <% } %>
                         <% }) %>
-
                     </div>  <!-- clocks-table -->
-
                     <p class="block-value -info1">* The duration of your presence in the TTA when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. TTA reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows TTA not to take into account the hours for such a day.</p>
-
                 <% } %>     <!-- if there are any clocks -->
 
 
                 <!-- SCORINGS -->
                 <% if(scorings) { %>
-                    <h3 class="block-title">Skill Scorings</h3>
-                    <div class="block-item">
-                        <span class="block-key">Can Visit Teaching<span class="block-value"><%= scorings.isAllowed ? "Yes" : "No" %></span></span>
-                    </div>
+                    <div class="scoring-info">
+                        <section class="profile-info-left">
+                            <h3 class="block-title">Skill SCORINGS</h3>
+                        </section>
+                        <section class="profile-info-right -flex-right">
+                            <div class="right-position-block">
+                                <div class="block-item">
+                                    <span class="block-key">Can Visit Teaching</span>
+                                    <span class="block-value <%= scorings.isAllowed ? '-trusted' : '-warning' %>" ><%= scorings.isAllowed ? "Yes" : "No" %></span>
+                                </div>
+                                <% if(scorings.lastDone) { %>
+                                    <div class="block-item">
+                                        <span class="block-key">Last Scoring Done</span>
+                                        <span class="block-value"><%= formatDateTime(scorings.lastDone) %></span>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </section>
+                    </div>  <!-- attendance-info -->
+                    
                     <% if(scorings.lastDone) { %>
-                        <div class="block-item">
-                            <span class="block-key">
-                                Last Scoring Done
-                                <span class="block-value">
-                                    <%= new Date(scorings.lastDone).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>
-                                    <%= new Date(scorings.lastDone).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %>
-                                </span>
-                            </span>
-                        </div>
                         <div class="scoring-table">
                             <div class="scoring-table-cell -scoring-header">Type</div>
                             <div class="scoring-table-cell -scoring-header">Date</div>
-                            <div class="scoring-table-cell -scoring-header -hide-if-small">Instructor</div>
+                            <div class="scoring-table-cell -scoring-header -hide-if-700">Instructor</div>
                             <div class="scoring-table-cell -scoring-header">Result</div>
-                            <div class="scoring-table-cell -scoring-header">Certificate</div>
+                            <div class="scoring-table-cell -scoring-header -hide-if-450">Certificate</div>
 
                             <% const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity] %>
                             <% const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving'] %>
 
                             <% scorArrays.forEach((scorArray, index) => { %>
                                 <% scorArray.forEach(scor => { %>
-                                    <a href="/user/scoring-print?scoring=<%= scorings._id %>&scoringform=<%= scor._id %>" class="scoring-table-cell"><%= scorTitles[index] %></a>
-                                    <div class="scoring-table-cell"><%= formatDateTime(scor.created) %></div>
-                                    <div class="scoring-table-cell -hide-if-small"><%= scor.instructor %></div>
+                                    <a class="scoring-table-cell -first-col" href="/user/scoring-print?scoring=<%= scorings._id %>&scoringform=<%= scor._id %>"><%= scorTitles[index] %></a>
+                                    <div class="scoring-table-cell -hide-if-450"><%= formatDateTime(scor.created) %></div>
+                                    <div class="scoring-table-cell -show-if-450"><%= formatDate(scor.created) %></div>
+                                    <div class="scoring-table-cell -hide-if-700"><%= scor.instructor %></div>
 
                                     <% if (scor.result) { %>
                                         <div class="scoring-table-cell -passed">passed</div>
@@ -357,9 +326,9 @@
                                     <% } %>
 
                                     <% if (scor.certificate) { %>
-                                        <div class="scoring-table-cell -passed">Yes</div>
+                                        <div class="scoring-table-cell -passed -hide-if-450">Yes</div>
                                     <% } else { %>
-                                        <div class="scoring-table-cell -failed">No</div>
+                                        <div class="scoring-table-cell -failed -hide-if-450">No</div>
                                     <% } %>
 
                                 <% }) %>
@@ -380,24 +349,28 @@
                     }
                 %>
                 <% if(user.student.schedule) { %>
-                    <h3 class="block-title">Scheduled Appointments</h3>
-                    <div class="block-item">
-                        <span class="block-key">
-                            Found appointments
-                            <span class="block-value">
-                                <%= user.student.schedule.appointments.length %>
-                            </span>
-                            <a class="schedule-more" href="/user/schedule">(schedule more...)</a>
-                        </span>
-                    </div>
+                    <div class="appointments-info">
+                        <section class="profile-info-left">
+                            <h3 class="block-title">Scheduled APPOINTMENTS</h3>
+                        </section>
+                        <section class="profile-info-right -flex-right">
+                            <div class="right-position-block">
+                                <div class="block-item">
+                                    <span class="block-key -margin-right-big">Found appointments</span>
+                                    <span class="block-value -margin-right-big"><%= user.student.schedule.appointments.length %></span>
+                                    <a class="block-link" href="/user/schedule">Schedule more</a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>  <!-- appointments-info -->
                     <div class="skills-test-table">
                         <div class="skills-test-table-cell -skills-test-header">Type</div>
                         <div class="skills-test-table-cell -skills-test-header">Date Time</div>
                         <div class="skills-test-table-cell -skills-test-header">Location</div>
-                        <div class="skills-test-table-cell -skills-test-header -hide-if-small">Transmission</div>
+                        <div class="skills-test-table-cell -skills-test-header -hide-if-450">Transmission</div>
 
                         <% user.student.schedule.appointments.forEach(appointment => { %>
-                            <div class="skills-test-table-cell"><%= calendarTitles[appointment.appType] %></div>
+                            <div class="skills-test-table-cell -first-col"><%= calendarTitles[appointment.appType] %></div>
                             <% 
                                 let y = appointment.appDate.getUTCFullYear()
                                 let m = leadingZero(appointment.appDate.getUTCMonth())
@@ -408,7 +381,7 @@
                             %>
                             <div class="skills-test-table-cell"><%= txtDate %></div>
                             <div class="skills-test-table-cell"><%= appointment.appLocation %></div>
-                            <div class="skills-test-table-cell -hide-if-small"><%= appointment.appTransmission %></div>
+                            <div class="skills-test-table-cell -hide-if-450"><%= appointment.appTransmission %></div>
                         <% }) %>
                     </div>      <!-- skills-test table -->
                 <% } %>     <!-- if there are any scorings -->
@@ -416,59 +389,58 @@
 
                 <!-- Skills Tests History -->
                 <% if(user.student.skillsTest) { %>
-                    <h3 class="block-title">Scheduled Skills Test</h3>
-                    <div class="block-item">
-                        <span class="block-key">Found appointments<span class="block-value"><%= user.student.skillsTest.length %></span></span>
-                    </div>
+                    <div class="skills-info">
+                        <section class="profile-info-left">
+                            <h3 class="block-title">Scheduled SKILLS TEST</h3>
+                        </section>
+                        <section class="profile-info-right -flex-right">
+                            <div class="right-position-block">
+                                <div class="block-item">
+                                    <span class="block-key -margin-right-big">Found skills test appointments</span>
+                                    <span class="block-value"><%= user.student.skillsTest.length %></span>
+                                </div>
+                            </div>
+                        </section>
+                    </div>  <!-- skills-info -->
                     <div class="skills-test-table">
                         <div class="skills-test-table-cell -skills-test-header">Type</div>
                         <div class="skills-test-table-cell -skills-test-header">Date Time**</div>
                         <div class="skills-test-table-cell -skills-test-header">Location</div>
-                        <div class="skills-test-table-cell -skills-test-header -hide-if-small">Endorsements</div>
-
+                        <div class="skills-test-table-cell -skills-test-header -hide-if-450">Endorsements</div>
                         <% user.student.skillsTest.forEach(test => { %>
-                            <div class="skills-test-table-cell"><%= test.testType %></div>
+                            <div class="skills-test-table-cell -first-col"><%= test.testType %></div>
                             <div class="skills-test-table-cell"><%= formatDateTime(test.scheduledDate) %></div>
                             <div class="skills-test-table-cell"><%= test.testLocation %></div>
-                            <div class="skills-test-table-cell -hide-if-small"><%= test.endorsements %></div>
+                            <div class="skills-test-table-cell -hide-if-450"><%= test.endorsements %></div>
                         <% }) %>
                     </div>      <!-- skills-test table -->
                     <span class="block-value -info1">** Double-check exact time with the school's manager, because some skills test locations do not provide timeframes, and mentioned below is just a preliminary or general.</span>
                 <% } %>     <!-- if there are any scorings -->
-
 
             <% } %>     <!-- USER is a STUDENT -->
         <% } %>     <!-- USER is OK -->
     </div>  <!--- profile-box -->
 
 
-    <div class="nav-bottom">
-        <div class="nav-bottom-box">
-            <div class="nav-left">
-                <div class="nav-left-item">Toro Trucking Academy</div>
-            </div>
-            <div class="nav-right">
-                <div class="nav-right-item">About Us</div>
-                <a class="nav-right-item" href="/cdl-courses">CDL Programs</a>
-                <a class="nav-right-item" href="/faq">FAQs</a>
-                <a class="nav-right-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
-                <div class="nav-right-item">Contact Us</div>
-            </div>
+    <footer>
+        <div class="footer-left">
+            <span>© BoltCDL</span>
         </div>
-        
-        
-    </div>      <!-- nav-bottom -->
-    <div class="bolt-footer">
-        © 2022 designed by BOLT
-        <a href="https://www.boltcdl.com" target="_blank">
-            <svg class='bolt-ico' viewBox="0 0 320 512"><path d="M296 160H180.6l42.6-129.8C227.2 15 215.7 0 200 0H56C44 0 33.8 8.9 32.2 20.8l-32 240C-1.7 275.2 9.5 288 24 288h118.7L96.6 482.5c-3.6 15.2 8 29.5 23.3 29.5 8.4 0 16.4-4.4 20.8-12l176-304c9.3-15.9-2.2-36-20.7-36z"></path></svg>
-        </a>
-        <a href="mailto:info@boltcdl.com">info@boltcdl.com</a>
-        <span class="bolt-tel">+1253.200.4466</span>
-    </div>
-    
+        <div class="footer-center">
+            <span class="footer-item">About Us</span>
+            <a class="footer-item" href="/cdl-courses">CDL Programs</a>
+            <a class="footer-item" href="/faq">FAQs</a>
+            <a class="footer-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
+            <span class="footer-item">Contact Us</span>
+        </div>
+        <div class="footer-right">
+            <span>designed by</span>
+            <a href="https://www.boltcdl.com" target="_blank">BOLT</a>
+        </div>
+    </footer>
 
 
+  
     <script defer>
         localStorage.setItem('id', '<%- user._id %>')
                 

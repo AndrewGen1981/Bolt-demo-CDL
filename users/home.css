@@ -16,15 +16,19 @@
 }
 
 /* @HEADER */
-header {
+header, .dummy-header {
     padding: 0.93rem 1.33rem;
     width: 100%;
-
+}
+header {
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
 
     background: #0F1C2F;
+    
+    position: fixed;
+    top: 0;
 }
 
 .left-box, .right-box {
@@ -208,6 +212,20 @@ header {
     width: 50%;
     min-height: 4rem;
 }
+
+.-margin-right-big {
+    margin-right: 1.8rem;
+    min-width: unset !important;
+}
+.-flex-right {
+    display: flex;
+    justify-content: right;
+}
+.right-position-block {
+    width: fit-content;
+    text-align: left;
+}
+
 .-top-border {
     border-top: 2px solid #C4C4C4;
 }
@@ -225,7 +243,6 @@ header {
     line-height: 1.87rem;
 
     color: #151515;
-
     margin-bottom: 2.4rem;
 }
 .-high-red {
@@ -280,16 +297,16 @@ header {
 }
 
 .-warning, .-error {
-    color: #EF5050;
+    color: #EF5050 !important;
 }
 .-caution, .-issue {
-    color: #bfbf04;
+    color: #bfbf04 !important;
 }
 .-medium, .-info {
-    color: #4377B5;
+    color: #4377B5 !important;
 }
 .-trusted {
-    color: #53b914;
+    color: #53b914 !important;
 }
 
 .change-password-box {
@@ -331,8 +348,18 @@ header {
 }
 
 
-/* Attendance Info */
-.attendance-info {
+/* 
+    Attendance Info
+    Scoring Info
+    Appointments
+    Skills tests
+*/
+.attendance-info,
+.scoring-info,
+.appointments-info,
+.skills-info {
+    margin-top: 3.67rem;
+
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -340,19 +367,60 @@ header {
 }
 .clocks-table {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     margin-bottom: 1.8rem;
 }
-.clocks-table-cell {
-    text-align: center;
+.scoring-table {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
 }
-.clocks-table-cell:not(.-header) {
-    margin-bottom: 0.5rem;
+.skills-test-table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }
-.-header {
+
+.-header,
+.-scoring-header,
+.-skills-test-header {
     padding: 0.3rem 1rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+
+    color: #3C3C3C;
+    margin-bottom: 1rem;
+}
+
+.-header {
     background-color: #FFF2C3;
-    margin-bottom: 1.2rem;
+}
+.-scoring-header,
+.-skills-test-header {
+    background-color: #E8E8E8;
+}
+
+.clocks-table-cell,
+.scoring-table-cell,
+.skills-test-table-cell {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2rem;
+    text-align: center;
+
+    color: #3C3C3C;
+}
+
+.clocks-table-cell + .-first-col,
+.skills-test-table-cell + .-first-col {
+    margin-left: 1.2rem;
+    text-align: left;
+}
+.scoring-table-cell + .-first-col {
+    margin-left: 1.2rem;
+    text-decoration: underline;
+    color: #4377B5;
+    text-align: left;
 }
 
 .-info1 {
@@ -365,8 +433,213 @@ header {
     margin-bottom: 4rem;
 }
 
+.-passed {
+    color: #A2D092;
+    text-transform: capitalize;
+}
+.-failed {
+    color: #F27878;
+    text-transform: capitalize;
+}
 
 
-.-hidden {
+/* FOOTER */
+footer {
+    margin-top: 10rem;
+    padding: 0.93rem 1.33rem;
+    width: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #0F1C2F;
+}
+.footer-left {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    color: #657389;
+}
+.footer-center {
+    width: calc(var(--max-width) * 0.6);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.footer-item {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    text-transform: uppercase;
+    text-decoration: none;
+
+    color: #FFFFFF;
+}
+.footer-right span {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    color: #657389;
+}
+.footer-right a {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+
+.-show-if-450, .-hidden {
     display: none;
+}
+
+
+@media (max-width: 1300px) {
+    :root {
+        --max-width: 85%;
+        font-size: 14px;
+    }
+}
+@media (max-width: 1145px) {
+    :root {
+        --max-width: 90%;
+        font-size: 13px;
+    }
+    header .left-box span {
+        display: none;
+    }
+}
+@media (max-width: 1000px) {
+    .forms-box {
+        flex-direction: column;
+    }
+    .small-block-title {
+        max-width: none;
+        font-size: 0.87rem;
+        line-height: 1.07rem;
+        text-transform: uppercase;
+
+        color: #151515;
+        margin-bottom: 1.4rem;
+    }
+    .forms-box a {
+        min-width: 22.67rem;
+        text-align: center;
+        margin-bottom: 0.87rem;
+    }
+}
+@media (max-width: 865px) {
+    .profile-info-box {
+        flex-direction: column;
+    }
+    .profile-info-left,
+    .profile-info-right {
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+    }
+    .scoring-table {
+        grid-template-columns: 1fr 1fr 1fr 0.5fr 0.5fr;
+    }
+}
+@media (max-width: 755px) {
+    :root {
+        font-size: 15px;
+    }
+    .html, body {
+        overflow-x: hidden;
+    }
+    .center-box {
+        width: calc(var(--max-width) * 0.85);
+    }
+    .title-box {
+        flex-direction: column;
+    }
+    .main-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .main-bold {
+        margin-bottom: 1.8rem;
+    }
+    .forms-box {
+        margin: 0 -3rem 3rem -3rem;
+        border-radius: unset;
+    }
+    .profile-info-left,
+    .profile-info-right {
+        width: 100%;
+    }
+    .profile-info-left + .-top-border {
+        border: none;        
+    }
+
+    .profile-info-left {
+        min-height: unset;
+    }
+    .profile-info-left .block-title {
+        margin-bottom: 1rem;
+    }
+    .right-position-block {
+        width: 100%;
+    }
+    .right-position-block * {
+        font-size: 0.8rem;
+        line-height: 1.53rem;
+    }
+
+    .clocks-table-cell,
+    .scoring-table-cell,
+    .skills-test-table-cell {
+        font-size: 0.83rem;
+    }
+    .scoring-table {
+        grid-template-columns: 1fr 1fr 0.5fr 0.5fr;
+    }
+    .-hide-if-700 {
+        display: none;
+    }
+}
+
+@media (max-width: 450px) {
+    .welcome-prompt {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .scoring-table {
+        grid-template-columns: 1fr 0.5fr 0.5fr;
+    }
+    .-hide-if-450 {
+        display: none;
+    }
+    .-show-if-450 {
+        display: block;
+    }
+
+    .skills-test-table {
+        grid-template-columns: 1fr 1fr 0.5fr;
+    }
+
+    footer {
+        margin-top: 6.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .footer-center {
+        margin: 2rem 0;
+        width: var(--max-width);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
 }
