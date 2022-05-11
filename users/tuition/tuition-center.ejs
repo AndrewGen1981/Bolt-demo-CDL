@@ -7,127 +7,144 @@
     <title>TTA | Tuition Center</title>
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/fonts.css">
-    <link rel="stylesheet" href="../../static/css/brix-family.css">
-
-    <link rel="stylesheet" href="../../static/css/colors.css">
-
     <link rel="stylesheet" href="/users/tuition/tuition.css">
 
 </head>
 <body>
-    
-    <h1 class="tuition-center-title">~ Toro Learning Center ~</h1>
-    <h3 class="center-subtitle">Here are our video tutorials, each contains video material and a test. You have the ability to track your progress and test status. To be admitted to practical classes, a student must pass all courses and tests.</h3>
-    
-    <div class="tuition-center-box">
-        <nav class="center-nav"><a href="/user/home">back home</a></nav>
-        
-        <form action="/user/tuition" method="POST" class="videoListInner" id="videoListInner">
 
-            <% let lesson %>
+    <!-- TOOLS and constants -->
+    <%
+        const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' })
+        const hello = `Hello${locals.fullName ? ',' : '!'}`
+        const prompt = locals.fullName ? `${locals.fullName}` : ''
+        const balance = locals.balance = !undefined ? `${usCurrencyFormat.format(locals.balance)}` : 'no data'
+    %>
 
-            <% listOfLessons.forEach( (video, index) => { %>
-                <section class="videoItem">
-                    <section class='videoSection'>
-                        <img class='videoThumb' src='//img.youtube.com/vi/<%= video %>/0.jpg' data-video='<%= video %>' onclick="videoClick(this)">
-                        <input class='videoRadio' type="radio" name='video' id='<%= video %>' value='<%= video %>' />
+    <header>
+        <a href="https://www.boltcdl.com" class="left-box">
+            <img src="/static/images/logo-small.png" alt="Bolt small logo">
+            <span>Home</span>
+        </a>
+        <div class="center-box">
+            <p class="welcome-prompt">
+                <span class="welcome-text"><%= hello %></span>
+                <span class="welcome-header"><%= prompt %></span>
+            </p>
+            <a href="/user/home" class="back-to-profile">Profile</a>
+            <p class="welcome-debt">
+                <span class="welcome-text -hide-if-450">Balance :</span>
+                <span class="welcome-header"><%= balance %></span>
+            </p>
+        </div>
+        <form class="right-box" action="/user/logout" method="POST">
+            <button type="submit">
+                <svg class="btn-ico -sign-out" viewBox="0 0 25 21">
+                    <path d="M10.2041 18.8964C10.2041 18.939 10.2094 19.0454 10.22 19.2156C10.2307 19.3859 10.2333 19.5268 10.228 19.6386C10.2227 19.7503 10.2067 19.8753 10.1802 20.0136C10.1536 20.1519 10.1004 20.2557 10.0207 20.3248C9.94101 20.394 9.83206 20.4286 9.69388 20.4286H4.59184C3.32696 20.4286 2.24543 19.979 1.34726 19.08C0.449086 18.1809 0 17.0983 0 15.8321V4.59643C0 3.33028 0.449086 2.24767 1.34726 1.3486C2.24543 0.449535 3.32696 0 4.59184 0H9.69388C9.83206 0 9.95164 0.0505394 10.0526 0.151618C10.1536 0.252697 10.2041 0.372396 10.2041 0.510714C10.2041 0.553274 10.2094 0.659673 10.22 0.829911C10.2307 1.00015 10.2333 1.14113 10.228 1.25285C10.2227 1.36456 10.2067 1.48958 10.1802 1.6279C10.1536 1.76622 10.1004 1.86996 10.0207 1.93912C9.94101 2.00828 9.83206 2.04286 9.69388 2.04286H4.59184C3.89031 2.04286 3.28975 2.29289 2.79018 2.79297C2.2906 3.29304 2.04082 3.8942 2.04082 4.59643V15.8321C2.04082 16.5344 2.2906 17.1355 2.79018 17.6356C3.28975 18.1357 3.89031 18.3857 4.59184 18.3857H9.56633L9.74968 18.4017L9.93304 18.4496L10.0606 18.5373L10.1722 18.681L10.2041 18.8964ZM25 10.2143C25 10.4909 24.899 10.7303 24.6971 10.9325L16.0236 19.6146C15.8216 19.8168 15.5825 19.9179 15.3061 19.9179C15.0298 19.9179 14.7906 19.8168 14.5886 19.6146C14.3867 19.4125 14.2857 19.1731 14.2857 18.8964V14.3H7.14286C6.8665 14.3 6.62734 14.1989 6.42538 13.9968C6.22343 13.7946 6.12245 13.5552 6.12245 13.2786V7.15C6.12245 6.87336 6.22343 6.63397 6.42538 6.43181C6.62734 6.22965 6.8665 6.12857 7.14286 6.12857H14.2857V1.53214C14.2857 1.25551 14.3867 1.01611 14.5886 0.813951C14.7906 0.611793 15.0298 0.510714 15.3061 0.510714C15.5825 0.510714 15.8216 0.611793 16.0236 0.813951L24.6971 9.49609C24.899 9.69825 25 9.93765 25 10.2143Z" />
+                </svg>
+            </button>
+        </form>
+    </header>
 
-                        <% lesson = undefined %>
-                        <% if (tuition) { %>
-                            <% for (let i=0; i < tuition.lessons.length; i++) { %>
-                                <% if (tuition.lessons[i].videoID === video) { %>
-                                    <% lesson = tuition.lessons[i] %>
-                                    <input type="hidden" name="videoProgress" value="<%= lesson.videoProgress %>" data-videoprogress='<%= video %>' />
-                                    <input type="hidden" name="testProgress" value="<%= lesson.testProgress %>" data-videotest='<%= video %>' />
-                                    <% break %>
+    <div class="dummy-header">Dummy</div>
+
+    <div class="main-container">
+        <!-- title-box -->
+        <section class="title-box">
+            <h1 class="main-title">
+                <span class="main-text">Welcome to</span>
+                <span class="main-bold">BOLT Trucking School</span>
+            </h1>
+            <a href="tel:8338676235" class="phone-box">
+                <svg class="main-phone-ico" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <path d="M16.7129 19.3309C16.7129 19.3309 18.8184 18.1256 19.3696 17.8359C19.9192 17.5453 20.4886 17.4719 20.8344 17.6831C21.358 18.0034 25.7552 20.9284 26.1254 21.1873C26.4956 21.4468 26.674 22.1878 26.1649 22.9137C25.6579 23.6397 23.319 26.5101 22.3278 26.4794C21.3352 26.4471 17.2079 26.3567 9.42508 18.5717C1.6438 10.7894 1.55176 6.66114 1.52004 5.66846C1.48832 4.6763 4.35872 2.33682 5.08464 1.8293C5.8116 1.3223 6.55364 1.51314 6.81156 1.86986C7.10484 2.27598 9.99604 6.65906 10.3143 7.16138C10.5322 7.50458 10.4521 8.0771 10.1614 8.62726C9.87228 9.17846 8.66692 11.2839 8.66692 11.2839C8.66692 11.2839 9.5166 12.7332 12.3901 15.6062C15.2642 18.4797 16.7129 19.3309 16.7129 19.3309Z" stroke="#9C9C9C" stroke-width="2" stroke-miterlimit="10" />
+                </svg>
+                <span class="main-phone">833-867-6235</span>
+            </a>
+        </section>      <!-- title-box -->
+
+        <!-- lessons -->
+
+        <% let lesson %>
+        <% listOfLessons.forEach((video, index) => { %>
+            <form action="/user/tuition" method="POST" class="videoItem">
+                
+                <% 
+                    lesson = undefined
+                    if (tuition) {
+                        for (let i=0; i < tuition.lessons.length; i++) {
+                            if (tuition.lessons[i].videoID === video) {
+                                lesson = tuition.lessons[i]
+                                break
+                            }
+                        }
+                    } 
+                %>
+
+                <div class="video-lesson-main">
+                    <span class="video-lesson-index"><%= index + 1 %>.</span>
+                    <button class="video-lesson-title"><%= listOfTitles[index] %></button>
+                </div>
+
+                <div class="video-lesson-details">
+                    <div class="completeness-box">
+                        <span class="completeness-title">Completeness:</span>
+                        <span class="completeness-ratio"><%= lesson ? Math.round(lesson.videoProgress * 100) : 0 %>%</span>
+                        <div class="completeness-bar" style="--perc: <%= lesson ? lesson.videoProgress : 0 %>; --col: <%= lesson ? lesson.testProgress ? '#A2D092' : '#C4C4C4' : '#C4C4C4' %>"></div>
+                    </div>
+                    <div class="test-box">
+                        <span class="test-title">Test:</span>
+                        <!-- <span class="test-ratio"><%= lesson ? lesson.testProgress : 0 %></span> -->
+                        <% if(!lesson) { %>
+                            <div class="test-indicator"></div>
+                            <div class="test-indicator"></div>
+                            <div class="test-indicator"></div>
+                        <% } else { %>
+                            <% if(lesson.videoProgress < 0.85) { %>
+                                <div class="test-indicator -ind-no-test"></div>
+                                <div class="test-indicator"></div>
+                                <div class="test-indicator"></div>
+                            <% } else { %>
+                                <% if(lesson.testProgress === 0) { %>
+                                    <div class="test-indicator"></div>
+                                    <div class="test-indicator -ind-failed"></div>
+                                    <div class="test-indicator"></div>
+                                <% } else { %>
+                                    <div class="test-indicator"></div>
+                                    <div class="test-indicator"></div>
+                                    <div class="test-indicator -ind-passed"></div>
                                 <% } %>
                             <% } %>
                         <% } %>
+                    </div>
+                </div>
 
-                        <% let perc = lesson ? lesson.videoProgress : 0 %>
-                        <div class="chart-box">
-                            <div class="pie" style="--p:<%= perc * 100 %>;--b:0.65rem;" title="Watching progress <%= Math.round(perc * 100) %>%"><%= index + 1 %>.</div>
-                        </div>
+                <input type="hidden" name='video' value='<%= video %>' />
+                <input type="hidden" name="videoProgress" value="<%= lesson ? lesson.videoProgress : 0 %>" />
+                <input type="hidden" name="testProgress" value="<%= lesson ? lesson.testProgress : 0 %>" />
 
-                        <section class='videoSection_info'>
-                            <span class='videoWatching'>
-                                <% if (lesson) { %>
-                                    <% if (lesson.videoProgress < 0.5) { %>
-                                        <svg class="ico -star" viewBox="0 0 488.022 488.022">
-                                            <path d="M471.563,173.778l-145.5-20.8l-64.4-132c-8-15.4-30-12.2-35.3,0l-64.4,132l-145.6,20.8c-16.4,1-21.6,20.9-10.4,33.2 l105,102.9l-25,144.5c-2.9,17.8,16.7,27.8,28.1,20.8l129.9-68.6l129.9,67.6c13.6,7,29.8-2.8,28.1-19.7l-25-144.6l105-102.9 C494.663,193.478,485.563,175.478,471.563,173.778z M342.663,288.078c-4.2,5.2-6.2,11.4-5.2,17.7l19.7,116.4l-103.9-55.1 c-6.7-2.8-13-2.8-18.7,0l-103.9,55.1l19.7-116.4c1-7.3-1-13.5-5.2-17.7l-84.1-82.1l116.4-16.6c6.2-1,11.4-4.2,14.6-10.4l52-105 l52,105c3.1,5.2,8.3,9.4,14.6,10.4l116.2,16.6L342.663,288.078z"/>
-                                        </svg>
-                                    <% } %>
-                                    <% if (lesson.videoProgress >= 0.5 && lesson.videoProgress < 0.85) { %>
-                                        <svg class="ico -star" viewBox="0 0 36.092 36.092">
-                                            <path d="M36.043,13.909c-0.123-0.377-0.456-0.646-0.852-0.688l-11.549-1.171L18.96,1.431c-0.159-0.363-0.518-0.596-0.914-0.596 s-0.755,0.234-0.915,0.597l-4.683,10.62L0.9,13.222c-0.395,0.04-0.728,0.309-0.851,0.688c-0.122,0.377-0.011,0.791,0.285,1.055 l8.651,7.734L6.532,34.044c-0.084,0.387,0.07,0.789,0.391,1.021c0.321,0.231,0.747,0.254,1.091,0.055l10.031-5.838l10.029,5.838 c0.156,0.092,0.33,0.137,0.505,0.137c0.207,0,0.411-0.064,0.588-0.191c0.319-0.231,0.474-0.633,0.39-1.021L27.104,22.7l8.651-7.735 C36.054,14.698,36.165,14.286,36.043,13.909z M25.339,21.594c-0.271,0.24-0.39,0.604-0.312,0.957l2.099,9.699l-8.574-4.99 c-0.001,0-0.002,0-0.003-0.002V5.447l3.503,7.943c0.146,0.33,0.456,0.555,0.813,0.592l9.869,1.001L25.339,21.594z"/>
-                                        </svg>
-                                    <% } %>
-                                    <% if (lesson.videoProgress >= 0.85) { %>
-                                        <svg class="ico -star" viewBox="0 0 478.53 478.53">
-                                            <path d="M477.795,184.279c-1.765-5.431-6.458-9.389-12.108-10.209l-147.159-21.384l-65.812-133.35 c-2.527-5.12-7.741-8.361-13.451-8.361s-10.924,3.241-13.451,8.361l-65.812,133.35L12.843,174.07 c-5.65,0.82-10.344,4.778-12.108,10.209c-1.765,5.43-0.293,11.391,3.796,15.376l106.484,103.798L85.877,450.018 c-0.965,5.627,1.349,11.314,5.968,14.671c4.618,3.354,10.741,3.799,15.797,1.142l131.623-69.199l131.623,69.199 c2.195,1.153,4.592,1.723,6.979,1.723c3.11,0,6.205-0.966,8.818-2.864c4.619-3.356,6.933-9.044,5.968-14.671l-25.138-146.565 l106.484-103.798C478.088,195.669,479.56,189.708,477.795,184.279z"/>
-                                        </svg>
-                                    <% } %>
-                                    <span class='videoWatching_info'><%= Math.round(lesson.videoProgress*1000) / 10 %>%</span>
-                                <% } else { %>
-                                    <span class='videoWatching_info'>0%</span>
-                                <% } %>
-                                Watching
-                            </span>
-                            <% if (lesson) { %>
-                                <% if (lesson.testProgress > 0) { %>
-                                    <span class='videoTests'>Test
-                                        <svg class="ico -test" viewBox="0 0 30 30">
-                                            <path d="M 15 3 C 8.373 3 3 8.373 3 15 C 3 21.627 8.373 27 15 27 C 21.627 27 27 21.627 27 15 C 27 12.820623 26.409997 10.783138 25.394531 9.0214844 L 14.146484 20.267578 C 13.959484 20.454578 13.705453 20.560547 13.439453 20.560547 C 13.174453 20.560547 12.919422 20.455578 12.732422 20.267578 L 8.2792969 15.814453 C 7.8882969 15.423453 7.8882969 14.791391 8.2792969 14.400391 C 8.6702969 14.009391 9.3023594 14.009391 9.6933594 14.400391 L 13.439453 18.146484 L 24.240234 7.3457031 C 22.039234 4.6907031 18.718 3 15 3 z M 24.240234 7.3457031 C 24.671884 7.8662808 25.053743 8.4300516 25.394531 9.0195312 L 27.707031 6.7070312 C 28.098031 6.3150312 28.098031 5.6839688 27.707031 5.2929688 C 27.316031 4.9019687 26.683969 4.9019688 26.292969 5.2929688 L 24.240234 7.3457031 z"/>
-                                        </svg>
-                                    </span>
-                                <% } else { %>
-                                    <span class='videoTests -no-test'>Test</span>
-                                <% } %>
-                            <% } else { %>
-                                <span class='videoTests -no-test'>Test</span>
-                            <% } %>
-                        </section><!-- videoSection -->
-
-                    </section>  <!-- videoSection_info -->
-                    <section class="afterLine"></section>
-                </section>  <!-- videoItem -->
-            <% }) %> <!-- forEach -->
-
-        </form>    <!-- videoListInner -->
-
-    </div>
+            </form>  <!-- videoItem -->
+            
+        <% }) %> <!-- forEach -->
+    </div>      <!-- main-container -->
 
 
-    <script>
+    <footer>
+        <div class="footer-left">
+            <span>© BoltCDL</span>
+        </div>
+        <div class="footer-center">
+            <span class="footer-item">About Us</span>
+            <a class="footer-item" href="/cdl-courses">CDL Programs</a>
+            <a class="footer-item" href="/faq">FAQs</a>
+            <a class="footer-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
+            <span class="footer-item">Contact Us</span>
+        </div>
+        <div class="footer-right">
+            <span>designed by</span>
+            <a href="https://www.boltcdl.com" target="_blank">BOLT</a>
+        </div>
+    </footer>
 
-        const inputs = document.querySelectorAll('[name="video"]')
-        let videoProgress, testProgress
-
-        function videoClick(videoThumb) {
-            // clear all inputs
-            for (let i=0; i < inputs.length; i++) {
-                inputs[i].checked = inputs[i].id === videoThumb.dataset.video
-                videoProgress = document.querySelector(`[data-videoprogress="${inputs[i].id}"]`)
-                testProgress = document.querySelector(`[data-videotest="${inputs[i].id}"]`)
-                if (videoProgress) {
-                    if (!inputs[i].checked) {
-                        videoProgress.remove()
-                    }
-                }
-                if (testProgress) {
-                    if (!inputs[i].checked) {
-                        testProgress.remove()
-                    }
-                }
-            }
-            // submiting a form without a button
-            document.forms["videoListInner"].submit()
-        }
-
-    </script>
 
 
 </body>

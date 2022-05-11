@@ -39,16 +39,47 @@ const listOfLessons = [
     "w0EYV8ZfwqM"
 ]
 
+const listOfTitles = [
+    "Orientation", "Control Systems/Dashboard",
+    "Pre- and Post-Trip Inspections", "Basic Control",
+    "Shifting/Operating Transmissions", "Backing And Docking",
+    "Coupling and Uncoupling", "Visual Search",
+    "Communication", "Distracted Driving",
+    "Speed Management", "Space Management",
+    "Night Operations", "Extreme Driving Conditions",
+    "Hazard Perception", "Skid Control/Recovery, Jackknifing, and Other Emergencies",
+    "Railroad-Highway Grade Crossings", "Identification and Diagnosis of Malfunctions",
+    "Roadside Inspections", "Maintenance",
+    "Handling and Documenting Cargo", "Environmental Compliance Issues",
+    "Hours of Service Requirements", "Fatigue and Wellness Awareness",
+    "Post-Crash Procedures", "External Communications",
+    "Whistleblower/Coercion", "Trip Planning",
+    "Drugs/Alcohol", "Medical Requirements",
+    "Human Trafficking", "CSA",
+    "Special Rigs", "Crossing the Canadian Border",
+    "Basic Business Practices",
+]
+
 
 // user/tuition
 tuitionRouter.get('/', async(req, res) => {
     const user = await User.findById(req.session._id)
     if (user) {
         if (user.student) {
-            const student = await Student.findById(user.student).select("tuition").populate("tuition")
+            const student = await Student.findById(user.student)
+            .select("tuition fullName")
+            .populate([
+                { path: "tuition" },
+                { path: "user", select: "balance"}
+            ])
             if (student.tuition) {
                 if (student.tuition.isAllowed) {
-                    return res.render(path.join(__dirname+'/tuition-center.ejs'), { listOfLessons, tuition: student.tuition })
+                    return res.render(path.join(__dirname+'/tuition-center.ejs'), { 
+                        listOfLessons, listOfTitles,
+                        tuition: student.tuition,
+                        fullName: student.fullName,
+                        balance: student.user.balance
+                    })
                 }
             }
             // if !student.tuition OR !student.tuition.isAllowed
@@ -66,7 +97,7 @@ tuitionRouter.post('/', async(req, res) => {
     if (!user) { return res.status(404).send(`No user found with ${req.session.userId}`) }
 
     const { video, videoProgress, testProgress } = req.body    // video id is being passed in body
-    const testFileName = listOfLessons.indexOf(video) + 1   // try to find id in vidoe IDs array
+    const testFileName = listOfLessons.indexOf(video) + 1   // try to find id in video IDs array
     if (testFileName) {
         const testFilePath = testFileName < 10 ? `0${testFileName}.json` : `${testFileName}.json`   //  adding '0' to filename ans extention
         fs.readFile(path.join(__dirname+`/tuition-tests/${testFilePath}`), (err, data) => {     // adding folder to a path
