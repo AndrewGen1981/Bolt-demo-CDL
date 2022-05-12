@@ -398,6 +398,16 @@ footer {
         flex-direction: column;
         margin-bottom: 1.67rem;
     }
+    footer {
+        margin-top: 3.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .footer-center {
+        margin: 1rem auto;
+        width: 95%;
+        display: flex;
+    }
 }
 @media (max-width: 615px) {
     :root {
@@ -424,6 +434,11 @@ footer {
     }
     .test-box {
         margin-bottom: 0.5rem;
+    }
+    .footer-center {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 1rem;
     }
 }
 @media (max-width: 450px) {
