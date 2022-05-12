@@ -323,6 +323,9 @@ footer {
 
     color: #828282;
 }
+.test-indicators-box {
+    display: flex;
+}
 .test-indicator {
     margin-left: 5px;
 
@@ -356,9 +359,99 @@ footer {
 
 
 
-
-
 /* LEARNING CENTER Media */
+@media (max-width: 1450px) {
+    :root {
+        --width: 95%;
+    }
+    .center-box {
+        width: 85%;
+    }
+}
+@media (max-width: 1250px) {
+    .center-box {
+        width: 80%;
+    }
+    .videoItem {
+        flex-direction: column;
+        justify-content: center;
+    }
+    .video-lesson-main,
+    .video-lesson-details {
+        margin: 0.5rem 0;
+        width: 100%;
+    }
+}
+@media (max-width: 850px) {
+    .center-box {
+        width: 87%;
+    }
+    header .left-box span,
+    header .welcome-debt .welcome-text {
+        display: none;
+    }
+    .title-box {
+        flex-direction: column;
+    }
+    .main-title {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1.67rem;
+    }
+}
+@media (max-width: 615px) {
+    :root {
+        --width: 85%;
+    }
+    .welcome-prompt .welcome-text {
+        display: none;
+    }
+    .videoItem {
+        margin-bottom: 2.5rem;
+    }
+    .video-lesson-main {
+        margin-left: -4.25rem;
+    }
+    .video-lesson-index {
+        margin-right: 0.5rem;
+    }
+    .video-lesson-details {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .completeness-box {
+        margin-bottom: 0.8rem;
+    }
+    .test-box {
+        margin-bottom: 0.5rem;
+    }
+}
+@media (max-width: 450px) {
+    .center-box {
+        width: 80%;
+    }
+    .welcome-prompt {
+        display: none;
+    }
+    .video-lesson-main {
+        margin-left: 0;
+        display: flex;
+    }
+    .video-lesson-title {
+        text-align: left;
+    }
+    .completeness-box {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .completeness-bar {
+        width: 6.67rem;
+    }
+    .test-box {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
 
 
 

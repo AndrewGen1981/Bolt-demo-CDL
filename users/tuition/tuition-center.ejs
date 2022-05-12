@@ -18,6 +18,8 @@
         const hello = `Hello${locals.fullName ? ',' : '!'}`
         const prompt = locals.fullName ? `${locals.fullName}` : ''
         const balance = locals.balance = !undefined ? `${usCurrencyFormat.format(locals.balance)}` : 'no data'
+        
+        function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
     %>
 
     <header>
@@ -32,7 +34,7 @@
             </p>
             <a href="/user/home" class="back-to-profile">Profile</a>
             <p class="welcome-debt">
-                <span class="welcome-text -hide-if-450">Balance :</span>
+                <span class="welcome-text">Balance :</span>
                 <span class="welcome-header"><%= balance %></span>
             </p>
         </div>
@@ -81,40 +83,43 @@
                 %>
 
                 <div class="video-lesson-main">
-                    <span class="video-lesson-index"><%= index + 1 %>.</span>
+                    <span class="video-lesson-index"><%= leadingZero(index + 1) %>.</span>
                     <button class="video-lesson-title"><%= listOfTitles[index] %></button>
                 </div>
 
                 <div class="video-lesson-details">
                     <div class="completeness-box">
-                        <span class="completeness-title">Completeness:</span>
-                        <span class="completeness-ratio"><%= lesson ? Math.round(lesson.videoProgress * 100) : 0 %>%</span>
+                        <div class="completeness-item">
+                            <span class="completeness-title">Completeness:</span>
+                            <span class="completeness-ratio"><%= lesson ? Math.round(lesson.videoProgress * 100) : 0 %>%</span>
+                        </div>
                         <div class="completeness-bar" style="--perc: <%= lesson ? lesson.videoProgress : 0 %>; --col: <%= lesson ? lesson.testProgress ? '#A2D092' : '#C4C4C4' : '#C4C4C4' %>"></div>
                     </div>
                     <div class="test-box">
                         <span class="test-title">Test:</span>
-                        <!-- <span class="test-ratio"><%= lesson ? lesson.testProgress : 0 %></span> -->
-                        <% if(!lesson) { %>
-                            <div class="test-indicator"></div>
-                            <div class="test-indicator"></div>
-                            <div class="test-indicator"></div>
-                        <% } else { %>
-                            <% if(lesson.videoProgress < 0.85) { %>
-                                <div class="test-indicator -ind-no-test"></div>
+                        <div class="test-indicators-box">
+                            <% if(!lesson) { %>
+                                <div class="test-indicator"></div>
                                 <div class="test-indicator"></div>
                                 <div class="test-indicator"></div>
                             <% } else { %>
-                                <% if(lesson.testProgress === 0) { %>
+                                <% if(lesson.videoProgress < 0.85) { %>
+                                    <div class="test-indicator -ind-no-test"></div>
                                     <div class="test-indicator"></div>
-                                    <div class="test-indicator -ind-failed"></div>
                                     <div class="test-indicator"></div>
                                 <% } else { %>
-                                    <div class="test-indicator"></div>
-                                    <div class="test-indicator"></div>
-                                    <div class="test-indicator -ind-passed"></div>
+                                    <% if(lesson.testProgress === 0) { %>
+                                        <div class="test-indicator"></div>
+                                        <div class="test-indicator -ind-failed"></div>
+                                        <div class="test-indicator"></div>
+                                    <% } else { %>
+                                        <div class="test-indicator"></div>
+                                        <div class="test-indicator"></div>
+                                        <div class="test-indicator -ind-passed"></div>
+                                    <% } %>
                                 <% } %>
                             <% } %>
-                        <% } %>
+                        </div>      <!-- test-indicators-box -->
                     </div>
                 </div>
 
