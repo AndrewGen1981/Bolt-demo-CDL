@@ -616,6 +616,19 @@ footer {
         display: flex;
         flex-direction: column;
     }
+
+    .update-form {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        border-radius: 0;
+    }
+    .update-form .inputs input {
+        padding: 1rem 0.5rem;
+        width: 100%;
+        border: none;
+        margin-bottom: 1rem;
+    }
+
     .-learning-center {
         width: 100%;
         display: flex;

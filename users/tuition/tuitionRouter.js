@@ -94,6 +94,9 @@ tuitionRouter.get('/', async(req, res) => {
 
 tuitionRouter.post('/', async(req, res) => {
     const user = await User.findById(req.session._id)
+    .select("balance")
+    .populate({ path: "student", select: "fullName" })
+
     if (!user) { return res.status(404).send(`No user found with ${req.session.userId}`) }
 
     const { video, videoProgress, testProgress } = req.body    // video id is being passed in body
@@ -111,9 +114,14 @@ tuitionRouter.post('/', async(req, res) => {
                         que.answers = que.answers.sort(() => Math.random() - 0.5);   // shuffeling answers
                     }
                 })
-                videoData.videoProgress = videoProgress
-                videoData.testProgress = testProgress
-                res.render(path.join(__dirname+'/tuition-player.ejs'), { user, videoData, video })
+                videoData.videoProgress = parseFloat(videoProgress) || 0
+                videoData.testProgress = parseFloat(testProgress) || 0
+
+                res.render(path.join(__dirname + '/tuition-player.ejs'), {
+                    user, videoData, video,
+                    fullName: user.student.fullName,
+                    balance: user.balance,
+                })
             }
         })
     }
