@@ -27,9 +27,9 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 
 :root {
     --width: 80%;
-    --max-width: 1200px;
+    --max-width: min(80vw, 1200px);
 
-    --player-box-width: min(80vw, var(--max-width));
+    --player-box-width: var(--max-width);
     --player-box-height: calc(var(--player-box-width)*0.5625);
 
     --player-width: var(--player-box-width);
@@ -574,11 +574,10 @@ footer {
 
 
 .tools-box {
-    /* width: var(--player-width); */
     width: 100%;
     margin: 0 auto;
 
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
 }
@@ -590,7 +589,16 @@ footer {
 .tool-playbackQuality {
     width: 10%;
 }
+.tool-playbackQuality {
+    padding: 0.3rem 0.7rem;
+    min-width: 8rem;
 
+    font-size: 1rem;
+    color: #3b3b3b;
+
+    border: 1px solid #C4C4C4;
+    border-radius: 1rem;
+}
 
 
 /* Quiz Side */
@@ -668,10 +676,15 @@ footer {
 }
 
 .test-question {
+    margin-bottom: 1.5rem;
+}
+.test-question-text {
     font-weight: 700;
     font-size: 1.5rem;
     color: #151515;
-    margin-bottom: 1.5rem;
+}
+.test-question-br {
+    display: none;
 }
 
 .answers-box {
@@ -686,6 +699,7 @@ footer {
     align-items: center;
     margin-left: 1.5rem;
 }
+.test-question-index,
 .test-answer {
     font-weight: 500;
     font-size: 1rem;
@@ -739,3 +753,92 @@ footer {
 }
 
 
+@media (max-width: 1000px) {
+    :root {
+        --player-box-width: 100vw;
+    }
+
+    #player-container {
+        width: 100%;
+        max-width: unset;
+    }
+    .test-title-box {
+        margin: 2rem 0 3.5rem 0;
+        padding: 0 1.87rem;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+    .titles {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #closelink {
+        margin-bottom: 1.53rem;
+    }
+
+    .main-video-box {
+        display: flex;
+        flex-direction: column-reverse;
+        margin-bottom: 0;
+    }
+    .player-and-tools::before {
+        border-radius: unset;
+        border: none;
+        border-top: 1px solid #C4C4C4;
+    }
+    .player-box {
+        border-radius: unset;
+    }
+    .tools-box {
+        margin: 0 auto;
+        width: 85%;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+    .tool-navigation {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+    .tool-volume {
+        width: 100px;
+    }
+    .main-video-box .video-lesson-details {
+        width: 100%;
+        padding: 1.87rem;
+
+        margin: 0;
+        margin-bottom: 2rem;
+        
+        border: none;
+        border-top: 1px solid #C4C4C4;
+        border-bottom: 1px solid #C4C4C4;
+    }
+
+    .question-block {
+        padding: 0.5rem 1.85rem;
+        margin-bottom: 2.5rem;
+        border-radius: unset;
+    }
+    .question-block::before {
+        border: none;
+        border-bottom: 1px solid #C4C4C4;
+        border-radius: unset;
+    }
+    .answers-box {
+        display: block;
+    }
+    .answer-block {
+        margin-bottom: 0.93rem;
+    }
+    .test-question-br {
+        display: block;
+    }
+
+    .submitQuizze {
+        margin-top: 5rem;
+    }
+
+    #player-footer {
+        margin-top: 2.65rem;
+    }
+}

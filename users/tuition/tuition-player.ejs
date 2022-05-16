@@ -49,7 +49,7 @@
 
     <div class="dummy-header">Dummy</div>
 
-    <div class="main-container">
+    <div class="main-container" id="player-container">
         <% if (locals.videoData) { %>
 
             <div class="test-title-box">
@@ -122,7 +122,16 @@
                     <% if (videoData) { %>
                         <% videoData.questions.forEach((question, Q) => { %>
                         <div class="question-block" id="Q-block<%= Q %>">
-                            <h3 class="test-question"><%= question.question %></h3>
+                            <%
+                                let i = question.question.indexOf(". ")
+                                let a = i > 0 ? question.question.substring(0, i + 1) : Q + 1
+                                let b = i > 0 ? question.question.substring(i + 1, question.question.length) : question.question
+                            %>
+                            <div class="test-question">
+                                <span class="test-question-index"><%= a %></span>
+                                <br class="test-question-br">
+                                <span class="test-question-text"><%= b %></span>
+                            </div>
 
                             <div class="answers-box">
                                 <% question.answers.forEach((answer, A) => { %>
@@ -144,7 +153,7 @@
         <% } %>
     </div>      <!-- main-container -->
 
-    <footer>
+    <footer id="player-footer">
         <div class="footer-left">
             <span>© BoltCDL</span>
         </div>
@@ -171,7 +180,7 @@
         const progressIndicator = document.querySelector('.completeness-ratio')
         const progressBar = document.querySelector('.completeness-bar')
         
-        const testIndicator = document.querySelector('.test-indicator')
+        const testIndicators = document.querySelectorAll('.test-indicator')
         const closeVideo = document.querySelector('.close-video')
         let canGetOut = true
 
@@ -371,6 +380,23 @@
         // Quizze
         let submitionMaxCount = 3   // submition takes without forn clearning
 
+        function showTestResult(result) {
+            testIndicators.forEach((testIndicator, index) => {
+                testIndicator.classList.remove('-ind-no-test')
+                testIndicator.classList.remove('-ind-failed')
+                testIndicator.classList.remove('-ind-passed')
+
+                if (result) {
+                    if (index === 2) {
+                        testIndicator.classList.add('-ind-passed')
+                    }
+                } else {
+                    if (index === 1) {
+                        testIndicator.classList.add('-ind-failed')
+                    }
+                }
+            })
+        }
 
         function submitQuizze() {
             let correct = true  // assume all correct
@@ -387,7 +413,8 @@
                     studentAnswer = document.getElementById('Q<%= Q %>A<%= A %>')
                     if (studentAnswer) {
                         if (studentAnswer.checked) {
-                            correctCurrent = studentAnswer.parentElement.dataset.answer === '<%= question.correctAnswer %>'
+                            correctCurrent = studentAnswer.nextElementSibling.dataset.answer === '<%= question.correctAnswer %>'
+
                             correct = correct ? correctCurrent : false
                             studentAnswer.parentElement.classList.remove(!correctCurrent)
                             studentAnswer.parentElement.classList.add(correctCurrent)
@@ -410,11 +437,13 @@
                     closeVideo.classList.toggle('-close-quize-done')
                 }
                 // change indicator
-                testIndicator.textContent = 'Quiz done'
-                testIndicator.classList.add('-quiz-done')
+                showTestResult(true)
                 lesson.quiz = Math.round(lesson.currRatio * 10000) / 10000    // saving current ratio when quiz done
                 updateOnServer()
+                alert("Congratulations! You just passed the test, please review your answers and get back to the Learning Center.")
             } else {
+                //  test not passed
+                showTestResult(false)
                 submitionMaxCount -= 1
                 if (submitionMaxCount < 1) {
                     // just guessing
