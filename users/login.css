@@ -271,6 +271,8 @@
     background-color: #1E3049;
 }
 
+
+
 /* Reset & Register links */
 .reset-box,
 .register-box {
@@ -350,5 +352,41 @@
 }
 
 
-/* MEDIA REQUESTS */
 
+/* MEDIA requests for login and register pages */
+@media (max-width: 1600px) {
+    .login-left {
+        min-width: 475px;
+    }
+}
+@media (max-width: 1000px) {
+    .login-right {
+        display: none;
+    }
+    .login-left {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media (max-width: 475px) {
+    .login-left {
+        width: 95%;
+        min-width: unset;
+        max-width: 475px;
+    }
+    .buttons-box {
+        width: 100%;
+    }
+    .sign-regist-form-box,
+    .admin-box {
+        width: 100%;
+    }
+}
+@media (max-width: 300px) {
+    .btn {
+        width: 6rem;
+    }
+    .btn span {
+        display: none;
+    }
+}
