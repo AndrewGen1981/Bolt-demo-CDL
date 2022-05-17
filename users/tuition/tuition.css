@@ -582,15 +582,54 @@ footer {
     justify-content: space-between;
 }
 
-.tool-navigation {
+.tool-navigation-box {
     width: 60%;
+    position: relative;
 }
-.tool-volume, 
-.tool-playbackQuality {
+
+.tool-navigation {
+    width: 100%;
+    transition: all 0.2s linear;
+}
+.tool-navigation-ico {
+    top: 0;
+    left: calc(var(--maxRatio) * 100%);
+
+    width: 30px;
+    height: 30px;
+    position: absolute;
+
+    background-color: #fff;
+    fill: #C4C4C4;
+    
+    transform: translate(-50%, -25%);
+    border-radius: 100%;
+
+    z-index: 1;
+
+    transition: all 0.2s linear;
+}
+
+.tool-navigation:hover {
+    accent-color: #4377B5;
+}
+.tool-navigation:hover ~ .tool-navigation-ico-box .tool-navigation-ico,
+.tool-navigation-ico:hover {
+    fill: #4377B5;
+}
+
+.tool-volume {
     width: 10%;
+    transition: all 0.2s linear;
 }
+.tool-volume:hover {
+    accent-color: #4377B5;
+}
+
 .tool-playbackQuality {
     padding: 0.3rem 0.7rem;
+
+    width: 10%;
     min-width: 8rem;
 
     font-size: 1rem;
@@ -733,6 +772,7 @@ footer {
     height: 3.33rem;
 
     background-color: #0F1C2F;
+    border: none;
     border-radius: 2.4rem;
 
     display: flex;
@@ -744,6 +784,11 @@ footer {
     text-transform: uppercase;
 
     color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+.submitQuizze:hover {
+    background-color: #1E3049;
 }
 
 
@@ -795,7 +840,7 @@ footer {
         flex-wrap: wrap;
         margin-bottom: 2rem;
     }
-    .tool-navigation {
+    .tool-navigation-box {
         width: 100%;
         margin-bottom: 2rem;
     }
@@ -840,5 +885,17 @@ footer {
 
     #player-footer {
         margin-top: 2.65rem;
+    }
+}
+
+@media (max-width: 465px) {
+    .test-box-info {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 300px) {
+    .test-box-info {
+        font-size: 1.5rem;
     }
 }

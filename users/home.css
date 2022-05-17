@@ -100,6 +100,7 @@ header {
 .profile-box {
     margin: 0 auto;
     width: var(--max-width);
+    min-height: 68.9vh;
 }
 
 /* title-box */
@@ -183,6 +184,7 @@ header {
 .form-todo {
     background-color: #fff;
     color: #151515;
+    box-shadow: #0f1c2f38 0 0 15px 1px;
 }
 .form-not-done {
     background-color: #EEF2ED;
@@ -190,6 +192,19 @@ header {
 
     border: 1px solid #AAAAAA;
     cursor: not-allowed;
+}
+
+.email-not-verified-box {
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+    background-color: #f278782c;
+    margin-bottom: 3rem;
+}
+.email-not-verified-box .block-value {
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.9rem;
 }
 
 
@@ -576,6 +591,17 @@ footer {
         margin: 0 -3rem 3rem -3rem;
         border-radius: unset;
     }
+
+    .email-not-verified-box {
+        margin: 0 -3rem 3rem -3rem;
+        padding: 2rem 3rem;
+        width: 113%;
+    }
+    .email-not-verified-box .block-value {
+        font-size: 1.1rem;
+        line-height: 1.65rem;
+    }
+
     .profile-info-left,
     .profile-info-right {
         width: 100%;
@@ -663,5 +689,9 @@ footer {
         width: var(--max-width);
         display: grid;
         grid-template-columns: 1fr 1fr;
+    }
+
+    .email-not-verified-box {
+        width: 125%;
     }
 }

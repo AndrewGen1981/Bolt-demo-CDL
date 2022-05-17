@@ -104,11 +104,14 @@
                     <a class="form-not-done">STUDENT DATA COLLECTION FORM</a>
                     <a class="form-not-done">APPLICATION FOR ENROLLMENT</a>
                     <a class="form-not-done">ENROLLMENT AGREEMENT</a>
-                    <div class="block-item">
-                        <span class="block-value">Enrollment forms cannot be available because your email still stays unverified. Please find our verification letter among your incoming emails (check spam folder, if needed) and stick with instructions given in it. Or you can generate one more verification letter, but be aware that only last generated will be valid one.</span>
-                    </div>
                 <% } %>
             </div>   <!-- forms-box -->
+
+            <% if(locals.user.token !== 'verified') { %>
+                <div class="email-not-verified-box">
+                    <span class="block-value">Enrollment forms cannot be available because your email still stays unverified. Please find our verification letter among your incoming emails (check spam folder, if needed) and stick with instructions given in it. Or you can generate one more verification letter, but be aware that only last generated will be valid one.</span>
+                </div>
+            <% } %>
 
             <!-- profile-info-box -->
             <div class="profile-info-box">
@@ -150,14 +153,12 @@
                                 <span class="block-value -warning">Your email is not verified</span>
                             </p>  <!-- token -->
                             <p class="block-value -warning">Verification email was sent to you</p>
-                            <% if(user.msg.e != 'verTokenSent') { %>
-                                <form action="/user/sendToken" method="POST">
-                                    <small class="block-value">Resend verification email</small>
-                                    <input type="hidden" name="name" value="<%= user.name %>" readonly>
-                                    <input type="hidden" name="email" value="<%= user.email %>" readonly>
-                                    <button class="-btn" type="submit">Resend</button>
-                                </form>
-                            <% } %>
+                            <form action="/user/sendToken" method="POST">
+                                <small class="block-value">Resend verification email</small>
+                                <input type="hidden" name="name" value="<%= user.name %>" readonly>
+                                <input type="hidden" name="email" value="<%= user.email %>" readonly>
+                                <button class="-btn" type="submit">Resend</button>
+                            </form>
                         <% } %>
                     <% } %>
 

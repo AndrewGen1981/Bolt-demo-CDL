@@ -16,7 +16,7 @@ async function sendALetter(letter) {
             html: letter.HTML,
             title: letter.title,
             body: letter.body,
-            sender: "[TTA] TORO Trucking Academy"
+            sender: "[BoltCDL] BoltCDL Software"
         })
     })
 }

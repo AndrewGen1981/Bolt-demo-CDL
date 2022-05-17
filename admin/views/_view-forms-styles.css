@@ -1,13 +1,16 @@
 /* @GENERAL */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@500;600;700&family=WindSong:wght@400;500&display=swap');
+
+
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     
-    font-family: 'BrixSlab-Regular';
+    font-family: 'Montserrat', sans-serif;
     font-size: 15px;
 
-    color: var(--blue-slate)
+    color: #2d393e;
 }
 
 ol {
@@ -28,7 +31,7 @@ li {
     width: 1080px;
     margin: 0 auto;
 
-    background-color: var(--sand15-coastal);
+    background-color: #fed63d0f;
     padding: 1.5% 0;
 
     border-radius: 15px;
@@ -46,12 +49,7 @@ li {
 .page-box::after {
     content: "";
     
-    background-image: url('/static/images/water-mark.png');
-
-    /* background-size: 20%;
-    background-position:center;
-    background-repeat:space; */
-
+    background-image: url('/static/images/2-WB.png');
     background-size:contain;
     background-position: center;
     background-repeat: no-repeat;
@@ -63,7 +61,7 @@ li {
     right: 0;
     z-index: -1;
 
-    opacity: 0.035;
+    opacity: 0.125;
 }
 
 
@@ -72,8 +70,7 @@ li {
 }
 
 .header-line1 {
-    font-family: "BrixSlab-Bold";
-
+    font-weight: 700;
     font-size: 0.8rem;
     text-align: right;
     text-transform: uppercase;
@@ -84,18 +81,17 @@ li {
 }
 
 .form-title {
-    font-family: "BrixSlab-Medium";
-
+    font-weight: 600;
     font-size: 2rem;
     text-align: left;
     text-transform: uppercase;
 
-    border-bottom: 2px solid var(--blue40-slate);
+    border-bottom: 2px solid #2d393e;
+    margin-bottom: 1rem;
 }
 
 .form-note {
-    font-family: "BrixSlab-Light";
-
+    font-weight: 500;
     font-size: 0.8rem;
     text-align: justify;
 
@@ -108,8 +104,7 @@ li {
     display: block;
 }
 .main-box-title, .section-title, .section-title-hgh {
-    font-family: "BrixSlab-LightItalic";
-
+    font-weight: 500;
     font-size: 1.2rem;
     text-align: left;
     text-transform: capitalize;
@@ -117,17 +112,18 @@ li {
     margin-bottom: 0.6rem;
 }
 .section-title-hgh {
-    color: var(--orange-high-desert)
+    color: #ff7f1a;
 }
 .appl-full-name, .appl-address {
-    font-family: "BrixSlab-RegularItalic";
-
+    font-weight: 700;
+    font-style: italic;
     font-size: 1.2rem;
     text-align: right;
     text-transform: uppercase;
 }
 .appl-address {
-    font-family: "BrixSlab-LightItalic";
+    font-weight: 500;
+    font-style: italic;
 }
 
 .section-box {
@@ -187,8 +183,7 @@ li {
 }
 
 .section-note {
-    font-family: "BrixSlab-Light";
-
+    font-weight: 500;
     font-size: 0.8rem;
     text-align: justify;
 
@@ -200,34 +195,35 @@ li {
     align-items: center;
 }
 .field-title, .field-value {
-    font-family: "BrixSlab-Medium";
+    font-weight: 600;
     font-size: 1.1rem;
-    text-align: center;
     text-transform: capitalize;
 
     padding: 0.35rem;
 }
 .field-value {
     min-width: 100px;
-    font-family: "BrixSlab-RegularItalic";
+
+    font-weight: 500;
+    font-style: italic;
     text-transform: uppercase;
-    border-bottom: 2px solid var(--blue20-slate);
+    border-bottom: 1px solid #2d393e;
 }
 .field-signature {
     min-width: 200px;
     font-family: 'WindSong', cursive;
     font-size: 3rem;
-    border-bottom: 2px solid var(--blue20-slate);
+    border-bottom: 1px solid #2d393e;
 }
 .check-mark {
     width: 1.5rem;
     height: 1.5rem;
 }
 #unchecked {
-    fill: var(--blue60-slate);
+    fill: #2d393ecc;
 }
 #checked {
-    fill: var(--blue-slate);
+    fill: #2d393e;
 }
 
 
@@ -236,10 +232,9 @@ table {
     width: 80%;
     margin: 0.5rem auto;
 
-    font-family: 'Brix', sans-serif;
     text-align: center;
 
-    border: 2px solid var(--black40-worn);
+    border: 2px solid #2d393e;
     border-radius: .5rem;
 }
 th,td {
@@ -247,13 +242,13 @@ th,td {
     padding: 5px 0;
     margin: 0;
 
-    border-bottom: 1px solid var(--black20-worn);
+    border-bottom: 1px solid #2d393e;
 }
 th {
-    background-color: var(--black15-worn);
+    background-color: #2d393e15;
 }
 td:nth-child(2) {
-    color: var(--orange-high-desert);
+    color: #ff7f1a;
 }
 .-no-border {
     border: none;
