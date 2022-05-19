@@ -1,288 +1,324 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
 
 /* @GENERAL */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-:root {
-    --left-panel-width: 15vw;
-    --desktop-width: calc(100vw - var(--left-panel-width));
-    --top-side-heihgt: 70px;
-
-    --chart-width: calc(var(--desktop-width) * 0.85);
-    --chart-column-width: calc(var(--chart-width) / 14);
-
-    --main-color: #263544;
-    --main-color60: #26354499;
-}
-
-.main-adm-box {
-    width: 100vw;
-}
-.left-panel {
-    width: var(--left-panel-width);
-    height: 100vh;
-
-    font-family: "BrixSlab-Regular";
-    font-size: 15px;
+    
+    font-family: 'Montserrat', sans-serif;
     font-weight: normal;
+    font-size: 15px;
+}
 
-    background-color: var(--main-color);
 
+/* HEADER */
+
+header, .dummy-header {
+    width: 100%;
+    height: 4rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #0F1C2F;
+}
+header {
     position: fixed;
     top: 0;
-    left: 0;
-}
-.adm-desktop {
-    width: var(--desktop-width);
-    min-height: calc(100vh - var(--top-side-heihgt));
 
-    margin-top: var(--top-side-heihgt);
-    margin-left: var(--left-panel-width);
+    z-index: 10;
+}
+
+.header-left-item {
+    padding: 0 1.33rem;
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+
+    transition: all 0.2s linear;
+}
+.header-left-item:hover {
+    background-color: #060E18;
+}
+
+.bolt-home {
+    width: 15px;
+    height: 35px;
+
+    margin-right: 0.87rem;
+}
+.item-home {
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+.header-center-item {
+    padding: 0 2.53rem;
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-left-side {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-nav-item {
+    margin: 0 1.5rem;
+
+    display: inline-flex;
+    align-items: center;
+
+    text-decoration: none;
+}
+
+.header-nav-item svg {
+    min-width: 25px;
+    margin-right: 0.67rem;
+    fill: #657389;
+    
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover svg {
+    fill: #fff;
+}
+
+.header-nav-item span {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #657389;
+
+    transition: all 0.25s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover span {
+    color: #fff;
+}
+
+.nav-right-side .admin-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+.nav-right-side .admin-separator {
+    margin: 0 0.7rem;
+    font-size: 1rem;
+    color: #657389;
+}
+.nav-right-side .admin-email {
+    font-size: 1rem;
+    color: #657389;
+}
+
+.header-right-item {
+    margin-right: 1.2rem;
+}
+.header-right-item button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    cursor: pointer;
+}
+
+.header-right-item svg {
+    fill: #657389;
+    transition: all 0.2s linear;
+}
+.header-right-item svg:hover {
+    fill: #fff;
+}
+
+
+/* Header media */
+@media (max-width: 950px) {
+    .admin-separator, .admin-email {
+        display: none;
+    }
+}
+@media (max-width: 800px) {
+    .header-nav-item span {
+        display: none;
+    }
+}
+@media (max-width: 550px) {
+    .header-left-item {
+        padding-right: 0;
+    }
+    .bolt-home {
+        margin-right: 0;
+    }
+    .item-home {
+        display: none;
+    }
+    .nav-left-side {
+        justify-content: space-around;
+    }
+    .nav-left-side,
+    .nav-right-side {
+        width: 50%;
+    }
+    .header-center-item {
+        padding: 0 0.5rem;
+    }
+    .header-nav-item {
+        margin: 0;
+    }
+}
+
+
+/* main-admin-profile-box */
+
+.main-admin-profile-box {
+    margin: 6.5rem auto;
+
+    width: 80%;
+    display: flex;
+}
+.main-admin-profile-left {
+    width: 80%;
+}
+.main-admin-profile-right {
+    width: 20%;
+}
+
+.main-admin-auth-box {
+    display: none;
+}
+
+/* main-admin-profile-left */
+
+.welcome-box {
+    margin-bottom: 7rem;
+}
+.welcome {
+    font-weight: 500;
+    font-size: 1.53rem;
+    color: #151515;
+}
+.school-title {
+    font-weight: 700;
+    font-size: 1.53rem;
+    text-transform: uppercase;
+    color: #151515;
+}
+
+.admin-menu-box {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+.admin-menu-item {
+    padding: 0 1.33rem;
+
+    max-width: 13.3rem;
+    height: 3.33rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    text-decoration: none;
+    
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
+
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.admin-menu-item:hover {
+    background-color: #F3F3F3;
+}
+
+.admin-menu-item svg {
+    margin-right: 0.5rem;
+    fill: #AAAAAA;
+}
+.menu-item {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #151515;
+}
+
+
+/* adm-desktop */
+.adm-desktop {
+    width: 100%;
+    min-height: 48vh;
 
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
         
-    background-color: #f2f7fb;
     color: #333;
 }
-.top-side {
-    width: var(--desktop-width);
-    height: var(--top-side-heihgt);
 
-    font-family: "BrixSlab-Regular";
-    font-size: 15px;
-    font-weight: normal;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    position: fixed;
-    top: 0;
-    left: var(--left-panel-width);
-
-    -webkit-box-shadow: 0px 3px 10px 0px var(--main-color60);
-    -moz-box-shadow: 0px 3px 10px 0px var(--main-color60);
-    box-shadow: 0px 3px 10px 0px var(--main-color60);
-
-    z-index: 1;
-}
-.tool-bar {
-    width: 100%;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.charts-bar {
-    min-width: 200px;
-    display: inline-flex;
-}
-.chart-item {
-    width: 4.5rem;
-    padding: 0 10px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-}
-.chart-ico {
-    width: 2rem;
-    height: 2rem;
-    fill: #33628b;
-    transition: all 0.3s ease-in;
-}
-.chart-item span {
-    font-family: "BrixSlab-Light";
-    font-size: 0.63rem;
-    text-align: center;
-    color: #686868;
-
-    transition: all 0.5s ease-in;
-}
-.chart-item:hover .chart-ico {
-    padding: 4px;
-    fill:#fff;
-    background-color: #33628b;
-    border-radius: 5px;
-}
-.chart-item:hover span {
-    letter-spacing: 0.5px;
-    opacity: 0.35;
-}
-
-.top-side-name {
-    padding: 0 1rem;
-    font-family: "BrixSlab-RegularItalic";
-}
-.top-side-id {
-    height: 100%;
-    padding: 0 1rem;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-family: "BrixSlab-ExtraLightItalic";
-    color: #ffffff;
-
-    background-color: var(--main-color60);
-}
-.navigation {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.fas, .-btn > svg {
-    margin-right: 10px;
-
-    width: 1.5rem;
-    font-size: 1.5rem;
-
-    color: #ffff00f3;
-    fill: #ffff00f3;
-    
-
-    transition: all 0.25s linear;
-}
-.-btn:hover>.fas, .-btn:hover>svg {
-    color: #ffd900;
-    fill: #ffd900;
-    transform: translateY(-1px);
-}
-
-.adm-profile {
-    width: 100%;
-    padding: 1rem;
-
-}
-.adm-profile p {
-    font-family: "BrixSlab-ExtraLightItalic";
-    font-size: 0.9rem;
-    line-height: 2rem;
-    color: #f2f7fb;
-}
-.adm-prop {
-    padding-left: 5px;
-    color: wheat;
-}
-.-btn {
-    width: 100%;
-    min-height: 50px;
-    padding: 0 10px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: left;
-
-    text-decoration: none;
-    color: #b7c0cd;
-
-    border: none;
-    background-color: transparent;
-
-    border-bottom: 1px solid hsla(207, 90%, 61%, 0.1);
-    cursor: pointer;
-}
-.-main-page {
-    min-height: var(--top-side-heihgt);
-    text-transform: uppercase;
-}
-.-main-page img {
-    width: 2.5rem;
-    margin-right: 5px;
-}
-.log-out-form {
+.chart-title-box {
     width: 100%;
 }
-.-log-out {
-    width: 100%;
-
-    font-family: 'WindSong', cursive;
-    font-size: 2rem;
-    letter-spacing: 1px;
-
-    background-color: #1d2531;
-}
-
-
-/* 
-@Industrial
-font-family: "Industrial Medium";
-font-family: "Industrial Bold";
-
-
-@BRIX font family
-
-font-family: "BrixSlab-ExtraLight";
-font-family: "BrixSlab-ExtraLightItalic";
-
-font-family: "BrixSlab-Light";
-font-family: "BrixSlab-LightItalic";
-
-font-family: "BrixSlab-Regular";
-font-family: "BrixSlab-RegularItalic";
-
-font-family: "BrixSlab-Medium";
-font-family: "BrixSlab-MediumItalic";
-
-font-family: "BrixSlab-Bold";
-font-family: "BrixSlab-BlackItalic";
-
-*/
-
 .chart-title {
-    font-family: "BrixSlab-RegularItalic";
-    font-size: 18px;
-    margin-bottom: 3rem;
+    width: 5rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    text-align: left;
+    
+    word-break:keep-all;
+
+    color: #AAAAAA;
 }
+
 .analythicsChart {
-    width: var(--chart-width);
-    height: 30vh;
+    margin-top: 2rem;
+
+    width: 100%;
+    height: 33vh;
 
     display: flex;
     align-items: flex-end;
     justify-content: center;
 }
 .chart-column {
-    --col1: lightgray;
-    --col2: gray;
-
-    width: var(--chart-column-width);
+    width: 100%;
     max-width: 75px;
-    padding: 0 1px;
 
-    background-color: var(--col2);
-    background: -webkit-linear-gradient(90deg, var(--col1) 35%, var(--col2));
-    background: -moz-linear-gradient(90deg, var(--col1) 35%, var(--col2));
-    background: linear-gradient(90deg, var(--col1) 35%, var(--col2));
+    padding: 0.5rem;
 
     display: flex;
     flex-direction: column;
 
-    position:relative;
-    border-bottom: 1px solid #26354430;
+    position: relative;
+    border-bottom: 2px solid #DADADA;
 }
 .chart-column::before {
     content: attr(data-value);
 
     width: 100%;
+    
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2rem;
     text-align: center;
-    color: #333;
-
-    font-family: "BrixSlab-Regular";
-    font-size: 15px;
+    color: #000000;
    
     position: absolute;
     top: -1.5em; 
@@ -291,14 +327,15 @@ font-family: "BrixSlab-BlackItalic";
 .chart-column::after {
     content: attr(data-key);
 
-    margin-top: 5px;
+    margin-top: 1rem;
     width: 100%;
     min-width: 75px;
    
-    font-family: "BrixSlab-Regular";
-    font-size: 12px;
-
+    font-weight: 500;
+    font-size: 0.73rem;
+    line-height: 0.87rem;
     text-align: center;
+    color: #000000;
 
     position: absolute;
     top: 100%; 
@@ -314,79 +351,155 @@ font-family: "BrixSlab-BlackItalic";
     width: 100%;
     height: var(--h);
     background-color: var(--c);
-    opacity: 0.35;
-    border: 1px solid #26354430;
+}
+.chart-sub-column:nth-child(1) {
+    border-radius: 3px 3px 0 0;
+}
+.chart-sub-column:nth-last-child(1) {
+    border-radius: 0 0 3px 3px;
 }
 
-@media (max-width: 1170px) {
-    :root {
-        --left-panel-width: 175px;
-    }
-    .chart-column::after {
-        transform: rotate(-90deg);
-        min-width: 1rem;
 
+
+
+/* main-admin-profile-right */
+.main-admin-profile-right {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: space-between;
+
+    background-image: url('/static/images/logo-gray.png');
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: bottom;
+    background-size: 85%;
+}
+
+.adm-auth-box p {
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.07rem;
+
+    color: #828282;
+}
+.adm-auth-box span {
+    font-weight: 700;
+    font-size: 0.87rem;
+    line-height: 1.07rem;
+    
+    color: #151515;
+    margin-left: 1rem;
+}
+
+.bolt-ref {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2rem;
+
+    text-transform: uppercase;
+    text-decoration: none;
+
+    color: #AAAAAA;
+    transition: all 0.2s linear;
+}
+.bolt-ref:hover {
+    color: #4377B5;
+    text-decoration: underline;
+}
+
+
+@media (max-width: 1200px) {
+    .main-admin-profile-box {
+        margin: 3.5rem auto;
+    }
+    .main-admin-profile-left {
+        width: 100%;
+    }
+    .main-admin-profile-right {
+        display: none;
+    }
+    .main-admin-auth-box {
+        width: 100%;
         display: flex;
-        align-items: flex-start;
-        justify-content: flex-end;
-
-        top: calc(100% + 2rem);
-
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
     }
 }
-@media (max-width: 950px) {
-    :root {
-        --left-panel-width: 95px;
-    }
-    .adm-profile {
-        padding: none;
-        padding-left: 5px;
-    }
-    .menu-item {
-        display: none;
-    }
-    .profile-email {
-        display: none;
-    }
-    .-log-out {
-        padding: none;
-        padding-left: 5px;
-        font-size: 1.25rem;
-    }
-    .-btn {
-        text-align: center;
-        justify-content: center;
+@media (max-width: 985px) {
+    .main-admin-profile-box {
+        width: 90%;
     }
 }
-@media (max-width: 650px) {
-    :root {
-        --chart-width: var(--desktop-width);
+@media (max-width: 850px) {
+    .main-admin-profile-box {
+        margin: 2rem auto;
+    }
+    .welcome-box {
+        margin-bottom: 2.67rem;
+    }
+    .admin-menu-box {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .chart-column:nth-child(1),
+    .chart-column:nth-child(2),
+    .chart-column:nth-child(3) {
+        display: none;
+    }
+}
+@media (max-width: 700px) {
+    .admin-menu-box {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .chart-column:nth-child(4),
+    .chart-column:nth-child(5),
+    .chart-column:nth-child(6) {
+        display: none;
     }
 }
 @media (max-width: 550px) {
-    :root {
-        --left-panel-width: 58px;
+    .welcome-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
-    .adm-profile {
-        display: none !important;
+    .school-title {
+        text-align: center;
     }
-    .adm-desktop {
-        justify-content: flex-start;
+    .admin-menu-item {
+        margin: 0 auto;
+
+        width: 100%;
+        max-width: 24.3rem;
+        height: 4.67rem;
+        
+        justify-content: center;
     }
-    .chart-title {
-        margin: 1.5rem 0;
+    .admin-menu-box {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
-    .analythicsChart {
-        height: 25vh;
-    }
-}
-@media (max-width: 450px) {
-    .top-side-name {
+    .chart-column:nth-child(7),
+    .chart-column:nth-child(8) {
         display: none;
     }
+    .chart-title {
+        width: 100%;
+        text-align: center;
+        margin: 3rem 0;
+    }
+    .adm-desktop {
+        margin-bottom: 5rem;
+    }
 }
-@media (max-width: 400px) {
-    :root {
-        font-size: 13px;
+@media (max-width: 350px) {
+    .chart-column::after {
+        margin-top: 2rem;
+        margin-left: -0.5rem;
+        font-weight: 600;
+        transform: rotate(90deg);
     }
 }

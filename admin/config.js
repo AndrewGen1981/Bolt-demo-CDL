@@ -44,7 +44,7 @@ const ISSUES = {
 }
 
 function findAdminById(id) {
-    return PROFILES.find(admin => admin.id.toUpperCase() === id.toUpperCase())
+    return PROFILES.find(admin => admin.id.toUpperCase() === id.toUpperCase()) || { id, name: id }
 }
 
 function checkAdminsAuth(id, auth) {
