@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTA | Chart: Accounts Receivables</title>
+    <title>BoltCDL | Accounts Receivables</title>
 
     <link rel="shortcut icon" href="/static/images/thumb.png">
-        
-    <!-- Styles -->
-    <!-- <link rel="stylesheet" href="/static/css/fonts.css">
-    <link rel="stylesheet" href="/static/css/brix-family.css"> -->
-        
     <link rel="stylesheet" href="/admin/charts/accountsReceivable.css">
 </head>
 <body>
 
     <!-- each location has own color for Chart -->
     <% 
-        const colorArray = ['#AAAAAA', '#F27878', '#FDC865', '#A2D092', 'yellow', 'green', 'cyan', 'blue', 'purple']
+        const colorArray = ['#AAAAAA', '#F27878', '#FDC865', '#A2D092', '#F9E960', '#B6D363', '#9CD9E7', '#80B4D9', '#C9A7EB', '#F29D78', '#92D0C5', '#9CA5F4', '#D6A5D4', '#ECBBCC']
     
         function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
         function formatToPercents(ratio) { return `${percFormat.format(Math.round(ratio * 1000) / 10)}%` }
@@ -43,7 +38,6 @@
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 2.25734C6.84313 2.25734 2.25734 6.84313 2.25734 12.5C2.25734 18.1569 6.84313 22.7427 12.5 22.7427C18.1569 22.7427 22.7427 18.1569 22.7427 12.5C22.7427 6.84313 18.1569 2.25734 12.5 2.25734ZM0 12.5C0 5.59644 5.59644 0 12.5 0C19.4036 0 25 5.59644 25 12.5C25 19.4036 19.4036 25 12.5 25C5.59644 25 0 19.4036 0 12.5Z" />
                     </svg>
                     <span>Accounts Receivable</span>
-                    <!-- <div class="active-item"></div> -->
                 </a>
                 <a href="/admin/charts/PF" class="header-nav-item" title="Graduation Dynamics">
                     <svg width="25" height="22" viewBox="0 0 25 22">
