@@ -213,10 +213,6 @@ header {
 
 /* Chart BOX */
 
-header {
-    /* margin-bottom: 3rem; */
-}
-
 .chart-box {
     margin: 0 auto 3rem auto;
     width: 95%;
@@ -241,7 +237,6 @@ header {
     font-weight: 700;
     color: #161616;
 }
-
 
 .analythicsChart {
     padding: 1.5rem 0;
@@ -284,8 +279,7 @@ header {
 
     margin-top: 1rem;
     width: 100%;
-    /* min-width: 75px; */
-   
+       
     font-weight: 600;
     font-size: 0.73rem;
     text-align: center;
