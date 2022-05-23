@@ -64,16 +64,12 @@
     </header>
 
 
-    <!-- each location has own color for Chart -->
-    <% 
-        const percFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
-    %>
-
-
     <% if(locals.chartData || locals.chartData.length) { %>
         
         <!-- making table form and sorting -->
         <%
+            const percFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+            
             let totalScoringsDone = 0
             const instructorsMatrix = []
             const scoringsMatrix = []
