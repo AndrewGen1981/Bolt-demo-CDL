@@ -225,11 +225,6 @@ nav {
 
 
 /* Header media */
-/* @media (max-width: 950px) {
-    .admin-separator, .admin-email {
-        display: none;
-    }
-} */
 @media (max-width: 985px) {
     .header-nav-item span {
         display: none;
