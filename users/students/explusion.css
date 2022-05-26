@@ -375,15 +375,25 @@ header {
     width: 36%;
     justify-content: space-between;
 }
-.-fullName {
+
+.-fullName,
+.-studentModal {
     font-weight: 500;
     font-size: 1rem;
     text-transform: capitalize;
+    text-decoration: underline;
     color: #4377B5;
 
     white-space: nowrap;
     overflow-x: hidden;
+
+    cursor: pointer;
 }
+.-studentModal {
+    padding-left: 1.4rem;
+    display: none;
+}
+
 .student-contacts {
     height: 100%;
     display: inline-flex;
@@ -555,6 +565,99 @@ footer {
 }
 
 
+/* modalWindow */
+.modalWindow {
+    position: fixed;
+
+    top: var(--header-height);
+    left: 0;
+
+    padding: 0 5%;
+    width: 100%;
+
+    height: 100%;
+    min-height: 100vh;
+
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+
+    z-index: 100;
+    transition: all 0.3s linear;
+}
+#student-name {
+    margin: 3rem 0;
+    width: fit-content;
+
+    display: block;
+    font-weight: 700;
+    font-size: 1.53rem;
+    line-height: 2.47rem;
+    text-transform: capitalize;
+
+    color: #4377B5;
+}
+.student-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#phone-href, #email-href {
+    text-decoration: none;
+    display: inline-flex;
+    margin-bottom: 3rem;
+}
+#phone, #email {
+    font-weight: 500;
+    font-size: 0.87rem;
+    text-decoration-line: underline;
+
+    color: #4377B5;
+}
+.info-header {
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 2rem;
+    color: #8D8D8D;
+}
+.info-text {
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 2rem;
+    color: #3C3C3C;
+}
+
+#balance {
+    font-weight: 700;
+    color: #F27878;
+}
+#balance[data-value="0"] {
+    font-weight: 500;
+    color: #3C3C3C;
+}
+
+#total-absence {
+    font-weight: 700;
+    margin: 3rem 0;
+}
+#absence {
+    font-weight: 700;
+    color: #F27878;
+    margin: 3rem 0;
+}
+#visited {
+    margin-bottom: 2rem;
+}
+
+#month1[data-value="0"],
+#month2[data-value="0"],
+#month3[data-value="0"] {
+    font-weight: 700;
+    color: #F27878;
+}
+
+
+/* General medai requests */
+
 @media (max-width: 1195px) {
     .-tuitionDuration {
         display: none;
@@ -603,9 +706,18 @@ footer {
     .-absenceSolid {
         width: 25%;
     }
-    .-student {
+
+    .-student, .-studentModal {
         width: 42%;
     }
+    .table-row .-student {
+        display: none;
+    }
+    .table-row .-studentModal {
+        display: inline-flex;
+    }
+
+
     .student-contacts {
         display: none;
     }

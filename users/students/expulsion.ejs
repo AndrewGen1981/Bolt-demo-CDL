@@ -142,7 +142,7 @@
                             <a href="/admin/user/<%= student.userId %>" class="-fullName" title="click to get into <%= student.fullName %> Profile"><%= student.fullName %></a>
                             <div class="student-contacts">
                                 <div class="-phone-box">
-                                    <a href="tel:<%= student.phone %>" class="-phone">
+                                    <a href="tel:<%= student.phone %>" class="-phone" data-phone="<%= student.phone %>">
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                                             <path d="M10.7391 12.4174C10.7391 12.4174 12.0888 11.6448 12.4421 11.4591C12.7945 11.2728 13.1595 11.2258 13.3811 11.3611C13.7168 11.5664 16.5355 13.4415 16.7728 13.6075C17.0101 13.7738 17.1245 14.2488 16.7981 14.7141C16.4731 15.1795 14.9738 17.0195 14.3385 16.9998C13.7021 16.9792 11.0565 16.9212 6.06749 11.9308C1.0795 6.94202 1.0205 4.29564 1.00017 3.6593C0.979834 3.02329 2.81983 1.5236 3.28516 1.19826C3.75116 0.873252 4.22682 0.995587 4.39216 1.22426C4.58016 1.4846 6.43348 4.29431 6.63748 4.61631C6.77715 4.83632 6.72582 5.20332 6.53948 5.55599C6.35415 5.90933 5.58149 7.25902 5.58149 7.25902C5.58149 7.25902 6.12615 8.18804 7.96815 10.0297C9.81047 11.8718 10.7391 12.4174 10.7391 12.4174Z" stroke-miterlimit="10"/>
                                         </svg>
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                                 <div class="-email-box">
-                                    <a href="mailto:<%= student.email %>" class="-email">
+                                    <a href="mailto:<%= student.email %>" class="-email" data-email="<%= student.email %>">
                                         <svg width="24" height="16" viewBox="0 0 24 16">
                                             <path d="M22 16H2C0.897 16 0 15.103 0 14V2C0 0.897 0.897 0 2 0H22C23.103 0 24 0.897 24 2V14C24 15.103 23.103 16 22 16ZM2 1C1.4485 1 1 1.4485 1 2V14C1 14.5515 1.4485 15 2 15H22C22.5515 15 23 14.5515 23 14V2C23 1.4485 22.5515 1 22 1H2Z" />
                                             <path d="M12 10.5955L3.22849 4.91999C2.99649 4.76949 2.92999 4.46049 3.07999 4.22849C3.22999 3.99649 3.53949 3.93049 3.77149 4.07999L12 9.40449L20.2285 4.07999C20.4605 3.93049 20.77 3.99649 20.92 4.22849C21.07 4.46049 21.0035 4.76949 20.7715 4.91999L12 10.5955Z" />
@@ -168,6 +168,8 @@
                                 </div>
                             </div>
                         </div>      <!-- cell -student -->
+
+                        <div class="cell -studentModal" onclick="showModalMenu(this)"><%= student.fullName %></div>
                         
                         <span class="cell -key"><%= student.key %></span>
                         <span class="cell -location"><%= student.location %></span>
@@ -218,7 +220,72 @@
     </div>
 
 
+    <!-- modalWindow -->
+    <div class="modalWindow -hidden" onclick="toggleModalWindow(this)">
+        <a href="#" id="student-name">Student name</a>
 
+        <div class="student-info">
+
+            <a href="#" class="-phone" id="phone-href">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <path d="M10.7391 12.4174C10.7391 12.4174 12.0888 11.6448 12.4421 11.4591C12.7945 11.2728 13.1595 11.2258 13.3811 11.3611C13.7168 11.5664 16.5355 13.4415 16.7728 13.6075C17.0101 13.7738 17.1245 14.2488 16.7981 14.7141C16.4731 15.1795 14.9738 17.0195 14.3385 16.9998C13.7021 16.9792 11.0565 16.9212 6.06749 11.9308C1.0795 6.94202 1.0205 4.29564 1.00017 3.6593C0.979834 3.02329 2.81983 1.5236 3.28516 1.19826C3.75116 0.873252 4.22682 0.995587 4.39216 1.22426C4.58016 1.4846 6.43348 4.29431 6.63748 4.61631C6.77715 4.83632 6.72582 5.20332 6.53948 5.55599C6.35415 5.90933 5.58149 7.25902 5.58149 7.25902C5.58149 7.25902 6.12615 8.18804 7.96815 10.0297C9.81047 11.8718 10.7391 12.4174 10.7391 12.4174Z" stroke-miterlimit="10"/>
+                </svg>
+                <span id="phone">2532004449</span>
+            </a>
+
+            <a href="#" class="-email" id="email-href">
+                <svg width="24" height="16" viewBox="0 0 24 16">
+                    <path d="M22 16H2C0.897 16 0 15.103 0 14V2C0 0.897 0.897 0 2 0H22C23.103 0 24 0.897 24 2V14C24 15.103 23.103 16 22 16ZM2 1C1.4485 1 1 1.4485 1 2V14C1 14.5515 1.4485 15 2 15H22C22.5515 15 23 14.5515 23 14V2C23 1.4485 22.5515 1 22 1H2Z" />
+                    <path d="M12 10.5955L3.22849 4.91999C2.99649 4.76949 2.92999 4.46049 3.07999 4.22849C3.22999 3.99649 3.53949 3.93049 3.77149 4.07999L12 9.40449L20.2285 4.07999C20.4605 3.93049 20.77 3.99649 20.92 4.22849C21.07 4.46049 21.0035 4.76949 20.7715 4.91999L12 10.5955Z" />
+                    <path d="M3.0005 13.0003C2.839 13.0003 2.68 12.9223 2.584 12.7778C2.4305 12.5478 2.4925 12.2378 2.7225 12.0843L7.2225 9.08429C7.4525 8.93079 7.763 8.99279 7.916 9.22279C8.0695 9.45279 8.0075 9.76279 7.7775 9.91629L3.2775 12.9163C3.192 12.9728 3.0955 13.0003 3.0005 13.0003Z" />
+                    <path d="M20.9995 13.0003C20.9045 13.0003 20.808 12.9728 20.7225 12.9163L16.2225 9.91629C15.9925 9.76279 15.9305 9.45279 16.084 9.22279C16.237 8.99279 16.547 8.93079 16.7775 9.08429L21.2775 12.0843C21.5075 12.2378 21.5695 12.5478 21.416 12.7778C21.32 12.9223 21.161 13.0003 20.9995 13.0003Z" />
+                </svg>
+                <span id="email">alphafleetacc@gmail.com</span>
+            </a>
+
+            <span class="info-header">Key</span>
+            <span class="info-text" id="key">1</span>
+
+            <span class="info-header">Location</span>
+            <span class="info-text" id="location">Kent, WA</span>
+
+            <span class="info-header">Balance</span>
+            <span class="info-text" id="balance">0.00</span>
+
+            <span class="info-header">TTT(h)</span>
+            <span class="info-text" id="ttt">30</span>
+
+            <span class="info-header">Tuition Start</span>
+            <span class="info-text" id="tuition-start">01/01/2022</span>
+
+            <span class="info-header">Last Session</span>
+            <span class="info-text" id="last-session">01/01/2022</span>
+
+            <span class="info-header">Last Visited</span>
+            <span class="info-text" id="last-visited">01/01/2022</span>
+
+            <span class="info-header">Tuition Duration</span>
+            <span class="info-text" id="duration">122</span>
+
+            <span class="info-header">Total Clocks</span>
+            <span class="info-text" id="clocks">12</span>
+
+            <span class="info-header" id="total-absence">Total Absence</span>
+            <span class="info-text" id="absence">22 days</span>
+
+            <span class="info-header" id="visited">Visited in:</span>
+            <span class="info-text"></span>
+
+            <span class="info-header" id="month1-header">Mar.2022</span>
+            <span class="info-text" id="month1">15</span>
+
+            <span class="info-header" id="month2-header">Mar.2022</span>
+            <span class="info-text" id="month2">15</span>
+
+            <span class="info-header" id="month3-header">Mar.2022</span>
+            <span class="info-text" id="month3">15</span>
+        </div>      <!-- student-info -->
+    </div>      <!-- modalWindow -->
 
 
     <script defer>
@@ -243,6 +310,53 @@
                     rows[i].classList.toggle('-visible', toShow && filter)
                 }
             }
+        }
+
+
+        // Show Modal Menu
+        function showModalMenu(studentModal) {
+            const row = studentModal.parentElement
+
+            const modalWindow = document.querySelector(".modalWindow")
+            modalWindow.classList.toggle("-hidden")
+
+            modalWindow.querySelector("#student-name").textContent = row.querySelector(".-fullName").textContent
+            modalWindow.querySelector("#student-name").href = row.querySelector(".-fullName").href
+
+            modalWindow.querySelector("#phone").textContent = row.querySelector(".-phone").dataset.phone
+            modalWindow.querySelector("#phone-href").href = row.querySelector(".-phone").href
+
+            modalWindow.querySelector("#email").textContent = row.querySelector(".-email").dataset.email
+            modalWindow.querySelector("#email-href").href = row.querySelector(".-email").href
+
+            modalWindow.querySelector("#key").textContent = row.querySelector(".-key").textContent
+            modalWindow.querySelector("#location").textContent = row.querySelector(".-location").textContent
+
+            modalWindow.querySelector("#balance").textContent = row.querySelector(".-balance").textContent
+            modalWindow.querySelector("#balance").dataset.value = parseInt(row.querySelector(".-balance").textContent)
+
+            modalWindow.querySelector("#ttt").textContent = row.querySelector(".-TTT").textContent
+            modalWindow.querySelector("#tuition-start").textContent = row.querySelector(".-tuitionStartDate").textContent
+            modalWindow.querySelector("#last-session").textContent = row.querySelector(".-lastSessionDate").textContent
+            modalWindow.querySelector("#last-visited").textContent = row.querySelector(".-lastVisitedDate").textContent
+
+            modalWindow.querySelector("#duration").textContent = row.querySelector(".-tuitionDuration").textContent
+            modalWindow.querySelector("#clocks").textContent = row.querySelector(".-totalClocks").textContent
+
+            modalWindow.querySelector("#absence").textContent = row.querySelector(".-absenceSolid").textContent
+
+            modalWindow.querySelector("#month1").textContent = row.querySelector(".mnth1").textContent
+            modalWindow.querySelector("#month1").dataset.value = row.querySelector(".mnth1").textContent
+
+            modalWindow.querySelector("#month2").textContent = row.querySelector(".mnth2").textContent
+            modalWindow.querySelector("#month2").dataset.value = row.querySelector(".mnth2").textContent
+
+            modalWindow.querySelector("#month3").textContent = row.querySelector(".mnth3").textContent
+            modalWindow.querySelector("#month3").dataset.value = row.querySelector(".mnth3").textContent
+        }
+
+        function toggleModalWindow(modalWindow) {
+            modalWindow.classList.toggle("-hidden")
         }
 
     </script>
