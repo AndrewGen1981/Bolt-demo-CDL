@@ -15,10 +15,6 @@
 :root {
     --header-height: 4rem;
     --titles-row-height: 3rem;
-    --left-cols-color: #c7c7c7;
-    --borders-color: var(--gray60-pacific-cloud);
-    --max-width: 1500px;
-
     --filter-accent: #43a84366;
 }
 
@@ -229,7 +225,9 @@ header {
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+
+    padding-left: 11.6vw;
 
     background-color: #fff;
 }
@@ -433,18 +431,17 @@ a.-name {
 
 
 
+footer, .empty-list {
+    width: 95%;
+    margin: 3rem auto;
+}
 .empty-list {
     font-size: 2rem;
-    color: var(--bad-todo)
 }
 .-smallMsg {
     display: none;
 }
 
-footer {
-    width: 95%;
-    margin: 3rem auto;
-}
 
 
 
