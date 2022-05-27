@@ -562,5 +562,8 @@ header {
     .sub-header {
         padding: 0 10px;
     }
+    .sub-header-title span {
+        margin: 0 0.7rem;
+    }
 }
 
