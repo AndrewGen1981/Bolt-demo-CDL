@@ -14,10 +14,7 @@
 
 :root {
     --header-height: 4rem;
-    /* for search */
     --filter-accent: #43a84366;
-    --filter-accent1: #43a843;
-    --accent-orange: hsla(21, 76%, 55%, 100%);
 }
 
 

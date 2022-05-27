@@ -4,24 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTA | WBDRS Report</title>
+    <title>BoltCDL | WBDRS Report</title>
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/fonts.css">
-    <link rel="stylesheet" href="../../static/css/brix-family.css">
-
     <link rel="stylesheet" href="/users/students/wbdrs.css">
 </head>
 <body>
     
     <!-- TOOLS -->
-    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %>
-    <% function formatDOB(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US').split("/").map(a => parseInt(a) < 10 ? `0${a}` : a).join("/") : '-' } %></10>
-    <% const usNumberFormat = new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
-    <!-- constant arrays -->
-    <%
+    <% 
+        function formatDate(textDate) {
+            return textDate 
+            ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
+            : ''
+        }
+
+        function formatSlashDate(date) {
+            return formatDate(date).replaceAll("-", "/")
+        }
+        
+        function formatDOB(textDate) {
+            return textDate
+            ? new Date(textDate).toLocaleDateString('en-CA')
+            : ''
+        }
+        
+        const year = locals.reportYear || parseInt(new Date().getFullYear())
+
+        const usNumberFormat = new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         const hispanic = ["Yes", "No"]
         const disabled = ["Yes", "No"]
         const veteran = ["Yes", "No"]
@@ -29,151 +39,206 @@
         const grade= ["Less than high school graduation", "GED", "High school graduate", "Some post high school, no degree/certificate", "Certificate (less than two years)", "Associate’s Degree", "Bachelor’s Degree", "Master’s Degree", "Doctoral Degree or above"]
     %>
 
-    <div class="report-box">
 
-        <header>
-            <h1 class="main-title"><span>WBDRS</span> <%= formatDate(locals.startDate) %><span>&bull;</span><%= formatDate(locals.endDate) %></h1>
-            <% const year = locals.reportYear || parseInt(new Date().getFullYear()) %>
-            <menu type="toolbar">
-                <%- include("../../static/partial/--admin-menu.ejs") %>
-                <a class="-admin-menu-btn" href="/admin/student/wbdrs" title="Reload report">
-                    <svg viewBox="0 0 512 512"><path d="M464 16c-17.67 0-32 14.31-32 32v74.09C392.1 66.52 327.4 32 256 32C161.5 32 78.59 92.34 49.58 182.2c-5.438 16.81 3.797 34.88 20.61 40.28c16.89 5.5 34.88-3.812 40.3-20.59C130.9 138.5 189.4 96 256 96c50.5 0 96.26 24.55 124.4 64H336c-17.67 0-32 14.31-32 32s14.33 32 32 32h128c17.67 0 32-14.31 32-32V48C496 30.31 481.7 16 464 16zM441.8 289.6c-16.92-5.438-34.88 3.812-40.3 20.59C381.1 373.5 322.6 416 256 416c-50.5 0-96.25-24.55-124.4-64H176c17.67 0 32-14.31 32-32s-14.33-32-32-32h-128c-17.67 0-32 14.31-32 32v144c0 17.69 14.33 32 32 32s32-14.31 32-32v-74.09C119.9 445.5 184.6 480 255.1 480c94.45 0 177.4-60.34 206.4-150.2C467.9 313 458.6 294.1 441.8 289.6z"/></svg>
-                </a>
-
-                <a class="-admin-menu-btn" onclick="downloadCSV(this)" target="_blank" title="Download as CSV">
-                    <svg viewBox="0 0 384 512">
-                        <path d="M256 0v128h128L256 0zM224 128L224 0H48C21.49 0 0 21.49 0 48v416C0 490.5 21.49 512 48 512h288c26.51 0 48-21.49 48-48V160h-127.1C238.3 160 224 145.7 224 128zM128 280C128 284.4 124.4 288 120 288H112C103.1 288 96 295.1 96 304v32C96 344.9 103.1 352 112 352h8C124.4 352 128 355.6 128 360v16C128 380.4 124.4 384 120 384H112C85.5 384 64 362.5 64 336v-32C64 277.5 85.5 256 112 256h8C124.4 256 128 259.6 128 264V280zM172.3 384H160c-4.375 0-8-3.625-8-8v-16C152 355.6 155.6 352 160 352h12.25c6 0 10.38-3.5 10.38-6.625c0-1.25-.75-2.625-2.125-3.875l-21.88-18.75C150.3 315.5 145.4 305.3 145.4 294.6C145.4 273.4 164.4 256 187.8 256H200c4.375 0 8 3.625 8 8v16C208 284.4 204.4 288 200 288H187.8c-6 0-10.38 3.5-10.38 6.625c0 1.25 .75 2.625 2.125 3.875l21.88 18.75c8.375 7.25 13.25 17.5 13.25 28.12C214.6 366.6 195.6 384 172.3 384zM288 284.8V264C288 259.6 291.6 256 296 256h16C316.4 256 320 259.6 320 264v20.75c0 35.5-12.88 69-36.25 94.13C280.8 382.1 276.5 384 272 384s-8.75-1.875-11.75-5.125C236.9 353.8 224 320.3 224 284.8V264C224 259.6 227.6 256 232 256h16C252.4 256 256 259.6 256 264v20.75c0 20.38 5.75 40.25 16 56.88C282.3 325 288 305.1 288 284.8z"/>
+    <header>
+        <!-- HOME element -->
+        <a href="/admin/profile" class="header-left-item">
+            <img src="/static/images/logo-small.png" alt="BOLT logo small" class="bolt-home">
+            <span class="item-home">Home</span>
+        </a>      <!-- header-left-item -->
+        <!-- CENTER element -->
+        <nav class="header-center-item">
+            <div class="nav-left-side">
+                <a href="/admin/user-area" class="header-nav-item" title="Users Area">
+                    <svg width="25" height="18" viewBox="0 0 25 18">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 4.10959C10.7741 4.10959 9.375 5.33621 9.375 6.84932C9.375 8.36243 10.7741 9.58904 12.5 9.58904C14.2259 9.58904 15.625 8.36243 15.625 6.84932C15.625 5.33621 14.2259 4.10959 12.5 4.10959ZM7.8125 6.84932C7.8125 4.57965 9.91117 2.73973 12.5 2.73973C15.0888 2.73973 17.1875 4.57965 17.1875 6.84932C17.1875 9.11898 15.0888 10.9589 12.5 10.9589C9.91117 10.9589 7.8125 9.11898 7.8125 6.84932Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.08058 13.2487C9.25269 12.2211 10.8424 11.6438 12.5 11.6438C14.1576 11.6438 15.7473 12.2211 16.9194 13.2487C18.0915 14.2763 18.75 15.67 18.75 17.1233C18.75 17.5016 18.4002 17.8082 17.9688 17.8082H7.03125C6.82405 17.8082 6.62534 17.7361 6.47882 17.6076C6.33231 17.4792 6.25 17.3049 6.25 17.1233C6.25 15.67 6.90848 14.2763 8.08058 13.2487ZM12.5 13.0137C11.2568 13.0137 10.0645 13.4467 9.18544 14.2174C8.49271 14.8247 8.03919 15.6025 7.87804 16.4384H17.122C16.9608 15.6025 16.5073 14.8247 15.8146 14.2174C14.9355 13.4467 13.7432 13.0137 12.5 13.0137Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.8443 0.354968C17.5743 0.0701711 18.3752 -0.0463026 19.171 0.0166068C19.9668 0.0795162 20.731 0.31972 21.3911 0.71441C22.0512 1.1091 22.5853 1.64517 22.9426 2.27173C23.3 2.89828 23.4687 3.59451 23.4328 4.29431C23.3968 4.99411 23.1575 5.67424 22.7374 6.27013C22.3174 6.86602 21.7305 7.35787 21.0326 7.69899C20.3348 8.04012 19.549 8.21918 18.75 8.21918C18.3185 8.21918 17.9688 7.91253 17.9688 7.53425C17.9688 7.15597 18.3185 6.84932 18.75 6.84932C19.2827 6.84932 19.8065 6.72994 20.2718 6.50253C20.737 6.27511 21.1282 5.94721 21.4083 5.54995C21.6883 5.15269 21.8479 4.69927 21.8718 4.23274C21.8958 3.7662 21.7833 3.30205 21.5451 2.88435C21.3069 2.46665 20.9508 2.10926 20.5107 1.84614C20.0707 1.58301 19.5612 1.42287 19.0306 1.38093C18.5001 1.339 17.9662 1.41664 17.4795 1.60651C16.9928 1.79637 16.5696 2.09215 16.25 2.46575C15.9911 2.76838 15.5014 2.82971 15.1562 2.60274C14.8111 2.37577 14.7411 1.94646 15 1.64384C15.4794 1.08343 16.1143 0.639765 16.8443 0.354968Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9688 9.58904C17.9688 9.21077 18.3185 8.90411 18.75 8.90411C20.4076 8.90411 21.9973 9.48141 23.1694 10.509C24.3415 11.5366 25 12.9303 25 14.3836C25 14.7618 24.6502 15.0685 24.2188 15.0685H19.5312C19.0998 15.0685 18.75 14.7618 18.75 14.3836C18.75 14.0053 19.0998 13.6986 19.5312 13.6986H23.372C23.2108 12.8628 22.7573 12.085 22.0646 11.4776C21.1855 10.7069 19.9932 10.274 18.75 10.274C18.3185 10.274 17.9688 9.96732 17.9688 9.58904Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.82904 0.0166068C6.62482 -0.0463026 7.42574 0.0701711 8.15574 0.354968C8.88574 0.639765 9.52059 1.08343 10 1.64384C10.2589 1.94646 10.1889 2.37577 9.84375 2.60274C9.49857 2.82971 9.00888 2.76838 8.75 2.46575C8.43039 2.09215 8.00716 1.79637 7.5205 1.60651C7.03383 1.41664 6.49988 1.339 5.96936 1.38093C5.43883 1.42287 4.92934 1.58301 4.48927 1.84614C4.04919 2.10926 3.69314 2.46665 3.45491 2.88435C3.21669 3.30205 3.10422 3.7662 3.12816 4.23274C3.1521 4.69927 3.31167 5.15269 3.59172 5.54995C3.87176 5.94721 4.26298 6.27511 4.72824 6.50253C5.19349 6.72994 5.71732 6.84932 6.25 6.84932C6.68147 6.84932 7.03125 7.15597 7.03125 7.53425C7.03125 7.91253 6.68147 8.21918 6.25 8.21918C5.45098 8.21918 4.66523 8.04012 3.96735 7.69899C3.26948 7.35787 2.68264 6.86602 2.26257 6.27013C1.84251 5.67424 1.60315 4.99411 1.56724 4.29431C1.53132 3.59451 1.70004 2.89828 2.05737 2.27173C2.4147 1.64517 2.94878 1.1091 3.6089 0.71441C4.26901 0.31972 5.03325 0.0795162 5.82904 0.0166068Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.83058 10.509C3.00268 9.48141 4.5924 8.90411 6.25 8.90411C6.68147 8.90411 7.03125 9.21077 7.03125 9.58904C7.03125 9.96732 6.68147 10.274 6.25 10.274C5.0068 10.274 3.81451 10.7069 2.93544 11.4776C2.24271 12.085 1.78919 12.8628 1.62804 13.6986H5.46875C5.90022 13.6986 6.25 14.0053 6.25 14.3836C6.25 14.7618 5.90022 15.0685 5.46875 15.0685H0.78125C0.57405 15.0685 0.375336 14.9963 0.228823 14.8679C0.08231 14.7394 0 14.5652 0 14.3836C0 12.9303 0.65848 11.5366 1.83058 10.509Z" />
                     </svg>
+                    <span>Users Area</span>
                 </a>
+                <a href="/admin/student/list" class="header-nav-item" title="Student List">
+                    <svg width="25" height="20" viewBox="0 0 25 20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1324 0.0928793C12.3621 -0.0309597 12.6379 -0.0309597 12.8676 0.0928793L24.5864 6.40867C24.841 6.54587 25 6.8137 25 7.10526C25 7.39682 24.841 7.66465 24.5864 7.80186L12.8676 14.1176C12.6379 14.2415 12.3621 14.2415 12.1324 14.1176L0.413603 7.80186C0.159022 7.66465 0 7.39682 0 7.10526C0 6.8137 0.159022 6.54587 0.413603 6.40867L12.1324 0.0928793ZM2.44141 7.10526L12.5 12.5263L22.5586 7.10526L12.5 1.68421L2.44141 7.10526Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.46875 8.8421C5.90022 8.8421 6.25 9.19556 6.25 9.63158V15C6.25 15.1967 6.34252 15.4921 6.6304 15.8592C6.91325 16.22 7.34774 16.6002 7.92148 16.948C9.0682 17.6433 10.6868 18.1579 12.5 18.1579C14.3132 18.1579 15.9318 17.6433 17.0785 16.948C17.6523 16.6002 18.0867 16.22 18.3696 15.8592C18.6575 15.4921 18.75 15.1967 18.75 15V9.63158C18.75 9.19556 19.0998 8.8421 19.5312 8.8421C19.9627 8.8421 20.3125 9.19556 20.3125 9.63158V15C20.3125 15.6717 20.0144 16.304 19.5943 16.8398C19.1691 17.382 18.5782 17.8801 17.8824 18.302C16.4901 19.1462 14.5931 19.7368 12.5 19.7368C10.4069 19.7368 8.50992 19.1462 7.11758 18.302C6.42179 17.8801 5.83089 17.382 5.40573 16.8398C4.9856 16.304 4.6875 15.6717 4.6875 15V9.63158C4.6875 9.19556 5.03728 8.8421 5.46875 8.8421Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.2188 6.31579C24.6502 6.31579 25 6.66925 25 7.10526V17.3684C25 17.8044 24.6502 18.1579 24.2188 18.1579C23.7873 18.1579 23.4375 17.8044 23.4375 17.3684V7.10526C23.4375 6.66925 23.7873 6.31579 24.2188 6.31579Z" />
+                    </svg>
+                    <span>Student List</span>
+                </a>
+                <a href="/admin/student" class="header-nav-item" id="reload-ins" title="INs">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.8286 11.6624C15.094 11.3705 15.5457 11.349 15.8376 11.6143L19.7662 15.1858C19.9151 15.3211 20 15.513 20 15.7143C20 15.9155 19.9151 16.1074 19.7662 16.2428L15.8376 19.8142C15.5457 20.0796 15.094 20.0581 14.8286 19.7662C14.5633 19.4743 14.5848 19.0225 14.8767 18.7572L18.2239 15.7143L14.8767 12.6714C14.5848 12.406 14.5633 11.9543 14.8286 11.6624Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 15.7143C0 15.3198 0.319797 15 0.714286 15H19.2857C19.6802 15 20 15.3198 20 15.7143C20 16.1088 19.6802 16.4286 19.2857 16.4286H0.714286C0.319797 16.4286 0 16.1088 0 15.7143Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.17139 0.23381C5.43675 0.525708 5.41524 0.977457 5.12334 1.24282L1.77615 4.28572L5.12334 7.32862C5.41524 7.59398 5.43675 8.04573 5.17139 8.33762C4.90602 8.62952 4.45428 8.65103 4.16238 8.38567L0.233805 4.81425C0.0848949 4.67887 0 4.48696 0 4.28572C0 4.08447 0.0848949 3.89256 0.233805 3.75719L4.16238 0.185762C4.45428 -0.0795999 4.90602 -0.0580881 5.17139 0.23381Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 4.28572C0 3.89123 0.319797 3.57143 0.714286 3.57143H19.2857C19.6802 3.57143 20 3.89123 20 4.28572C20 4.68021 19.6802 5 19.2857 5H0.714286C0.319797 5 0 4.68021 0 4.28572Z" />
+                    </svg>
+                    <span>INs</span>
+                </a>
+            </div>
+            <div class="nav-right-side">
+                <div class="nickname-search-box">
+                    <input type="search" class="nickname-search" placeholder="Student..." oninput="filterColumn(this, '.schema-col-name')">
+                    <svg width="20" height="20" viewBox="0 0 20 20" onclick="toggleSearch()">
+                        <path d="M19.5119 17.1552L15.281 12.9243C16.1552 11.6068 16.6668 10.0293 16.6668 8.33342C16.6668 3.73837 12.9285 0 8.33342 0C3.73837 0 0 3.73837 0 8.33342C0 12.9285 3.73837 16.6668 8.33342 16.6668C10.0293 16.6668 11.6068 16.1552 12.9243 15.281L17.1552 19.5119C17.8052 20.1627 18.8619 20.1627 19.5119 19.5119C20.1627 18.861 20.1627 17.806 19.5119 17.1552ZM2.50003 8.33342C2.50003 5.11672 5.11672 2.50003 8.33342 2.50003C11.5501 2.50003 14.1668 5.11672 14.1668 8.33342C14.1668 11.5501 11.5501 14.1668 8.33342 14.1668C5.11672 14.1668 2.50003 11.5501 2.50003 8.33342Z" />
+                    </svg>
+                </div>
+                <% if(locals.user) { %>
+                    <span class="admin-name"><%= user.name %></span>
+                    <span class="admin-separator">|</span>
+                    <span class="admin-email"><%= user.location %></span>
+                <% } %>
+            </div>
+        </nav>      <!-- header-center-item -->
+        <!-- SIGN OUT element -->
+        <form class="header-right-item" action="/admin/logout" method="POST">
+            <button type="submit">
+                <svg width="25" height="21" viewBox="0 0 25 21">
+                    <path d="M10.2041 18.8964C10.2041 18.939 10.2094 19.0454 10.22 19.2156C10.2307 19.3859 10.2333 19.5268 10.228 19.6386C10.2227 19.7503 10.2067 19.8753 10.1802 20.0136C10.1536 20.1519 10.1004 20.2557 10.0207 20.3248C9.94101 20.394 9.83206 20.4286 9.69388 20.4286H4.59184C3.32696 20.4286 2.24543 19.979 1.34726 19.08C0.449086 18.1809 0 17.0983 0 15.8321V4.59643C0 3.33028 0.449086 2.24767 1.34726 1.3486C2.24543 0.449535 3.32696 0 4.59184 0H9.69388C9.83206 0 9.95164 0.0505394 10.0526 0.151618C10.1536 0.252697 10.2041 0.372396 10.2041 0.510714C10.2041 0.553274 10.2094 0.659673 10.22 0.829911C10.2307 1.00015 10.2333 1.14113 10.228 1.25285C10.2227 1.36456 10.2067 1.48958 10.1802 1.6279C10.1536 1.76622 10.1004 1.86996 10.0207 1.93912C9.94101 2.00828 9.83206 2.04286 9.69388 2.04286H4.59184C3.89031 2.04286 3.28975 2.29289 2.79018 2.79297C2.2906 3.29304 2.04082 3.8942 2.04082 4.59643V15.8321C2.04082 16.5344 2.2906 17.1355 2.79018 17.6356C3.28975 18.1357 3.89031 18.3857 4.59184 18.3857H9.56633L9.74968 18.4017L9.93304 18.4496L10.0606 18.5373L10.1722 18.681L10.2041 18.8964ZM25 10.2143C25 10.4909 24.899 10.7303 24.6971 10.9325L16.0236 19.6146C15.8216 19.8168 15.5825 19.9179 15.3061 19.9179C15.0298 19.9179 14.7906 19.8168 14.5886 19.6146C14.3867 19.4125 14.2857 19.1731 14.2857 18.8964V14.3H7.14286C6.8665 14.3 6.62734 14.1989 6.42538 13.9968C6.22343 13.7946 6.12245 13.5552 6.12245 13.2786V7.15C6.12245 6.87336 6.22343 6.63397 6.42538 6.43181C6.62734 6.22965 6.8665 6.12857 7.14286 6.12857H14.2857V1.53214C14.2857 1.25551 14.3867 1.01611 14.5886 0.813951C14.7906 0.611793 15.0298 0.510714 15.3061 0.510714C15.5825 0.510714 15.8216 0.611793 16.0236 0.813951L24.6971 9.49609C24.899 9.69825 25 9.93765 25 10.2143Z" />
+                </svg>
+            </button>
+        </form>     <!-- header-right-item -->
+    </header>
 
-                <input type="search" id="search-bar" placeholder="search" oninput="filterColumn(this)">
+    <div class="sub-header">
+        <div class="sub-header-left">
+            <h2 class="sub-header-title">WBDRS<span><%= formatSlashDate(locals.startDate) %> - <%= formatSlashDate(locals.endDate) %></span></h2>
+            <div class="years-box">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M16.1538 20H3.84615C2.82609 20 1.84781 19.5948 1.12651 18.8735C0.405219 18.1522 0 17.1739 0 16.1538V5.38462C0 4.36455 0.405219 3.38627 1.12651 2.66497C1.84781 1.94368 2.82609 1.53846 3.84615 1.53846H16.1538C17.1739 1.53846 18.1522 1.94368 18.8735 2.66497C19.5948 3.38627 20 4.36455 20 5.38462V16.1538C20 17.1739 19.5948 18.1522 18.8735 18.8735C18.1522 19.5948 17.1739 20 16.1538 20ZM3.84615 3.07692C3.23412 3.07692 2.64715 3.32005 2.21437 3.75283C1.78159 4.18561 1.53846 4.77258 1.53846 5.38462V16.1538C1.53846 16.7659 1.78159 17.3529 2.21437 17.7856C2.64715 18.2184 3.23412 18.4615 3.84615 18.4615H16.1538C16.7659 18.4615 17.3529 18.2184 17.7856 17.7856C18.2184 17.3529 18.4615 16.7659 18.4615 16.1538V5.38462C18.4615 4.77258 18.2184 4.18561 17.7856 3.75283C17.3529 3.32005 16.7659 3.07692 16.1538 3.07692H3.84615Z" fill="#AAAAAA"/>
+                    <path d="M16.1538 16.9231H13.0769C12.8729 16.9231 12.6773 16.842 12.533 16.6978C12.3887 16.5535 12.3077 16.3579 12.3077 16.1538V13.0769C12.3077 12.8729 12.3887 12.6773 12.533 12.533C12.6773 12.3887 12.8729 12.3077 13.0769 12.3077H16.1538C16.3579 12.3077 16.5535 12.3887 16.6978 12.533C16.842 12.6773 16.9231 12.8729 16.9231 13.0769V16.1538C16.9231 16.3579 16.842 16.5535 16.6978 16.6978C16.5535 16.842 16.3579 16.9231 16.1538 16.9231ZM13.8462 15.3846H15.3846V13.8462H13.8462V15.3846Z" fill="#AAAAAA"/>
+                    <path d="M19.2308 7.69231H0.769231C0.565218 7.69231 0.369561 7.61126 0.225302 7.46701C0.0810437 7.32275 0 7.12709 0 6.92308C0 6.71906 0.0810437 6.52341 0.225302 6.37915C0.369561 6.23489 0.565218 6.15385 0.769231 6.15385H19.2308C19.4348 6.15385 19.6304 6.23489 19.7747 6.37915C19.919 6.52341 20 6.71906 20 6.92308C20 7.12709 19.919 7.32275 19.7747 7.46701C19.6304 7.61126 19.4348 7.69231 19.2308 7.69231Z" fill="#AAAAAA"/>
+                    <path d="M6.15385 4.61538C5.94983 4.61538 5.75418 4.53434 5.60992 4.39008C5.46566 4.24582 5.38462 4.05017 5.38462 3.84615V0.769231C5.38462 0.565218 5.46566 0.369561 5.60992 0.225302C5.75418 0.0810437 5.94983 0 6.15385 0C6.35786 0 6.55352 0.0810437 6.69777 0.225302C6.84203 0.369561 6.92308 0.565218 6.92308 0.769231V3.84615C6.92308 4.05017 6.84203 4.24582 6.69777 4.39008C6.55352 4.53434 6.35786 4.61538 6.15385 4.61538Z" fill="#AAAAAA"/>
+                    <path d="M13.8462 4.61538C13.6421 4.61538 13.4465 4.53434 13.3022 4.39008C13.158 4.24582 13.0769 4.05017 13.0769 3.84615V0.769231C13.0769 0.565218 13.158 0.369561 13.3022 0.225302C13.4465 0.0810437 13.6421 0 13.8462 0C14.0502 0 14.2458 0.0810437 14.3901 0.225302C14.5343 0.369561 14.6154 0.565218 14.6154 0.769231V3.84615C14.6154 4.05017 14.5343 4.24582 14.3901 4.39008C14.2458 4.53434 14.0502 4.61538 13.8462 4.61538Z" fill="#AAAAAA"/>
+                </svg>
                 <select class="year-picker" onchange="reloadWithYear(this.value, reloadHref)">
                     <% for (let i=-10; i < 1; i++) { %>
-                        <option value="<%= year + i %>" <%= i === 0 ? 'selected' : '' %> ><%= year + i %></option>
+                        <option value="<%= year + i %>" <%= i === 0 ? 'selected' : '' %>><%= year + i %></option>
                     <% } %>
                 </select>
-                <a href="#" id="reloadHref" class="-hidden"></a>
-            </menu>
-        </header>
-
-        <div class="dummy-header"></div>
-
-        <div class="main-data-table">
-            <div class="table-row -table-header">
-                <span class="cell -index">#</span>
-                <span class="cell -location">Location</span>
-                <span class="cell -class">ProgramTitle</span>
-                <span class="cell -awardType">ProgramAwardType</span>
-    
-                <span class="cell -lastName">StudentLastName</span>
-                <span class="cell -firstName">StudentFirstName</span>
-                <span class="cell -mi">MI</span>
-    
-                <span class="cell -street">Address</span>
-                <span class="cell -city">City</span>
-                <span class="cell -state">State</span>
-                <span class="cell -zip">ZipCode</span>
-                <span class="cell -phone">Phone</span>
-                <span class="cell -SSN">SSN</span>
-                <span class="cell -DOB">BirthDate</span>
-    
-                <span class="cell -hispanic">Hispanic</span>
-                <span class="cell -race">Race</span>
-                <span class="cell -sex">Gender</span>
-                <span class="cell -disabled">Disability</span>
-                <span class="cell -veteran">Veteran</span>
-                <span class="cell -grade">PriorEducation</span>
-    
-                <span class="cell -startDate">StartDate</span>
-                <span class="cell -exitDate">ExitDate</span>
-    
-                <span class="cell -programEnrollmentStatus">ProgramEnrollmentStatus</span>
-                <span class="cell -earnedAwardType">EarnedAwardType</span>
-                <span class="cell -GPA">GPA</span>
-                <span class="cell -passFail">PassFail</span>
             </div>
+        </div>      <!-- sub-header-left -->
+        <div class="sub-header-right">
+            <a class="-admin-menu-btn" onclick="downloadCSV(this)" target="_blank" title="Download as CSV">CSV</a>
+            <a href="/admin/student/wbdrs" class="-admin-menu-btn">
+                <svg width="20" height="17" viewBox="0 0 20 17" fill="none">
+                    <path d="M14.3789 14.3723C13.0021 15.7507 11.19 16.609 9.25136 16.8011C7.31268 16.9932 5.36737 16.5071 3.74687 15.4258C2.12636 14.3444 0.930903 12.7347 0.364181 10.8707C-0.20254 9.00682 -0.105469 7.00407 0.638856 5.20369C1.38318 3.40331 2.72871 1.9167 4.4462 0.997141C6.16369 0.0775767 8.14689 -0.21805 10.0579 0.160627C11.9689 0.539303 13.6895 1.56886 14.9266 3.07388C16.1636 4.5789 16.8406 6.46627 16.8421 8.41444H14.7368C14.7381 6.95318 14.2327 5.53669 13.3066 4.40633C12.3806 3.27598 11.0912 2.50171 9.65826 2.21546C8.22531 1.92921 6.73744 2.1487 5.44818 2.83652C4.15892 3.52435 3.14806 4.63794 2.58784 5.98755C2.02763 7.33716 1.95273 8.83927 2.3759 10.2379C2.79908 11.6366 3.69415 12.8452 4.90858 13.6579C6.12302 14.4705 7.58168 14.8369 9.03599 14.6947C10.4903 14.5524 11.8503 13.9102 12.8842 12.8776L14.3789 14.3723ZM11.5789 8.41444H20L15.7895 12.625L11.5789 8.41444Z" fill="#AAAAAA"/>
+                </svg>
+            </a>
+            <a href="#" id="reloadHref" class="-hidden"></a>
+        </div>      <!-- sub-header-right -->
+    </div>      <!-- sub-header -->
 
-            <% if(locals.students) { %>
-                <% students.map((student, index) => { %>
-                    <% if(student.user) { %>
-                        <% if(student.user.agreement && student.user.dataCollection) { %>
-                            <div class="table-row" id="table-row-<%= student._id %>">
-                                <span class="cell -index">
-                                    <%= index + 1 %>
-                                    <div class="delete-row" title="delete row from report" onclick="deleteRow('table-row-<%= student._id %>')">-</div>
-                                </span>
 
-                                <span class="cell -location"><%= student.location.split(',')[0] %></span>
-                                <span class="cell -class"><%= student.user.agreement.class %></span>
-                                <span class="cell -awardType">Certificate</span>
+    <!-- main-data-table -->
+    <div class="main-data-table">
+        <div class="table-row -table-header">
+            <span class="cell -index">#</span>
+            <span class="cell -location">Location</span>
+            <span class="cell -class">ProgramTitle</span>
+            <span class="cell -awardType">ProgramAwardType</span>
 
-                                <a href="/admin/user/<%= student.user._id %>" class="cell -lastName"><%= student.user.dataCollection.lastName %></a>
-                                <span class="cell -firstName"><%= student.user.dataCollection.firstName %></span>
+            <span class="cell -lastName">StudentLastName</span>
+            <span class="cell -firstName">StudentFirstName</span>
+            <span class="cell -mi">MI</span>
 
-                                <!-- Middle name has to be cleared from spec.symbols and N/As -->
-                                <% let mi = student.user.dataCollection.middleName.replace(/[^a-z]/gi, "").toUpperCase() %>
-                                <% mi = mi != "NA" ? mi[0] : "" %>
-                                <span class="cell -mi" title="<%= student.user.dataCollection.middleName %>"><%= mi %></span>
+            <span class="cell -street">Address</span>
+            <span class="cell -city">City</span>
+            <span class="cell -state">State</span>
+            <span class="cell -zip">ZipCode</span>
+            <span class="cell -phone">Phone</span>
+            <span class="cell -SSN">SSN</span>
+            <span class="cell -DOB">BirthDate</span>
 
-                                <span class="cell -street"><%= student.user.dataCollection.street %></span>
-                                <span class="cell -city"><%= student.user.dataCollection.city %></span>
-                                <span class="cell -state"><%= student.user.dataCollection.state[0].toUpperCase()+student.user.dataCollection.state[1].toUpperCase() %></span>
-                                <span class="cell -zip"><%= student.user.dataCollection.zip %></span>
-                                <span class="cell -phone"><%= student.user.dataCollection.phone %></span>
-                                <span class="cell -SSN"><%= student.user.dataCollection.SSN %></span>
-                                <span class="cell -DOB"><%= formatDOB(student.user.dataCollection.DOB) %></span>
+            <span class="cell -hispanic">Hispanic</span>
+            <span class="cell -race">Race</span>
+            <span class="cell -sex">Gender</span>
+            <span class="cell -disabled">Disability</span>
+            <span class="cell -veteran">Veteran</span>
+            <span class="cell -grade">PriorEducation</span>
 
-                                <span class="cell -hispanic" title="<%= student.user.dataCollection.hispanic %>"><%= hispanic.indexOf(student.user.dataCollection.hispanic) + 1 || " " %></span>
-                                <span class="cell -race" title="<%= student.user.dataCollection.race %>"><%= !student.user.dataCollection.race ? "9" : race.indexOf(student.user.dataCollection.race) + 1 || "8" %></span>
-                                <span class="cell -sex" title="<%= student.user.dataCollection.sex %>"><%= !student.user.dataCollection.sex ? " " : student.user.dataCollection.sex[0].toUpperCase() %></span>
-                                <span class="cell -disabled" title="<%= student.user.dataCollection.disabled %>"><%= disabled.indexOf(student.user.dataCollection.disabled) + 1 || " " %></span>
-                                <span class="cell -veteran" title="<%= student.user.dataCollection.veteran %>"><%= veteran.indexOf(student.user.dataCollection.veteran) + 1 || " " %></span>
-                                <span class="cell -grade" title="<%= student.user.dataCollection.grade %>"><%= !student.user.dataCollection.grade ? "99" : grade.indexOf(student.user.dataCollection.grade) + 1 || "90" %></span>
+            <span class="cell -startDate">StartDate</span>
+            <span class="cell -exitDate">ExitDate</span>
 
-                                <span class="cell -startDate"><%= formatDate(student.created) %></span>
-                                <span class="cell -exitDate"><%= student.graduate != 'no' ? formatDate(student.enrollmentStatusUpdate) : " " %></span>
+            <span class="cell -programEnrollmentStatus">ProgramEnrollmentStatus</span>
+            <span class="cell -earnedAwardType">EarnedAwardType</span>
+            <span class="cell -GPA">GPA</span>
+            <span class="cell -passFail">PassFail</span>
+        </div>
 
-                                <% if(student.enrollmentStatus === "Graduated from the program") { %>
-                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">1</span>
-                                <% } %>
-                                <% if(student.enrollmentStatus === "Withdrew/terminated from the program" || student.enrollmentStatus === "Withdrew/terminated from the program (Declined)") { %>
-                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">2</span>
-                                <% } %>
-                                <% if(student.enrollmentStatus === "Still enrolled in the program") { %>
-                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">3</span>
-                                <% } %>
-                                <% if(student.enrollmentStatus === "Military leave of absence") { %>
-                                    <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">4</span>
-                                <% } %>
-                                
-                                <span class="cell -earnedAwardType"><%= student.graduate === "passed" ? "Certificate " : "" %></span>
+        <% if(locals.students) { %>
+            <% students.map((student, index) => { %>
+                <% if(student.user) { %>
+                    <% if(student.user.agreement && student.user.dataCollection) { %>
+                        <div class="table-row" id="table-row-<%= student._id %>">
+                            
+                            <span class="cell -index">
+                                <div class="delete-row" title="delete row from report" onclick="deleteRow('table-row-<%= student._id %>')">-</div>
+                                <%= index + 1 %>
+                            </span>
+                            
 
-                                <span class="cell -GPA"></span>
-                                <span class="cell -passFail"><%= student.graduate === "passed" ? "P" : student.graduate === "failed" ? "F" : "" %></span>
-                            </div>      <!-- table-row -->
-                        <% } %>
+                            <span class="cell -location"><%= student.location.split(',')[0] %></span>
+                            <span class="cell -class"><%= student.user.agreement.class %></span>
+                            <span class="cell -awardType">Certificate</span>
+
+                            <a href="/admin/user/<%= student.user._id %>" class="cell -lastName"><%= student.user.dataCollection.lastName %></a>
+                            <span class="cell -firstName"><%= student.user.dataCollection.firstName %></span>
+
+                            <!-- Middle name has to be cleared from spec.symbols and N/As -->
+                            <% let mi = student.user.dataCollection.middleName.replace(/[^a-z]/gi, "").toUpperCase() %>
+                            <% mi = mi != "NA" ? mi[0] : "" %>
+                            <span class="cell -mi" title="<%= student.user.dataCollection.middleName %>"><%= mi %></span>
+
+                            <span class="cell -street"><%= student.user.dataCollection.street %></span>
+                            <span class="cell -city"><%= student.user.dataCollection.city %></span>
+                            <span class="cell -state"><%= student.user.dataCollection.state[0].toUpperCase()+student.user.dataCollection.state[1].toUpperCase() %></span>
+                            <span class="cell -zip"><%= student.user.dataCollection.zip %></span>
+                            <span class="cell -phone"><%= student.user.dataCollection.phone %></span>
+                            <span class="cell -SSN"><%= student.user.dataCollection.SSN %></span>
+                            <span class="cell -DOB"><%= formatDOB(student.user.dataCollection.DOB) %></span>
+
+                            <span class="cell -hispanic" title="<%= student.user.dataCollection.hispanic %>"><%= hispanic.indexOf(student.user.dataCollection.hispanic) + 1 || " " %></span>
+                            <span class="cell -race" title="<%= student.user.dataCollection.race %>"><%= !student.user.dataCollection.race ? "9" : race.indexOf(student.user.dataCollection.race) + 1 || "8" %></span>
+                            <span class="cell -sex" title="<%= student.user.dataCollection.sex %>"><%= !student.user.dataCollection.sex ? " " : student.user.dataCollection.sex[0].toUpperCase() %></span>
+                            <span class="cell -disabled" title="<%= student.user.dataCollection.disabled %>"><%= disabled.indexOf(student.user.dataCollection.disabled) + 1 || " " %></span>
+                            <span class="cell -veteran" title="<%= student.user.dataCollection.veteran %>"><%= veteran.indexOf(student.user.dataCollection.veteran) + 1 || " " %></span>
+                            <span class="cell -grade" title="<%= student.user.dataCollection.grade %>"><%= !student.user.dataCollection.grade ? "99" : grade.indexOf(student.user.dataCollection.grade) + 1 || "90" %></span>
+
+                            <span class="cell -startDate"><%= formatDate(student.created) %></span>
+                            <span class="cell -exitDate"><%= student.graduate != 'no' ? formatDate(student.enrollmentStatusUpdate) : " " %></span>
+
+                            <% if(student.enrollmentStatus === "Graduated from the program") { %>
+                                <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">1</span>
+                            <% } %>
+                            <% if(student.enrollmentStatus === "Withdrew/terminated from the program" || student.enrollmentStatus === "Withdrew/terminated from the program (Declined)") { %>
+                                <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">2</span>
+                            <% } %>
+                            <% if(student.enrollmentStatus === "Still enrolled in the program") { %>
+                                <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">3</span>
+                            <% } %>
+                            <% if(student.enrollmentStatus === "Military leave of absence") { %>
+                                <span class="cell -programEnrollmentStatus" title="<%= student.enrollmentStatus %>">4</span>
+                            <% } %>
+                            
+                            <span class="cell -earnedAwardType"><%= student.graduate === "passed" ? "Certificate " : "" %></span>
+
+                            <span class="cell -GPA"></span>
+                            <span class="cell -passFail"><%= student.graduate === "passed" ? "P" : student.graduate === "failed" ? "F" : "" %></span>
+                        </div>      <!-- table-row -->
                     <% } %>
-                <% }) %>
-            <% } else { %>
-                <h2 class="error-message">No student's data passed</h2>
-            <% } %>
-        </div>      <!-- main-data-table -->
-    </div>      <!-- report-box -->
+                <% } %>
+            <% }) %>
+        <% } else { %>
+            <h2 class="error-message">No student's data passed</h2>
+        <% } %>
+    </div>      <!-- main-data-table -->
+
 
 
     <script defer>
-
-        fitDummyHeader()
-
-        function fitDummyHeader() {
-            const dummy = document.querySelector('.dummy-header')
-            const tableHeader = document.querySelector('.-table-header')
-            const header = document.querySelector('header')
-
-            const headerHeight = window.getComputedStyle(header).getPropertyValue("height")
-            dummy.style.height = headerHeight
-            tableHeader.style.top = headerHeight
-        }
 
         // reload a layout with a certain year
         function reloadWithYear(yearPickerValue, a) {
@@ -230,6 +295,15 @@
             const row = document.querySelector(`#${id}`)
             if (!row) { return }
             row.remove()
+        }
+
+
+        const subHeader = document.querySelector(".sub-header")
+
+        if (subHeader) {
+            window.addEventListener('scroll', (e) => {
+                subHeader.style.marginLeft = `${window.scrollX}px`
+            })
         }
 
     </script>
