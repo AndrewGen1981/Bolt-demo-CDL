@@ -74,7 +74,7 @@
             <% let today = new Date() %>
             <div class="calendar-row -headers">
                 <div class="calendar-cell calendar-student-name"></div>
-                <% days.map((day, index) => { %>
+                <% days.forEach((day, index) => { %>
                     <% let isToday = (new Date() - day.date) >= 0 && (new Date() - day.date) <= 86400000 %>
                     <div class="calendar-cell <%= isToday ? '-today' : '' %>" style="--d: <%= index / 20 %>s">
                         <% dayOfWeek = day.date.getDay() %>
@@ -84,13 +84,13 @@
                 <% }) %>
             </div>
             <!-- going through students array to place what scheduled -->
-            <% studentsKeys.map((studentKey, k) => { %>
+            <% studentsKeys.forEach((studentKey, k) => { %>
                 <div class="calendar-row">
                     <div class="calendar-cell calendar-student-name">
                         <!-- getting info about all the skills tests -->
                         <% 
                             let stInfo = "Skills Tests:"
-                            studentsInRange[k].allSkillsTests.map(skTest => {
+                            studentsInRange[k].allSkillsTests.forEach(skTest => {
                                 stInfo += `\n${formatDateTime(skTest.scheduledDate)}: ${skTest.testLocation} - ${skTest.testType}; endor.${skTest.endorsements}`
                             })
                         %>
@@ -98,12 +98,12 @@
                         <span class="short-name" data-studentId="<%= studentsInRange[k].studentId %>" title="<%= stInfo %>"><%= studentsInRange[k].short %></span>
                         <span class="full-name"><%= studentsInRange[k].name.toLowerCase() %></span>
                     </div>
-                    <% days.map((day, index) => { %>
+                    <% days.forEach((day, index) => { %>
                         <div class="calendar-cell" style="--d: <%= index / 20 %>s">    
                             <% if(day.students) { %>
                                 <% if(day.students.length) { %>
                                     <% let freeSpot = true %>
-                                    <% day.students.map(stdt => { %>
+                                    <% day.students.forEach(stdt => { %>
                                         <% if(stdt.key === studentKey) { %>
                                             <% freeSpot = false %>
                                             <!-- skillsTestLocations -->

@@ -74,6 +74,12 @@ body, html {
 }
 
 
+.-headers {
+    position: sticky;
+    top: 0;
+}
+
+
 /* CALENDAR BODY */
 .calendar-row {
     width: 100%;

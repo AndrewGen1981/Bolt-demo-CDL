@@ -102,7 +102,11 @@
         </form>     <!-- header-right-item -->
     </header>
 
-    <div class="sub-header">
+
+    <div class="dummy"></div>
+
+    <!-- sub-header -->
+    <menu type="toolbar" class="sub-header">
         <div class="sub-header-left">
             <h2 class="sub-header-title">WBDRS<span><%= formatSlashDate(locals.startDate) %> - <%= formatSlashDate(locals.endDate) %></span></h2>
             <div class="years-box">
@@ -129,7 +133,8 @@
             </a>
             <a href="#" id="reloadHref" class="-hidden"></a>
         </div>      <!-- sub-header-right -->
-    </div>      <!-- sub-header -->
+    </menu>
+
 
 
     <!-- main-data-table -->
@@ -295,15 +300,6 @@
             const row = document.querySelector(`#${id}`)
             if (!row) { return }
             row.remove()
-        }
-
-
-        const subHeader = document.querySelector(".sub-header")
-
-        if (subHeader) {
-            window.addEventListener('scroll', (e) => {
-                subHeader.style.marginLeft = `${window.scrollX}px`
-            })
         }
 
     </script>

@@ -16,12 +16,17 @@
     --filter-accent: #4377B5;
 }
 
-/* HEADER */
+html, body {
+    width: fit-content;
+}
 
-header {
+/* HEADER */
+header, .dummy {
     width: 100%;
     height: var(--header-height);
+}
 
+header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -262,19 +267,21 @@ header {
 
 /* sub-header */
 .sub-header {
-    margin-top: 4rem;
+    padding: 0 11.6vw;
+
     width: 100%;
+    max-width: 98vw;
     height: 8.5rem;
 
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-
-    padding: 0 11.6vw;
+    justify-content: space-between;
 
     background-color: #fff;
-
     transition: all 0.35s linear;
+
+    position: sticky;
+    left: 0;
 }
 
 .sub-header-left {
