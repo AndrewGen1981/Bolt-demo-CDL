@@ -1,12 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+/* @GENERAL */
 *, *::before, *::after {
-    padding: 0;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
     font-weight: normal;
+    font-size: 15px;
 }
 
 :root {
-    font-size: 14px;
+    --header-height: 4rem;
     --accent-col1: #1d1e3d;
     --accent-col2: #2c314a;
     --accent-col3: #2c314a47;
@@ -15,72 +21,379 @@
 body, html {
     width: 100%;
     min-height: 100vh;
-    background-color: #161737;
+    background-color: #0F1C2F;
 }
 
-.calendar-box {
+
+/* HEADER */
+header, .dummy {
     width: 100%;
-    display: block;
+    height: var(--header-height);
 }
 
-/* HEADERS */
-.calendar-titles {
-    padding: 1rem 0;
-    width: 100%;
-    background-color: #1d1e3d;
-    text-align: center;
-    border-bottom: 1px solid var(--accent-col2);
-    margin-bottom: 0.5rem;
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+    background-color: #0F1C2F;
+
+    position: fixed;
+    top: 0;
+
+    z-index: 10;
+}
+
+.header-left-item {
+    padding: 0 1.33rem;
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+
+    transition: all 0.2s linear;
+}
+.header-left-item:hover {
+    background-color: #060E18;
+}
+
+.bolt-home {
+    width: 15px;
+    height: 35px;
+
+    margin-right: 0.87rem;
+}
+.item-home {
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+.header-center-item {
+    padding: 0 2.53rem;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-left-side,
+.nav-right-side {
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-left-side {
+    justify-content: flex-start;
+}
+
+.header-nav-item {
+    margin: 0 1.5rem;
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+
+    text-decoration: none;
     position: relative;
 }
-.calendar-title {
-    font-family: "Industrial Bold";
-    font-size: 2.3rem;
+
+
+.active-item::after {
+    content: "";
+    --height: 5px;
+
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    height: var(--height);
+    background-color: #3789EB;
+
+    z-index: 10;
+}
+
+
+.header-nav-item svg {
+    min-width: 25px;
+    margin-right: 0.67rem;
+    fill: #657389;
+    
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover svg {
+    fill: #fff;
+}
+
+.header-nav-item span {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #657389;
+
+    transition: all 0.25s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover span {
     color: #fff;
 }
-.data-titles {
+
+.nav-right-side .admin-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+.nav-right-side .admin-separator {
+    margin: 0 0.7rem;
+    font-size: 1rem;
+    color: #657389;
+}
+.nav-right-side .admin-email {
+    font-size: 1rem;
+    color: #657389;
+}
+
+.header-right-item {
+    margin-right: 1.2rem;
+}
+.header-right-item button {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
-}
-.calendar-year-title,
-.data-titles span,
-.calendar-month-title {
-    padding: 0 2px;
-    font-family: "Industrial Medium";
-    font-size: 1.6rem;
-    color:wheat;
-}
-#calendar-date {
-    padding: 5px 12px;
 
-    font-family: "BrixSlab-Light";
-    font-size: 1.2rem;
-    letter-spacing: 0.6px;
-    color: #fff;
-
-    outline: none;
     border: none;
-    border-radius: 1rem;
-    
-    background-color: #ffffff45;
+    outline: none;
+    background-color: transparent;
+
     cursor: pointer;
 }
-.calendar-box menu {
-    position: absolute;
-    left: 0.5rem; bottom: 0.5rem;
+
+.header-right-item svg {
+    fill: #657389;
+    transition: all 0.2s linear;
+}
+.header-right-item svg:hover {
+    fill: #fff;
 }
 
 
-.-headers {
+/* searchbar */
+.nickname-search-box {
+    width: 100%;
+    max-width: 20rem;
+    height: 100%;
+
+    background-color: #060E18;
+    position: relative;
+
+    margin-right: 2rem;
+}
+.nickname-search-box svg {
+    fill: #647389;
+
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    
+    transform: translateY(-50%);
+    transition: all 0.2s linear;
+    
+    cursor: pointer;
+}
+.nickname-search-box svg:hover {
+    fill: #fff;
+}
+
+.nickname-search {
+    padding: 0 2rem;
+
+    width: 100%;
+    height: 100%;
+    
+    color: #fff;
+    background-color: transparent;
+
+    border: none;
+    outline: none;
+}
+.nickname-search::placeholder {
+    color: #647389;
+}
+
+
+/* Header media */
+@media (max-width: 950px) {
+    .admin-separator, .admin-email {
+        display: none;
+    }
+}
+@media (max-width: 800px) {
+    .header-nav-item span {
+        display: none;
+    }
+    .header-nav-item svg {
+        margin: 0 auto;
+    }
+}
+@media (max-width: 550px) {
+    .header-left-item {
+        padding-right: 0;
+    }
+    .bolt-home {
+        margin-right: 0;
+    }
+    .item-home {
+        display: none;
+    }
+    .nav-left-side {
+        justify-content: space-around;
+    }
+    .nav-left-side,
+    .nav-right-side {
+        width: 50%;
+    }
+    .header-center-item {
+        padding: 0 0.5rem;
+    }
+    .header-nav-item {
+        margin: 0;
+    }
+}
+
+
+/* sub-header */
+.sub-header {
+    padding: 0 11.6vw;
+
+    width: 100%;
+    max-width: 100vw;
+    height: 8.73rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #fff;
+    transition: all 0.2s linear;
+
     position: sticky;
-    top: 0;
+    left: 0;
+}
+
+.sub-header-left {
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.sub-header-right {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.sub-header-title {
+    display: flex;
+    align-items: center;
+
+    font-weight: 700;
+    font-size: 1.53rem;
+
+    text-transform: uppercase;
+    color: #151515;
+}
+.sub-header-title span {
+    margin: 0 0.5rem;
+
+    font-weight: 500;
+    font-size: 1.53rem;
+
+    text-transform: none;
+    color: #151515;
+}
+
+
+.back-to-link {
+    margin-left: 1rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #4377B5;
+}
+
+.calendar-year-title,
+.calendar-month-title {
+    display: none;
+}
+
+#calendar-date {
+    padding: 0 1.5rem;
+    width: 10.47rem;
+    height: 3.33rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #151515;
+
+    background: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2rem;
+}
+
+#reload-calendar {
+    margin-left: 1rem;
+
+    width: 3.33rem;
+    height: 3.33rem;
+
+    min-width: 3.33rem;
+    min-height: 3.33rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2rem;
 }
 
 
 /* CALENDAR BODY */
+
+.-headers {
+    /* backup dummy layer, for scrolling */
+    background-color: #0F1C2F;
+
+    position: sticky;
+    top: var(--header-height);
+    z-index: 2;
+}
+
+.-headers .calendar-student-name,
+.-headers .calendar-cell {
+    background-color: #172237 !important;
+}
+
+
+
+.calendar-box {
+    width: 100%;
+    display: block;
+
+    padding-right: 5px;
+    margin-bottom: 3rem;
+}
+
 .calendar-row {
     width: 100%;
     display: flex;
@@ -110,9 +423,9 @@ body, html {
     animation-timing-function: linear;
     animation-delay: var(--d);
 
-
     /* animation: appear 0.5s linear var(--d); */
 }
+
 .calendar-student-name {
     padding: 0 3px;
     flex: 1.5;
@@ -122,18 +435,20 @@ body, html {
 .-headers .calendar-cell:not(.calendar-student-name) {
     border-radius: 5px 5px 0 0;
 }
-.-today {
-    background-color: #43a84338;
+
+.-headers .-today {
+    background-color: #43a84338 !important;
 }
+
 .calendar-date {
-    font-family: "BrixSlab-Bold";
     letter-spacing: 0.5px;
-    font-size: 1.1rem;
+    font-size: 0.93rem;
+    font-weight: 600;
     color: #fff;
 }
 .calendar-day {
-    font-family: "BrixSlab-Light";
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 500;
     color: #fff;
     opacity: 0.85;
 }
@@ -149,8 +464,7 @@ body, html {
     padding: 0.35rem 0.3rem;
     width: 2.2rem;
 
-    font-family: "BrixSlab-Medium";
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     text-align: center;
     text-transform: uppercase;
     color: #fff;
@@ -170,14 +484,15 @@ body, html {
     --col2: transparent;
 
     padding: 3px;
-    width: 135px;
+    min-width: 10rem;
+
     position: absolute;
     top: 0; left: 2.15rem;
 
-    font-family: "BrixSlab-Light";
-    font-size: 0.7rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
     text-transform: capitalize;
-    letter-spacing: 1px;
+    letter-spacing: 0.6px;
     color: #f5deb3;
 
     background: var(--col1);
@@ -195,19 +510,25 @@ body, html {
 
     width: 100%;
 
-    font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 0.8px;
-    font-size: 0.85rem;
-    text-align: center;
-    color:#2f315e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     background-color: var(--c);
     box-shadow: 0 0 8px 0px var(--c);
     border-radius: 2px;
+
     cursor: pointer;
 
     position: relative;
 }
+.-occupied-spot span {
+    letter-spacing: 0.8px;
+    font-size: 0.87rem;
+    color:#2f315e;
+}
+
+
 .-occupied-spot-to-delete {
     --c: red !important;
 }
@@ -241,13 +562,16 @@ body, html {
 }
 
 .-tool-btn {
-    margin: 1px 0;
+    margin: 1px;
+    
+    width: 1rem;
+    height: 1rem;
 
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    width: 13px;
-    height: 13px;
+    font-size: 0.73rem;
 
     transition: all 0.2s linear;
 }
