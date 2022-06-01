@@ -121,7 +121,11 @@ schRouter.put('/', ifCanWrite, async(req, res) => {
         if (action === "BLOCK SCHEDULE CELL") {
             const { column, row, type, transmission, location } = req.body
             if (column && row && type && transmission && location ) {
-                const scheduleBlocked = await ScheduleBlocked.findOne({ type, transmission, location })
+                const scheduleBlocked = await ScheduleBlocked.findOne({ 
+                    schType: type,
+                    schTransmission: transmission,
+                    schLocation: location
+                })
                 if (!scheduleBlocked) {
                     await new ScheduleBlocked({
                         schType: type,
@@ -142,7 +146,11 @@ schRouter.put('/', ifCanWrite, async(req, res) => {
         if (action === "UNBLOCK SCHEDULE CELL") {
             const { column, row, type, transmission, location } = req.body
             if (column && row && type && transmission && location ) {
-                const scheduleBlocked = await ScheduleBlocked.findOne({ type, transmission, location })
+                const scheduleBlocked = await ScheduleBlocked.findOne({ 
+                    schType: type,
+                    schTransmission: transmission,
+                    schLocation: location
+                })
                 if (scheduleBlocked) {
                     if (scheduleBlocked.schBlockedDays) {
                         const newSchBlockedDays = scheduleBlocked.schBlockedDays.filter(schBlockedDay => {
