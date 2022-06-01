@@ -396,7 +396,8 @@ header {
     cursor: pointer;
 }
 .-admin-menu-btn:hover {
-    box-shadow: 0px 0px 10px 1px #93939357;
+    /* box-shadow: 0px 0px 10px 1px #93939357; */
+    background-color: #F3F3F3;
 }
 
 .min-requirements input {

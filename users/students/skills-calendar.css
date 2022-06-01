@@ -347,6 +347,9 @@ header {
     background: #FFFFFF;
     border: 1px solid #DEDEDE;
     border-radius: 2rem;
+
+    transition: all 0.2s linear;
+    cursor: pointer;
 }
 
 #reload-calendar {
@@ -365,6 +368,14 @@ header {
     background: #FFFFFF;
     border: 1px solid #DEDEDE;
     border-radius: 2rem;
+
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+
+#calendar-date:hover,
+#reload-calendar:hover {
+    background-color: #F3F3F3;
 }
 
 

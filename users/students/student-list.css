@@ -249,33 +249,45 @@ header {
     max-width: 10rem;
     height: 3.33rem;
 
-    margin-left: 3px;
-    padding: 3px;
-
+    padding: 0 1rem;
+    
     font-size: 1rem;
-
     color: #151515;
+
     background-color: #FFFFFF;
 
     border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
     outline: unset;
+
+    transition: all 0.2s linear;
+}
+
+#locationSelect {
+    margin-right: 0.7rem;
 }
 #enrollmentStatusSelect {
     min-width: 300px;
 }
+
 #locationSelect option,
 #enrollmentStatusSelect option {
     font-size: 0.87rem;
     background-color: #fff;
 }
 
+#locationSelect:hover,
+#enrollmentStatusSelect:hover {
+    background-color: #F3F3F3;
+}
+
 
 /* subheader toolbar*/
 .subheader {
-    padding-left: 1rem;
+    padding: 0 2rem 0 1rem;
 
     width: 100%;
-    max-width: 95vw;
+    max-width: 100vw;
 
     height: var(--header-height);
 
@@ -305,7 +317,13 @@ header {
 
     cursor: pointer;
     margin-right: 1.33rem;
+
+    transition: all 0.2s linear;
 }
+.tool-bar-btn:hover {
+    background-color: #F3F3F3;
+}
+
 .tool-bar-btn svg {
     margin-right: 0.8rem;
     transition: all 0.15s linear;

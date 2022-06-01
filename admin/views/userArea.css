@@ -12,30 +12,26 @@
 }
 
 :root {
+    --header-height: 4rem;
     --max-content-width: 1650px;
     --filter-accent: #43a84366;
-}
-
-
-/* NAV BAR */
-nav {
-    width: 100%;
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 
 /* HEADER */
 .header-top {
     width: 100%;
-    height: 4rem;
+    height: var(--header-height);
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     background-color: #0F1C2F;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .header-left-item {
@@ -95,6 +91,7 @@ nav {
 
 .header-nav-item {
     margin: 0 1.5rem;
+    height: 100%;
 
     display: inline-flex;
     align-items: center;
@@ -108,7 +105,7 @@ nav {
     --height: 5px;
 
     position: absolute;
-    bottom: calc(-2rem + var(--height));
+    bottom: 0;
 
     width: 100%;
     height: var(--height);
@@ -296,7 +293,12 @@ header {
     align-items: center;
 
     background-color: #E8E8E8;
+
+    position: sticky;
+    top: var(--header-height);
+    z-index: 10;
 }
+
 #schema-headers-users {
     width: 95%;
     max-width: var(--max-content-width);
@@ -503,11 +505,6 @@ header {
         max-width: 18.5rem;
     }
 }
-@media (max-width: 1125px) {
-    .active-item {
-        bottom: calc(-1.4rem + var(--height));
-    }
-}
 @media (max-width: 1100px) {
     .nav-info,
     .nav-info span {
@@ -525,9 +522,6 @@ header {
     }
 }
 @media (max-width: 980px) {
-    .active-item {
-        bottom: calc(-2rem - 1px + var(--height));
-    }
     .nav-item-text {
         display: none;
     }
@@ -573,6 +567,10 @@ header {
     .nav-info {
         padding: 0.65rem 0.3rem;
     }
+    .schema-col-index {
+        min-width: 35px;
+        text-align: left;
+    }
 }
 @media (max-width: 450px) {
     .nav-info {
@@ -585,5 +583,8 @@ header {
 @media (max-width: 400px) {
     .schema-col-name {
         min-width: 13rem;
+    }
+    :root {
+        font-size: 13px;
     }
 }

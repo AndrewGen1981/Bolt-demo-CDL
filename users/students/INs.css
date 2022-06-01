@@ -259,6 +259,11 @@ header {
     border-radius: 2rem;
 
     outline: none;
+
+    transition: all 0.2s linear;
+}
+#clocked-as-of:hover {
+    background-color: #F3F3F3;
 }
 
 

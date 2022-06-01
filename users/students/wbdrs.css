@@ -337,7 +337,8 @@ header {
     cursor: pointer;
 }
 .-admin-menu-btn:hover {
-    box-shadow: 0px 0px 15px 1px #93939357;
+    /* box-shadow: 0px 0px 15px 1px #93939357; */
+    background-color: #F3F3F3;
 }
 
 
@@ -389,7 +390,8 @@ header {
     z-index: 1;
 }
 .year-picker:hover {
-    box-shadow: 0px 0px 15px 1px #93939357;
+    /* box-shadow: 0px 0px 15px 1px #93939357; */
+    background-color: #e9e9e963;
 }
 
 

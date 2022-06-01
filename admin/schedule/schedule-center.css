@@ -355,6 +355,11 @@ header {
 
     margin-bottom: 1.27rem;
     cursor: pointer;
+
+    transition: all 0.2s linear;
+}
+.location-title:not(.-active):hover {
+    background-color: #F3F3F3;
 }
 
 .test-item {

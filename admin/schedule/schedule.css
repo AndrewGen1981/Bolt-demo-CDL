@@ -316,7 +316,13 @@ header {
     border: 1px solid #DEDEDE;
     border-radius: 2rem;
 
+    cursor: pointer;
     outline: none;
+
+    transition: all 0.2s linear;
+}
+.schedule-input:hover {
+    background-color: #F3F3F3;
 }
 
 .back-n-forth {
