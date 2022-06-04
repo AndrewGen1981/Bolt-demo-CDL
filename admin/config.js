@@ -60,9 +60,13 @@ function checkAdminsAuth(id, auth) {
     }
 }
 
+function getAllLocations() {
+    return Object.values(LOCATION).filter(el => { return el !== LOCATION.All && LOCATION.Unset })
+}
+
 
 // INIT
-PROFILES.map(profile => {
+PROFILES.forEach(profile => {
     profile.authString = AUTHNAMES[profile.auth - 1]
 })
 
@@ -71,5 +75,6 @@ module.exports = {
     PROFILES,
     ISSUES,
     findAdminById,
-    checkAdminsAuth
+    checkAdminsAuth,
+    getAllLocations
 }

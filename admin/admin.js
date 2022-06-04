@@ -7,7 +7,7 @@ const path = require('path')
 const admin = require('./config')
 
 // MODELS for mongoose
-const { User, Student, Schedule, tools } = require('../users/userModel')
+const { User, Student, tools } = require('../users/userModel')
 const { dataCollectionForm } = require('../users/applicants/form1Model')
 const { applicationForm } = require('../users/applicants/form2Model')
 const { agreementForm } = require('../users/applicants/form3Model')
@@ -18,10 +18,6 @@ const { qrCONFIG } = require('./config-qr')
 
 // Charts
 const chart = require('./adminProfileCharts')
-
-// PDF
-const pdf = require('../static/pdf/pdf')
-
 
 // @SESSION config
 const ADM_SESS_DURATION = 1000 * 60 * 60 * 12    //  12 hours
@@ -65,7 +61,8 @@ function extractAdminFields(adminProfile) {
         name: adminProfile.name,
         first: adminProfile.name.split(' ')[0],
         last: adminProfile.name.split(' ')[1],
-        title: adminProfile.title
+        title: adminProfile.title,
+        location: adminProfile.location
     }
 }
 
@@ -240,7 +237,7 @@ admRouter.get('/user/:id', redirectToLogin, ifCanReadOrInstructor, async(req, re
 
         // Preparing updaters fields - original from db have only admin's id, I' like to pass a name instead
         const forms = ['dataCollection', 'application', 'agreement']
-        forms.map(form => {
+        forms.forEach(form => {
             if (user[form]) {
                 if (user[form].updatedAdmin) {
                     let updater = admin.findAdminById(user[form].updatedAdmin)
@@ -250,17 +247,16 @@ admRouter.get('/user/:id', redirectToLogin, ifCanReadOrInstructor, async(req, re
         })
 
         // current admin will sign or, if Agreement is signed alredy, the one in the agreement
-        let adm = admin.findAdminById(req.session.userId)
+        const loggedAdmin = admin.findAdminById(req.session.userId)
+        let adm = loggedAdmin
         if (user.agreement) {
             if (user.agreement.schoolSignRep) {
                 adm = admin.findAdminById(user.agreement.schoolSignRep)
             }
         }
+
         const signer = extractAdminFields(adm)
 
-        // getting pdf object for DPF printing
-        const pdfObj = user.dataCollection ? JSON.stringify(pdf.form1ToPDF(user.dataCollection)) : {}
-        
         // if user is a student and has clocks array already, then get student clocks's array - check tools to find out what is that
         if (user.agreement && user.student) {       // only when Agreement is signed and full/part is determined AND user is a Student
             if (user.agreement.visiting && user.student.clocks) {
@@ -269,19 +265,22 @@ admRouter.get('/user/:id', redirectToLogin, ifCanReadOrInstructor, async(req, re
                 const minVisitingRequirements = user.agreement.visiting.toLowerCase().includes("full time") ? 6 : 4
                 const { TTT, studentClocks } = tools.reCalculateTTT(user.student.clocks, minVisitingRequirements)       //  destructuring results
 
-                return res.render(path.join(__dirname+'/views/userInfo.ejs'), { user, pdfObj, signer,
+                return res.render(path.join(__dirname+'/views/userInfo.ejs'), {
+                    loggedAdmin, user, signer,
                     verTTT: TTT / (1000 * 60 *60),
                     verClocks: studentClocks,
                     tab, open,
                     enrollmentStatuses: tools.enrollmentStatusesArray,
+                    allLocations: admin.getAllLocations(),
                 })
                             
             }   //  type is determined AND clocks are present
         }   //  Agreement is signed AND user is a Student
         
         res.render(path.join(__dirname+'/views/userInfo.ejs'), { 
-            user, pdfObj, signer, tab, open,
+            loggedAdmin, user, signer, tab, open,
             enrollmentStatuses: tools.enrollmentStatusesArray,
+            allLocations: admin.getAllLocations(),
         })
 
     } catch(e) {

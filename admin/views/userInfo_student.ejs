@@ -2,335 +2,317 @@
 <!-- included into userInfo.ejs -->
 
 <% if (!user.dataCollection || !user.application || !user.agreement) { %>
-    <section class="row-item-85">
-        <div class="fields-set">
-            <div class="field-warning">Student Section is unavailable, because enrollment forms are not completed yet</div>
-        </div>
-    </section>
-    
+    <div class="field-info">Student Section is unavailable, because enrollment forms are not completed yet</div>
     <% if(user.dataCollection) { %>
-        <section class="row-item-85">
-            <div class="field-value -small">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
+        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
     <% } else { %>
-        <section class="row-item-85">
-            <div class="field-warning">#1 Data Collection hasn't been completed by User.</div>
-        </section>
+        <div class="field-warning">#1 Data Collection hasn't been completed by User.</div>
     <% } %>
-
     <% if(user.application) { %>
-        <section class="row-item-85">
-            <div class="field-value -small">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
+        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
     <% } else { %>
-        <section class="row-item-85">
-            <div class="field-warning">#2 Application form is not ready yet.</div>
-        </section>
+        <div class="field-warning">#2 Application form is not ready yet.</div>
     <% } %>
-
     <% if(user.agreement) { %>
-        <section class="row-item-85">
-            <div class="field-value -small">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
+        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
         <% if(!user.agreement.schoolSignRep) { %>
-            <section class="row-item-85">
-                <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
-            </section>
+            <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
         <% } else { %>
-            <section class="row-item-85">
-                <div class="field-accomplished">Agreement has been signed also from School's behalf.</div>
-            </section>
+            <div class="field-info1">Agreement has been signed also from School's behalf.</div>
         <% } %>  
     <% } else { %>
-        <section class="row-item-85">
-            <div class="field-warning">#3 Agreement has not been signed yet.</div>
-        </section>
+        <div class="field-warning">#3 Agreement has not been signed yet.</div>
     <% } %>
+<% } else { %>
 
-<% } else {%>
-
-    <!-- TODO: if already a Student then skip this -->
     <% if(!user.student) { %>
-        
-        <section class="row-item-85">
-            <div class="field-value -small">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
-        <section class="row-item-85">
-            <div class="field-value -small">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
-        <section class="row-item-85">
-            <div class="field-value -small">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-        </section>
-    
-        <section class="row-item-85"><div class="gap-line"></div></section>
+        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
 
         <% if(!user.agreement.schoolSignRep) { %>
-            <section class="row-item-85">
-                <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
-            </section>
+            <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
         <% } else { %>
-            <section class="row-item-85">
-                <div class="field-accomplished">Agreement has been signed also from School's behalf.</div>
-            </section>
+            <div class="field-info2">Agreement has been signed also from School behalf.</div>
 
             <form action="/admin/student/new/<%= user._id %>" method="post">
-    
-                <section class="row-item-85">
-                    <div class="field-accomplished">Everything is ready to create a new Student on Applicant Profile basis</div>
+                <div class="field-info1">Everything is ready to create a new Student on Applicant Profile basis</div>
+                <div class="row-buttons-center">
                     <button class='-btn' type="submit">Make a Student</button>
-                </section>
-        
+                </div>
             </form>
         <% } %> 
        
     <% } else { %>
 
-        <!-- TOOL: function floatToPercent() -->
-        <% function floatToPercent(d) { const D = d*100; const R = Math.trunc(D); const L = Math.round(10*(D % 1)); return `${R}.${L}%` } %>
-        <!-- TOOL: function printDateTime() -->
-        <% function printDateTime(date) { const d = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }); const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }); return `${d} (${t})` } %>
-        <!-- TOOL: Clocks TTT, coordinates -->
-        <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
-        <% function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` } %>
-        <% function normCOORD(latlon) { return Math.round(latlon * 1000) / 1000 } %>
+        <!-- TOOL -->
+        <% 
+            function floatToPercent(d) {
+                const D = d*100;
+                const R = Math.trunc(D);
+                const L = Math.round(10*(D % 1));
+                return `${R}.${L}%`
+            }
+        
+            function printDateTime(date) {
+                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
+                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false });
+                return `${d} (${t})`
+            }
+        
+            function strTTT(TTT) {
+                const H = Math.trunc(TTT);
+                const M = Math.round(60*(TTT % 1));
+                return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m`
+            }
+
+            function normTTT(TTT) {
+                return `${ Math.round(TTT * 100) / 100 }h`
+            }
+
+            function normCOORD(latlon) {
+                return Math.round(latlon * 1000) / 1000
+            }
+        %>
 
 
-        <form class="row-item-95 student-info-table" action='/admin/student/update-location' method="POST" id="update-location">
+        <form class="student-info-table" action='/admin/student/update-location' method="POST" id="update-location">
             <!-- table header -->
             <p class="-table-header">Info</p>
             <p class="-table-header">Value</p>
-            <p class="-table-header">Created</p>
+            <p class="-table-header -hide-if-small">Created</p>
             <p class="-table-header -cell-center">More</p>
 
             <!-- 1st string -->
-            <p>Student key</p>
+            <p class="-left-side-header">Student key</p>
             <p><%= user.student.key %></p>
-            <p><%= printDateTime(user.student.created) %></p>
+            <p class="-hide-if-small"><%= printDateTime(user.student.created) %></p>
             <p><%= user.student._id %></p>
 
             <!-- next line Status -->
-            <p>Status</p>
+            <p class="-left-side-header">Status</p>
             <% if(user.student.status === "unblock") { %>
-                <p class="field-accomplished">NORMAL</p>
+                <p class="field-info1">NORMAL</p>
             <% } %>
             <% if(user.student.status === "block") { %>
                 <p class="field-warning">BLOCKED</p>
             <% } %>
             <% if(user.student.status === "archive") { %>
-                <p class="field-yellow">ARCHIVED</p>
+                <p class="field-info">ARCHIVED</p>
             <% } %>
-            <p></p>
-            <p>*use menu to update status</p>
+            <p class="-hide-if-small"></p>
+            
+            <p class="field-link" onclick="highlightToolbar()">*use toolbar to update</p>
+            <script>
+                function highlightToolbar() {
+                    const toolbarButtons = document.querySelectorAll(".toolbar-btn")
+                    toolbarButtons.forEach(toolbarButton => {
+                        toolbarButton.classList.add("-toolbar-btn-move")
+                        setTimeout(() => {
+                            toolbarButton.classList.remove("-toolbar-btn-move")
+                        }, 350)
+                    })
+                }
+            </script>
             
             <!-- next line Email -->
-            <p>Email</p>
+            <p class="-left-side-header">Email</p>
             <% if(user.student.email === user.email) { %>
-                <a href="mailto:<%= user.student.email %>">
-                    <p class="-email field-accomplished"><%= user.student.email %></p>
-                </a>
-                <p></p>
-                <p class="field-accomplished">equals to user email</p>
+                <a class="field-link" href="mailto:<%= user.student.email %>"><%= user.student.email %></a>
+                <p class="-hide-if-small"></p>
+                <p class="field-info1">equals to user email</p>
             <% } else { %>
-                <a href="mailto:<%= user.student.email %>">
-                    <p class="-email field-warning"><%= user.student.email %></p>
-                </a>
-                <p></p>
+                <a class="field-warning" href="mailto:<%= user.student.email %>"><%= user.student.email %></a>
+                <p class="-hide-if-small"></p>
                 <p class="field-warning">doesn't equal to user email</p>
             <% } %>
 
             <!-- next line Location -->
-            <p>Location</p>
+            <p class="-left-side-header">Location</p>
             <!-- hidden, for location update -->
             <input type="hidden" name="studentId" value="<%= user.student._id %>" />
             <input type="hidden" name="userId" value="<%= user._id %>" />
-            <% const location = user.student.location ? user.student.location : 'UNSET' %>
-            <% const locs = ['Tacoma, WA', 'Kent, WA', 'Troutdale, OR'] %>
-            <select class='location-input-box' name='location' id='location'>
-                <% if (location === 'UNSET') { %>
-                    <option value='UNSET' selected >UNSET</option>
-                <% } %>
-                <% locs.forEach(loc => { %>
-                    <% if (location === loc) { %>
-                        <option value='<%= loc %>' selected ><%= loc %></option>
-                    <% } else { %>
-                        <option value='<%= loc %>'><%= loc %></option>
+            <% 
+                const location = user.student.location ? user.student.location : 'UNSET'
+                const locs = locals.allLocations || []
+            %>
+            <div class="location-input-box">
+                <select name='location' id='location'>
+                    <% if (location === 'UNSET') { %>
+                        <option value='UNSET' selected >UNSET</option>
                     <% } %>
-                <%  }) %>
-            </select>
-            <p></p>
-            <button type='submit' class='-btn-type2'>Update</button>
+                    <% locs.forEach(loc => { %>
+                        <% if (location === loc) { %>
+                            <option value='<%= loc %>' selected ><%= loc %></option>
+                        <% } else { %>
+                            <option value='<%= loc %>'><%= loc %></option>
+                        <% } %>
+                    <%  }) %>
+                </select>
+            </div>
+            <p class="-hide-if-small"></p>
+            <button type="submit" class="button-link">Update</button>
 
             <!-- next line Learning -->
-            <p>Learning progress</p>
+            <p class="-left-side-header">Learning progress</p>
             <% if(user.student.tuition) { %>
                 <% if(user.student.tuition.isAllowed) { %>
                     <p><%= floatToPercent(user.student.tuition.avLessonsRate) %></p>
-                    <p><%= printDateTime(user.student.tuition.created) %></p>
-                    <a class="-btn-type2" href="/admin/student/change-tuition-access/<%= user.student._id %>?action=disable">Disable access</a>
+                    <p class="-hide-if-small"><%= printDateTime(user.student.tuition.created) %></p>
+                    <a class="button-link" href="/admin/student/change-tuition-access/<%= user.student._id %>?action=disable">Disable access</a>
                 <% } else { %>
                     <p class="field-warning">Disabled(<%= floatToPercent(user.student.tuition.avLessonsRate) %>)</p>
-                    <p class="field-warning">Disabled</p>
-                    <a class="-btn-type2" href="/admin/student/change-tuition-access/<%= user.student._id %>?action=enable">Enable access</a>
+                    <p class="field-warning -hide-if-small">Disabled</p>
+                    <a class="button-link" href="/admin/student/change-tuition-access/<%= user.student._id %>?action=enable">Enable access</a>
                 <% } %>
             <% } else { %>
                 <p>0%</p>
-                <p class="field-warning">no access</p>
-                <a class="-btn-type2" href="/admin/student/allow-tuition/<%= user.student._id %>">Allow</a>
+                <p class="field-warning -hide-if-small">no access</p>
+                <a class="button-link" href="/admin/student/allow-tuition/<%= user.student._id %>">Allow</a>
             <% } %>
         </form>     <!-- student-info-table -->
 
         <!-- next line Clocks -->
         <% if (user.student.TTT) { %>
-            <form class="row-item-95 student-info-table" action="/admin/clocks" method="POST">
+            <form class="student-info-table" action="/admin/clocks" method="POST">
                 <input type="hidden" name="studentId" value="<%= user.student._id %>" />
                 <input type="hidden" name="userId" value="<%= user._id %>" />
                 <input type="hidden" name="studentKey" value="<%= user.student.key %>" />
                 <input type="hidden" name="studentName" value="<%= user.dataCollection.firstName %> <%= user.dataCollection.middleName %> <%= user.dataCollection.lastName %>" />
                 <input type="hidden" name="visiting" value="<%= user.agreement.visiting %>" />
 
-                <p>Total Tuition Time</p>
+                <p class="-left-side-header">Total Tuition Time</p>
                 <% if(user.student.TTT === verTTT) { %>
-                    <p><%= strTTT(user.student.TTT) %></p>
+                    <p class="field-info1"><%= strTTT(user.student.TTT) %></p>
                 <% } else { %>
                     <p class="field-warning"><%= strTTT(user.student.TTT) %></p>
                 <% } %>
-                <p><%= strTTT(verTTT) %> recalculated</p>
-                
-                <button class="-btn-type2" type="submit">Edit Clocks</button>
+                <p class="field-info1 -hide-if-small"><%= strTTT(verTTT) %> recalculated</p>
+                <button class="button-link" type="submit">Edit Clocks</button>
             </form>
         <% } %>
 
         <!-- next line Scorings -->
         <% if (user.student.scoring) { %>
-            <form class="row-item-95 student-info-table" action="/admin/inst/toggle-isallow" method="POST">
+            <form class="student-info-table" action="/admin/inst/toggle-isallow" method="POST">
                 <input type="hidden" name="scoringId" value="<%= user.student.scoring._id %>" />
                 <input type="hidden" name="userId" value="<%= user._id %>" />
 
-                <p>Scorings</p>
+                <p class="-left-side-header">Scorings</p>
                 <% if(user.student.scoring.isAllowed) { %>
-                    <p class="field-accomplished">Allowed</p>
-                    <p><%= printDateTime(user.student.scoring.created) %></p>
+                    <p class="field-info1">Allowed</p>
+                    <p class="-hide-if-small"><%= printDateTime(user.student.scoring.created) %></p>
                     <input type="hidden" name="newIsAllowed" value="disable" />
-                    <button class="-btn-type2" type="submit">Disable</button>
+                    <button class="button-link" type="submit">Disable</button>
                 <% } else { %>
                     <p class="field-warning">Disabled</p>
-                    <p><%= printDateTime(user.student.scoring.created) %></p>
+                    <p class="-hide-if-small"><%= printDateTime(user.student.scoring.created) %></p>
                     <input type="hidden" name="newIsAllowed" value="enable" />
-                    <button class="-btn-type2" type="submit">Enable</button>
+                    <button class="button-link" type="submit">Enable</button>
                 <% } %>
 
                 <% if(user.student.scoring.lastDone) { %>
-                    <p>Last scoring</p>
+                    <p class="-left-side-header">Last scoring</p>
                     <p>done by <%= user.student.scoring.lastDoneBy %></p>
-                    <p><%= printDateTime(user.student.scoring.lastDone) %></p>
-                    <p>*refer to "Details"</p>
-                <% } %>
+                    <p class="-hide-if-small"><%= printDateTime(user.student.scoring.lastDone) %></p>
+                    <p class="field-link" onclick="scrollToScorings()">*refer to details</p>
 
+                    <script>
+                        function scrollToScorings() {
+                            const scoringsSection = document.querySelector("#scoring-details")
+                            if (scoringsSection) {
+                                scoringsSection.open = !scoringsSection.open
+                                scoringsSection.scrollIntoView({
+                                    block: "end",
+                                    inline: "nearest",
+                                    behavior: "smooth"
+                                })
+                            }
+                        }
+                    </script>
+                <% } %>
             </form>
         <% } %>
 
 
-        <section class="row-item-85"><div class="gap-line"></div></section>
-
         <!-- LEARNING Center Details -->
         <% if(user.student.tuition) { %>
-            <section class="row-item-95">
-                <div class="fields-set">
-                    <svg class="details-ico"viewBox="0 0 448 512"><path d="M438.40625,377.59375c-3.20313,12.8125-3.20313,57.60937,0,73.60937Q447.9922,460.78907,448,470.40625v16c0,16-12.79688,25.59375-25.59375,25.59375H96c-54.40625,0-96-41.59375-96-96V96C0,41.59375,41.59375,0,96,0H422.40625C438.40625,0,448,9.59375,448,25.59375v332.8125Q448,372.79688,438.40625,377.59375ZM380.79688,384H96c-16,0-32,12.79688-32,32s12.79688,32,32,32H380.79688ZM128.01562,176.01562c0,.51563.14063.98438.14063,1.5l37.10937,32.46876A7.99954,7.99954,0,0,1,160,224h-.01562a9.17678,9.17678,0,0,1-5.25-1.98438L131.14062,201.375C142.6875,250.95312,186.90625,288,240,288s97.3125-37.04688,108.875-86.625l-23.59375,20.64062a8.02516,8.02516,0,0,1-5.26563,1.96876H320a9.14641,9.14641,0,0,1-6.01562-2.71876A9.26508,9.26508,0,0,1,312,216a9.097,9.097,0,0,1,2.73438-6.01562l37.10937-32.46876c.01563-.53124.15625-1,.15625-1.51562,0-11.04688-2.09375-21.51562-5.06251-31.59375l-21.26562,21.25a8.00467,8.00467,0,0,1-11.32812-11.3125l26.42187-26.40625a111.81517,111.81517,0,0,0-46.35937-49.26562,63.02336,63.02336,0,0,1-14.0625,82.64062A55.83846,55.83846,0,0,1,251.625,254.73438l-1.42188-34.28126,12.67188,8.625a3.967,3.967,0,0,0,2.25.6875,3.98059,3.98059,0,0,0,3.43749-6.03124l-8.53124-14.3125,17.90625-3.71876a4.00647,4.00647,0,0,0,0-7.84374l-17.90625-3.71876,8.53124-14.3125a3.98059,3.98059,0,0,0-3.43749-6.03124,4.726,4.726,0,0,0-2.25.67187L248.6875,184.125,244,71.82812a4.00386,4.00386,0,0,0-8,0l-4.625,110.8125-12-8.15624a4.003,4.003,0,0,0-5.68751,5.35937l8.53126,14.3125L204.3125,197.875a3.99686,3.99686,0,0,0,0,7.82812l17.90625,3.73438-8.53126,14.29688a4.72469,4.72469,0,0,0-.56249,2.04687,4.59547,4.59547,0,0,0,1.25,2.90625,4.01059,4.01059,0,0,0,2.75,1.09375,4.09016,4.09016,0,0,0,2.25-.6875l10.35937-7.04687L228.375,254.76562a55.86414,55.86414,0,0,1-28.71875-93.45312,63.01119,63.01119,0,0,1-14.04688-82.65625,111.93158,111.93158,0,0,0-46.375,49.26563l26.42187,26.42187a7.99917,7.99917,0,0,1-11.3125,11.3125l-21.26563-21.26563C130.09375,154.48438,128,164.95312,128.01562,176.01562Z" /></svg>
-                    <div class="details-title">Learning</div>
-                </div>
-            </section>
             <% if(user.student.tuition.lessons.length) { %>     <!-- begun tuition -->
-                <details class="row-item-95" id="tuition-details">  <!-- id is used for open details after backlink -->
-                    <summary class="field-accomplished">
-                        Details
-                    </summary>
+                <details class="row-item" id="tuition-details">  <!-- id is used for open details after backlink -->
+                    <summary>Learning</summary>
                     <div class="learning-table">
-                        <p class='-table-header'>Training Module</p>
-                        <p class='-table-header'>TITLE</p>
-                        <p class='-table-header -cell-center'>LAST TAKE</p>
-                        <p class='-table-header -cell-center'>TIME</p>
-                        <p class='-table-header -cell-right'>PROGRESS</p>
-                        <p class='-table-header -cell-center'>TEST</p>
-                        <% user.student.tuition.lessons.forEach(lesson => { %>
-                            <p><%= lesson.lesson %></p>
+                        <p class="-table-header -hide-if-small">Training Module</p>
+                        <p class="-table-header">TITLE</p>
+                        <p class="-table-header -to-hide-500">LAST TAKE</p>
+                        <p class="-table-header -time-to-hide">TIME</p>
+                        <p class="-table-header">PROGRESS</p>
+                        <p class="-table-header -cell-center">TEST</p>
+                        <% user.student.tuition.lessons.forEach((lesson, index) => { %>
+                            <p class="-hide-if-small"><%= `Module ${ index < 9 ? '0' + (index + 1) : (index + 1) }` %></p>
                             <p><%= lesson.lessonTitle %></p>
-                            <p class='-cell-center'><%= new Date(lesson.watchDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
-                            <p class='-cell-center'><%= new Date(lesson.watchDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles',  hour12: false }) %></p>
-                            <p class='-cell-right'><%= floatToPercent(lesson.videoProgress) %></p>
-
-                            <% if(lesson.testProgress > 0) { %>
-                                <p class='-cell-center -cell-done' title='Accomplished at <%= floatToPercent(lesson.testProgress) %>'>Yes</p>
-                            <% } else {%>
-                                <p class='-cell-center'>No</p>
+                            <p class="-to-hide-500"><%= new Date(lesson.watchDate).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %></p>
+                            <p class="-time-to-hide"><%= new Date(lesson.watchDate).toLocaleTimeString("en-CA", { timeZone: "America/Los_Angeles",  hour12: false }) %></p>
+                            <!-- PROGRESS -->
+                            <% if(lesson.videoProgress > 0.05) { %>
+                                <p><%= floatToPercent(lesson.videoProgress) %></p>
+                            <% } else { %>
+                                <p class="-cell-not-done"><%= floatToPercent(lesson.videoProgress) %></p>
                             <% } %>
-
+                            <!-- TEST -->
+                            <% if(lesson.testProgress > 0) { %>
+                                <p class="-cell-center -cell-done" title="Accomplished at <%= floatToPercent(lesson.testProgress) %>">Yes</p>
+                            <% } else { %>
+                                <p class="-cell-center -cell-not-done">No</p>
+                            <% } %>
                         <% }) %>
-                    </div>  <!-- learning-table -->
+                    </div>
                 </details>
             <% } else { %>
-                <section class="row-item-85">
-                    <div class="fields-set">
-                        <div class="field-warning">The course is scheduled but Student has not begun a tuition yet</div>
-                    </div>
-                </section>
+                <div class="field-warning">The course is scheduled but Student has not begun a tuition yet</div>
             <% } %>
         <% } %>
         
 
         <!-- QR Clocks Details -->
         <% if (verClocks) { %>
-            <section class="row-item-95">
-                <div class="fields-set">
-                    <svg class="details-ico" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm61.8-104.4l-84.9-61.7c-3.1-2.3-4.9-5.9-4.9-9.7V116c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v141.7l66.8 48.6c5.4 3.9 6.5 11.4 2.6 16.8L334.6 349c-3.9 5.3-11.4 6.5-16.8 2.6z" /></svg>
-                    <div class="details-title">Clocks</div>
-                </div>
-            </section>
-            <details class="row-item-95" id="clocks-details">   <!-- id is used for open details after backlink -->
-                <summary class="field-accomplished">
-                    Details
-                </summary>
+            <details class="row-item" id="clocks-details">   <!-- id is used for open details after backlink -->
+                <summary>Clocks</summary>
                 <div class="clock-table">
                     <p class="-table-header">DATE</p>
-                    <p class="-table-header">KEY</p>
+                    <p class="-table-header -hide-if-small">KEY</p>
                     <p class="-table-header">IN</p>
-                    <p class="-table-header">IN GEO</p>
+                    <p class="-table-header -hide-if-small">IN GEO</p>
                     <p class="-table-header">OUT</p>
-                    <p class="-table-header">OUT GEO</p>
-                    <p class="-table-header">DURATION</p>
+                    <p class="-table-header -hide-if-small">OUT GEO</p>
+                    <p class="-table-header -cell-center">DURATION</p>
                     <% verClocks.forEach(clock => { %>
                         <% let duration = clock.duration / (1000 * 60 *60) %>
                         <!-- Date, key -->
-                        <div><%= new Date(clock.date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
-                        <div><%= clock.dateKey %></div>
+                        <div><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                        <div class="-cell-not-done -hide-if-small"><%= clock.dateKey %></div>
                         <!-- IN & coord -->
                         <div><%= new Date(clock.in).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></div>
                         <% if (!isNaN(clock.inlat) && !isNaN(clock.inlon)) { %>
-                            <a class="-coord" href="http://www.google.com/maps/place/<%= clock.inlat %>,<%= clock.inlon %>" target="_blank">
-                                <%= normCOORD(clock.inlat) %>,<%= normCOORD(clock.inlon) %>
-                            </a>
+                            <a class="-coord -hide-if-small" href="http://www.google.com/maps/place/<%= clock.inlat %>,<%= clock.inlon %>" target="_blank"><%= normCOORD(clock.inlat) %>,<%= normCOORD(clock.inlon) %></a>
                         <% } else { %>
-                            <div class="-no-coord"><%= clock.inlat %>,<%= clock.inlon %></div>
+                            <div class="<%= (clock.inlat.length < 3 && clock.inlon.length < 3) ? '-no-coord' : '-updated-coord' %> -hide-if-small"><%= clock.inlat %>,<%= clock.inlon %></div>
                         <% } %>
                         <!-- OUT & coord -->
                         <% if( !isNaN(clock.out) ) { %>
                             <div><%= new Date(clock.out).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></div>
                         <% } else { %>
-                            <div class="-orange">NO</div>
+                            <div class="-no-clockout">NO</div>
                         <% } %>
-
                         <% if (!isNaN(clock.outlat) && !isNaN(clock.outlon)) { %>
-                            <a class="-coord" href="http://www.google.com/maps/place/<%= clock.outlat %>,<%= clock.outlon %>" target="_blank">
-                                <%= normCOORD(clock.outlat) %>,<%= normCOORD(clock.outlon) %>
-                            </a>
+                            <a class="-coord -hide-if-small" href="http://www.google.com/maps/place/<%= clock.outlat %>,<%= clock.outlon %>" target="_blank"><%= normCOORD(clock.outlat) %>,<%= normCOORD(clock.outlon) %></a>
                         <% } else { %>
-                            <div class="-no-coord"><%= clock.outlat %>,<%= clock.outlon %></div>
+                            <div class="<%= (clock.outlat.length < 3 && clock.outlon.length < 3) ? '-no-coord' : '-updated-coord' %> -hide-if-small"><%= clock.outlat %>,<%= clock.outlon %></div>
                         <% } %>
                         <!-- duration -->
                         <% if( !isNaN(clock.out) ) { %>
-                            <div><%= strTTT(duration) %></div>
+                            <div class="-cell-center"><%= strTTT(duration) %></div>
                         <% } else { %>
-                            <div class="-orange"><%= strTTT(duration) %></div>
+                            <div class="-no-clockout -cell-center"><%= strTTT(duration) %></div>
                         <% } %>
                     <% }) %>
                 </div>  <!-- clock-table -->
@@ -340,26 +322,20 @@
 
         <!-- SCORING Details -->
         <% if (user.student.scoring) { %>
-            <section class="row-item-95">
-                <div class="fields-set">
-                    <svg class="details-ico" viewBox="0 0 480 512"><path d="M477.7 186.1L309.5 18.3c-3.1-3.1-8.2-3.1-11.3 0l-34 33.9c-3.1 3.1-3.1 8.2 0 11.3l11.2 11.1L33 316.5c-38.8 38.7-45.1 102-9.4 143.5 20.6 24 49.5 36 78.4 35.9 26.4 0 52.8-10 72.9-30.1l246.3-245.7 11.2 11.1c3.1 3.1 8.2 3.1 11.3 0l34-33.9c3.1-3 3.1-8.1 0-11.2zM318 256H161l148-147.7 78.5 78.3L318 256z" /></svg>
-                    <div class="details-title">Scorings</div>
-                </div>
-            </section>
-            <details class="row-item-95" id="scoring-details">  <!-- id is used for open details after backlink -->
-                <summary class="field-accomplished">
-                    Details
-                </summary>
+            <details class="row-item" id="scoring-details">  <!-- id is used for open details after backlink -->
+                <summary>Scorings</summary>
                 <div class="scoring-table">
                     <div class="-table-header">Type</div>
                     <div class="-table-header">Date</div>
-                    <div class="-table-header">Instructor</div>
+                    <div class="-table-header -to-hide-500">Instructor</div>
                     <div class="-table-header">Result</div>
-                    <div class="-table-header">Certificate</div>
+                    <div class="-table-header -cell-center -hide-if-small">Certificate</div>
                     <!-- constants -->
-                    <% const scorings = user.student.scoring %>
-                    <% const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity] %>
-                    <% const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving'] %>
+                    <% 
+                        const scorings = user.student.scoring
+                        const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity]
+                        const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving']
+                    %>
                     <!-- 2D scorings array -->
                     <% scorArrays.forEach((scorArray, index) => { %>
                         <% scorArray.forEach(scor => { %>
@@ -369,22 +345,22 @@
                                 <textarea class='-hidden' name="scoringComment"><%= scor.comment %></textarea>
                                 <input type="hidden" name="scoringCertificate" value="<%= scor.certificate %>" />
                                 <input type="hidden" name="userId" value="<%= user._id %>" />
-                                <button class='scoring-details' type='submit'><%= scorTitles[index] %></button>
+                                <button class="button-link -no-borders" type="submit"><%= scorTitles[index] %></button>
                             </form>
 
                             <div><%= printDateTime(scor.created) %></div>
-                            <div><%= scor.instructor %></div>
+                            <div class="-to-hide-500"><%= scor.instructor %></div>
                             <!-- Result -->
                             <% if (scor.result) { %>
-                                <div class="field-accomplished">passed</div>
+                                <div class="-cell-done">passed</div>
                             <% } else { %>
                                 <div class="field-warning">failed</div>
                             <% } %>
                             <!-- Certificate -->
                             <% if (scor.certificate) { %>
-                                <div class="field-accomplished">Yes</div>
+                                <div class="-cell-done -cell-center -hide-if-small">Yes</div>
                             <% } else { %>
-                                <div class="field-yellow">No</div>
+                                <div class="-cell-not-done -cell-center -hide-if-small">No</div>
                             <% } %>
                         <% }) %>
                     <% }) %>
@@ -395,7 +371,6 @@
 
         <!-- schedule Details -->
         <% if (user.student.schedule) { %>
-
             <%
                 function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
                 const calendarTitles = {
@@ -405,22 +380,13 @@
                     "city": "CITY DRIVING", 
                 }
             %>
-
-            <section class="row-item-95">
-                <div class="fields-set">
-                    <svg class="details-ico" viewBox="0 0 448 512"><path d="M160 32V64H288V32C288 14.33 302.3 0 320 0C337.7 0 352 14.33 352 32V64H400C426.5 64 448 85.49 448 112V160H0V112C0 85.49 21.49 64 48 64H96V32C96 14.33 110.3 0 128 0C145.7 0 160 14.33 160 32zM0 192H448V464C448 490.5 426.5 512 400 512H48C21.49 512 0 490.5 0 464V192zM80 256C71.16 256 64 263.2 64 272V336C64 344.8 71.16 352 80 352H368C376.8 352 384 344.8 384 336V272C384 263.2 376.8 256 368 256H80z" /></svg>
-                    <div class="details-title">Schedule</div>
-                </div>
-            </section>
-            <details class="row-item-95" id="schedule-details">  <!-- id is used for open details after backlink -->
-                <summary class="field-accomplished">
-                    Details
-                </summary>
+            <details class="row-item" id="schedule-details">  <!-- id is used for open details after backlink -->
+                <summary>Schedule</summary>
                 <div class="schedule-table">
                     <div class="-table-header">Type</div>
                     <div class="-table-header">Date</div>
-                    <div class="-table-header">Transmission</div>
-                    <div class="-table-header">Location</div>
+                    <div class="-table-header -cell-center">Transmission</div>
+                    <div class="-table-header -cell-center">Location</div>
 
                     <% user.student.schedule.appointments.forEach(appointment => { %>
                         <%
@@ -434,10 +400,10 @@
                             link += `&calendarTransmission=${appointment.appTransmission}`
                             link += `&calendarLocation=${appointment.appLocation}`
                         %>
-                        <a href="<%= link %>"><%= calendarTitles[appointment.appType] %></a>
+                        <a class="field-info2" href="<%= link %>"><%= calendarTitles[appointment.appType] %></a>
                         <div><%= dateStr %></div>
-                        <div><%= appointment.appTransmission %></div>
-                        <div><%= appointment.appLocation %></div>
+                        <div class="-cell-center"><%= appointment.appTransmission %></div>
+                        <div class="-cell-center"><%= appointment.appLocation %></div>
                     <% }) %>
 
                 </div>  <!-- schedule-table -->
