@@ -40,35 +40,37 @@
 
 
     <% if(user.student.skillsTest) { %>
-        <div class="field-subheader-black">Skills Test Schedule</div>
-        
-        <div class="skills-test-table">
-            <p class="-table-header">#</p>
-            <p class="-table-header">Date</p>
-            <p class="-table-header">Test Location</p>
-            <p class="-table-header">Test Type</p>
-            <p class="-table-header -time-to-hide">Endorsements</p>
-            <p class="-table-header -cell-center -time-to-hide">STRF</p>
-            <% user.student.skillsTest.forEach((test, index) => { %>
-                <p><%= index + 1 %></p>
-                <p><%= getDateTime(test.scheduledDate) %></p>
-                <p><%= test.testLocation %></p>
-                <!-- Test Type -->
-                <% if(test.testType.toLowerCase() === "initial") { %>
-                    <p><%= test.testType %></p>
-                <% } else { %>
-                    <p class="field-warning"><%= test.testType %></p>
-                <% } %>
-                <!-- Endorsements -->
-                <% if(test.endorsements.toLowerCase() === "none") { %>
-                    <p class="-cell-not-done -time-to-hide"><%= test.endorsements %></p>
-                <% } else { %>
-                    <p class="-time-to-hide"><%= test.endorsements %></p>
-                <% } %>
-                <!-- STRF -->
-                <p class="-cell-center -time-to-hide"><%= test.strf %></p>
-            <% }) %>
-        </div>
+        <% if(user.student.skillsTest.length) { %>
+            <div class="field-subheader-black">Skills Test Schedule</div>
+            
+            <div class="skills-test-table">
+                <p class="-table-header">#</p>
+                <p class="-table-header">Date</p>
+                <p class="-table-header">Test Location</p>
+                <p class="-table-header">Test Type</p>
+                <p class="-table-header -time-to-hide">Endorsements</p>
+                <p class="-table-header -cell-center -time-to-hide">STRF</p>
+                <% user.student.skillsTest.forEach((test, index) => { %>
+                    <p><%= index + 1 %></p>
+                    <p><%= getDateTime(test.scheduledDate) %></p>
+                    <p><%= test.testLocation %></p>
+                    <!-- Test Type -->
+                    <% if(test.testType.toLowerCase() === "initial") { %>
+                        <p><%= test.testType %></p>
+                    <% } else { %>
+                        <p class="field-warning"><%= test.testType %></p>
+                    <% } %>
+                    <!-- Endorsements -->
+                    <% if(test.endorsements.toLowerCase() === "none") { %>
+                        <p class="-cell-not-done -time-to-hide"><%= test.endorsements %></p>
+                    <% } else { %>
+                        <p class="-time-to-hide"><%= test.endorsements %></p>
+                    <% } %>
+                    <!-- STRF -->
+                    <p class="-cell-center -time-to-hide"><%= test.strf %></p>
+                <% }) %>
+            </div>
+        <% } %>
     <% } %>
 
 
