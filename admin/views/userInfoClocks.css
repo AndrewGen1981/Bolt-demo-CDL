@@ -118,13 +118,22 @@ nav {
 
 
 /* CLOCKS TABLE */
+header {
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
+}
 
 .clocks-table {
     display: grid;
     grid-template-columns: repeat(4, 1fr) repeat(3, 0.5fr);
 
-    border-radius: 7px;
+    border-radius: 0.5rem 0.5rem 0 0;
     overflow: hidden;
+}
+.clocks-table:nth-last-child(1) {
+    margin-bottom: 4rem;
 }
 
 .clocks-table *:not(.clock-title) {
@@ -139,18 +148,21 @@ nav {
     color: #151515;
     text-align: center;
     
-    border-bottom: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8 !important;
     cursor: pointer;
 
     transition: all 0.2s linear;
 }
 
+
 .clock-title {
     padding: 0.5rem 0;
-    background-color: var(--hgh-col1) !important;
-    color: white;
+    
     font-size: 1rem;
     text-align: center;
+    color: white;
+
+    background-color: var(--hgh-col1) !important;
 }
 
 .clocks-table input {
@@ -183,9 +195,18 @@ nav {
 }
 
 
+.back-to-profile {
+    font-size: 0.87rem;
+    line-height: 2.67rem;
+
+    text-decoration: underline;
+    color: #4377B5 !important;
+}
+
 
 .-no-clockOUT {
-    background-color: #EF5050 !important;
+    font-weight: 700 !important;
+    color: #EF5050 !important;
 }
 
 
@@ -198,17 +219,21 @@ nav {
 
 
 @media print {
+    :root {
+        font-size: 13px;
+    }
     .nav-box-left {
         width: 100%;
     }
     .nav-box-right {
         display: none;
     }
-    .-hide-when-print {
+    .-hide-when-print,
+    .back-to-profile {
         display: none !important;
     }
     .clocks-table {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, 1fr) !important;
     }
 }
 

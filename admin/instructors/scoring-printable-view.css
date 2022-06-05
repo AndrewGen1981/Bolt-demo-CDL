@@ -1,7 +1,14 @@
-* {
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+/* @GENERAL */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
 }
 
 .scoring-box {
@@ -11,8 +18,11 @@
 }
 
 .title {
-    margin: 20px 0 10px;
-    font-family: "Industrial Medium";
+    margin: 1.33rem 0 0.67rem 0;
+
+    font-weight: 700;
+    font-size: 1.53rem;
+    
     text-align: center;
 }
 
@@ -25,47 +35,54 @@
 
     background-color: rgba(41, 41, 41, 0.03);
 }
-.-student-data {
-    align-items: center;
-    background-color: rgba(14, 231, 14, 0.25);
+
+.item-title {
+    min-width: 8rem;
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #8D8D8D;
 }
-.-student-failed {
-    background-color: rgba(231, 14, 14, 0.25);
+.item-value {
+    font-weight: 600;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #151515;
+}
+
+[data-passed="true"] {
+    background-color: #daf9ce;
+}
+[data-passed="false"] {
+    background-color: #fde9e9;
 }
 
 .block-box > h2{
-    font-family: "Industrial Medium";
-    margin-bottom: 3px;
+    margin-bottom: 1rem;
 }
 .block-item {
+    width: 100%;
     display: inline-flex;
-    align-items: baseline;
-
-    font-family: "BrixSlab-Light";
-    font-size: 16px;
+    align-items: center;
+    justify-content: flex-start;
 }
 .block-item strong, .item-title {
     padding-right: 5px;
 }
-.-note {
-    font-family: "BrixSlab-LightItalic";
-    font-size: 14px;
-}
+
 
 /* Certificates */
 .certificate, .no-certificate {
     width: 100%;
     padding: 5px;
 
-    font-family: "BrixSlab-LightItalic";
-    font-size: 16px;
     text-align: right;
     
-    background-color: rgba(14, 231, 14, 0.25);
+    background-color: #d6eecd;
     position: relative;
 }
 .no-certificate {
-    background-color: rgba(231, 14, 14, 0.25);
+    background-color: #f7aaaa;
 }
 .fa-certificate {
     width: 40px;
@@ -79,6 +96,7 @@
     transform: translateY(-50%);
 }
 .certificate strong, .no-certificate strong {
+    font-weight: 700;
     text-transform: uppercase;
 }
 
@@ -89,31 +107,31 @@
     display: block;
 }
 .scoring-results h2 {
-    margin: 25px 0 10px;
-    font-family: "Industrial Medium";
-    font-size: 32px;
+    margin: 1.67rem 0 0.67rem 0;
+    font-size: 2rem;
     text-align: center;
 }
 
 .scoring-block-box {
     padding: 5px;
-    background-color: #d7d8ed17;
-    border-radius: 3px;
-    margin-bottom: 35px;
+    margin-bottom: 2.33rem;
 }
 .scoring-block-box-title {
     padding-bottom: 3px;
     margin-bottom: 10px;
 
-    font-family: "BrixSlab-LightItalic";
-    font-size: 17px;
+    font-weight: 700;
     text-transform: uppercase;
-    border-bottom: 1px solid rgb(218, 218, 218);
+
+    border-bottom: 1px solid #E8E8E8;
 }
 .scoring-block-title {
-    font-family: "BrixSlab-Light";
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #8D8D8D;
+
     text-transform: capitalize;
-    font-size: 16px;
 }
 
 .scoring-skills-box {
@@ -127,55 +145,52 @@
     display: inline-flex;
     align-items: center;
 
-    font-family: "BrixSlab-ExtraLight";
     text-transform: capitalize;
-    font-size: 15px;
 }
 .scoring-skill p {
     margin: 2px 5px;
+
+    font-weight: 500;
+    font-size: 0.93rem;
+    line-height: 1.53rem;
+    color: #151515;
 }
 .scoring-skill svg {
-    width: 15px !important;
-    min-height: 15px;
+    width: 0.93rem !important;
+    min-height: 0.93rem;
 }
 .-checked {
-    fill: #005c00db;
+    fill: #8acd71;
 }
 .-unchecked {
-    fill: #e70e0e59;
+    fill: #F27878;
 }
 
 .comments {
     min-height: 100px;
-    
-    font-family: "BrixSlab-LightItalic";
-    font-size: 15px;
-
     cursor: pointer;
 }
 .comments p {
-    padding: 5px 25px;
-    font-family: "BrixSlab-RegularItalic";
-    font-size: 17px;
+    padding: 5px 1.67rem;
+
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #8D8D8D;
+
     background-color: #d7d8ed17;
 }
 
 footer {
-    min-height: 150px;
-    background: linear-gradient(180deg, #fff , #1e203f7e);
-    margin-bottom: 10px;
+    min-height: 10rem;
 }
+
 .backlink {
     margin: 5px 0;
-    padding: 10px 25px;
+    
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.33rem;
 
-    font-family: "BrixSlab-Light";
-    font-size: 16px;
-    line-height: 45px;
-    text-transform: uppercase;
-
-    color: #fff;
-    background-color: #1e203f42;
-
-    border-radius: 30px;
+    color: #4377B5;
 }

@@ -13,14 +13,32 @@
 </head>
 <body>
     
-    <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
+    <%
+        function strTTT(TTT) { 
+            const H = Math.trunc(TTT);
+            const M = Math.round(60*(TTT % 1));
+            return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m`
+        }
+        function leadZero(a) {
+            return a.length < 2 ? `0${a}` : a
+        }
+        function getYYYYMMDD(date) {
+            const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/');
+            return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`
+        }
+        function getHHMMSS(time) {
+            const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':');
+            return `${leadZero(a[0])}:${leadZero(a[1])}`
+        }
+    %>
+    
     
     <form class="clocks-box" id="clocks-update-form" action="/admin/clocks-update" method="POST">
 
         <nav>
             <div class="nav-box-left">
                 <h1>Clocks List of <span><%= studentName %></span></h1>
-        
+                <a class="back-to-profile" href="/admin/user/<%= userId %>?activatetab=4">« Back to profile</a>
                 <div class="student-info-item">
                     <span class="title">Student key</span>
                     <span class="value"><%= studentKey %></span>
@@ -44,7 +62,8 @@
 
         <input type="hidden" name="studentId" value="<%= studentId %>" />
 
-        <div class="clocks-table">
+        <header class="clocks-table">
+
             <!-- headers -->
             <div class="clock-title">DATE</div>
             <div class="clock-title">IN</div>
@@ -53,20 +72,25 @@
             <div class="clock-title -hide-when-print">Undo</div>
             <div class="clock-title -hide-when-print">Del</div>
             <div class="clock-title -hide-when-print">Add</div>
+        </header>
 
-            <!-- values -->
-
-            <% function leadZero(a) {return a.length < 2 ? `0${a}` : a} %>
-            <% function getYYYYMMDD(date) { const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/'); return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`} %>
-            <% function getHHMMSS(time) { const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':'); return `${leadZero(a[0])}:${leadZero(a[1])}` } %>
+        <div class="clocks-table">
             
+            <!-- values -->
             <% if (verClocks) { %>
                 <!-- if no clocks at all, then admin cann add, even first -->
-                <% if (!verClocks.length) { %>
-                    <% verClocks.push({ date: new Date(), in: new Date(), inlat: '-', inlon: '-', inlocation: 'none', inDoneByAdmin: '-', inUpdatedByAdmin: '-', out: '-', outlat: '-', outlon: '-', outlocation: 'none', outDoneByAdmin: '-', outUpdatedByAdmin: '-', duration: 0 }) %>
-                <% } %>
+                <% 
+                    if (!verClocks.length) {
+                        verClocks.push({
+                            date: new Date(),
+                            in: new Date(), inlat: '-', inlon: '-', inlocation: 'none', inDoneByAdmin: '-', inUpdatedByAdmin: '-',
+                            out: '-', outlat: '-', outlon: '-', outlocation: 'none', outDoneByAdmin: '-', outUpdatedByAdmin: '-',
+                            duration: 0
+                        })
+                    }
+                %>
 
-                <% verClocks.map((clock, index) => { %>
+                <% verClocks.forEach((clock, index) => { %>
                     <!-- DATE -->
                     <input type="date" name="clockDate" id="date<%= index + 1 %>" value="<%= getYYYYMMDD(clock.date) %>" data-wasvalue="<%= getYYYYMMDD(clock.date) %>" required />
                     <!-- IN -->
@@ -95,7 +119,7 @@
                         <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
                         <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
                         <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
-                        <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %>(auto)</div>
+                        <div class="-no-clockOUT" name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %>(auto)</div>
                     <% } %>
                     
                     <!-- UNDO -->
@@ -105,13 +129,9 @@
                     <!-- ADD should be LAST to add properly-->
                     <div class="-add -hide-when-print" id="add<%= index + 1%>" onclick="addBtnClick(this, '<%= index + 1%>')">add</div>
                 <% }) %>
-                
             <% } %>
 
-            <!-- add more values -->
-
         </div>      <!-- clocks-table -->
-
     </form>
 
 
