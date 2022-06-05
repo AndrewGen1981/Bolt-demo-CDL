@@ -5,129 +5,114 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>TTA | Student Clocks</title>
+    <title>BoltCDL | Student Clocks</title>
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/brix-family.css">
-
-    <link rel="stylesheet" href="../../static/css/colors.css">
-    
     <link rel="stylesheet" href="/admin/views/userInfoClocks.css">
 
 </head>
 <body>
     
-    <!-- sprites -->
-    <svg class='-hidden-sprite'>
-        <symbol id="undo" viewBox="0 0 24 24">
-            <path d="M5.33936 4.46777H7.33936V7.02487C8.52937 6.08978 10.03 5.53207 11.6608 5.53207C15.5268 5.53207 18.6608 8.66608 18.6608 12.5321C18.6608 16.3981 15.5268 19.5321 11.6608 19.5321C9.51031 19.5321 7.58632 18.5623 6.30225 17.0363L7.92157 15.8515C8.83747 16.8825 10.1733 17.5321 11.6608 17.5321C14.4222 17.5321 16.6608 15.2935 16.6608 12.5321C16.6608 9.77065 14.4222 7.53207 11.6608 7.53207C10.574 7.53207 9.56811 7.87884 8.74785 8.46777L11.3394 8.46777V10.4678H5.33936V4.46777Z" />
-        </symbol>
-    </svg>
-    <svg class='-hidden-sprite'>
-        <symbol id="del" viewBox="0 0 455 455">
-            <rect y="217.5" width="400" height="20"/>
-        </symbol>
-    </svg>
-    <svg class='-hidden-sprite'>
-        <symbol id="add" viewBox="0 0 455 455">
-            <rect x="27.5" y="217.5" width="400" height="20"/><rect x="217.5" y="27.5" width="20" height="400"/>
-        </symbol>
-    </svg>
-
     <% function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` } %>
+    
+    <form class="clocks-box" id="clocks-update-form" action="/admin/clocks-update" method="POST">
 
-    <section class="clocks-box">
-        <h1>Clocks List of <span><%= studentName %></span></h1>
-        <h2>student key# <span><%= studentKey %></span></h2>
-        <h3>attendance type: <span><%= visiting %></span></h3>
-        <h4>Total Tuition Time is <span id='TTT'><%= strTTT(verTTT) %></span></h4>
-        <form action="/admin/clocks-update" method="POST" id="clocks-update-form">
-            <input type="hidden" name="studentId" value="<%= studentId %>" />
-            <!-- QR Clocks -->
-            <div class="clocks-table">
-                <!-- headers -->
-                <div class="clock-title">DATE</div>
-                <div class="clock-title">IN</div>
-                <div class="clock-title">OUT</div>
-                <div class="clock-title">DURATION</div>
-                <div class="clock-title">Undo</div>
-                <div class="clock-title">Del</div>
-                <div class="clock-title">Add</div>
-  
-                <!-- values -->
+        <nav>
+            <div class="nav-box-left">
+                <h1>Clocks List of <span><%= studentName %></span></h1>
+        
+                <div class="student-info-item">
+                    <span class="title">Student key</span>
+                    <span class="value"><%= studentKey %></span>
+                </div>
+                <div class="student-info-item">
+                    <span class="title">Attendance type</span>
+                    <span class="value"><%= visiting %></span>
+                </div>
+                <div class="student-info-item">
+                    <span class="title">Total Tuition Time</span>
+                    <span class="value" id="TTT"><%= strTTT(verTTT) %></span>
+                </div>
+            </div>     <!-- nav-box-left -->
+            <div class="nav-box-right">
+                <button class='-btn' type="submit">Update</button>
+                <button class='-btn' type="button" onclick="restoreAll()">Restore All</button>
+                <a class='-btn' href="/admin/user/<%= userId %>?activatetab=4">Cancel</a>
+                <!-- <button type="button" onclick="cancelAll()">Cancel</button> -->
+            </div>        <!-- nav-box-right -->
+        </nav>
 
-                <% function leadZero(a) {return a.length < 2 ? `0${a}` : a} %>
-                <% function getYYYYMMDD(date) { const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/'); return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`} %>
-                <% function getHHMMSS(time) { const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':'); return `${leadZero(a[0])}:${leadZero(a[1])}` } %>
-                
-                <% if (verClocks) { %>
-                    <!-- if no clocks at all, then admin cann add, even first -->
-                    <% if (!verClocks.length) { %>
-                        <% verClocks.push({ date: new Date(), in: new Date(), inlat: '-', inlon: '-', inlocation: 'none', inDoneByAdmin: '-', inUpdatedByAdmin: '-', out: '-', outlat: '-', outlon: '-', outlocation: 'none', outDoneByAdmin: '-', outUpdatedByAdmin: '-', duration: 0 }) %>
-                    <% } %>
+        <input type="hidden" name="studentId" value="<%= studentId %>" />
 
-                    <% verClocks.map((clock, index) => { %>
-                        <!-- DATE -->
-                        <input type="date" name="clockDate" id="date<%= index + 1 %>" value="<%= getYYYYMMDD(clock.date) %>" data-wasvalue="<%= getYYYYMMDD(clock.date) %>" required />
-                        <!-- IN -->
-                        <input type="time" name="clockIN" id="IN<%= index + 1%>" value="<%= getHHMMSS(clock.in) %>" data-wasvalue="<%= getHHMMSS(clock.in) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
-                        <input type="hidden" name="locationIN" id="locationIN<%= index + 1 %>" value="<%= clock.inlocation %>" />
-                        <input type="hidden" name="latIN" id="latIN<%= index + 1 %>" value="<%= clock.inlat %>" />
-                        <input type="hidden" name="lonIN" id="lonIN<%= index + 1 %>" value="<%= clock.inlon %>" />
-                        <input type="hidden" name="doneByAdminIN" id="doneByAdminIN<%= index + 1 %>" value="<%= clock.inDoneByAdmin %>" />
-                        <input type="hidden" name="updatedByAdminIN" id="updatedByAdminIN<%= index + 1 %>" value="<%= clock.inUpdatedByAdmin %>" />
-                        
-                        <!-- OUT & duration -->
-                        <% if( !isNaN(clock.out) ) { %>
-                            <input type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(clock.out) %>" data-wasvalue="<%= getHHMMSS(clock.out) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
-                            <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.outlocation %>" />
-                            <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
-                            <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
-                            <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
-                            <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
-                            <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %></div>
-                        <% } else { %>
-                            <% let newOut = new Date(clock.in) %>
-                            <% newOut.setTime(newOut.getTime() + clock.duration) %>
-                            <input class="-no-clockOUT" type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(newOut) %>" data-wasvalue="<%= getHHMMSS(newOut) %>" onchange="updateDuration(this, '<%= index + 1%>')" required/>
-                            <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.inlocation %>" />
-                            <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
-                            <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
-                            <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
-                            <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
-                            <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %>(auto)</div>
-                        <% } %>
-                        
-                        <!-- UNDO -->
-                        <svg class="ico -undo" id="undo<%= index + 1%>" onclick="restoreBtnClick(this, '<%= index + 1%>')">
-                            <use href="#undo"></use>
-                        </svg>
-                        <!-- DEL -->
-                        <svg class="ico -del" id="del<%= index + 1%>" onclick="delBtnClick(this, '<%= index + 1%>')">
-                            <use href="#del"></use>
-                        </svg>
-                        <!-- ADD should be LAST to add properly-->
-                        <svg class="ico -add" id="add<%= index + 1%>" onclick="addBtnClick(this, '<%= index + 1%>')">
-                            <use href="#add"></use>
-                        </svg>
-                    <% }) %>
-                    
+        <div class="clocks-table">
+            <!-- headers -->
+            <div class="clock-title">DATE</div>
+            <div class="clock-title">IN</div>
+            <div class="clock-title">OUT</div>
+            <div class="clock-title">DURATION</div>
+            <div class="clock-title -hide-when-print">Undo</div>
+            <div class="clock-title -hide-when-print">Del</div>
+            <div class="clock-title -hide-when-print">Add</div>
+
+            <!-- values -->
+
+            <% function leadZero(a) {return a.length < 2 ? `0${a}` : a} %>
+            <% function getYYYYMMDD(date) { const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/'); return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`} %>
+            <% function getHHMMSS(time) { const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':'); return `${leadZero(a[0])}:${leadZero(a[1])}` } %>
+            
+            <% if (verClocks) { %>
+                <!-- if no clocks at all, then admin cann add, even first -->
+                <% if (!verClocks.length) { %>
+                    <% verClocks.push({ date: new Date(), in: new Date(), inlat: '-', inlon: '-', inlocation: 'none', inDoneByAdmin: '-', inUpdatedByAdmin: '-', out: '-', outlat: '-', outlon: '-', outlocation: 'none', outDoneByAdmin: '-', outUpdatedByAdmin: '-', duration: 0 }) %>
                 <% } %>
 
-                <!-- add more values -->
+                <% verClocks.map((clock, index) => { %>
+                    <!-- DATE -->
+                    <input type="date" name="clockDate" id="date<%= index + 1 %>" value="<%= getYYYYMMDD(clock.date) %>" data-wasvalue="<%= getYYYYMMDD(clock.date) %>" required />
+                    <!-- IN -->
+                    <input type="time" name="clockIN" id="IN<%= index + 1%>" value="<%= getHHMMSS(clock.in) %>" data-wasvalue="<%= getHHMMSS(clock.in) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
+                    <input type="hidden" name="locationIN" id="locationIN<%= index + 1 %>" value="<%= clock.inlocation %>" />
+                    <input type="hidden" name="latIN" id="latIN<%= index + 1 %>" value="<%= clock.inlat %>" />
+                    <input type="hidden" name="lonIN" id="lonIN<%= index + 1 %>" value="<%= clock.inlon %>" />
+                    <input type="hidden" name="doneByAdminIN" id="doneByAdminIN<%= index + 1 %>" value="<%= clock.inDoneByAdmin %>" />
+                    <input type="hidden" name="updatedByAdminIN" id="updatedByAdminIN<%= index + 1 %>" value="<%= clock.inUpdatedByAdmin %>" />
+                    
+                    <!-- OUT & duration -->
+                    <% if( !isNaN(clock.out) ) { %>
+                        <input type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(clock.out) %>" data-wasvalue="<%= getHHMMSS(clock.out) %>" onchange="updateDuration(this, '<%= index + 1%>')" required />
+                        <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.outlocation %>" />
+                        <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
+                        <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
+                        <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
+                        <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
+                        <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %></div>
+                    <% } else { %>
+                        <% let newOut = new Date(clock.in) %>
+                        <% newOut.setTime(newOut.getTime() + clock.duration) %>
+                        <input class="-no-clockOUT" type="time" name="clockOUT" id="OUT<%= index + 1%>" value="<%= getHHMMSS(newOut) %>" data-wasvalue="<%= getHHMMSS(newOut) %>" onchange="updateDuration(this, '<%= index + 1%>')" required/>
+                        <input type="hidden" name="locationOUT" id="locationOUT<%= index + 1 %>" value="<%= clock.inlocation %>" />
+                        <input type="hidden" name="latOUT" id="latOUT<%= index + 1 %>" value="<%= clock.outlat %>" />
+                        <input type="hidden" name="lonOUT" id="lonOUT<%= index + 1 %>" value="<%= clock.outlon %>" />
+                        <input type="hidden" name="doneByAdminOUT" id="doneByAdminOUT<%= index + 1 %>" value="<%= clock.outDoneByAdmin %>" />
+                        <input type="hidden" name="updatedByAdminOUT" id="updatedByAdminOUT<%= index + 1 %>" value="<%= clock.outUpdatedByAdmin %>" />
+                        <div name="duration" id="duration<%= index + 1%>"><%= strTTT(clock.duration / (1000 * 60 *60)) %>(auto)</div>
+                    <% } %>
+                    
+                    <!-- UNDO -->
+                    <div class="-undo -hide-when-print" id="undo<%= index + 1%>" onclick="restoreBtnClick(this, '<%= index + 1%>')">undo</div>
+                    <!-- DEL -->
+                    <div class="-del -hide-when-print" id="del<%= index + 1%>" onclick="delBtnClick(this, '<%= index + 1%>')">del</div>
+                    <!-- ADD should be LAST to add properly-->
+                    <div class="-add -hide-when-print" id="add<%= index + 1%>" onclick="addBtnClick(this, '<%= index + 1%>')">add</div>
+                <% }) %>
+                
+            <% } %>
 
-            </div>      <!-- clocks-table -->
+            <!-- add more values -->
 
-            <button class='-btn' type="submit">Update</button>
-            <button class='-btn' type="button" onclick="restoreAll()">Restore All</button>
-            <a class='-btn' href="/admin/user/<%= userId %>?activatetab=4">Cancel</a>
-            <!-- <button type="button" onclick="cancelAll()">Cancel</button> -->
+        </div>      <!-- clocks-table -->
 
-        </form>
-    </section>      <!-- clocks-box -->
-    
+    </form>
 
 
     <script>
@@ -338,7 +323,6 @@
 
             // UNDO
             const undo = document.createElement('div')
-            undo.classList.add('ico')
             undo.classList.add('-undo')
             undo.id = `undo${number}`
             undo.addEventListener('click', () => {
@@ -350,7 +334,6 @@
 
             // DEL
             const del = document.createElement('div')
-            del.classList.add('ico')
             del.classList.add('-del')
             del.id = `del${number}`
             del.addEventListener('click', () => {
@@ -362,7 +345,6 @@
 
             // ADD
             const add = document.createElement('div')
-            add.classList.add('ico')
             add.classList.add('-add')
             add.id = `add${number}`
             add.addEventListener('click', () => {

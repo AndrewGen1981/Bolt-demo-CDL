@@ -1,84 +1,150 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
 
 :root {
-    --col1: #4158d0;
-    --col2: #c850c0;
+    --max-content-width: 1175px;
 
     --hgh-col1: #36304a;
-    --hgh-col2: #36304a4b;
-
-    font-size: 18px;
 }
 
 
-* {
+/* @GENERAL */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
     font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
 }
+
 
 body, html {
     width: 100%;
     height: fit-content;
     min-height: 100vh;
-
-    background: var(--col1);
-    background: -webkit-linear-gradient(45deg, var(--col1), var(--col2));
-    background: -o-linear-gradient(45deg, var(--col1), var(--col2));
-    background: -moz-linear-gradient(45deg, var(--col1), var(--col2));
-    background: linear-gradient(45deg, var(--col1), var(--col2));
-
 }
 
 .clocks-box {
-    width: 95%;
-    max-width: 1024px;
-
     margin: 0 auto;
-    padding: 2rem 0;
+
+    width: 95%;
+    max-width: var(--max-content-width);
+
 }
-.clocks-box h1{
-    padding: 3px;
-    font-size: 1.5rem;
+
+nav {
+    margin: 2rem 0;
+    width: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-box-left {
+    width: 50%;
+}
+.nav-box-right {
+    width: 50%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+}
+.nav-box-right * {
+    margin-bottom: 0.8rem;
+}
+
+.clocks-box h1 {
+    font-weight: 700;
+    font-size: 1.53rem;
     text-transform: uppercase;
-    background-color: var(--hgh-col1);
-    color: white;
+    color: #151515;
+
+    margin-bottom: 1.27rem;
 }
-.clocks-box h2{
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    color: white;
-    margin-bottom: 0.5rem;
-}
-.clocks-box h3, .clocks-box h4{
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-.clocks-box h4{
-    margin-bottom: 1rem;
-}
-.clocks-box span{
+.clocks-box h1 > span {
+    font-weight: 500;
+    font-size: 1.53rem;
     text-transform: capitalize;
-    opacity: 0.65;
+    color: #151515;
+}
+
+.student-info-item .title {
+    display: inline-flex;
+    min-width: 9rem;
+
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #AAAAAA;
+}
+.student-info-item .value {
+    font-weight: 500;
+    font-size: 0.87rem;
+    line-height: 1.53rem;
+    color: #000000;
+}
+
+#TTT {
+    font-weight: 700;
+}
+
+.-btn {
+    width: 10rem;
+    height: 3.33rem;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #151515;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: all 0.2s linear;
+}
+
+.-btn:hover {
+    background-color: #F3F3F3;
 }
 
 
-
+/* CLOCKS TABLE */
 
 .clocks-table {
     display: grid;
     grid-template-columns: repeat(4, 1fr) repeat(3, 0.5fr);
 
-    font-size: 0.93rem;
-    background-color: #ffffff;
-    color: #808080;
-
     border-radius: 7px;
     overflow: hidden;
-
-    margin-bottom: 1rem;
 }
+
+.clocks-table *:not(.clock-title) {
+    padding: 0.6rem 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 0.87rem;
+    color: #151515;
+    text-align: center;
+    
+    border-bottom: 1px solid #E8E8E8;
+    cursor: pointer;
+
+    transition: all 0.2s linear;
+}
+
 .clock-title {
     padding: 0.5rem 0;
     background-color: var(--hgh-col1) !important;
@@ -87,100 +153,99 @@ body, html {
     text-align: center;
 }
 
-.clocks-table input{
-    padding: 0.35rem 0;
-    font-size: 0.93rem;
-    color: #808080;
-
+.clocks-table input {
     background-color: transparent;
     border: none;
-    border-bottom: 1px solid var(--hgh-col2);
     outline: transparent;
 }
 
-.clocks-table input:focus{
-    border-bottom: 1px solid var(--hgh-col1);
+.clocks-table input:hover,
+.clocks-table input:focus {
+    border-bottom: 1px solid #3789EB;
 }
 
-input[name='clockDate'],
-input[name='clockIN'], 
-input[name='clockOUT'] {
-    text-align: center;
-    cursor: pointer;
+[name='duration'] {
+    cursor: default !important;
 }
 
-div[name='duration'] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-input[name='clockDate']:nth-of-type(even),
-input[name='clockIN']:nth-of-type(odd), 
-input[name='clockOUT']:nth-of-type(odd),
-div[name='duration']:nth-of-type(odd) {
-    background-color: #f5f5f5;
-}
-
-.ico {
-    width: 30px;
-    height: 30px;
-}
-.-undo {
-    width: 35px;
-    height: 35px;
-}
 .-undo, .-del, .-add {
-    fill: #808080;
-    margin: auto;
+    width: 100%;
+    min-height: 2.67rem;
+
+    text-decoration: underline;
+    color: #4377B5 !important;
+    
     cursor: pointer;
+    transition: all 0.2s linear;
 }
 .-undo:hover, .-del:hover, .-add:hover {
-    fill: #6e6e6e;
-    transition: fill 0.2s linear;
-}
-
-.-btn {
-    width: 130px;
-    font-size: 1rem;
-    padding: 7px 0;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    text-decoration: none;
-
-    background-color: var(--hgh-col1);
-    color: #ffffff;
-
-    border-radius: 5px;
-    border: none;
-
-    cursor: pointer;
-}
-
-.-btn:hover {
-    background-color: var(--hgh-col2);
-    transition: background-color 0.2s linear;
+    color: #4e94e9 !important;
 }
 
 
 
 .-no-clockOUT {
-    background-color: rgba(247, 160, 178, 0.863) !important;
+    background-color: #EF5050 !important;
 }
-
-.-hidden-sprite {
-    display: none;
-}
-
 
 
 .-correctDuration {
-    color: green;
+    color: #64cf40;
 }
 .-incorrectDuration {
-    color: red;
+    color: #EF5050;
+}
+
+
+@media print {
+    .nav-box-left {
+        width: 100%;
+    }
+    .nav-box-right {
+        display: none;
+    }
+    .-hide-when-print {
+        display: none !important;
+    }
+    .clocks-table {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    nav {
+        /* flex-direction: column; */
+        flex-wrap: wrap;
+    }
+    .nav-box-left {
+        width: 95%;
+        padding-left: 1rem;
+        margin-bottom: 2rem;
+    }
+    .nav-box-left h1 {
+        text-align: center;
+    }
+    .nav-box-right {
+        width: 95%;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}
+
+@media (max-width: 550px) {
+    :root {
+        font-size: 14px;
+    }
+    .clocks-table {
+        grid-template-columns: 1.5fr repeat(3, 1fr) repeat(3, 0.5fr);
+    }
+}
+
+@media (max-width: 450px) {
+    .-hide-when-print {
+        display: none !important;
+    }
+    .clocks-table {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }

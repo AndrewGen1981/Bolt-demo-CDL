@@ -951,6 +951,8 @@ input[name="paymentAmount"] {
 .graduate-info-table .-left-side-header {
     color: #AAAAAA;
 }
+
+#location,
 #enrollmentStatus {
     width: 100%;
     height: 2rem;
@@ -959,16 +961,19 @@ input[name="paymentAmount"] {
 
     background-color: transparent;
     
-    border: 2px solid #fff;
+    border: 2px solid #fff !important;
     border-radius: 5px;
     
     outline: none;
     cursor: pointer;
     transition: all 0.2s linear;
 }
+
+#location:hover,
+#location:focus,
 #enrollmentStatus:hover,
 #enrollmentStatus:focus {
-    border: 2px solid #3789EB;
+    border: 2px solid #3789EB !important;
 }
 
 
