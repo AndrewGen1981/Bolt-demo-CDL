@@ -1,4 +1,4 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
 
 /* @GENERAL */
 *, *::before, *::after {
@@ -6,28 +6,35 @@
     padding: 0;
     box-sizing: border-box;
     
-    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
 }
 
 body, html {
     position: relative;
 }
 
-header, .main-test-box, .scoring-results {
+header,
+.main-test-box,
+.scoring-results {
     width: 95%;
     max-width: 1535px;
     margin: 10px auto;
 }
+
 header {
     padding: 5px 0;
     position: relative;
 }
 header::before {
     content: '';
+    
     position:absolute;
     inset: 0;
-    background-color: var(--blue20-slate);
-    background-image: url('/static/images/logo-badge-black.png');
+    top: -5rem;
+
+    background-image: url('/static/images/2-WB.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position-x: center;
@@ -39,98 +46,146 @@ header::before {
 .scoring-title {
     width: 100%;
     
-    font-family: "Industrial Medium";
-    font-weight: bolder;
-    font-size: 2rem;
+    font-weight: 700;
+    font-size: 1.53rem;
     text-align: center;
-    color: #333;
+    text-transform: uppercase;
+    color: #151515;
 
     margin-bottom: 1rem;
 }
 
-.student-info {
+.student-info,
+.scoring-examiner {
     padding: 10px 3px;
     width: 100%;
-
-    background-color: var(--blue20-slate);
-    border-radius: 5px;
-
     list-style: none;
 }
-.fas {
-    width: 35px;
-    text-align: center;
-    color: var(--orange80-high-desert);
-}
-.student-info li {
+.student-info li,
+.scoring-examiner li {
     display: flex;
-    align-items: baseline;
-    margin-bottom: 2px;
 }
 
-.student, .first-name, .middle-name, .last-name {
-    font-family: "BrixSlab-Medium";
-    font-size: 1.25rem;
-    text-transform: uppercase;
-    color: var(--orange-high-desert);
+.info-title {
+    min-width: 11.27rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+    color: #828282;
 }
-.student {
-    font-weight: bolder;
-    color: #333;
+.info-value {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+    color: #151515;
+
+    margin-right: 5px;
 }
-.transmission {
-    font-family: "BrixSlab-Medium";
-    font-size: 1.1rem;
-    text-transform: uppercase;  
-}
-.class-cdl, .key, .location, .TTT {
-    font-family: "BrixSlab-Light";
-}
-.location {
-    font-weight: bolder;
+.-bold {
+    font-weight: 700;
 }
 
 .scoring-examiner {
-    font-family: "BrixSlab-BlackItalic";
-    font-size: 1.25rem;
-    font-weight: bolder;
-    text-align: right;
-}
-.scoring-date {
-    font-family: "BrixSlab-BlackItalic";
-    text-transform: uppercase;
-    text-align: right;
-    padding-bottom: 3px;
-    border-bottom: 1px solid #d3d3d3;
-}
-.scoring-examiner span, .scoring-date span {
-    color: var(--orange-high-desert);
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-.fa-times-circle {
-    position: fixed;
-
-    top: 2px;
-    left: calc(97.5% - 2.5rem - 2px);
-    width: 2.5rem;
-    height: 2.5rem;
-
-    color: var(--orange-high-desert);
-    opacity: 0.5;
-    z-index: 1000;
-    cursor: pointer;
-    transition: opacity 0.3s linear;
-}
-.fa-times-circle::before {
+nav {
+    margin: 10px auto;
     
-    font-size: 2.5rem;
+    width: 95%;
+    max-width: 1535px;
 }
-.fa-times-circle:hover {
-    opacity: 1;
+#close {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.33;
+
+    color: #4377B5;
+
+    transition: all 0.2s linear;
+    cursor: pointer;
 }
+#close:hover {
+    color: #3789EB;
+}
+
+
+/* Details sections */
+.prev-scorings {
+    width: 95%;
+    max-width: 1535px;
+    margin: 10px auto 25px auto;
+    
+    background-color: rgba(51, 51, 51, 0.075);
+    border-radius: 3px;
+}
+.prev-scorings summary {
+    padding: 0.5rem;
+
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #4377B5;
+    cursor: pointer;
+}
+
+
+/* Student Scoring Details */
+.scoring-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
+    font-size: 0.83rem;
+}
+.scoring-table * {
+    margin-bottom: 0.5rem;
+
+    font-weight: 500;
+    font-size: 0.87rem;
+}
+.scoring-table *:nth-child(1) {
+    padding-left: 1rem;
+}
+
+.-table-header {
+    padding: 5px 0;
+    
+    font-weight: 700;
+    font-size: 0.87rem;
+    color: #fff;
+
+    background-color: #AAAAAA;
+
+}
+
+.scoring-details {
+    width: 100%;
+    padding-left: 1rem;
+
+    color: #a9a9a9;
+    text-align: left;
+    text-decoration: underline;
+
+    border: none;
+    cursor: pointer;
+}
+
+.field-warning {
+    color: #F27878;
+}
+.field-accomplished {
+    color: #70cd4f;
+}
+.field-yellow {
+    color: #a9a9a9;
+}
+
 
 .scoring-results {
-    --col1: #333333f8;
+    --col1: #0F1C2F;
     --col2: #ffffffd2;
 
     padding: 0.7rem 0 1.5rem 0;
@@ -148,27 +203,23 @@ header::before {
     z-index: 100;
 }
 .scoring-results h2 {
-    font-family: "Industrial Medium";
     font-size: 1.15rem;
     color: #fff;
 }
 #current-result {
-    color: #F7BF68;
+    color: #FFD971;
 }
 #pass-fail {
-    font-family: "BrixSlab-Bold";
     font-size: 1.3rem;
     text-transform: uppercase;
-    color: #F7BF68;
+    color: #FFD971;
 }
 
-
 .test-block-box {
-    --col1: #a0aaaa;
-    --col2: #6a6f6f;
+    --col1: #0F1C2F;
+    --col2: #a0aaaa;
 
-    font-family: "BrixSlab-MediumItalic";
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 2em;
     
     padding-left: 3px;
@@ -203,9 +254,14 @@ header::before {
 summary {
     cursor: pointer;
 }
-summary::marker {
-    color: var(--orange80-high-desert);
+.test-block-box summary::marker {
+    color: #fff;
 }
+
+.section-title {
+    color: #fff;
+}
+
 .item-box {
     margin: 0;
     margin-top: 1px;
@@ -221,7 +277,11 @@ summary::marker {
 }
 .item-title {
     width: 15%;
+
+    font-weight: 700;
+    font-size: 0.87rem;
     line-height: 1.2;
+    color: #4377b5;
 }
 .item {
     width: 85%;
@@ -251,7 +311,7 @@ summary::marker {
 
 .skill label {
     width: 100%;
-    font-family: "BrixSlab-LightItalic";
+    color: #151515;
     padding-left: 3px;
     line-height: 1.2em;
 }
@@ -259,33 +319,20 @@ summary::marker {
 
 .comments-box {
     margin: 2rem 0;
-    padding: 5px;
-
-    background-color: var(--blue20-slate);
-    border-radius: 5px;
-
-    display: flex;
-    align-items: flex-start;
-}
-.fa-comments, .fa-comments::before {
-    width: 5%;
-    min-width: 4rem;
-    font-size: 2rem;
+    width: 100%;
 }
 .comments {
     width: 100%;
     height: 4.6rem;
 
-    /* margin: 1rem 0; */
     padding: 5px;
 
-    font-family: "BrixSlab-RegularItalic";
-    font-size: 1.1rem;
-    color: #333;
-    background-color: rgb(253, 253, 253);
+    font-size: 1rem;
+    color: #000000;
 
-    border: none;
+    border: 2px solid #4377B5;
     border-radius: 5px;
+
     resize: none;
     outline: none;
 }
@@ -300,8 +347,7 @@ summary::marker {
     position: relative;
 }
 .certification h3 {
-    font-family: "BrixSlab-LightItalic";
-    font-size: 1.25rem;
+    font-size: 0.87rem;
     margin-bottom: 10px;
 }
 .certification input {
@@ -309,15 +355,15 @@ summary::marker {
     margin-right: 10px;
 }
 .certification label {
-    font-family: "BrixSlab-LightItalic";
-    font-size: 1.15rem;
+    font-size: 1rem;
 }
 .cetrSignature {
     display: none;
     
-    font-family: 'WindSong', cursive;
-    font-size: 3rem;
-    color: #7e7e7ede;
+    font-size: 1.53rem;
+    font-weight: 600;
+    font-style: italic;
+    color: #4377B5;
     
     position: absolute;
     right: 0;
@@ -337,20 +383,11 @@ input#certificate:checked ~ .cetrSignature {
     align-items: flex-start;
     justify-content: center;
 
-    --col1: #fff;
-    --col2: #8b8b8b;
-    
-    background-color: var(--col1);
-    background: -webkit-linear-gradient(180deg, var(--col1) 60%, var(--col2));
-    background: -moz-linear-gradient(180deg, var(--col1) 60%, var(--col2));
-    background: linear-gradient(180deg, var(--col1) 60%, var(--col2));
-
     position: relative;
 }
 .buttons-box p {
-    font-family: 'WindSong', cursive;
-    font-size: 1.35rem;
-    color: #fff;
+    font-size: 1rem;
+    color: #AAAAAA;
     
     position: absolute;
     right: 0;
@@ -358,90 +395,30 @@ input#certificate:checked ~ .cetrSignature {
 }
 
 .-btn {
-    width: 160px;
-    padding: 15px 20px;
-    margin: 0 2%;
+    margin: 2.5rem 0;
+    width: 10rem;
+    height: 3.33rem;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
     
-    font-family: "BrixSlab-Medium";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
     font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: center;
-    color: #ffffff;
-    
-    background-color: #8C9494;
-    
-    border-radius: 35px;
-    border: none;
-    
+    color: #151515;
+
     cursor: pointer;
-    transition: all 0.2s ease-in;
-
-    margin-bottom: 100px !important;
+    transition: all 0.2s linear;
 }
-.-submit {
-    color: wheat;
-}
-
 .-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 20px -11px rgb(122 172 172 / 73%);
-}
-
-/* Details sections */
-.prev-scorings {
-    width: 95%;
-    max-width: 1535px;
-    margin: 10px auto 25px auto;
-    padding: 5px;
-    
-    font-family: "BrixSlab-Regular";
-    color: #333;
-    background-color: rgba(51, 51, 51, 0.075);
-   
-    border-radius: 3px;
-}
-.prev-scorings summary {
-    font-family: "BrixSlab-MediumItalic";
-    text-transform: uppercase;
-    color:#00a16d;
-    cursor: pointer;
+    background-color: #F3F3F3;
 }
 
 
-/* Student Scoring Details */
-.scoring-table {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    font-size: 0.83rem;
-}
-.scoring-details {
-    width: 100%;
-    height: 95%;
-
-    font-family: "BrixSlab-Regular";
-    text-align: left;
-    text-decoration: underline;
-    color: var(--orange-high-desert);
-    background-color: rgba(51, 51, 51, 0.05);
-
-    border: none;
-    cursor: pointer;
-}
-.-table-header {
-    padding: 5px 0;
-    background-color: rgba(51, 51, 51, 0.075);
-    font-weight: bold;
-}
-.field-warning {
-    color: var(--bad-todo1)
-}
-.field-accomplished {
-    color: var(--good-done1)
-}
-.field-yellow {
-    color: rgb(205, 156, 50);
-}
 .-hidden {
     display: none;
 }
@@ -449,7 +426,7 @@ input#certificate:checked ~ .cetrSignature {
 
 /* IMPORTANT GROUPS */
 label[data-importantlabel="YES"] {
-    color: #e46868;
+    color: #8b1717;
 }
 
 
@@ -469,7 +446,7 @@ label[data-importantlabel="YES"] {
 }
 @media (max-width: 750px) {
     :root {
-        font-size: 15px;
+        font-size: 14px;
     }
     .item-title {
         width: 45%;
@@ -481,7 +458,10 @@ label[data-importantlabel="YES"] {
 }
 @media (max-width: 550px) {
     :root {
-        font-size: 14px;
+        font-size: 13px;
+    }
+    .-ex-title {
+        display: none;
     }
     .scoring-title {
         font-size: 1.5rem;
@@ -503,6 +483,6 @@ label[data-importantlabel="YES"] {
 }
 @media (max-width: 350px) {
     :root {
-        font-size: 13px;
+        font-size: 12px;
     }
 }

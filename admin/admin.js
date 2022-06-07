@@ -157,8 +157,14 @@ function checkCredentials(id, password) {
 admRouter.post('/', redirectToHome, (req, res) => {
     const { id, password } = req.body
     if (checkCredentials(id, password)) {
+        // credentials are ok, saving id
         req.session.userId = id
-        return res.redirect('/admin/profile')
+        // if role is "instructor", then redirect to INs, otherwise - to admin profile
+        if (admin.checkAdminsAuth(id, 'instructor')) {
+            return res.redirect("/admin/student")
+        } else {
+            return res.redirect("/admin/profile")
+        }
     } else {
         res.status(400).redirect('/admin?logIssue=wrongIDPASS')
     }

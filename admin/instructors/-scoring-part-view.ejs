@@ -1,10 +1,10 @@
 <!-- Partial view for scorings layouts -->
 
-<a id='close' href="/admin/student">
-    <i class="fas fa-times-circle" title='back to INs'></i>
-</a>
+<nav>
+    <a id="close" href="/admin/student" title="back to INs">« Back to INs</a>
+</nav>
 
-<% if (!student) { %>
+<% if (!locals.student) { %>
     <h2>No student data..</h2>
 <% } else { %>
     <% if (!student.user.dataCollection || !student.user.agreement || student.status != 'unblock') { %>
@@ -20,64 +20,66 @@
     
             <ul class="student-info">
                 <li>
-                    <i class="fas fa-user-graduate"></i>
-                    <h2 class="student">Student:
-                        <span class="first-name"><%= student.user.dataCollection.firstName %></span>
-                        <span class="middle-name"><%= student.user.dataCollection.middleName %></span>
-                        <span class="last-name"><%= student.user.dataCollection.lastName %></span>
-                    </h2>
+                    <span class="info-title">Student</span>
+                    <span class="info-value -bold first-name"><%= student.user.dataCollection.firstName || "" %></span>
+                    <span class="info-value -bold middle-name"><%= student.user.dataCollection.middleName || "" %></span>
+                    <span class="info-value -bold last-name"><%= student.user.dataCollection.lastName || "" %></span>
                 </li>
                 <li>
-                    <i class="fas fa-cogs"></i>
-                    <p class="transmission"><%= student.user.agreement.transmission %></p>
+                    <span class="info-title">Transmission</span>
+                    <span class="info-value transmission"><%= student.user.agreement.transmission %></span>
                 </li>
                 <li>
-                    <i class="fas fa-user-friends"></i>
-                    <p class="class-cdl"><%= student.user.agreement.class %></p>
+                    <span class="info-title">CDL Class</span>
+                    <span class="info-value class-cdl"><%= student.user.agreement.class %></span>
                 </li>
                 <li>
-                    <i class="fas fa-key"></i>
-                    <p class="key">Key: <%= student.key %></p>
+                    <span class="info-title">Key</span>
+                    <span class="info-value key"><%= student.key %></span>
                 </li>
                 <li>
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p class="location">Location: <%= student.location %></p>
+                    <span class="info-title">Location</span>
+                    <span class="info-value location"><%= student.location %></span>
                 </li>
                 <li>
-                    <i class="fas fa-clock"></i>
-                    <p class="TTT">Accumulated Tuition Time as of now
-                        <span><%= Math.trunc(student.TTT) %>h:<%= Math.round(60*(student.TTT % 1)) %>m</span>
-                    </p>
+                    <span class="info-title">Accumulated TTT</span>
+                    <span class="info-value TTT"><%= Math.trunc(student.TTT) %>h:<%= Math.round(60*(student.TTT % 1)) %>m</span>
                 </li>
             </ul>
 
-            <% if (examiner) { %>
-                <h2 class='scoring-examiner'>Examiner:
-                    <span><%= examiner.name %></span>
-                    <span>(<%= examiner.title %>)</span>
-                    <span><%= examiner.location %></span>
-                </h2>
-            <% } else { %>
-                <h2 class='scoring-examiner'>Examiner _______</h2>
-            <% } %>
-    
-            <p class='scoring-date'>Date:
-                <span><%= new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></span>
-                <span>(<%= new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %>)</span>
-            </p>
+            <ul class="scoring-examiner">
+                <li>
+                    <span class="info-title">Examiner</span>
+                    <% if (examiner) { %>
+                        <span class="info-value -bold"><%= examiner.name %></span>
+                        <span class="info-value -bold -ex-title">(<%= examiner.title %>)</span>
+                        <span class="info-value -bold"><%= examiner.location %></span>
+                    <% } else { %>
+                        <span class="info-value">unknown instructor</span>
+                    <% } %>
+                </li>
+                <li>
+                    <span class="info-title">Date</span>
+                    <span class="info-value scoring-date"><%= new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></span>
+                    <span class="info-value scoring-date">(<%= new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %>)</span>
+                </li>
+            </ul>
         </header>
 
 
         <!-- TOOL: function printDateTime() -->
-        <% function printDateTime(date) { const d = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }); const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }); return `${d} (${t})` } %>
-
+        <% 
+            function printDateTime(date) {
+                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
+                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false });
+                return `${d} (${t})`
+            }
+        %>
         
         <!-- SCORING Details -->
         <% if (student.scoring) { %>
             <details class="prev-scorings">
-                <summary>
-                    Scorings
-                </summary>
+                <summary>Scorings</summary>
                 <div class="scoring-table">
                     <div class="-table-header">Type</div>
                     <div class="-table-header">Date</div>
@@ -85,12 +87,14 @@
                     <div class="-table-header">Result</div>
                     <div class="-table-header">Certificate</div>
                     <!-- constants -->
-                    <% const scorings = student.scoring %>
-                    <% const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity] %>
-                    <% const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving'] %>
+                    <% 
+                        const scorings = student.scoring
+                        const scorArrays = [scorings.scoringsInCab, scorings.scoringsOutCab, scorings.scoringsBacking, scorings.scoringsCity]
+                        const scorTitles = ['pretrip In-Cab', 'pretrip Out-Cab', 'Backing Maneuvers', 'City Driving']
+                    %>
                     <!-- 2D scorings array -->
-                    <% scorArrays.map((scorArray, index) => { %>
-                        <% scorArray.map(scor => { %>
+                    <% scorArrays.forEach((scorArray, index) => { %>
+                        <% scorArray.forEach(scor => { %>
 
                             <form action="/admin/inst/scoring-print" method="POST">
                                 <textarea class='-hidden' name="scoringDetails"><%= scor.details %></textarea>
@@ -125,20 +129,21 @@
             <p id='pass-fail'>Not Started</p>
         </section>
 
-    
-        <% let count %>
-        <% let important %>
+        <% 
+            let count
+            let important
+        %>
     
         <div class="main-test-box">
             <% if (test) { %>
-                <% test.map((block, N) => { %>
+                <% test.forEach((block, N) => { %>
                     <section class="test-block-box" data-block="block_<%= N %>" data-title="<%= block.title %>">
                         <details>
                             <% count = 0 %>
                             <summary>
                                 <span class="section-title"><%= block.title %> [<span class="section-result" id="block_<%= N %>" data-total=0 data-correct=0 data-incorrect=0>0</span>]</span>
                             </summary>
-                            <% block.items.map((subblock, i) => { %>
+                            <% block.items.forEach((subblock, i) => { %>
                                 <section class="item-box">
                                     <h3 class="item-title"><%= subblock.item %></h3>
 
@@ -146,7 +151,7 @@
 
                                     <div class="item">
                                         <% count += subblock.checks.length %>
-                                        <% subblock.checks.map((check, j) => { %>
+                                        <% subblock.checks.forEach((check, j) => { %>
                                             <span class="skill">            
                                                 <input class="skill-checkbox" type="checkbox" name="<%= `block${N}_item${i}_skill${j}` %>" 
                                                     id="<%= `block${N}_item${i}_skill${j}` %>" data-qty="block_<%= N %>"
@@ -172,22 +177,19 @@
                 <textarea name="scoringData" class="scoring-data"></textarea>
                 
                 <div class="comments-box">
-                    <i class="fas fa-comments fa-3x"></i>
                     <textarea name="comments" class="comments" placeholder="for instructor's comments..."></textarea>
                 </div>
                 
                 <section class="certification">
                     <h3>Certification is not required. Instructors should use certification only if they are completely confident in the student's knowledge.</h3>
-                    <i class="fas fa-certificate"></i>
                     <input type="checkbox" name="certificate" id="certificate">
-                    <label for="certificate">I'm, <%= examiner.name %>, on behalf of TTA, is Certifying that the student's knowledge and skills fully meet the requirements of the State in this discipline</label>
+                    <label for="certificate">I'm, <%= examiner.name %>, on behalf of CDL School, is Certifying that the student's knowledge and skills fully meet the requirements of the State in this discipline</label>
                     <p class="cetrSignature"><%= examiner.name %></p>
-                    <i class="fas fa-certificate"></i>
                 </section>
 
                 <div class="buttons-box">
                     <button class="-btn -submit" type="submit">Submit</button>
-                    <p>Toro Trucking Academy © 2022</p>
+                    <p>BoltCDL © 2022</p>
                 </div>
             </form>
 
