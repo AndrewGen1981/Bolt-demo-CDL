@@ -12,118 +12,145 @@
 </head>
 <body>
     
-    <% if (locals.student && locals.TODClocks) { %>
-        <section class="qr-box -success">
+    <section class="main-box">
 
-            <h1 class='qr-main-title'><span class='qr-main-type'><%= TODClocks.lastClock.type %></span> was successfully performed</h1>
+        <% if (locals.student && locals.TODClocks) { %>
+            <section class="qr-box -success">
 
-            <div class="inner-box">
-                <section class='qr-block'>
-                    <h2 class='qr-block-title'>Student Info</h2>
+                <h1 class='qr-main-title'><span class='qr-main-type'><%= TODClocks.lastClock.type %></span> was successfully performed</h1>
 
-                    <div class="flex-box">
-                        <div class='flex-column'>
+                <div class="separator-box">
+                    <div class="separator-title">student info</div>
+                    <div class="separator-line"></div>
+                </div>
+
+                <div class="qr-box-inner">
+                    <div class="-qr-box-left">
+                        <% if (student.user.dataCollection) { %>
+                            <%
+                                let fullName = "Unknown person"
+                                if (student.user.dataCollection) {
+                                    fullName = student.user.dataCollection.firstName.toLowerCase() !== "n/a" ? student.user.dataCollection.firstName + " " : ""
+                                    fullName += student.user.dataCollection.middleName.toLowerCase() !== "n/a" ? student.user.dataCollection.middleName + " " : ""
+                                    fullName += student.user.dataCollection.lastName.toLowerCase() !== "n/a" ? student.user.dataCollection.lastName + " " : ""
+                                }
+                            %>
+                            <a class="student-name" href='/admin/user/<%= student.user._id %>'><%= fullName %></a>
+                        <% } %>
+                        <div class="info-item">
                             <% if (student.user.dataCollection) { %>
-                                <%
-                                    let fullName = "Unknown person"
-                                    if (student.user.dataCollection) {
-                                        fullName = student.user.dataCollection.firstName.toLowerCase() !== "n/a" ? student.user.dataCollection.firstName + " " : ""
-                                        fullName += student.user.dataCollection.middleName.toLowerCase() !== "n/a" ? student.user.dataCollection.middleName + " " : ""
-                                        fullName += student.user.dataCollection.lastName.toLowerCase() !== "n/a" ? student.user.dataCollection.lastName + " " : ""
-                                    }
-                                %>
-                                <a class="value -name" href='/admin/user/<%= student.user._id %>'><%= fullName %></a>
-                            <% } %>
-
-                            <p><span class="title">key</span><span class="value"><%= student.key %></span></p>
-                            <p><span class="title">id</span><span class="value"><%= student._id %></span></p>
-                            <p><span class="title">email</span><span class="value"><%= student.email %></span></p>
-                            <p><span class="title">TTT</span><span class="value"><%= Math.trunc(student.TTT) %>h : <%= Math.round(60*(student.TTT % 1)) %>m</span></p>
-
-                        </div>  <!-- flex-column -->
-                        <div class='flex-column'>
-                            
-                            <p><span class="title">visiting</span><span class="value"><%= student.user.agreement.visiting %></span></p>
-                            <p><span class="title">class</span><span class="value"><%= student.user.agreement.class %></span></p>
-
-                            <% let form = student.user.dataCollection ? '+' : '-' %>
-                            <% let classForm = student.user.dataCollection ? '-step-done' : '-step-todo' %>
-                            <p><span class='step <%= classForm %>'><%= form %></span>Data Collection Form</p>
-
-                            <% form = student.user.application ? '+' : '-' %>
-                            <% classForm = student.user.application ? '-step-done' : '-step-todo' %>
-                            <p><span class='step <%= classForm %>'><%= form %></span>Application for Enrollment</p>
-
-                            <% form = student.user.agreement ? '+' : '-' %>
-                            <% classForm = student.user.agreement ? '-step-done' : '-step-todo' %>
-                            <p><span class='step <%= classForm %>'><%= form %></span>Enrollment Agreement</p>
-                            
-                        </div>  <!-- flex-column -->
-                    </div>  <!-- flex-box -->
-                </section>  <!-- qr-block -->
-
-                <section class='qr-block'>
-                    <h2 class='qr-block-title'>Today's Activity <%= new Date(TODClocks.lastClock.date).toLocaleDateString() %></h2>
-
-                    <% let durationForToday = 0 %>
-
-                    <% TODClocks.todayClocks.map((clock, index) => { %>
-                        
-                        <% const lastLine = index === (TODClocks.todayClocks.length-1) ? 'lastLine' : '' %>
-                        
-                        <div class="grid-table <%= lastLine %>">
-                            <span class='grid-value'>#<%= index + 1 %>.</span>
-                            <span class='grid-value'><%= clock.type %></span>
-                            <span class='grid-value -center'>[<%= new Date(clock.date).toLocaleTimeString() %>]</span>
-
-                            <% if (!isNaN(clock.lat) && !isNaN(clock.lon)) { %>
-                                <a class='grid-value -center -coord' href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
-                                    <%= Math.round(clock.lat * 10000) / 10000 %>,
-                                    <%= Math.round(clock.lon * 10000) / 10000 %>
-                                </a>
-                            <% } else { %>
-                                <span class='grid-value -center -coord'>LAT: <%= clock.lat %>, LON: <%= clock.lon %></span>
-                            <% } %>
-
-                            <a class='grid-value -center' href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
-                                <svg class="map-marker" viewBox="0 0 384 512">
-                                    <path d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"></path>
+                                <span class="item-title">Data Collection Form</span>
+                                <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                    <path d="M6.00004 11.1709L1.83004 7.00094L0.415039 8.41594L6.00004 14.0009L18 2.00094L16.585 0.585938L6.00004 11.1709Z" fill="white"/>
                                 </svg>
-                            </a>
-
-                            <span class='grid-value -right'>-location <%= clock.location %></span>
-                        </div>
-                            <% if (clock.duration) { %>
-                                <% let duration = clock.duration / (1000 * 60 * 60) %>
-                                <% durationForToday += duration %>
-                                <p><span class="title -left">Session Duration</span><span class="value"><%= Math.trunc(duration) %>h : <%= Math.round(60*(duration % 1)) %>m</span></p>
-                                <br>
+                            <% } else { %>
+                                <span class="item-title -warning">Data Collection Form</span>
                             <% } %>
-                    <% }) %>
+                        </div>
+                        <div class="info-item">
+                            <% if (student.user.application) { %>
+                                <span class="item-title">Application for Enrollment</span>
+                                <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                    <path d="M6.00004 11.1709L1.83004 7.00094L0.415039 8.41594L6.00004 14.0009L18 2.00094L16.585 0.585938L6.00004 11.1709Z" fill="white"/>
+                                </svg>
+                            <% } else { %>
+                                <span class="item-title -warning">Application for Enrollment</span>
+                            <% } %>
+                        </div>
+                        <div class="info-item">
+                            <% if (student.user.agreement) { %>
+                                <span class="item-title">Enrollment Agreement</span>
+                                <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                    <path d="M6.00004 11.1709L1.83004 7.00094L0.415039 8.41594L6.00004 14.0009L18 2.00094L16.585 0.585938L6.00004 11.1709Z" fill="white"/>
+                                </svg>
+                            <% } else { %>
+                                <span class="item-title -warning">Enrollment Agreement</span>
+                            <% } %>
+                        </div>
+                    </div>      <!-- -qr-box-left -->
 
-                    <p><span class="title -left">Total for today</span><span class="value"><%= Math.trunc(durationForToday) %>h : <%= Math.round(60*(durationForToday % 1)) %>m (may fluctuate within 1 minute due to rounding)</span></p>
-                    
-                </section>  <!-- qr-block -->
-            </div>      <!-- inner-box -->
-        </section>  <!-- qx-box -->
+                    <div class="-qr-box-right">
+                        <div class="info-item">
+                            <span class="item-title">Key</span>
+                            <span class="item-value"><%= student.key %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="item-title">ID</span>
+                            <span class="item-value"><%= student._id %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="item-title">Email</span>
+                            <span class="item-value"><%= student.email %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="item-title">TTT</span>
+                            <span class="item-value"><%= Math.trunc(student.TTT || 0) %>h : <%= Math.round(60*((student.TTT || 0) % 1)) %>m</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="item-title">Visiting</span>
+                            <span class="item-value"><%= student.user.agreement.visiting %></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="item-title">Class</span>
+                            <span class="item-value"><%= student.user.agreement.class %></span>
+                        </div>
+                    </div>      <!-- -qr-box-right -->
+                </div>      <!-- qr-box-inner -->
+            </section>  <!-- qx-box -->
 
-    <% } else { %>
-        <section class="qr-box -fail">
-            <h1 class="qr-main-title">Something is wrong...</h1>
-            <div class="inner-box">
-                <section class='qr-block'>
-                    <% if (!student) { %>
-                        <p><span class="title -left">Clock was not recorded</span><span class="value">because student info was not found</span></p>
-                        <p><span class="value">Are you sure you are trying to clock a student with VALID QR? If you are, then try again please, but be aware about the fact that system tracks QR activity of registered students only, with a valid QR codes.</span></p>
+            <section class="activity-box">
+                <div class="separator-box">
+                    <div class="separator-title">today's activity</div>
+                    <div class="separator-line"></div>
+                    <div class="separator-date"><%= new Date(TODClocks.lastClock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                </div>
+                <% let durationForToday = 0 %>
+                <% TODClocks.todayClocks.forEach((clock, index) => { %>
+                    <% const lastClock = index === (TODClocks.todayClocks.length-1) ? '-lastClock' : '' %>
+                    <div class="grid-table">
+                        <span class="clock-index">#<%= index + 1 %>.</span>
+                        <span class="clock-inout <%= lastClock %>"><%= clock.type %></span>
+                        <span class='clock-time'><%= new Date(clock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></span>
+                        <% if (!isNaN(clock.lat) && !isNaN(clock.lon)) { %>
+                            <a class="clock-coord" href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
+                                <%= Math.round(clock.lat * 10000) / 10000 %>,
+                                <%= Math.round(clock.lon * 10000) / 10000 %>
+                            </a>
+                        <% } else { %>
+                            <span class="clock-coord">LAT: <%= clock.lat %>, LON: <%= clock.lon %></span>
+                        <% } %>
+                        <span class="clock-location">• location <%= clock.location.toUpperCase() %></span>
+                    </div>
+                    <% if (clock.duration) { %>
+                        <% 
+                            let duration = clock.duration / (1000 * 60 * 60)
+                            durationForToday += duration
+                        %>
+                        <div class="sess-duration">Session duration - <%= Math.trunc(duration) %>h : <%= Math.round(60*(duration % 1)) %>m</div>
                     <% } %>
+                <% }) %>
+                <div class="summary">
+                    <span class="total">Total for today - <%= Math.trunc(durationForToday) %>h : <%= Math.round(60*(durationForToday % 1)) %>m</span>
+                    <span class="total-note">(may fluctuate within 1 minute due to rounding)</span>
+                </div>
+            </section>  <!-- activity-box -->
+        <% } else { %>
+            <section class="qr-box -fail">
+                <h1 class="qr-main-title">Something is wrong...</h1>
+                <span class="item-title">Clock was not recorded</span>
+                <% if (!student) { %>
+                    <span class="item-value">because student info was not found</span>
+                    <p class="add-info">Are you sure you are trying to clock a student with VALID QR? If you are, then try again please, but be aware about the fact that system tracks QR activity of registered students only, with a valid QR codes.</p>
+                <% } else { %>
                     <% if (!TODClocks) { %>
-                        <p><span class="title -left">Clock was not recorded</span><span class="value">because of database negative respond</span></p>
-                        <p><span class="value">Most likely issue is inner, try later please. It just looks like we are not able to retrieve a clocks information for TODAY from database. We don't know yet if a clock has been recordered and just not shows up yet or it hasn't been recordered. Meanwhile you can check in student's personal records if clock was recordered or not.</span></p>
+                        <span class="item-value">because of database negative respond</span>
+                        <p class="add-info">Most likely issue is inner, try later please. It just looks like we are not able to retrieve a clocks information for TODAY from database. We don't know yet if a clock has been recordered and just not shows up yet or it hasn't been recordered. Meanwhile you can check in student's personal records if clock was recordered or not.</p>
                     <% } %>
-                </section>
-            </div>
-        </section>
-    <% } %>
+                <% } %>
+            </section>
+        <% } %>
+
+    </section>      <!-- main-box -->
 
 </body>
 </html>
