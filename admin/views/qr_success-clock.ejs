@@ -7,19 +7,12 @@
     <title>QR Clock Success | <%= student.user.name %> </title>
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" href="../../static/css/fonts.css">
-    <link rel="stylesheet" href="../../static/css/brix-family.css">
-
-    <link rel="stylesheet" href="../../static/css/colors.css">
-    
     <link rel="stylesheet" href="/admin/views/qr-styles.css">
 
 </head>
 <body>
     
-    <% if (student && TODClocks) { %>
+    <% if (locals.student && locals.TODClocks) { %>
         <section class="qr-box -success">
 
             <h1 class='qr-main-title'><span class='qr-main-type'><%= TODClocks.lastClock.type %></span> was successfully performed</h1>
@@ -31,12 +24,15 @@
                     <div class="flex-box">
                         <div class='flex-column'>
                             <% if (student.user.dataCollection) { %>
-                                <div>
-                                    <span class="value -name"><%= student.user.dataCollection.lastName %></span>
-                                    <span class="value -name"><%= student.user.dataCollection.firstName %></span>
-                                    <span class="value -name"><%= student.user.dataCollection.middleName %></span>
-                                    <a class="-btn" href='/admin/user/<%= student.user._id %>'>more...</a>
-                                </div>
+                                <%
+                                    let fullName = "Unknown person"
+                                    if (student.user.dataCollection) {
+                                        fullName = student.user.dataCollection.firstName.toLowerCase() !== "n/a" ? student.user.dataCollection.firstName + " " : ""
+                                        fullName += student.user.dataCollection.middleName.toLowerCase() !== "n/a" ? student.user.dataCollection.middleName + " " : ""
+                                        fullName += student.user.dataCollection.lastName.toLowerCase() !== "n/a" ? student.user.dataCollection.lastName + " " : ""
+                                    }
+                                %>
+                                <a class="value -name" href='/admin/user/<%= student.user._id %>'><%= fullName %></a>
                             <% } %>
 
                             <p><span class="title">key</span><span class="value"><%= student.key %></span></p>

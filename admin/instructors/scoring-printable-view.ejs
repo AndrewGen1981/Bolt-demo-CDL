@@ -22,106 +22,127 @@
         <% if(!scoring) { %>
             <h1 class='title'>Oooopps... No scoring data were passed</h1>
         <% } else { %>
-            <h1 class='title'><%= scoring.scoringTitle %></h1>
+            <h1 class='title'><span class="sub-title"><%= scoring.class %>:</span><%= scoring.scoringTitle %></h1>
 
-            <section class="block-box" data-passed="<%= scoring.ifPassed %>">
-                <div class="block-item">
-                    <p class="item-title">Student</p>
-                    <span class="item-value"><%= scoring.studentName %></span>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">Email</p>
-                    <span class="item-value"><%= scoring.studentEmail %></span>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">Key</p>
-                    <span class="item-value"><%= scoring.studentKey %></span>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">Location</p>
-                    <span class="item-value"><%= scoring.location %></span>
-                </div>
-                <br>
-                <div class="block-item -note">
-                    <span class="item-title">Conducted as part of training</span>
-                    <span class="item-value"><%= scoring.class %> <%= scoring.transmittion %> as of test date student had <%= Math.round(scoring.TTT) %>h of tuition time compounded</span>
-                </div>
-            </section>      <!-- block-box -student-data -->
-
-            <section class="block-box -examiner-data">
-                <h2>Conducted by:</h2>
-                <div class="block-item">
-                    <p class="item-title">examiner</p>
-                    <span class="item-value"><%= scoring.examinerName %></span>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">at</p>
-                    <span class="item-value"><%= scoring.examDate %> <%= scoring.examTime %> Pacific Time Zone</span>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">location</p>
-                    <span class="item-value"><%= scoring.examinerLocation %></span>
-                </div>
-            </section>      <!-- block-box -examiner-data -->
-
-            <section class="block-box -test-data">
-                <h2>Evaluation parameters:</h2>
-                <div class="block-item">
-                    <p class="item-title">test capacity</p>
-                    <span class="item-value"><%= scoring.maxPoints %> points</span>
-                </div>
-                 <div class="block-item">
-                    <p class="item-title">test type</p>
-                    <% if(scoring.scoringType === 'INCAB' || scoring.scoringType === 'OUTCAB') { %>
-                        <span class="item-value">ascending (as many points as possible), lower limit is <%= Math.round(scoring.maxPoints * scoring.limit) %> points</span>
-                    <% } else { %>
-                        <span class="item-value">descending (as few points as possible, points are treated as a penalty), maximum <%= scoring.limit %> penatly points allowed</span>
-                    <% } %>
-                </div>
-                <div class="block-item">
-                    <p class="item-title">result</p>
-                    <span class="item-value" id='result'><%= scoring.ifPassed ? 'PASSED' : 'FAILED' %></span>
-                </div>
-                <% if(scoring.importantCoveredRatio) { %>
+            <header>
+                <div class="-left-header-box">
                     <div class="block-item">
-                        <p class="item-title">percentage of coverage of mandatory inspections</p>
-                        <span class="item-value" id='importantCoveredRatio'><%= Math.round(scoring.importantCoveredRatio * 1000) / 10 %>%</span>
+                        <p class="item-title">Student</p>
+                        <span class="item-value -bold"><%= scoring.studentName %></span>
                     </div>
-                <% } %>
-            </section>      <!-- block-box -test-data -->
+                    <div class="block-item">
+                        <p class="item-title">Email</p>
+                        <span class="item-value"><%= scoring.studentEmail %></span>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Key</p>
+                        <span class="item-value"><%= scoring.studentKey %></span>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Location</p>
+                        <span class="item-value"><%= scoring.location %></span>
+                    </div>
+                </div>    <!-- -left-header-box -->
+                <div class="-right-header-box">
+                    <div class="block-item">
+                        <p class="item-title">Examiner</p>
+                        <span class="item-value -bold"><%= scoring.examinerName %></span>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Timestamp</p>
+                        <span class="item-value"><%= scoring.examDate %> <%= scoring.examTime %> Pacific Time Zone</span>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Location</p>
+                        <span class="item-value"><%= scoring.examinerLocation %></span>
+                    </div>
+                </div>       <!-- -right-header-box -->
 
-            <!-- Certificates -->
-            <% if(scoringCertificate.toString() === 'true') { %>
-                <p class='certificate'>
-                    <svg class="fa-certificate" viewBox="0 0 512 512"><path d="M458.622 255.92l45.985-45.005c13.708-12.977 7.316-36.039-10.664-40.339l-62.65-15.99 17.661-62.015c4.991-17.838-11.829-34.663-29.661-29.671l-61.994 17.667-15.984-62.671C337.085.197 313.765-6.276 300.99 7.228L256 53.57 211.011 7.229c-12.63-13.351-36.047-7.234-40.325 10.668l-15.984 62.671-61.995-17.667C74.87 57.907 58.056 74.738 63.046 92.572l17.661 62.015-62.65 15.99C.069 174.878-6.31 197.944 7.392 210.915l45.985 45.005-45.985 45.004c-13.708 12.977-7.316 36.039 10.664 40.339l62.65 15.99-17.661 62.015c-4.991 17.838 11.829 34.663 29.661 29.671l61.994-17.667 15.984 62.671c4.439 18.575 27.696 24.018 40.325 10.668L256 458.61l44.989 46.001c12.5 13.488 35.987 7.486 40.325-10.668l15.984-62.671 61.994 17.667c17.836 4.994 34.651-11.837 29.661-29.671l-17.661-62.015 62.65-15.99c17.987-4.302 24.366-27.367 10.664-40.339l-45.984-45.004z"></path></svg>
-                    Instructor certified student's knowledge and skills due to examining discipline
-                </p>
-            <% } else { %>
-                <p class='no-certificate'>The student's knowledge and skills are <strong>not certified</strong></p>
-            <% } %>
+                <div class="block-item">
+                    <span class="item-title">Conducted as part of training <%= scoring.class %> <%= scoring.transmittion %> as of test date student had <%= Math.round(scoring.TTT) %>h of tuition time compounded</span>
+                </div>
+            </header>
+
+            <% const typeOfScoring = scoring.scoringType === 'INCAB' || scoring.scoringType === 'OUTCAB' %>
+
+            <div class="test-information-box">
+                <div class="-left-test-information-box">
+                    <!-- Certificates -->
+                    <% if(scoringCertificate.toString() === 'true') { %>
+                        <img class="cert-ico" src="/static/images/_certified.png" alt="test certified">
+                        <p class="cert-info">Instructor <span>certified</span> student's knowledge and skills due to examining discipline</p>
+                    <% } else { %>
+                        <img class="cert-ico" src="/static/images/_not-certified.png" alt="test not certified">
+                        <p class="cert-info">The student's knowledge and skills are <span>not certified</span></p>
+                    <% } %>
+                </div>    <!-- -left-test-information-box -->
+                <div class="-right-test-information-box">
+                    <div class="block-item">
+                        <p class="item-title">Test capacity</p>
+                        <span class="item-value -bold"><%= scoring.maxPoints %> points</span>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Test type</p>
+                        <% if (typeOfScoring) { %>
+                            <span class="item-value">Ascending (as many points as possible), lower limit is <%= Math.round(scoring.maxPoints * scoring.limit) %> points</span>
+                        <% } else { %>
+                            <span class="item-value">Descending (as few points as possible, points are treated as a penalty), maximum <%= scoring.limit %> penatly points allowed</span>
+                        <% } %>
+                    </div>
+                    <div class="block-item">
+                        <p class="item-title">Result</p>
+                        <span class="item-value" id='result' data-passed="<%= scoring.ifPassed %>"><%= scoring.ifPassed ? 'PASSED' : 'FAILED' %></span>
+                    </div>
+                    <% if(scoring.importantCoveredRatio) { %>
+                        <div class="block-item">
+                            <p class="item-title -mandatory">Percentage of coverage of mandatory inspections</p>
+                            <span class="item-value -bold" id='importantCoveredRatio'><%= Math.round(scoring.importantCoveredRatio * 1000) / 10 %>%</span>
+                        </div>
+                    <% } %>
+                </div>       <!-- -right-test-information-box -->
+            </div>  <!-- test-information-box -->
+
             
             <div class="scoring-results">
                 <h2>Scoring details</h2>
                 <% scoring.blocks.forEach(block => { %>
                     <section class="scoring-block-box">
-                        <h4 class="scoring-block-box-title"><%= block.bl %></h4>
-                        <% block.items.forEach(item => { %>
-                            <div class="scoring-block">
-                                <h5 class="scoring-block-title"><%= item.it %></h5>
-                                <div class="scoring-skills-box">
-                                    <% item.skills.forEach(skill => { %>
-                                        <div class="scoring-skill">
-                                            <p><%= skill.sk %></p>
-                                            <% if(skill.checked) { %>
-                                                <svg class='-checked' viewBox="0 0 448 512"><path d="M400 480H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48zm-204.686-98.059l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.248-16.379-6.249-22.628 0L184 302.745l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.25 16.379 6.25 22.628.001z"></path></svg>
-                                            <% } else { %>
-                                                <svg class='-unchecked' viewBox="0 0 448 512"><path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>
-                                            <% } %>
-                                        </div>
-                                    <% }) %>
+                        <div class="scoring-block-box-inner">
+                            <h4 class="scoring-block-box-title"><%= block.bl %></h4>
+                            <div class="scoring-block-box-line"></div>
+                        </div>
+
+                        <div class="scoring-checks">
+
+                            <% block.items.forEach((item, index) => { %>
+
+                                <div class="scoring-block" data-skills="<%= block.items.length %>">
+
+                                    <h5 class="scoring-block-title"><%= item.it %></h5>
+                                    <div class="scoring-skills-box">
+                                        <% item.skills.forEach(skill => { %>
+                                            <div class="scoring-skill">
+                                                <span class="scoring-skill-value"><%= skill.sk %></span>
+                                                <div class="scoring-skill-check">
+                                                    <% if(skill.checked) { %>
+                                                        
+                                                        <% if (typeOfScoring) { %>
+                                                            <div class="-checked"></div>
+                                                        <% } else { %>
+                                                            <div class="-unchecked"></div>
+                                                        <% } %>
+
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
                                 </div>
-                            </div>
-                        <% }) %>
+                            <% }) %>
+
+                        </div>      <!-- scoring-checks -->
+
+
                     </section>
                 <% }) %>
             </div>      <!-- scoring-results -->

@@ -1,12 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+/* @GENERAL */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     
-    font-family: 'BrixSlab-Regular';
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
     font-size: 15px;
-
-    color: var(--blue-slate)
 }
 
 body, html {
@@ -14,24 +16,14 @@ body, html {
     min-height: 100vh;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    flex-wrap: wrap;
 }
-
-ol {
-    list-style-position: inside;
-}
-li {
-    padding: 0.3rem 0;
-    text-align: justify;
-}
-
 
 .qr-box {
-    --grad-color1: var(--good-done);
-    --grad-color2: #52b3b6;
+    --grad-color1: #aaaaaa;
+    --grad-color2: lightgray;
 
     margin: 0 auto;
     padding: 2rem 0;
@@ -52,29 +44,27 @@ li {
 }
 
 .-success {
-    --grad-color1: var(--good-done);
-    --grad-color2: #52b3b6;
+    --grad-color1: lightgreen;
+    --grad-color2: #cdf0cd;
 }
 
 .-fail {
-    --grad-color1: var(--bad-todo);
-    --grad-color2: #e988f9;
+    --grad-color1: lightcoral;
+    --grad-color2: #f988bd;
     max-width: 720px;
 }
 
 .qr-main-title, .qr-main-type {
     padding: 0 0 2rem 0;
 
-    font-family: "BrixSlab-Light";
-    font-size: 3rem;
+    font-size: 2.33rem;
     text-align: center;
 
-    color: var(--black80-worn)
+    color: #151515
 }
 
 .qr-main-type {
-    font-family: "BrixSlab-Medium";
-    color: var(--orange-high-desert);
+    color: orangered;
 }
 
 .inner-box {
@@ -89,11 +79,10 @@ li {
 .qr-block-title {
     margin-bottom: 0.5rem;
 
-    font-family: 'WindSong', cursive;
     font-size: 1.75rem;
     text-align: center;
 
-    color: var(--black80-worn)
+    color: #151515;
 }
 
 .flex-box {
@@ -103,7 +92,7 @@ li {
     align-items: center;
     justify-content: space-evenly;
 
-    border: 1px solid var(--blue40-slate);
+    border: 1px solid #AAAAAA;
     border-radius: 0.5rem;
 
     padding: 1rem 0;
@@ -111,18 +100,18 @@ li {
 .grid-table {
     padding: 0 .35rem;
     display: grid;
-    grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 0.5fr 1fr 1fr 1fr 0.5fr 1fr;
 }
 .grid-value {
-    font-family: "BrixSlab-Light";
+    color: #fff;
     margin-bottom: 0.25rem;
 }
 a.grid-value {
-    color: white;
+    color: #fff;
 }
 
 .lastLine {
-    background-color: var(--black15-worn);
+    background-color: #151515;
     border-radius: 0.35rem;
 }
 
@@ -138,17 +127,12 @@ a.grid-value {
     display: inline-flex;
     justify-content: right;
 
-    font-family: "BrixSlab-Medium";
     text-transform: uppercase;
     
+    border-right: 1px solid #aaaaaa;
+}
 
-    border-right: 1px solid var(--blue20-slate);
-}
-.value {
-    font-family: "BrixSlab-Light";
-}
 .-name {
-    font-family: "BrixSlab-Medium";
     font-size: 1.25rem;
 }
 
@@ -179,6 +163,9 @@ a.grid-value {
     box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
 }
 .-step-done {
+    --good-done: lightgreen;
+    --good-done1: green;
+
     color: white;
 
     background: var(--good-done); /* Old browsers */
@@ -187,6 +174,9 @@ a.grid-value {
     background: linear-gradient(135deg,  var(--good-done), var(--good-done1)); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 .-step-todo {
+    --bad-todo: lightcoral;
+    --bad-todo1: coral;
+
     color: white;
 
     background-color: var(--bad-todo);
@@ -204,7 +194,7 @@ a.grid-value {
     display: inline-flex;
     justify-content: center;
 
-    background-color: var(--orange-high-desert);
+    background-color: orangered;
     text-decoration: none;
     color: white;
 
@@ -225,14 +215,13 @@ a.grid-value {
 .geo-box {
     padding: 3rem;
     text-align: center;
-    background-color: var(--blue15-slate);
+    background-color: #d1d1d1;
     border-radius: 0.5rem;
 
     animation: showing 1s ease-in
 }
 .main-geo-title {
     width: 100%;
-    font-family: "BrixSlab-Medium";
     font-size: 2rem;
 }
 .main-geo-subtitle {

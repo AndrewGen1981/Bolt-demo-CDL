@@ -13,91 +13,125 @@
 
 .scoring-box {
     width: 95%;
-    max-width: 1535px;
+    max-width: 1211px;
     margin: 0 auto;
 }
 
 .title {
-    margin: 1.33rem 0 0.67rem 0;
+    margin: 2rem 0 3rem 0;
 
-    font-weight: 700;
-    font-size: 1.53rem;
-    
-    text-align: center;
-}
-
-.block-box {
-    margin-bottom: 10px;
-    padding: 15px;
-    
-    display: flex;
-    flex-direction: column;
-
-    background-color: rgba(41, 41, 41, 0.03);
-}
-
-.item-title {
-    min-width: 8rem;
     font-weight: 500;
-    font-size: 0.87rem;
-    line-height: 1.53rem;
-    color: #8D8D8D;
-}
-.item-value {
-    font-weight: 600;
-    font-size: 0.87rem;
-    line-height: 1.53rem;
+    font-size: 1.53rem;
     color: #151515;
 }
+.sub-title {
+    font-weight: 700;
+    font-size: 1.53rem;
+    color: #151515;
 
-[data-passed="true"] {
-    background-color: #daf9ce;
-}
-[data-passed="false"] {
-    background-color: #fde9e9;
+    margin-right: 0.73rem;
 }
 
-.block-box > h2{
-    margin-bottom: 1rem;
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 2.93rem;
 }
+
+.-left-header-box,
+.-right-header-box {
+    width: 50%;
+}
+.-left-header-box {
+    border-right: 2px solid #C4C4C4;
+    margin-bottom: 3.47rem;
+}
+.-right-header-box {
+    padding-left: 2rem;
+    margin-bottom: 3.47rem;
+}
+
 .block-item {
     width: 100%;
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
 }
-.block-item strong, .item-title {
-    padding-right: 5px;
+
+.item-title {
+    min-width: 14.73rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+    color: #828282;
+}
+.item-value {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+    color: #151515;
+}
+.item-value.-bold {
+    font-weight: 700;
 }
 
+.test-information-box {
+    padding: 1.67rem 0;
 
-/* Certificates */
-.certificate, .no-certificate {
-    width: 100%;
-    padding: 5px;
-
-    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     
-    background-color: #d6eecd;
-    position: relative;
-}
-.no-certificate {
-    background-color: #f7aaaa;
-}
-.fa-certificate {
-    width: 40px;
+    border-top: 2px solid #C4C4C4;
+    border-bottom: 2px solid #C4C4C4;
 
-    fill:#e9760ba6;
-
-    position: absolute;
-    top: 50%;
-    left: 5px;
-
-    transform: translateY(-50%);
+    margin-bottom: 2.93rem;
 }
-.certificate strong, .no-certificate strong {
+.-left-test-information-box {
+    width: 35%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+.-right-test-information-box {
+    width: 65%;
+    padding-left: 2rem;
+}
+
+.cert-ico {
+    margin-right: 1.4rem;
+}
+.cert-info {
+    max-width: 10.87rem;
+
+    font-size: 1rem;
+    line-height: 1.53rem;
+    color: #151515;
+}
+.cert-info span {
     font-weight: 700;
     text-transform: uppercase;
+}
+
+.-mandatory {
+    max-width: 13.33rem !important;
+    line-height: 1rem;
+}
+
+[data-passed="true"] {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #A2D092;
+}
+[data-passed="false"] {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #F27878;
 }
 
 
@@ -107,64 +141,145 @@
     display: block;
 }
 .scoring-results h2 {
-    margin: 1.67rem 0 0.67rem 0;
-    font-size: 2rem;
-    text-align: center;
-}
-
-.scoring-block-box {
-    padding: 5px;
-    margin-bottom: 2.33rem;
-}
-.scoring-block-box-title {
-    padding-bottom: 3px;
-    margin-bottom: 10px;
-
+    margin: 1.67rem 0 1.67rem 0;
+    
     font-weight: 700;
+    font-size: 1.53rem;
+    color: #151515;
+
+    text-align: center;
     text-transform: uppercase;
-
-    border-bottom: 1px solid #E8E8E8;
-}
-.scoring-block-title {
-    font-weight: 500;
-    font-size: 0.87rem;
-    line-height: 1.53rem;
-    color: #8D8D8D;
-
-    text-transform: capitalize;
 }
 
-.scoring-skills-box {
-    margin: 5px 0 10px 35px;
-    display: flex;
-    flex-wrap: wrap;
+
+/* Scoring Block */
+.scoring-block-box {
+    width: 100%;
+    margin-bottom: 1.67rem;
 }
-.scoring-skill {
-    flex: 1 auto;
+.scoring-block-box-inner {
+    width: 100%;
 
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+
+    margin-bottom: 2rem;
+}
+.scoring-block-box-title {
+    margin-top: -2px;
+    margin-right: 0.6rem;
+
+    font-weight: 700;
+    font-size: 1rem;
+    color: #C4C4C4;
+
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.scoring-block-box-line {
+    width: 100%;
+    border-bottom: 2px solid #E8E8E8;
+}
+
+
+.scoring-checks {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.scoring-block {
+    width: 33.33%;
+
+    margin-bottom: 0.5rem;
+
+    flex: 1 1 auto;
+}
+
+
+.scoring-block[data-skills="1"] {
+    width: 100%;
+}
+.scoring-block[data-skills="1"] .scoring-skills-box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.scoring-block[data-skills="2"] {
+    width: 50%;
+}
+.scoring-block[data-skills="2"] .scoring-skills-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+
+
+.scoring-block-title {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 2.67rem;
+    color: #151515;
+
+    text-transform: capitalize;
+    margin-bottom: 0.53rem;
+}
+
+.scoring-skill {
+    width: 95%;
+    max-width: 20rem;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 0.63rem;
+}
+.scoring-skill-value {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #151515;
 
     text-transform: capitalize;
 }
-.scoring-skill p {
-    margin: 2px 5px;
 
-    font-weight: 500;
-    font-size: 0.93rem;
-    line-height: 1.53rem;
-    color: #151515;
+
+.scoring-skill-check {
+    width: 30px;
+    min-width: 30px;
+
+    height: 30px;
+    min-height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #C4C4C4;
+    border-radius: 100%;
 }
-.scoring-skill svg {
-    width: 0.93rem !important;
-    min-height: 0.93rem;
+
+
+.-checked, .-unchecked {
+    width: 22px;
+    height: 22px;
+    border-radius: 100%;
 }
 .-checked {
-    fill: #8acd71;
+    background-color: #A2D092;
 }
 .-unchecked {
-    fill: #F27878;
+    background-color: #F27878;
 }
+
+
 
 .comments {
     min-height: 100px;
