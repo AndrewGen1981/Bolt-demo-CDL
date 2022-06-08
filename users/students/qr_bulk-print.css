@@ -1,14 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
 /* @GENERAL */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     
-    font-family: 'BrixSlab-Regular';
-    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
     font-weight: normal;
-
-    color: var(--black-worn)
+    font-size: 15px;
+    color: #151515;
 }
 
 
@@ -25,7 +26,7 @@ Legal	8.5 × 14	    216 × 356               816.5 × 1345.5
     --LETTERw: 816.5px;
     --LETTERh: 1054.5px;
 
-    --width: calc( (var(--LETTERw) / 5));     /* 2px right and bottom margins */
+    --width: calc( (var(--LETTERw) / 5) - 3px);     /* 2px right and bottom margins */
     --space: 24px;
 }
 
@@ -33,51 +34,47 @@ Legal	8.5 × 14	    216 × 356               816.5 × 1345.5
 /* BULK QR CODES PRINTING */
 
 .qr-bulk-print-box {
+    margin: 0 auto;
+
     width: var(--LETTERw);
     /* min-height: var(--LETTERh); */
 
-    margin: 0 auto;
-
     display: flex;
+    flex-wrap: wrap;
     align-items:flex-start;
     justify-content: left;
 
-    /* border: 1px solid var(--gray20-pacific-cloud); */
+    /* border: 1px solid red; */
 }
 
 
 
 .qr-card {
-    --grad-back1:var(--gray15-pacific-cloud);
-    --grad-back2:var(--gray40-pacific-cloud);
-    
     margin: 0 2px 2px 0;
     width: var(--width);
-    height: calc(2 * var(--width));
+    height: calc(2 * var(--width) + 7px);
 
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
 
-    background: -webkit-linear-gradient(135deg, var(--grad-back1), var(--grad-back2));
-    background: -moz-linear-gradient(135deg, var(--grad-back1), var(--grad-back2));
-    background: linear-gradient(135deg, var(--grad-back1), var(--grad-back2));
-    background-color: var(--grad-back1);
+    background-image: url("/static/images/logo-gray.png");
+    background-repeat: no-repeat;
+    background-position: center;
 
     border-radius: calc(var(--width) / 26);
+    border: 1px solid #cecece;
 }
 
 
-
 .qr-code {
-    --qr-width: calc(var(--width) - 10px);
+    --qr-width: calc(var(--width) - 6px);
 
     width: var(--qr-width);
     height: var(--qr-width);
 
     border-radius: calc(var(--space)  / 6);
-    /* border: 1px solid var(--orange-high-desert); */
     overflow: hidden;
 
     position: relative;
@@ -85,77 +82,58 @@ Legal	8.5 × 14	    216 × 356               816.5 × 1345.5
 .qr-code::after {
     content: "";
 
-    background-image: url('/static/images/water-mark.png');
-
-    background-size: 40%;
+    background-image: url('/static/images/logo15-32.png');
     background-position: center;
     background-repeat: no-repeat;
 
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    inset: 0;
     
-    opacity: 0.945;
+    opacity: 0.975;
 }
 .qr-code::before {
-    --grad-col1: var(--orange-high-desert);
-    --grad-col2: black;
+    --grad-col1: #FF6C17;
+    --grad-col2: #0F1C2F;
 
     content: "";
 
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    inset: 0;
 
     background: -webkit-linear-gradient(135deg, var(--grad-col1), var(--grad-col2));
     background: -moz-linear-gradient(135deg, var(--grad-col1), var(--grad-col2));
     background: linear-gradient(135deg, var(--grad-col1), var(--grad-col2));
     background-color: var(--grad-col1);
-    
 }
 
 
 .qr-card-title {
     padding-top: calc(var(--space) / 2);
 
-    font-family: 'Industrial Bold';
-
     font-size: calc(var(--space) * 1.5);
     line-height: calc(var(--space) + 10px);
-    color: var(--black-worn);
     
     letter-spacing: -3px;
-    text-shadow: 5px 1px 2px var(--black40-worn);
 }
 .qr-card-title-line {
     width: 85%;
-    border-bottom: 1px solid var(--black60-worn)
+    border-bottom: 1px solid #0F1C2F;
 }
 .qr-card-subtitle {
-    font-family: 'Great Vibes', cursive;
     font-size: calc(var(--space) / 1.5);
     letter-spacing: -1.3px;
-        
-    color: var(--black80-worn);
 }
 .qr-card-name {
     padding-top: calc(var(--space) / 1.6);
     padding-bottom: calc(var(--space) / 2);
 
-    font-family: "BrixSlab-Regular";
     font-size: calc(var(--space) / 2);
     text-transform: capitalize;
 }
 .qr-card-key {
-    font-family: "BrixSlab-Bold";
     font-size: calc(var(--space) * 1.5);
 }
 .qr-card-class {
-    font-family: "BrixSlab-Regular";
     font-size: calc(var(--space) / 3);
     margin-bottom: calc(var(--space) / 3);
 }

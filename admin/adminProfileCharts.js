@@ -38,7 +38,7 @@ async function newStudentsInvolvingChart(deltaMonth) {
         })
     }
     // filling in blank array with data
-    students.map(student => {
+    students.forEach(student => {
         let created = new Date(student.created)
         let i = (created.getFullYear() - startYear)*12 + created.getMonth() + 1 - startMonth
         analyticsArray[i].newStudents += 1
@@ -74,7 +74,7 @@ async function accountsReceivableChart() {
         })
 
         if (allUsers) {
-            allUsers.map(user => {
+            allUsers.forEach(user => {
                 if(user.agreement) {
                     let cost = user.agreement.tuitionCost ? user.agreement.tuitionCost : 0
                     cost += user.agreement.regisrFee ? user.agreement.regisrFee : 0
@@ -83,7 +83,7 @@ async function accountsReceivableChart() {
 
                     let paid = 0
                     if(user.payments) {
-                        user.payments.map(pmt => {
+                        user.payments.forEach(pmt => {
                             paid += pmt.ammount
                         })
                     }
@@ -156,7 +156,7 @@ async function enrollmentStatusesChart(deltaMonth) {
     const students = await Student
         .where("enrollmentStatusUpdate").gt(startDate)
         .where("graduate").ne("no")
-        .select("enrollmentStatusUpdate location graduate -_id")
+        .select("enrollmentStatusUpdate location graduate skillsTest -_id")
     // results to return
     let analyticsArray = []
     // initing: LOCATION to array and locationValues will be 0 array with the same length as LOCATION
@@ -174,10 +174,16 @@ async function enrollmentStatusesChart(deltaMonth) {
             locationFailed: locations.map(l => { return 0 }),      // Creating an array of Failed
             locationDeclined: locations.map(l => { return 0 }),      // Creating an array of Declined
             locationMilitary: locations.map(l => { return 0 }),      // Creating an array of Military
+            
+            // skills test
+            locationInitial: locations.map(l => { return 0 }),      // Creating an array of 'Initial' skills test
+            locationRetest: locations.map(l => { return 0 }),      // Creating an array of 'Retest' skills test NOT INCLUDES next 2 types
+            locationRetestBKnRD: locations.map(l => { return 0 }),      // Creating an array of 'Retest Bk & Rd' skills test
+            locationRetestRDonly: locations.map(l => { return 0 }),      // Creating an array of 'Retest Rd only' skills test
         })
     }
     // filling in blank array with data
-    students.map(student => {
+    students.forEach(student => {
         let graduated = new Date(student.enrollmentStatusUpdate)
         let i = (graduated.getFullYear() - startYear)*12 + graduated.getMonth() + 1 - startMonth
         analyticsArray[i].graduatedStudents += 1
@@ -197,8 +203,33 @@ async function enrollmentStatusesChart(deltaMonth) {
                     analyticsArray[i].locationMilitary[loc] += 1
                 break;
             }
-        }
-    })
+            // gathering skills test info
+            if (student.skillsTest) {
+                if (student.skillsTest.length) {
+                    student.skillsTest.forEach(test => {
+                        if (test.scheduledDate > startDate && date >= test.scheduledDate) {
+                            let m = (test.scheduledDate.getFullYear() - startYear)*12 + test.scheduledDate.getMonth() + 1 - startMonth
+                            switch (test.testType) {
+                                case "Initial":
+                                    analyticsArray[m].locationInitial[loc] += 1
+                                break;
+                                case "Retest":
+                                    analyticsArray[m].locationRetest[loc] += 1
+                                break;
+                                case "Retest Bk & Rd":
+                                    analyticsArray[m].locationRetestBKnRD[loc] += 1
+                                break;
+                                case "Retest Rd only":
+                                    analyticsArray[m].locationRetestRDonly[loc] += 1
+                                break;
+                            }
+                        }
+                    })
+                }
+            }
+        }   //  loc > -1
+    })      //  students.forEach
+
     return analyticsArray
 }
 

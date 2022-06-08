@@ -98,7 +98,7 @@ header {
     --height: 5px;
 
     position: absolute;
-    bottom: calc(-1 * var(--height));
+    bottom: 0;
 
     width: 100%;
     height: var(--height);
@@ -323,12 +323,110 @@ header {
 }
 
 
+/* Skills Test Table */
+.-mt {
+    margin-top: 8rem;
+}
+.analythicsTable {
+    width: 100%;
+
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    margin-bottom: 2rem;
+}
+.table-left-column {
+    width: 250%;
+    text-align: left;
+}
+.table-column {
+    width: 100%;
+    text-align: center;
+}
+
+.table-left-column * {
+    white-space: nowrap;
+}
+
+.table-left-column .table-header {
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 2.53rem;
+    color: #0F1C2F;
+}
+.table-column .table-header {
+    font-weight: 600;
+    font-size: 0.73rem;
+    line-height: 2.53rem;
+    color: #000000;
+}
+
+.table-left-column .-total {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.67rem;
+    color: #FFFFFF;
+}
+.table-column .-total {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.67rem;
+    color: #AAAAAA;
+}
+
+.table-left-column .table-value:not(.-total) {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.67rem;
+    color: #000000;
+}
+.table-column .table-value {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.67rem;
+    color: #AAAAAA;
+}
+
+.table-value:not(.-total) {
+    border-right: 1px solid #DADADA;
+}
+
+.table-value.-group {
+    font-weight: 700 !important;
+    color: #3789EB !important;
+}
+
+.-subvalue {
+    font-size: 0.83rem !important;
+    line-height: 1.53rem !important;
+}
+
+.table-note {
+    font-size: 0.83rem;
+    color: #a3a3a3;
+}
+
+.table-value.-group[data-tabvalue = "0"] {
+    color: #d8e7f9 !important;
+}
+[data-tabvalue = "0"] {
+    color: #ebebeb !important;
+}
+
+
 
 @media (max-width: 900px) {
     .chart-column:nth-child(1),
     .chart-column:nth-child(2),
     .chart-column:nth-child(3),
     .chart-column:nth-child(4) {
+        display: none;
+    }
+    .table-column:nth-child(2),
+    .table-column:nth-child(3),
+    .table-column:nth-child(4),
+    .table-column:nth-child(5) {
         display: none;
     }
 }
@@ -338,9 +436,21 @@ header {
     .chart-column:nth-child(7) {
         display: none;
     }
+    .table-column:nth-child(6),
+    .table-column:nth-child(7),
+    .table-column:nth-child(8) {
+        display: none;
+    }
 }
 @media (max-width: 500px) {
+    :root {
+        font-size: 14px;
+    }
     .chart-column:nth-child(8) {
+        display: none;
+    }
+    .table-column:nth-child(9),
+    .table-column:nth-child(10) {
         display: none;
     }
 }
