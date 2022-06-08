@@ -1,6 +1,9 @@
 // @ADMIN configuration file
 // contains credentials & a list of authorities
 
+// app domain is used for QR generations
+const appDomain = "https://bolt-demo-school.herokuapp.com/"
+
 // Locations
 const LOCATION = {
     All: 'All',
@@ -71,6 +74,7 @@ PROFILES.forEach(profile => {
 })
 
 module.exports = {
+    appDomain,
     LOCATION,
     PROFILES,
     ISSUES,

@@ -166,6 +166,7 @@ async function enrollmentStatusesChart(deltaMonth) {
         let index = (month + i) % 12     // index can be greater than monthNames length
         let year = startYear + Math.trunc((month + i) / 12)
         analyticsArray.push({  // correct item names
+            indexMonth: index,
             month: monthNames[index],
             year,
             graduatedStudents: 0,   // for general statistic about all locations

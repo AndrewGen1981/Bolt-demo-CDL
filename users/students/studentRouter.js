@@ -388,8 +388,7 @@ studentRouter.get(
 // @POST admin/student/print-bulk-qr
 studentRouter.post("/print-bulk-qr", ifCanRead, (req, res) => {
   // BULK QRs printing
-  let { qrsToPrint, qrsNamesToPrint, qrsKeysToPrint, qrsClassesToPrint } =
-    req.body;
+  let { qrsToPrint, qrsNamesToPrint, qrsKeysToPrint, qrsClassesToPrint } = req.body
 
   if (!Array.isArray(qrsToPrint)) {
     qrsToPrint = [qrsToPrint];
@@ -399,12 +398,10 @@ studentRouter.post("/print-bulk-qr", ifCanRead, (req, res) => {
   }
 
   res.render(path.join(__dirname + "/qr_bulk-print.ejs"), {
-    qrsToPrint,
-    qrsNamesToPrint,
-    qrsKeysToPrint,
-    qrsClassesToPrint,
-  });
-});
+    qrsToPrint, qrsNamesToPrint, qrsKeysToPrint, qrsClassesToPrint,
+    appDomain: admin.appDomain
+  })
+})
 
 // bringing skills test location names and color schemes for initial tests and retests
 const skillsTestLocations = require("./skills-test-config");

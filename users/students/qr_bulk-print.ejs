@@ -12,19 +12,19 @@
 <body>
 
     <div class="qr-bulk-print-box">
-        <% if(!qrsToPrint) { %>
+        <% if(!qrsToPrint || !appDomain) { %>
             <h2>Inner issue: have nothing to print...</h2>
         <% } else { %>
             <% qrsToPrint.forEach((qr, index) => { %>
                 <div class="qr-card">
-                    <div class="qr-card-title">BoltCDL</div>
+                    <div class="qr-card-title">Bolt CDL</div>
                     <div class="qr-card-title-line"></div>
                     <div class="qr-card-subtitle">Trucking School</div>
                     <div class="qr-card-name"><%= qrsNamesToPrint[index] %></div>
                     <div class="qr-card-key"><%= qrsKeysToPrint[index] %></div>
                     <div class="qr-card-class"><%= qrsClassesToPrint[index] %></div>
                     <div class='qr-code'>
-                        <img class='qr-code-img' src="https://chart.googleapis.com/chart?chs=177x177&cht=qr&chl=https://bolt-demo-school.herokuapp.com/admin/qr/<%= qr %>?choe=UTF-8&chld=H" alt="QR <%= qr %>">
+                        <img class='qr-code-img' src="https://chart.googleapis.com/chart?chs=177x177&cht=qr&chl=<%= appDomain %>admin/qr/<%= qr %>?choe=UTF-8&chld=H" alt="QR <%= qr %>">
                     </div>
                 </div>
             <% }) %>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
 
 /* @GENERAL */
 *, *::before, *::after {
@@ -114,19 +114,22 @@ Legal	8.5 × 14	    216 × 356               816.5 × 1345.5
     line-height: calc(var(--space) + 10px);
     
     letter-spacing: -3px;
+    color: #151515;
 }
 .qr-card-title-line {
     width: 85%;
-    border-bottom: 1px solid #0F1C2F;
+    border-bottom: 1px solid #AAAAAA;
 }
 .qr-card-subtitle {
     font-size: calc(var(--space) / 1.5);
     letter-spacing: -1.3px;
+    color: #AAAAAA;
 }
 .qr-card-name {
     padding-top: calc(var(--space) / 1.6);
     padding-bottom: calc(var(--space) / 2);
 
+    font-weight: 700;
     font-size: calc(var(--space) / 2);
     text-transform: capitalize;
 }

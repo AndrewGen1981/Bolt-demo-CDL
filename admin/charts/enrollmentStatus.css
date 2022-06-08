@@ -393,6 +393,7 @@ header {
 }
 
 .table-value.-group {
+    display: block;
     font-weight: 700 !important;
     color: #3789EB !important;
 }
@@ -408,7 +409,9 @@ header {
 }
 
 .table-value.-group[data-tabvalue = "0"] {
+    text-decoration: none;
     color: #d8e7f9 !important;
+    cursor: default;
 }
 [data-tabvalue = "0"] {
     color: #ebebeb !important;

@@ -204,33 +204,35 @@
                         let qtyRetestBKnRD = item.locationRetestBKnRD.reduce((a,b) => b += a)
                         let qtyRetestRDonly = item.locationRetestRDonly.reduce((a,b) => b += a)
                         let total = qtyInitial + qtyRetest + qtyRetestBKnRD + qtyRetestRDonly
+
+                        let link = `/admin/student/skills-calendar?year=${item.year}&month=${item.indexMonth + 1}`
                     %>
                     <div class="table-column">
                         <div class="table-header"><%= item.month %>.<%= item.year %></div>
                         <div class="table-value -total" data-tabvalue="<%= total %>"><%= total %></div>
                         
-                        <div class="table-value -group" data-tabvalue="<%= qtyInitial %>"><%= qtyInitial %></div>
+                        <a class="table-value -group" data-tabvalue="<%= qtyInitial %>" href="<%= link %>"><%= qtyInitial %></a>
                         <% item.locations.forEach((location, index) => { %>
                             <% if(location != "All" && location != "UNSET") { %>
                                 <div class="table-value -subvalue" data-tabvalue="<%= item.locationInitial[index] %>"><%= item.locationInitial[index] %></div>
                             <% } %>
                         <% }) %>
 
-                        <div class="table-value -group" data-tabvalue="<%= qtyRetest %>"><%= qtyRetest %></div>
+                        <a class="table-value -group" data-tabvalue="<%= qtyRetest %>" href="<%= link %>"><%= qtyRetest %></a>
                         <% item.locations.forEach((location, index) => { %>
                             <% if(location != "All" && location != "UNSET") { %>
                                 <div class="table-value -subvalue" data-tabvalue="<%= item.locationRetest[index] %>"><%= item.locationRetest[index] %></div>
                             <% } %>
                         <% }) %>
 
-                        <div class="table-value -group" data-tabvalue="<%= qtyRetestBKnRD %>"><%= qtyRetestBKnRD %></div>
+                        <a class="table-value -group" data-tabvalue="<%= qtyRetestBKnRD %>" href="<%= link %>"><%= qtyRetestBKnRD %></a>
                         <% item.locations.forEach((location, index) => { %>
                             <% if(location != "All" && location != "UNSET") { %>
                                 <div class="table-value -subvalue" data-tabvalue="<%= item.locationRetestBKnRD[index] %>"><%= item.locationRetestBKnRD[index] %></div>
                             <% } %>
                         <% }) %>
 
-                        <div class="table-value -group" data-tabvalue="<%= qtyRetestRDonly %>"><%= qtyRetestRDonly %></div>
+                        <a class="table-value -group" data-tabvalue="<%= qtyRetestRDonly %>" href="<%= link %>"><%= qtyRetestRDonly %></a>
                         <% item.locations.forEach((location, index) => { %>
                             <% if(location != "All" && location != "UNSET") { %>
                                 <div class="table-value -subvalue" data-tabvalue="<%= item.locationRetestRDonly[index] %>"><%= item.locationRetestRDonly[index] %></div>
