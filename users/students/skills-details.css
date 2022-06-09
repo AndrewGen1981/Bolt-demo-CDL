@@ -355,4 +355,50 @@ nav svg:hover {
     font-weight: 500;
     font-size: 0.8rem;
     color: #000000;
+
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
+
+@media (max-width: 1100px) {
+    .-report-item-right {
+        width: 150%;
+    }
+}
+@media (max-width: 850px) {
+    .-report-item-right {
+        width: 200%;
+    }
+    .student-box {
+        flex-direction: column;
+    }
+}
+@media (max-width: 760px) {
+    .report-item {
+        flex-direction: column;
+    }
+    .-report-item-right {
+        width: 100%;
+    }
+}
+@media (max-width: 575px) {
+    .report-title {
+        flex-direction: column;
+    }
+    .report-title h1 {
+        margin-bottom: 1rem;
+    }
+    .-report-item-right li {
+        grid-template-columns: 0.25fr 0.7fr 1fr 2fr;
+    }
+}
+@media (max-width: 475px) {
+    .-report-item-left,
+    .-report-item-right {
+        padding: 0.5rem 1rem;
+    }
+    .-report-item-right li {
+        grid-template-columns: 0.25fr 0.7fr 1fr 1fr;
+    }
 }
