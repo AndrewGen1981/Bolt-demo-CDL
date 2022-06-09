@@ -382,7 +382,7 @@ nav svg:hover {
         width: 100%;
     }
 }
-@media (max-width: 575px) {
+@media (max-width: 625px) {
     .report-title {
         flex-direction: column;
     }
@@ -393,7 +393,7 @@ nav svg:hover {
         grid-template-columns: 0.25fr 0.7fr 1fr 2fr;
     }
 }
-@media (max-width: 475px) {
+@media (max-width: 525px) {
     .-report-item-left,
     .-report-item-right {
         padding: 0.5rem 1rem;
