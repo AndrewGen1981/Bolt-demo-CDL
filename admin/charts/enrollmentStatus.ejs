@@ -205,7 +205,7 @@
                         let qtyRetestRDonly = item.locationRetestRDonly.reduce((a,b) => b += a)
                         let total = qtyInitial + qtyRetest + qtyRetestBKnRD + qtyRetestRDonly
 
-                        let link = `/admin/student/skills-calendar?year=${item.year}&month=${item.indexMonth + 1}`
+                        let link = `/admin/student/skills-details?year=${item.year}&month=${item.indexMonth + 1}`
                     %>
                     <div class="table-column">
                         <div class="table-header"><%= item.month %>.<%= item.year %></div>

@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
+}
+
+:root {
+    --header-height: 4rem;
+}
+
+
+/* HEADER */
+
+header {
+    width: 100%;
+    height: var(--header-height);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #0F1C2F;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 10;
+}
+
+.header-left-item {
+    padding: 0 1.33rem;
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+
+    transition: all 0.2s linear;
+}
+.header-left-item:hover {
+    background-color: #060E18;
+}
+
+.bolt-home {
+    width: 15px;
+    height: 35px;
+
+    margin-right: 0.87rem;
+}
+.item-home {
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+
+    color: #FFFFFF;
+}
+
+.header-center-item {
+    padding: 0 2.53rem;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-left-side,
+.nav-right-side {
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-left-side {
+    justify-content: flex-start;
+}
+
+.header-nav-item {
+    margin: 0 1.5rem;
+    height: 100%;
+
+    display: inline-flex;
+    align-items: center;
+
+    text-decoration: none;
+    position: relative;
+}
+
+
+.active-item::after {
+    content: "";
+    --height: 5px;
+
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    height: var(--height);
+    background-color: #3789EB;
+
+    z-index: 10;
+}
+
+
+.header-nav-item svg {
+    min-width: 25px;
+    margin-right: 0.67rem;
+    fill: #657389;
+    
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover svg {
+    fill: #fff;
+}
+
+.header-nav-item span {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #657389;
+
+    transition: all 0.25s linear;
+    cursor: pointer;
+}
+.header-nav-item:hover span {
+    color: #fff;
+}
+
+.nav-right-side .admin-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #FFFFFF;
+}
+.nav-right-side .admin-separator {
+    margin: 0 0.7rem;
+    font-size: 1rem;
+    color: #657389;
+}
+.nav-right-side .admin-email {
+    font-size: 1rem;
+    color: #657389;
+}
+
+.header-right-item {
+    margin-right: 1.2rem;
+}
+.header-right-item button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    outline: none;
+    background-color: transparent;
+
+    cursor: pointer;
+}
+
+.header-right-item svg {
+    fill: #657389;
+    transition: all 0.2s linear;
+}
+.header-right-item svg:hover {
+    fill: #fff;
+}
+
+
+/* Header media */
+@media (max-width: 950px) {
+    .admin-separator, .admin-email {
+        display: none;
+    }
+}
+@media (max-width: 800px) {
+    .header-nav-item span {
+        display: none;
+    }
+    .header-nav-item svg {
+        margin: 0 auto;
+    }
+}
+@media (max-width: 550px) {
+    .header-left-item {
+        padding-right: 0;
+    }
+    .bolt-home {
+        margin-right: 0;
+    }
+    .item-home {
+        display: none;
+    }
+    .nav-left-side {
+        justify-content: space-around;
+    }
+    .nav-left-side,
+    .nav-right-side {
+        width: 50%;
+    }
+    .header-center-item {
+        padding: 0 0.5rem;
+    }
+    .header-nav-item {
+        margin: 0;
+    }
+}
+
+
+/* Report Box */
+.report-box {
+    margin: 0 auto 7.13rem auto;
+    width: 95%;
+    max-width: 1150px;
+}
+
+.report-title {
+    margin: 3.33rem 0;
+    width: 100%;
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.report-title h1 {
+    font-weight: 700;
+    font-size: 1.53rem;
+    line-height: 1.87rem;
+    text-transform: uppercase;
+
+    color: #151515;
+}
+.report-title h1 span {
+    margin-left: 0.5rem;
+
+    font-weight: 500;
+    font-size: 1.53rem;
+    text-transform: none;
+
+    color: #151515;
+}
+
+nav {
+    display: inline-flex;
+    align-items: center;
+}
+nav svg {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: all 0.2 linear;
+}
+nav svg:hover {
+    opacity: 1;
+}
+.report-period {
+    margin: 0 1rem;
+    padding: 1rem 2rem;
+    
+    font-size: 1rem;
+    text-decoration: none;
+    color: #151515;
+
+    border: 1px solid #DEDEDE;
+    border-radius: 2rem;
+}
+
+
+.report-item {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.report-item[data-graduate="passed"] {
+    background-color: #ddf4d5;
+    border-bottom: 1px solid #cfcfcf;
+}
+.report-item[data-graduate="failed"] {
+    background-color: #f9cdcd;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.-report-item-left,
+.-report-item-right {
+    padding: 1rem 2rem;
+    width: 100%;
+}
+
+.student-box {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.student-name {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.53rem;
+    text-decoration: underline;
+
+    color: #4377B5;
+
+    margin-bottom: 0.5rem;
+}
+.student-location {
+    font-weight: 500;
+    font-size: 0.8rem;
+    line-height: 1.53rem;
+    
+    color: #8D8D8D;
+}
+.student-enrollment {
+    font-weight: 600;
+    font-size: 0.8rem;
+    
+    color: #151515;
+}
+
+.-report-item-right li {
+    list-style: none;
+    line-height: 1.53rem;
+
+    display: grid;
+    grid-template-columns: 0.25fr 1fr 1fr 2fr;
+}
+
+.test-index {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #151515;
+}
+.test-type {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #151515;
+}
+.test-date {
+    font-weight: 500;
+    font-size: 0.87rem;
+    color: #8D8D8D;
+}
+.test-location {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #000000;
+}
