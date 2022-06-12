@@ -15,8 +15,7 @@ const { getCalendarData } = require('./schedule')
 
 function ifCanWrite (req, res, next) {
     // check Admin's Auth - if can WRITE
-    const adminId = req.session.userId
-    if (!admin.checkAdminsAuth(adminId, 'write')) {
+    if (!admin.checkAdminsAuth(req.session.adminData, 'write')) {
         return res.status(403).json({ issue: "Instructors cannot change schedule" })
     } else { next() }
 }

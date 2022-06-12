@@ -81,45 +81,38 @@ function redirectToHome (req, res, next) {
         res.redirect('/admin/profile')
     } else { next() }
 }
-admRouter.use((req, res, next) => {   // !!! general middleware - will be used before EACH ROUTE!!!
-    if (req.session.userId) {   // if there is one, then tries to find it in users array and inject it to LOCALS - spec.obj. for sharing data between functions
-        const profile = admin.findAdminById(req.session.userId)
-        res.locals.user = profile
-    }
+admRouter.use(async(req, res, next) => {   // !!! general middleware - will be used before EACH ROUTE!!!
+    res.locals.user = req.session.adminData
     next()
 })
 
-// @Middleware
+// @Auth check middleware
 function ifCanRead (req, res, next) {
     // check Admin's Auth - if can READ
-    const adminId = req.session.userId
-    if (!admin.checkAdminsAuth(adminId, 'read')) {
+    if (!admin.checkAdminsAuth(req.session.adminData, 'read')) {
         return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read" })
     } else { next() }
 }
 function ifCanWrite (req, res, next) {
     // check Admin's Auth - if can WRITE
-    const adminId = req.session.userId
-    if (!admin.checkAdminsAuth(adminId, 'write')) {
+    if (!admin.checkAdminsAuth(req.session.adminData, 'write')) {
         return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "write" })
     } else { next() }
 }
 function ifCanReadOrInstructor (req, res, next) {
     // check Admin's Auth - if INSTRUCTOR
-    const adminId = req.session.userId
-
-    if (admin.checkAdminsAuth(adminId, 'read')) { return next() }
-    if (admin.checkAdminsAuth(adminId, 'instructor')) { return next() }
-
+    if (admin.checkAdminsAuth(req.session.adminData, 'read')) { return next() }
+    if (admin.checkAdminsAuth(req.session.adminData, 'instructor')) { return next() }
     return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read or instructor" })
 }
 function ifCanWriteOrInstructor (req, res, next) {
-    const adminId = req.session.userId
-
-    if (admin.checkAdminsAuth(adminId, 'write')) { return next() }
-    if (admin.checkAdminsAuth(adminId, 'instructor')) { return next() }
-
+    if (admin.checkAdminsAuth(req.session.adminData, 'write')) { return next() }
+    if (admin.checkAdminsAuth(req.session.adminData, 'instructor')) { return next() }
     return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "write or instructor" })
+}
+function ifSuperAdmin (req, res, next) {
+    if (admin.checkAdminsAuth(req.session.adminData, 'share')) { return next() }
+    return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "super-admin" })
 }
 
 
@@ -140,27 +133,14 @@ admRouter.get('/profile', redirectToLogin, async(req, res) => {
 })
 
 
-
-
-function checkCredentials(id, password) {
-    // checks credentials, can be used for verification in other functions except Login
-    if (!id || !password) { return false }
-    
-    const user = admin.findAdminById(id)
-
-    if (!user) { return false } // can not find a user
-    if (user.password != password) { return false } // wrong password
-        
-    return true
-}
-
-admRouter.post('/', redirectToHome, (req, res) => {
+admRouter.post('/', redirectToHome, async(req, res) => {
     const { id, password } = req.body
-    if (checkCredentials(id, password)) {
-        // credentials are ok, saving id
+    const adm = await admin.checkCredentials(id, password)
+    if (adm) {
         req.session.userId = id
+        req.session.adminData = adm
         // if role is "instructor", then redirect to INs, otherwise - to admin profile
-        if (admin.checkAdminsAuth(id, 'instructor')) {
+        if (adm.authString === "instructor") {
             return res.redirect("/admin/student")
         } else {
             return res.redirect("/admin/profile")
@@ -185,7 +165,7 @@ admRouter.post('/logout', redirectToLogin, (req, res) => {
 admRouter.get('/user-area', redirectToLogin, ifCanRead, async (req, res) => {
     // shows users area with all registered students and applicants
     try {
-        const adminProfile = admin.findAdminById(req.session.userId)
+        const adminProfile = req.session.adminData
         if (adminProfile) {
             // find, sort in descending order and populate if students to get a location
             const allUsers = await User.find()
@@ -241,23 +221,23 @@ admRouter.get('/user/:id', redirectToLogin, ifCanReadOrInstructor, async(req, re
 
         if (user === null) { return res.status(400).send(`Wrong request: ${id}`) }
 
-        // Preparing updaters fields - original from db have only admin's id, I' like to pass a name instead
+        // Preparing updaters fields - original from db have only admin's id, I'd like to pass a name instead
         const forms = ['dataCollection', 'application', 'agreement']
-        forms.forEach(form => {
+        forms.forEach(async(form) => {
             if (user[form]) {
                 if (user[form].updatedAdmin) {
-                    let updater = admin.findAdminById(user[form].updatedAdmin)
+                    let updater = await admin.findAdminById(user[form].updatedAdmin)
                     if (updater) { user[form].updatedAdmin = updater.name }      //  getting an admin's name by id
                 }
             }
         })
 
         // current admin will sign or, if Agreement is signed alredy, the one in the agreement
-        const loggedAdmin = admin.findAdminById(req.session.userId)
+        const loggedAdmin = req.session.adminData
         let adm = loggedAdmin
         if (user.agreement) {
             if (user.agreement.schoolSignRep) {
-                adm = admin.findAdminById(user.agreement.schoolSignRep)
+                adm = await admin.findAdminById(user.agreement.schoolSignRep)
             }
         }
 
@@ -424,10 +404,10 @@ admRouter.get('/print-form/:id', redirectToLogin, ifCanRead, async(req, res) => 
         if (user === null) { return res.status(400).send(`Wrong request: ${id}`) }
 
         // current admin will sign or, if Agreement is signed alredy, the one in the agreement
-        let adm = admin.findAdminById(req.session.userId)
+        let adm = req.session.adminData
         if (user.agreement) {
             if (user.agreement.schoolSignRep) {
-                adm = admin.findAdminById(user.agreement.schoolSignRep)
+                adm = await admin.findAdminById(user.agreement.schoolSignRep)
             }
         }
         const signer = extractAdminFields(adm)
@@ -537,29 +517,30 @@ admRouter.post('/sign/:id', redirectToLogin, ifCanWrite, async(req, res) => {
     // signs Agreement with Admin's credentials passed from client side
     const agreementId = req.params.id
 
-    if(!checkCredentials(req.session.userId, req.body.signerPassword)) { 
+    if(await admin.checkCredentials(req.session.userId, req.body.signerPassword)) {
+        // credentials are correct
+        try {
+            const agreement = await agreementForm.findByIdAndUpdate(agreementId, {
+                tuitionCost: req.body.tuitionCostItem,
+                regisrFee: req.body.regisrFeeItem,
+                supplyFee: req.body.supplyFeeItem,
+                otherFee: req.body.otherFeeItem,
+                schoolSignRep: req.session.userId,
+                schoolSignDate: new Date()
+            })
+    
+            if (agreement === null) { return res.status(400).send(`Wrong request: ${agreementId}`) }
+    
+            const { postedPath } = req.body
+            return res.status(200).redirect(postedPath)    // redirecting back to the posting page
+    
+        } catch(e) {
+            res.status(500).send(`Signing issue... ${e.message}. Try later please.`)
+        }
+    } else {
         return res.status(400).redirect('back')     // password not belongs to current logged admin
     }
 
-    // credentials are correct
-    try {
-        const agreement = await agreementForm.findByIdAndUpdate(agreementId, {
-            tuitionCost: req.body.tuitionCostItem,
-            regisrFee: req.body.regisrFeeItem,
-            supplyFee: req.body.supplyFeeItem,
-            otherFee: req.body.otherFeeItem,
-            schoolSignRep: req.session.userId,
-            schoolSignDate: new Date()
-        })
-
-        if (agreement === null) { return res.status(400).send(`Wrong request: ${agreementId}`) }
-
-        const { postedPath } = req.body
-        return res.status(200).redirect(postedPath)    // redirecting back to the posting page
-
-    } catch(e) {
-        res.status(500).send(`Signing issue... ${e.message}. Try later please.`)
-    }
 })
 
 
@@ -582,7 +563,7 @@ function qrRedirectToLogin (req, res, next) {
 // route /admin/qr/:id
 admRouter.get('/qr/:id', qrRedirectToLogin, ifCanRead, async (req, res) => {
     const studentId = req.params.id    // receiving user _id from posting form
-    const currentAdmin = admin.findAdminById(req.session.userId)
+    const currentAdmin = req.session.adminData
     let location    // this will be passed as 'location' to a clock
     try {
         //  getting today's date-prefix
@@ -888,7 +869,8 @@ admRouter.use('/inst', redirectToLogin, require('./instructors/instructorsRouter
 admRouter.use('/charts', redirectToLogin, ifCanRead, require('./charts/chartsRouter'))
 // @ admin/schedule
 admRouter.use('/schedule', redirectToLogin, ifCanWriteOrInstructor, require('./schedule/scheduleRouter'))
-
+// @ Super Admin routes
+admRouter.use("/super-admin", redirectToLogin, ifSuperAdmin, require("./super-admin/superAdmin"))
 
 
 module.exports = admRouter

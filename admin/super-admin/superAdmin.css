@@ -1,0 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+/* @GENERAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
+}
+
+:root {
+    accent-color : #4377B5;
+}
+
+.main-box {
+    margin: 0 auto;
+    padding: 2rem 0;
+
+    width: 90%;
+    max-width: 1225px;
+
+    margin-bottom: 5rem;
+}
+
+.back-link {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 2.33rem;
+    text-decoration: underline;
+    
+    color: #4377B5;
+}
+
+.main-title {
+    margin: 3.33rem 0;
+
+    font-weight: 700;
+    font-size: 1.53rem;
+    line-height: 1.87rem;
+    text-transform: uppercase;
+
+    color: #151515;
+}
+
+.admin-item {
+    padding-bottom: 1.33rem;
+    border-bottom: 1px solid #ededed;
+    margin-bottom: 1.33rem;
+}
+.admin-item::marker,
+.user-item::marker {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #AAAAAA;
+}
+
+.item-box {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.item-box > details {
+    width: 100%;
+}
+details summary {
+    margin-left: 1rem;
+    cursor: pointer;
+}
+details[open] summary {
+    --col1: #e2eefb;
+    --col2: #fff;
+
+    background-color: var(--col1);
+    background: linear-gradient(0deg, var(--col1), var(--col2));
+    background: -o-linear-gradient(0deg, var(--col1), var(--col2));
+    background: -moz-linear-gradient(0deg, var(--col1), var(--col2));
+    background: -webkit-linear-gradient(0deg, var(--col1), var(--col2));
+
+    margin-bottom: 1rem;
+}
+
+.item-box-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.item-box-left {
+    width: 70%;
+}
+.item-box-right {
+    width: 30%;
+    text-align: center;
+}
+
+.item-block {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 3fr 3fr;
+    
+    margin-bottom: 0.35rem;
+}
+.item-title {
+    font-weight: 500;
+    font-size: 0.87rem;
+    color: #828282;
+}
+.item-value {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #3C3C3C;
+}
+
+.item-title + label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+input[type="checkbox"] {
+    transform: scale(1.2);
+    cursor: pointer;
+
+}
+
+.show-hide {
+    margin-left: 0.5rem;
+    
+    font-weight: 500;
+    font-size: 0.73rem;
+    text-transform: uppercase;
+
+    color: #828282;
+}
+
+.item-block input[type="text"],
+.item-block input[type="email"],
+.item-block input[type="password"],
+.item-block select {
+    width: 21rem;
+    padding: 3px 5px;
+
+    color: #AAAAAA;
+    outline: none;
+
+    border: 2px solid #3789EB;
+    border-radius: 5px;
+
+    transition: all 0.2s linear;
+}
+
+.-updated {
+    color: #151515 !important;
+}
+
+.item-update {
+    width: 8rem;
+    min-height: 3.33rem;
+    padding: 1rem 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #151515;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
+    
+    transition: all 0.2s linear;
+    margin-right: 0.3rem;
+
+    cursor: pointer;
+    outline: none;
+}
+.item-update:hover {
+    background-color: #F3F3F3;
+}
+
+.item-delete,
+.user-delete {
+    width: 3.33rem;
+    height: 3.33rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
+
+    transition: all 0.2s linear;
+
+    cursor: pointer;
+}
+.user-delete {
+    width: 2.33rem;
+    height: 2.33rem;
+}
+.item-delete:hover,
+.user-delete:hover {
+    background-color: #EF5050;
+    border: 1px solid #EF5050;
+}
+.item-delete path,
+.user-delete path {
+    transition: all 0.2s linear;
+    fill: #AAAAAA;
+}
+.item-delete:hover path,
+.user-delete:hover path {
+    fill: #fff;
+}
+
+
+.indicator {
+    width: 1.33rem;
+    height: 1.33rem;
+
+    min-width: 1.33rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #fff;
+
+    cursor: default;
+
+    border-radius: 100%;
+}
+.indicator[data-active="false"] {
+    background-color: #E8E8E8;
+}
+.indicator[data-active="true"] {
+    background-color: #A2D092;
+    cursor: pointer;
+}
+
+
+/* USERS LIST */
+.users-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+}
+.user-item {
+    padding-left: 0.5rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 0.5rem;
+}
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+.user-email {
+    /* margin-left: 1rem; */
+    color: #4377B5;
+}
+.user-expires {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #AAAAAA;
+}
+
+
+@media (max-width: 1200px) {
+    .item-box-left {
+        width: 85%;
+    }
+    .item-box-right {
+        width: 15%;
+    }
+    .item-update {
+        margin: 0 5px 1rem 5px;
+    }
+}
+@media (max-width: 1050px) {
+    :root {
+        font-size: 14px;
+    }
+    .item-block {
+        grid-template-columns: 1fr 3fr 2.5fr;
+    }
+}
+@media (max-width: 850px) {
+    .item-block {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .item-title {
+        width: 30%;
+    }
+    .item-value,
+    .item-block label {
+        width: 70%;
+    }
+    .item-block input[type="text"],
+    .item-block input[type="email"],
+    .item-block input[type="password"],
+    .item-block select {
+        margin: 3px 0 0.5rem 0;
+        max-width: 25rem;
+        width: 100%
+    }
+    .item-box-left {
+        width: 80%;
+    }
+    .item-box-right {
+        width: 20%;
+    }
+}
+@media (max-width: 750px) {
+    .item-box-inner {
+        flex-direction: column;
+    }
+    .item-box-left,
+    .item-box-right {
+        width: 100%;
+    }
+    .item-box-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .item-update {
+        margin-bottom: unset;
+    }
+    .users-list {
+        grid-template-columns: 1fr;
+        column-gap: unset;
+    }
+}
+@media (max-width: 450px) {
+    :root {
+        font-size: 13px;
+    }
+}

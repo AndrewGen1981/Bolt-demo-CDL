@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoltCDL | Superadmin</title>
+
+    <link rel="shortcut icon" href="/static/images/thumb.png">
+    <link rel="stylesheet" href="/admin/super-admin/superAdmin.css">
+</head>
+<body>
+
+    <%
+        const fields = [ "id", "password", "name", "title", "email" ]
+        const selects = [ "location", "auth"]
+    %>
+    
+    <div class="main-box">
+        
+        <a class="back-link" href="/admin/profile">« Back to Profile</a>
+
+        <!-- new credentials -->
+        <h2 class="main-title">New credentials</h2>
+        <section class="admins-list">
+            <div class="admin-item">
+                <div class="item-box" id="new-admin">
+                    <details open>
+                        <summary>New admin/instructor</summary>
+                        <div class="item-box-inner">
+                            <div class="item-box-left">
+                                <% fields.forEach(field => { %>
+                                    <div class="item-block">
+                                        <% let itemTitle = field === "id" ? "id/login" : field %>
+                                        <span class="item-title"><%= itemTitle %></span>
+                                        <% if(field === "password") { %>
+                                            <label for="show-password-new">
+                                                <input type="checkbox" id="show-password-new" onclick="togglePasswordVisability(this, 'password-new')"/>
+                                                <span class="show-hide">show</span>
+                                            </label>
+                                            <input type="password" name="password" id="password-new" data-old="" value="" />
+                                        <% } else { %>
+                                            <span class="item-value"></span>
+                                            <% if(field === "email") { %>
+                                                <input type="email" name="<%= field %>" data-old="" value="" />
+                                            <% } else { %>
+                                                <input type="text" name="<%= field %>" data-old="" value="" />
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                <% }) %>
+                                <div class="item-block">
+                                    <span class="item-title">location</span>
+                                    <span class="item-value"></span>
+                                    <select name="location" data-old="not-set">
+                                        <option value="not-set" selected>not set</option>
+                                        <% locals.locations.forEach(location => { %>
+                                            <% if (!excludeLocations.includes(location)) { %>
+                                                <option value="<%= location %>"><%= location %></option>
+                                            <% } %>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="item-block">
+                                    <span class="item-title">authority</span>
+                                    <span class="item-value"></span>
+                                    <select name="auth" data-old="not-set">
+                                        <option value="not-set" selected>not set</option>
+                                        <% locals.auths.forEach((auth, index) => { %>
+                                            <% if (!excludeAuth.includes(index + 1)) { %>
+                                                <option value="<%= (index + 1) %>"><%= auth %></option>
+                                            <% } %>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>      <!-- item-box-left -->
+                            <div class="item-box-right">
+                                <button class="item-update" data-id="new-admin">Create</button>
+                            </div>      <!-- item-box-right -->
+                        </div>      <!-- item-box-inner -->
+                    </details>
+                </div>      <!-- item-box -->
+            </div>
+        </section>
+
+        <!-- existing ADMIN's DATA -->
+        <% if(locals.admins) { %>
+            <h2 class="main-title">Admin's data(<%= admins.length %>)</h2>
+            <ol type="1" class="admins-list">
+                <% admins.forEach((admin, index) => { %>
+                    <li class="admin-item">
+                        <div class="item-box" id="<%= admin._id %>">
+                            <details>
+                                <summary><%= admin.name %></summary>
+                                <div class="item-box-inner">
+                                    <div class="item-box-left">
+                                        <% fields.forEach(field => { %>
+                                            <div class="item-block">
+                                                <% let itemTitle = field === "id" ? "id/login" : field %>
+                                                <span class="item-title"><%= itemTitle %></span>
+                                                <% if(field === "password") { %>
+                                                    <label for="show-password-<%= index %>">
+                                                        <input type="checkbox" id="show-password-<%= index %>" onclick="togglePasswordVisability(this, 'password-<%= index %>')"/>
+                                                        <span class="show-hide">show</span>
+                                                    </label>
+                                                    <input type="password" name="password" id="password-<%= index %>" data-old="" value="" />
+                                                <% } else { %>
+                                                    <span class="item-value"><%= admin[field] %></span>
+                                                    <% if(field === "email") { %>
+                                                        <input type="email" name="<%= field %>" data-old="<%= admin[field] %>" value="<%= admin[field] %>" />
+                                                    <% } else { %>
+                                                        <input type="text" name="<%= field %>" data-old="<%= admin[field] %>" value="<%= admin[field] %>" />
+                                                    <% } %>
+                                                <% } %>
+                                            </div>
+                                        <% }) %>
+                                        <div class="item-block">
+                                            <span class="item-title">location</span>
+                                            <span class="item-value"><%= admin.location %></span>
+                                            <select name="location" data-old="<%= admin.location %>">
+                                                <% locals.locations.forEach(location => { %>
+                                                    <% if (!excludeLocations.includes(location) || (location === admin.location)) { %>
+                                                        <option value="<%= location %>" <%= location === admin.location ? "selected" : "" %> ><%= location %></option>
+                                                    <% } %>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="item-block">
+                                            <span class="item-title">authority</span>
+                                            <span class="item-value"><%= admin.auth %>(<%= locals.auths[admin.auth-1] %>)</span>
+                                            <select name="auth" data-old="<%= admin.auth %>">
+                                                <% locals.auths.forEach((auth, index) => { %>
+                                                    <% if (!excludeAuth.includes(index + 1) || ((index + 1) === admin.auth)) { %>
+                                                        <option value="<%= (index + 1) %>" <%= (index + 1) === admin.auth ? "selected" : "" %> ><%= auth %></option>
+                                                    <% } %>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>      <!-- item-box-left -->
+    
+                                    <div class="item-box-right">
+                                        <button class="item-update" data-id="<%= admin._id %>">Update</button>
+                                        <button class="item-delete" data-id="<%= admin._id %>" data-name="<%= admin.name %>" data-type="admin" title="delete <%= admin.title %>!">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                <path d="M17.9195 3.84876L12.8021 8.96613L17.9534 14.1174L14.1595 17.9113L9.00823 12.76L3.92027 17.848L0.223503 14.1512L5.31146 9.06328L0.160227 3.91204L3.95414 0.118126L9.10538 5.26936L14.2227 0.151993L17.9195 3.84876Z" />
+                                            </svg>
+                                        </button>
+                                    </div>      <!-- item-box-right -->
+                                </div>      <!-- item-box-inner -->
+                            </details>
+                            <% 
+                                let ifActive = locals.sessAdmin ? sessAdmin.some(sess => sess.userId === admin.id) : false
+                                let sessQty = ifActive ? (sessAdmin.filter(sess => sess.userId === admin.id)).length : ""
+                                let title = ifActive ? `active sessions: ${sessQty}` : ""
+                            %>
+                            <div class="indicator" data-active="<%= ifActive %>" title="<%= title %>"><%= sessQty %></div>
+                        </div>      <!-- item-box -->
+                    </li>
+                <% }) %>
+            </ol>
+        <% } else { %>
+            <h2 class="main-title">No admin's data has been passed</h2>
+        <% } %>
+
+        <!-- USERS' DATA -->
+        <% if(locals.sessUsers) { %>
+            <h2 class="main-title">Active users' data(<%= sessUsers.length %>)</h2>
+            <ol type="1" class="users-list">
+                <% sessUsers.forEach(user => { %>
+                    <li class="user-item">
+                        <div class="user-info">
+                            <span class="user-email"><%= user.email %></span>
+                            <span class="user-expires">session expires at <%= user.cookie.expires %></span>
+                        </div>
+                        <div class="user-delete" data-id="<%= user.sess_id %>" data-name="<%= user.email %>" data-type="user" title="delete user's SESSION">
+                            <svg width="13" height="13" viewBox="0 0 18 18" fill="none">
+                                <path d="M17.9195 3.84876L12.8021 8.96613L17.9534 14.1174L14.1595 17.9113L9.00823 12.76L3.92027 17.848L0.223503 14.1512L5.31146 9.06328L0.160227 3.91204L3.95414 0.118126L9.10538 5.26936L14.2227 0.151993L17.9195 3.84876Z" />
+                            </svg>
+                        </div>
+                    </li>
+                <% }) %>
+            </ol>
+        <% } else { %>
+            <h2 class="main-title">No active users's found</h2>
+        <% } %>
+
+    </div>      <!-- main-box -->
+
+
+
+    <script defer>
+
+        function togglePasswordVisability(checkbox, passwordInputId) {
+            if (checkbox && passwordInputId) {
+                const passwordInput = document.getElementById(passwordInputId)
+                if (passwordInput) {
+                    passwordInput.type = checkbox.checked ? "text" : "password"
+                }
+            }
+        }
+
+
+        // INPUTS/SELECTS update
+        const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], select')
+        if (inputs) {
+            inputs.forEach(input => {
+                input.addEventListener("input", () => {
+                    input.classList.toggle("-updated", input.value != input.dataset.old)
+                })
+            })
+        }
+
+        //  UPDATE button handler
+        const itemButtons = document.querySelectorAll(".item-update")
+        if (itemButtons) {
+            itemButtons.forEach(btn => {
+                btn.addEventListener("click", async() => {
+                    const item = document.getElementById(btn.dataset.id)
+                    if (item) {
+                        const isNewRequest = btn.dataset.id === "new-admin"
+                        const itemBlocks = item.querySelectorAll(".item-block")
+                        if (itemBlocks) {
+                            
+                            const bodyObject = {
+                                _id: item.id,
+                                isNewRequest: btn.dataset.id === "new-admin",
+                            }
+
+                            let anyChanges = false
+                            let anyFieldsBlank = false
+                            let firstBlankField = undefined
+                            
+                            itemBlocks.forEach(block => {
+                                let field = block.querySelector("input[type='text']")
+                                || block.querySelector("input[type='password']")
+                                || block.querySelector("input[type='email']")
+                                || block.querySelector("select")
+                                
+                                if (field) {
+                                    bodyObject[field.name] = field.value
+                                    if (!anyChanges) {
+                                        anyChanges = field.dataset.old != field.value
+                                    }
+                                    if (!anyFieldsBlank) {
+                                        anyFieldsBlank = field.value === "" || field.value === "not-set"
+                                        firstBlankField = field
+                                    }
+                                }
+                            })
+
+                            if (isNewRequest && anyFieldsBlank) {
+                                if (firstBlankField) {
+                                    firstBlankField.focus()
+                                    alert(`Field "${firstBlankField.name}" cannot be blank`)
+                                } else {
+                                    alert("Some fields are left blank")
+                                }
+                                return
+                            }
+                            if (!anyChanges) {
+                                alert("No changes found")
+                                return
+                            }
+                            if (!confirm("Would you like to apply updates?")) {
+                                return
+                            }
+
+                            // fetching with PUT
+                            const result = await fetch("/admin/super-admin/", {
+                                method: "PUT",
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(bodyObject)
+                            })
+                            // getting back with response
+                            if (!result || result.status > 400) { return alert("Inner issue: Changes were not applied") }
+                            if (result.status != 200) {
+                                const res = await result.json()
+                                return alert(`Error: ${res.issue}`)
+                            }
+                            // status 200, everything is OK
+                            if (isNewRequest) {
+                                alert("New credentials are added. Page will be reloaded")
+                                window.location.reload()
+                            }
+                        }
+                    }
+                })
+            })
+        }
+
+
+        // DELETE button handler
+        const deleteButtons = document.querySelectorAll(".item-delete, .user-delete")
+        if (deleteButtons) {
+            deleteButtons.forEach(deleteButton => {
+                deleteButton.addEventListener("click", async() => {
+                    if (deleteButton.dataset.id 
+                        && deleteButton.dataset.name
+                        && confirm(`Would you like to delete "${ deleteButton.dataset.name }" ${ deleteButton.dataset.type === "admin" ? "CREDENTIALS?" : "SESSION?" }`)) {
+                        
+                        // fetching with PUT
+                        const result = await fetch("/admin/super-admin/", {
+                            method: "DELETE",
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                _id: deleteButton.dataset.id,
+                                type: deleteButton.dataset.type
+                            })
+                        })
+                        // getting back with response
+                        if (!result || result.status > 400) { return alert("Inner issue: Changes were not applied") }
+                        if (result.status != 200) {
+                            const res = await result.json()
+                            return alert(`Error: ${res.issue}`)
+                        }
+                        // status 200, everything is OK
+                        alert("Done. Page will be reloaded")
+                        window.location.reload()
+                    }
+                })
+            })
+        }
+
+
+    </script>
+
+</body>
+</html>

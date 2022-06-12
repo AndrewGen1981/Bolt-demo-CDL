@@ -25,9 +25,8 @@ const { Student } = require('../../users/userModel')
 
 function ifInstructor (req, res, next) {
     // check Admin's Auth - if INSTRUCTOR
-    const adminId = req.session.userId
-    if (admin.checkAdminsAuth(adminId, 'instructor')) { return next() }
-    return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read or instructor" })
+    if (admin.checkAdminsAuth(req.session.adminData, 'instructor')) { return next() }
+    return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "instructor" })
 }
 
 
@@ -62,7 +61,7 @@ instRouter.post('/incab', ifInstructor, async (req, res) => {
         if (agrClass === "CDL Class A" || agrClass === "Upgrade to Class A") {
             return res.render(path.join(__dirname + '/test1_view_pretrip.ejs'), {
                 title: 'Class A preTrip Inspection IN-CAB scoring',
-                examiner: admin.findAdminById(req.session.userId),
+                examiner: req.session.adminData,
                 test: test1_preTrip_A_incab,
                 type: 'INCAB',
                 student
@@ -71,7 +70,7 @@ instRouter.post('/incab', ifInstructor, async (req, res) => {
         if (agrClass === "CDL Class B" || agrClass === "Endorsements") {
             return res.render(path.join(__dirname + '/test1_view_pretrip.ejs'), {
                 title: 'Class B Passenger and School Bus IN-CAB scoring',
-                examiner: admin.findAdminById(req.session.userId),
+                examiner: req.session.adminData,
                 test: test1_preTrip_B_incab,
                 type: 'INCAB',
                 student
@@ -92,7 +91,7 @@ instRouter.post('/outcab', ifInstructor, async (req, res) => {
         if (agrClass === "CDL Class A" || agrClass === "Upgrade to Class A") {
             return res.render(path.join(__dirname + '/test1_view_pretrip.ejs'), {
                 title: 'Class A preTrip Inspection OUT-CAB scoring',
-                examiner: admin.findAdminById(req.session.userId),
+                examiner: req.session.adminData,
                 test: test1_preTrip_A_outcab,
                 type: 'OUTCAB',
                 student
@@ -101,7 +100,7 @@ instRouter.post('/outcab', ifInstructor, async (req, res) => {
         if (agrClass === "CDL Class B" || agrClass === "Endorsements") {
             return res.render(path.join(__dirname + '/test1_view_pretrip.ejs'), {
                 title: 'Class B Passenger and School Bus OUT-CAB scoring',
-                examiner: admin.findAdminById(req.session.userId),
+                examiner: req.session.adminData,
                 test: test1_preTrip_B_outcab,
                 type: 'OUTCAB',     // INCAB, OUTCAB, BACKING, CITY
                 student
@@ -119,7 +118,7 @@ instRouter.post('/backing', ifInstructor, async (req, res) => {
         const student = await getStudentData(studentId)
         return res.render(path.join(__dirname + '/test2_view_backing.ejs'), {
             title: 'Backing Maneuvers Scoring',
-            examiner: admin.findAdminById(req.session.userId),
+            examiner: req.session.adminData,
             test: test2_backing,
             type: 'BACKING',
             student
@@ -135,7 +134,7 @@ instRouter.post('/city', ifInstructor, async (req, res) => {
         const student = await getStudentData(studentId)
         return res.render(path.join(__dirname + '/test3_view_city.ejs'), {
             title: 'Drive Test Scoring',
-            examiner: admin.findAdminById(req.session.userId),
+            examiner: req.session.adminData,
             test: test3_city,
             type: 'CITY',
             student

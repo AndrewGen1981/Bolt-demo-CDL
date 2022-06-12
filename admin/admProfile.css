@@ -67,7 +67,8 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-.nav-left-side {
+.nav-left-side,
+.nav-right-side {
     display: inline-flex;
     align-items: center;
     justify-content: flex-start;
@@ -80,6 +81,14 @@ header {
     align-items: center;
 
     text-decoration: none;
+}
+
+.header-nav-item.-no-margin {
+    margin: 0;
+    transition: all 0.2s linear;
+}
+.header-nav-item.-no-margin svg:hover {
+    transform: rotate(90deg);
 }
 
 .header-nav-item svg {
