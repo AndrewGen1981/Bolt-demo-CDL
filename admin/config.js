@@ -157,6 +157,31 @@ function checkAdminsAuth(admin, auth) {
 }
 
 
+// Check qty of certain user sessions and deletes all previouse
+async function allowOnlyOneActiveSession(sessCollection, id) {
+    const prevSessions = (await sessCollection.find().select("_id session"))
+    .filter(sess => {
+        let session = JSON.parse(sess.session)
+        if (session && (session.userId === id || session._id === id)) {
+            return session
+        }
+    })
+    if (prevSessions.length) {
+        prevSessions.forEach(async(prevSess) => {
+            await sessCollection.findByIdAndDelete(prevSess._id)
+        })
+    }
+}
+
+// Two variants of "allowOnlyOneActiveSession" function
+async function allowOnlyOne_ADMIN_ActiveSession(id) {
+    await allowOnlyOneActiveSession(SessAdmin, id)
+}
+async function allowOnlyOne_USER_ActiveSession(id) {
+    await allowOnlyOneActiveSession(SessUsers, id)
+}
+
+
 function getAllLocations() {
     return Object.values(LOCATION).filter(el => el !== LOCATION.All && LOCATION.Unset)
 }
@@ -188,4 +213,8 @@ module.exports = {
     getLocations,
     getAuthString,
     getAuths,
+
+    // check session
+    allowOnlyOne_ADMIN_ActiveSession,
+    allowOnlyOne_USER_ActiveSession
 }

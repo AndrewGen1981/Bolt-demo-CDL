@@ -27,6 +27,9 @@ const { StudentScoring } = require('../admin/instructors/scoringModel')
 const { getInfoMessage, getIssueMessage } = require('./_messages')
 const postman = require('./postman/postman')
 
+// use config for allowOnlyOne_USER_ActiveSession
+const { allowOnlyOne_USER_ActiveSession } = require("../admin/config")
+
 // @SESSION setup
 const SESS_DURATION = 1000 * 60 * 60 * 6    //  6 hours for Applicants and Students
 
@@ -176,8 +179,10 @@ userRouter.post('/', redirectToHome, async (req, res) => {
         }
         try {
             if (await bcrypt.compare(password, user.password)) {
+                // cut-off extra sessions
+                await allowOnlyOne_USER_ActiveSession(user._id.toString())
+                // saving data to a session
                 req.session.userId = email
-                // test lines to speedup DB operations, for findById instead of find({ email })
                 req.session.email = user.email
                 req.session._id = user._id
                 return res.redirect('/user/home')

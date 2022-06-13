@@ -137,6 +137,8 @@ admRouter.post('/', redirectToHome, async(req, res) => {
     const { id, password } = req.body
     const adm = await admin.checkCredentials(id, password)
     if (adm) {
+        // check qty of sessions
+        // await admin.allowOnlyOne_ADMIN_ActiveSession(id)
         req.session.userId = id
         req.session.adminData = adm
         // if role is "instructor", then redirect to INs, otherwise - to admin profile
