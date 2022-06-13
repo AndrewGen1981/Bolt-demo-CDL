@@ -14,10 +14,26 @@ const { AUTH, LOCATION, Admin, SessAdmin, SessUsers, getLocations, getAuths, get
 superAdminRouter.get("/", async(req, res) => {
     try {
         // find all admin's credentials
-        const admins = await Admin.find().select("-__v -idLower")
+        const admins = (await Admin.find().select("-__v -idLower"))
+        .sort((a, b) => {
+
+            if(a.location > b.location) {
+                return 1
+            } else {
+                if(a.location < b.location) {
+                    return -1
+                } else {
+                    return  a.title < b.title ? 1 : -1
+                }
+            }
+        })
+
         // finds all logged in admins, returns only session info
         const sessAdmin = (await SessAdmin.find().select("session"))
         .map(sess => JSON.parse(sess.session))
+        
+
+
         // finds all logged in users, returns only session info, session _id and sort by emails
         const sessUsers = (await SessUsers.find().select("session"))
         .map(sess => { 

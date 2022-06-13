@@ -15,13 +15,30 @@
         const fields = [ "id", "password", "name", "title", "email" ]
         const selects = [ "location", "auth"]
     %>
+
+    <header>
+        <div class="header-inner">
+            <a class="header-link" href="/admin/profile">« Back to Profile</a>
+            <span class="header-link" onclick="scrollToElement('-scrollTarget1')">New Credentials</span>
+            <span class="header-link" onclick="scrollToElement('-scrollTarget2')">Admins Data</span>
+            <span class="header-link" onclick="scrollToElement('-scrollTarget3')">Users Data</span>
+        </div>
+
+        <script defer>
+            function scrollToElement(classElement) {
+                const element = document.querySelector(`.${classElement}`)
+                if (element) {
+                    element.scrollIntoView({ block: "center", behavior: "smooth" })
+                }
+            }
+        </script>
+    </header>
     
     <div class="main-box">
         
-        <a class="back-link" href="/admin/profile">« Back to Profile</a>
 
         <!-- new credentials -->
-        <h2 class="main-title">New credentials</h2>
+        <h2 class="main-title -scrollTarget1">New credentials</h2>
         <section class="admins-list">
             <div class="admin-item">
                 <div class="item-box" id="new-admin">
@@ -85,13 +102,27 @@
 
         <!-- existing ADMIN's DATA -->
         <% if(locals.admins) { %>
-            <h2 class="main-title">Admin's data(<%= admins.length %>)</h2>
+            <h2 class="main-title -scrollTarget2">Admin's data(<%= admins.length %>)</h2>
             <ol type="1" class="admins-list">
+                <% let prevLocation = admins[0].location %>
+                <div class="new-location-separator"><%= admins[0].location %></div>
+
                 <% admins.forEach((admin, index) => { %>
+
+                    <!-- admins are sorted by location, so put break among location's groups -->
+                    <% if (prevLocation != admin.location) { %>
+                        <% prevLocation = admin.location %>
+                        <div class="new-location-separator"><%= admin.location %></div>
+                    <% } %>
+
                     <li class="admin-item">
                         <div class="item-box" id="<%= admin._id %>">
                             <details>
-                                <summary><%= admin.name %></summary>
+                                <summary>
+                                    <span class="admin-summary-name"><%= admin.name %></span>
+                                    <span class="admin-summary-title" data-title="<%= admin.title.toUpperCase() %>"><%= admin.title %></span>
+                                    <span class="admin-summary-location" data-location="<%= admin.location.toUpperCase() %>"><%= admin.location %></span>
+                                </summary>
                                 <div class="item-box-inner">
                                     <div class="item-box-left">
                                         <% fields.forEach(field => { %>
@@ -159,12 +190,12 @@
                 <% }) %>
             </ol>
         <% } else { %>
-            <h2 class="main-title">No admin's data has been passed</h2>
+            <h2 class="main-title -scrollTarget2">No admin's data has been passed</h2>
         <% } %>
 
         <!-- USERS' DATA -->
         <% if(locals.sessUsers) { %>
-            <h2 class="main-title">Active users' data(<%= sessUsers.length %>)</h2>
+            <h2 class="main-title -scrollTarget3">Active users' data(<%= sessUsers.length %>)</h2>
             <ol type="1" class="users-list">
                 <% sessUsers.forEach(user => { %>
                     <li class="user-item">
@@ -181,7 +212,7 @@
                 <% }) %>
             </ol>
         <% } else { %>
-            <h2 class="main-title">No active users's found</h2>
+            <h2 class="main-title -scrollTarget3">No active users's found</h2>
         <% } %>
 
     </div>      <!-- main-box -->
