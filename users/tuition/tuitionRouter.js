@@ -40,11 +40,17 @@ const listOfLessons = [
     "k9uJrEoRZlw", "_pX_GZcMfis",
 
     // 21-30
-    "oAo9Wh8I0D4",    "OTjYnCklxwY",
-    "_0ie8gKimJM",    "x15pck15los",
-    "-3GbAIYAgyg",    "08ypMNH4vXc",
-    "Qyabk1hl2sU",    "gZNxWL_U9Gc",
-    "zQix4Sv16kA",    "YQA1MWp19RY",
+    // "oAo9Wh8I0D4",    "OTjYnCklxwY",
+    // "_0ie8gKimJM",    "x15pck15los",
+    // "-3GbAIYAgyg",    "08ypMNH4vXc",
+    // "Qyabk1hl2sU",    "gZNxWL_U9Gc",
+    // "zQix4Sv16kA",    "YQA1MWp19RY",
+    "nbqXyZTOcRs", "KM-Up3EOJUQ",
+    "PS3laxM-IaU", "_FlT36Uiux8",
+    "zj5YoJMXpGA", "3OHQvK_E1Sg",
+    "J64XZolAgZw", "P8kCJ5-VkPg",
+    "scDQ5FAsTGA", "tfTUgM8eaqs",
+
     // 31-35
     "C8Y9LVgR9iY",    "Vn8n7JnFzOI",
     "4wukFJiHhQg",    "z-9RgNg2hC0",
