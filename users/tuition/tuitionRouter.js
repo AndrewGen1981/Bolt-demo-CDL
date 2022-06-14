@@ -15,12 +15,7 @@ const fs = require('fs')
 
 // YouTube Lessons
 const listOfLessons = [
-    // first 10
-    // "PpFhqMl8uH8",    "LaChnXdNWug",
-    // "1vv4ovcc4nI",    "8YT_fbC4YKM",
-    // "VbsTb_EQ6a4",    "Uh9Sm-3jyN8",
-    // "-rMifxK7W6U",    "1mni_COEQfg",
-    // "PGRC3JBi6_k",    "RysouiVzvl4",
+    // -10
     "OW58-9AaxcU", "l9UdE_XfI9c",
     "FxUw2p1cpEA", "MpOpKIa3huI",
     "2zjXAsviNVQ", "ibBc6D2MCts",
@@ -28,11 +23,6 @@ const listOfLessons = [
     "8gvLVTnSt60", "CzR1v_5nRX4",
 
     // 11-20
-    // "OvUrTesyTUI",    "bMd5R18WWDs",
-    // "HaQ1CMXb9qY",    "mlqemX2v1Gc",
-    // "30ejX843HfI",    "guGK9h3u6G0",
-    // "9qCpGGMhU0A",    "v11pYxt5wFk",
-    // "2kyPEhTJiz8",    "fzwLgmRNHS8",
     "1sv1mR2UeIU", "3_KP-GPyDcU",
     "aCdWWoNdBX0", "bCUP1Z1pjpQ",
     "8fuJ0FBdq54", "f8EA9uk7CPA",
@@ -40,11 +30,6 @@ const listOfLessons = [
     "k9uJrEoRZlw", "_pX_GZcMfis",
 
     // 21-30
-    // "oAo9Wh8I0D4",    "OTjYnCklxwY",
-    // "_0ie8gKimJM",    "x15pck15los",
-    // "-3GbAIYAgyg",    "08ypMNH4vXc",
-    // "Qyabk1hl2sU",    "gZNxWL_U9Gc",
-    // "zQix4Sv16kA",    "YQA1MWp19RY",
     "nbqXyZTOcRs", "KM-Up3EOJUQ",
     "PS3laxM-IaU", "_FlT36Uiux8",
     "zj5YoJMXpGA", "3OHQvK_E1Sg",
@@ -52,9 +37,9 @@ const listOfLessons = [
     "scDQ5FAsTGA", "tfTUgM8eaqs",
 
     // 31-35
-    "C8Y9LVgR9iY",    "Vn8n7JnFzOI",
-    "4wukFJiHhQg",    "z-9RgNg2hC0",
-    "w0EYV8ZfwqM"
+    "jcK2c3lxdU4", "hOSsBNAkIgM",
+    "TCx2CznQsJg", "5sB1_fe-IVo",
+    "xHRLptSZZss"
 ]
 
 const listOfTitles = [
