@@ -38,7 +38,7 @@ const {
     NODE_ENV = 'development',
 
     SESS_NAME = 'sid',
-    SESS_SECRET = 'TOROTruckingAcademy2022!',
+    SESS_SECRET = 'NoWarEverIn-a-World2022!',
     SESS_LIFETIME = SESS_DURATION
 } = process.env
 
@@ -582,7 +582,7 @@ userRouter.get('/print-form/:id', redirectToLogin, async(req, res) => {
         if (user === null) { return res.status(400).send(`Wrong request: ${formID}`) }
 
         const signer = {
-            name: "TTA Signer",
+            name: "CDL School Signer",
             title: "Manager",
             last: "Siger",
             first: "Manager"

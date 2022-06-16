@@ -1,8 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap');
+
 /* @GENERAL */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
 }
 
 body, html {
@@ -47,11 +53,8 @@ body, html {
 }
 
 .main-box-title {
-    font-family: "Industrial Bold";
     font-size: 3rem;
-
     text-align: center;
-
     color: #fff;
 
     z-index: 2;

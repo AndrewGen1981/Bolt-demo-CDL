@@ -1,13 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&display=swap');
+
 /* @GENERAL */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 14px;
 }
 
 :root {
-    font-size: 15px;
-
     --day-color: #3333330d;
 }
 
@@ -29,13 +33,11 @@ header {
     margin-bottom: 1rem;
 }
 .header-title {
-    font-family: "Industrial Bold";
     font-size: 2.2rem;
     text-align: center;
     color: #fff;
 }
 .header-description {
-    font-family: "BrixSlab-RegularItalic";
     font-size: 0.9rem;
     text-align: center;
     color: wheat;
@@ -75,7 +77,6 @@ menu {
     padding: 3px 7px;
     width: 14%;
 
-    font-family: "BrixSlab-Regular";
     letter-spacing: 0.5px;
     font-size: 0.85rem;
     text-decoration: none;
@@ -127,7 +128,6 @@ menu {
 .calendar-dateOfWeek {
     margin: 0 1px;
 
-    font-family: "BrixSlab-Regular";
     font-size: 1.65rem;
     text-align: center;
     
@@ -140,7 +140,6 @@ menu {
 .day-date {
     margin: 0 1px;
 
-    font-family: "BrixSlab-Regular";
     font-size: 0.8rem;
     text-align: center;
     
@@ -159,7 +158,6 @@ menu {
     margin: 0 1px;
     padding: 5px 0;
 
-    font-family: "BrixSlab-Regular";
     text-align: center;
 
     background-color: var(--day-color);
@@ -251,12 +249,10 @@ menu {
 }
 
 .limits-box .title {
-    font-family: "BrixSlab-RegularItalic";
     font-size: 1.2rem;
     color: #7e7e7e;
 }
 #limits-qty {
-    font-family: "BrixSlab-BlackItalic";
     font-size: 1.75rem;
     color: #20c120;
 }
@@ -283,14 +279,12 @@ menu {
     border-radius: 10px;
 }
 .modal-window-wait h3 {
-    font-family: "BrixSlab-Regular";
     text-transform: uppercase;
     text-align: center;
     color: wheat;
     margin-bottom: 5px;
 }
 .modal-window-wait p {
-    font-family: "BrixSlab-ExtraLight";
     text-align: center;
     color: #fff;
     margin-bottom: 5px;
@@ -323,7 +317,7 @@ menu {
 
 @media (max-width: 1150px) {
     :root {
-        font-size: 14px;
+        font-size: 13px;
     }
     .nav-item {
         width: 105px;
@@ -336,7 +330,7 @@ menu {
 }
 @media (max-width: 750px) {
     :root {
-        font-size: 13px;
+        font-size: 12px;
     }
     .occupied-text {
         display: none;
