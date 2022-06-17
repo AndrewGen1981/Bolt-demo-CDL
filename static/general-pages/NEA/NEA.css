@@ -1,112 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
 
-* {
-    padding: 0;
+/* @GENERAL */
+*, *::before, *::after {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    font-size: 15px;
 }
 
 .main-box {
     width: 100%;
     min-height: 100vh;
     
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background-color: #ffffff;
 
-    --col1: #fd6868d8;
-    --col2: #f1f2adc7;
-    background: var(--col1);
-
-    
+    background-image: url('/static/general-pages/NEA/NEA.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-
-    position: relative;
-}
-.main-box::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-
-    background: -webkit-linear-gradient(0deg, var(--col1), var(--col2));
-    background: -moz-linear-gradient(0deg, var(--col1), var(--col2));
-    background: linear-gradient(0deg, var(--col1), var(--col2));
-
-    z-index: 0;
+    background-position-x: center;
+    background-position-y: bottom;
 }
 
 h1 {
     width: 95%;
-    margin: 0 auto;
+    margin: 0 auto 1rem auto;
+    padding-top: 14vh;
 
-    font-family: 'Montserrat', sans-serif;
-    font-size: 50px;
-    color: #ffffff;
+    font-weight: 700;
+    font-size: 2.67rem;
     text-align: center;
-
-    margin-bottom: 7px;
-
-    z-index: 1;
-}
-h2 {
-    width: 90%;
-    margin: 0 auto;
-
-    font-family: 'Montserrat', sans-serif;
-    font-size: 35px;
-    color: #ffffff;
-    text-align: center;
-    z-index: 1;
-}
-.-hgh {
-    color: yellow;
-}
-
-.main-box div {
-    margin: 1rem 0;
-    padding: 1rem 2rem;
-
-    font-family: 'Montserrat', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
     text-transform: uppercase;
 
-    background-color: white;
-    cursor: pointer;
-    z-index: 1;
-
-    transition: all 0.25s liner;
+    color: #1B1B1B;
 }
-.main-box div:hover {
-    transform: translateY(-1px);
+.-hgh {
+    font-weight: inherit;
+    font-size: inherit;
+    color: #f27878;
+}
+
+h2 {
+    width: 95%;
+    margin: 0 auto;
+    padding-bottom: 8.33vh;
+
+    font-size: 1rem;
+    color: #1B1B1B;
+    text-align: center;
+}
+h2 strong {
+    margin: 0 0.35rem;
+    font-weight: 600;
+    font-size: inherit;
+}
+
+
+.btn {
+    margin: 0 auto;
+    padding: 1rem 0;
     
-    -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
-    -moz-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
-    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
+    width: 13.33rem;
+
+    font-weight: 500;
+    font-size: 1rem;
+    color: #151515;
+
+    text-align: center;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DEDEDE;
+    border-radius: 2.4rem;
+
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #F3F3F3;
 }
 
-@media (min-width: 1535px) {
-    .main-box {
-        background-image: url('/static/general-pages/NEA/NEA_1920.jpg');
-    }
-}
-@media (max-width: 1535px) {
-    .main-box {
-        background-image: url('/static/general-pages/NEA/NEA_1535.jpg');
-    }
-}
-@media (max-width: 1150px) {
-    .main-box {
-        background-image: url('/static/general-pages/NEA/NEA_1150.jpg');
-    }
-}
+
 @media (max-width: 770px) {
-    .main-box {
-        background-image: url('/static/general-pages/NEA/NEA_770.jpg');
-    }
-    h1 { font-size: 35px; }
-    h2 { font-size: 20px; }
+    h1 { font-size: 2.33rem; }
+    h2 { font-size: 1.33rem; }
 }
