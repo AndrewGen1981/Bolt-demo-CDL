@@ -48,6 +48,18 @@ const SessAdmin = sessAdminConnection.model("sessionSchema", sessionSchema)
 const SessUsers = sessUsersConnection.model("sessionSchema", sessionSchema)
 
 
+const SCHOOL_DATA = {
+    TITLE: "New Sound Trucking School",
+    PHONE_LINK: "2532100505",
+    PHONE: "253-210-0505",
+    // address
+    ADDRESS: "5205 South Tacoma Way",
+    CITY: "Tacoma",
+    STATE: "WA",
+    ZIP: "98409",
+}
+
+
 // Locations
 const LOCATION = {
     All: 'All',

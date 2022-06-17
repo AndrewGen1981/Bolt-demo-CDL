@@ -68,13 +68,13 @@
             <section class="title-box">
                 <h1 class="main-title">
                     <span class="main-text">Welcome to</span>
-                    <span class="main-bold">BOLT Trucking School</span>
+                    <span class="main-bold"><%= locals.SCHOOL_DATA.TITLE || "CDL School" %></span>
                 </h1>
-                <a href="tel:8338676235" class="phone-box">
+                <a href="tel:<%= locals.SCHOOL_DATA.PHONE_LINK || '#' %>" class="phone-box">
                     <svg class="main-phone-ico" width="28" height="28" viewBox="0 0 28 28" fill="none">
                         <path d="M16.7129 19.3309C16.7129 19.3309 18.8184 18.1256 19.3696 17.8359C19.9192 17.5453 20.4886 17.4719 20.8344 17.6831C21.358 18.0034 25.7552 20.9284 26.1254 21.1873C26.4956 21.4468 26.674 22.1878 26.1649 22.9137C25.6579 23.6397 23.319 26.5101 22.3278 26.4794C21.3352 26.4471 17.2079 26.3567 9.42508 18.5717C1.6438 10.7894 1.55176 6.66114 1.52004 5.66846C1.48832 4.6763 4.35872 2.33682 5.08464 1.8293C5.8116 1.3223 6.55364 1.51314 6.81156 1.86986C7.10484 2.27598 9.99604 6.65906 10.3143 7.16138C10.5322 7.50458 10.4521 8.0771 10.1614 8.62726C9.87228 9.17846 8.66692 11.2839 8.66692 11.2839C8.66692 11.2839 9.5166 12.7332 12.3901 15.6062C15.2642 18.4797 16.7129 19.3309 16.7129 19.3309Z" stroke="#9C9C9C" stroke-width="2" stroke-miterlimit="10" />
                     </svg>
-                    <span class="main-phone">833-867-6235</span>
+                    <span class="main-phone"><%= locals.SCHOOL_DATA.PHONE || "no phone" %></span>
                 </a>
             </section>      <!-- title-box -->
 
@@ -276,7 +276,7 @@
                             <% } %>
                         <% }) %>
                     </div>  <!-- clocks-table -->
-                    <p class="block-value -info1">* The duration of your presence in the CDL School when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. CDL School reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows CDL School not to take into account the hours for such a day.</p>
+                    <p class="block-value -info1">* The duration of your presence in the <%= locals.SCHOOL_DATA.TITLE || "CDL School" %> when there is no clock-out is determined on the basis of the minimum required number of hours according to the Agreement signed by you. CDL School reserves the right to review this number depending on the current Attendance Policy. We also inform you that the Student, as a party to the Agreement, is obliged to attend classes in case of abuse by the Student, the absence of clocks-out allows CDL School not to take into account the hours for such a day.</p>
                 <% } %>     <!-- if there are any clocks -->
 
 

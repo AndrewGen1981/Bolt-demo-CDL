@@ -30,8 +30,8 @@
         <div class="page-box">
 
             <div class="header">
-                <div class="header-line1">BoltCDL Software</div>
-                <div class="header-line2">(5205 South Tacoma Way, Tacoma, WA 98409), 253-200-4466</div>
+                <div class="header-line1"><%= locals.SCHOOL_DATA.TITLE || "Bolt Soft Dev" %></div>
+                <div class="header-line2">(<%= locals.SCHOOL_DATA.ADDRESS || "5205 South Tacoma Way" %>, <%= locals.SCHOOL_DATA.CITY || "Tacoma" %>, <%= locals.SCHOOL_DATA.STATE || "WA" %>, <%= locals.SCHOOL_DATA.ZIP || "98409" %>), <%= locals.SCHOOL_DATA.PHONE || "253-210-0505" %></div>
             </div>
 
             <h1 class="form-title">STUDENT DATA COLLECTION FORM</h1>

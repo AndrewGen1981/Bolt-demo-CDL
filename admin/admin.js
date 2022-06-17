@@ -81,7 +81,8 @@ function redirectToHome (req, res, next) {
         res.redirect('/admin/profile')
     } else { next() }
 }
-admRouter.use(async(req, res, next) => {   // !!! general middleware - will be used before EACH ROUTE!!!
+admRouter.use((req, res, next) => {   // !!! general middleware - will be used before EACH ROUTE!!!
+    res.locals.SCHOOL_DATA = admin.SCHOOL_DATA,
     res.locals.user = req.session.adminData
     next()
 })

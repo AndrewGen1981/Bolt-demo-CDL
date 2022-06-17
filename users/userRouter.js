@@ -28,7 +28,7 @@ const { getInfoMessage, getIssueMessage } = require('./_messages')
 const postman = require('./postman/postman')
 
 // use config for allowOnlyOne_USER_ActiveSession
-const { allowOnlyOne_USER_ActiveSession } = require("../admin/config")
+const { allowOnlyOne_USER_ActiveSession, SCHOOL_DATA } = require("../admin/config")
 
 // @SESSION setup
 const SESS_DURATION = 1000 * 60 * 60 * 6    //  6 hours for Applicants and Students
@@ -61,6 +61,12 @@ userRouter.use(session({
         secure: IN_PROD
     }
 }))
+
+
+userRouter.use((req, res, next) => {   // !!! general middleware - will be used before EACH ROUTE!!!
+    res.locals.SCHOOL_DATA = SCHOOL_DATA,
+    next()
+})
 
 
 // middleware
