@@ -16,10 +16,10 @@ const fs = require('fs')
 // YouTube Lessons
 const listOfLessons = [
     // -10
-    "OW58-9AaxcU", "l9UdE_XfI9c",
-    "FxUw2p1cpEA", "MpOpKIa3huI",
+    "OW58-9AaxcU", "zO12lt1JOsw",
+    "FxUw2p1cpEA", "QReTAmyhABU",
     "2zjXAsviNVQ", "ibBc6D2MCts",
-    "wjKM2zz5c3I", "SXl8uqr0cLw",
+    "I02mnwJu8mI", "SXl8uqr0cLw",
     "8gvLVTnSt60", "CzR1v_5nRX4",
 
     // 11-20
@@ -30,15 +30,15 @@ const listOfLessons = [
     "k9uJrEoRZlw", "_pX_GZcMfis",
 
     // 21-30
-    "nbqXyZTOcRs", "KM-Up3EOJUQ",
+    "hXJ62EgUqKI", "KM-Up3EOJUQ",
     "PS3laxM-IaU", "_FlT36Uiux8",
-    "zj5YoJMXpGA", "3OHQvK_E1Sg",
+    "W2lKfbsk_ng", "3OHQvK_E1Sg",
     "J64XZolAgZw", "P8kCJ5-VkPg",
-    "scDQ5FAsTGA", "tfTUgM8eaqs",
+    "9gNvH_VYygA", "tfTUgM8eaqs",
 
     // 31-35
     "jcK2c3lxdU4", "hOSsBNAkIgM",
-    "TCx2CznQsJg", "5sB1_fe-IVo",
+    "mNkFdvY8fVM", "5sB1_fe-IVo",
     "xHRLptSZZss"
 ]
 
