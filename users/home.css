@@ -69,7 +69,9 @@ header {
     background-color: transparent;
 }
 
-.welcome-text, .welcome-header {
+.welcome-text,
+.welcome-header,
+.welcome-link {
     font-weight: 500;
     font-size: 1rem;
     line-height: 1.2rem;
@@ -79,6 +81,10 @@ header {
 .welcome-header {
     font-weight: 600;
     color: #fff;
+}
+.welcome-link {
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 .btn-ico {
@@ -312,15 +318,23 @@ header {
 }
 
 .-warning, .-error {
+    /* 2 usecases */
+    --col1: #EF5050; 
     color: #EF5050 !important;
 }
 .-caution, .-issue {
+    /* 2 usecases */
+    --col1: #bfbf04; 
     color: #bfbf04 !important;
 }
 .-medium, .-info {
+    /* 2 usecases */
+    --col1: #4377B5; 
     color: #4377B5 !important;
 }
 .-trusted {
+    /* 2 usecases */
+    --col1: #53b914; 
     color: #53b914 !important;
 }
 
@@ -355,11 +369,32 @@ header {
 }
 
 .-big-data {
+    min-width: 13.33rem;
+    padding: 0.5rem 1rem;
+
+    display: inline-flex;
+
     font-weight: 700;
     font-size: 2rem;
     line-height: 2.5rem;
     text-transform: uppercase;
-    text-decoration: underline;
+    text-decoration: none;
+
+    color: var(--col1);
+
+    border: 2px solid var(--col1);
+    border-radius: 2.4rem;
+    
+    transition: all 0.2s ease-in;
+    cursor: pointer;
+}
+.-big-data:hover {
+    background-color: var(--col1);
+    color: #fff !important;
+}
+
+.-grow {
+    transform: scale(0.9);
 }
 
 

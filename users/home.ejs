@@ -41,6 +41,7 @@
                 <span class="welcome-text"><%= hello %></span>
                 <span class="welcome-header"><%= prompt %></span>
             </p>
+            <span class="welcome-link" onclick="scrollToElement('#learning-center')">Tuition</span>
             <p class="welcome-debt">
                 <span class="welcome-text -hide-if-450">Balance :</span>
                 <span class="welcome-header"><%= balance %></span>
@@ -199,18 +200,18 @@
                             <% if(tuition) { %>
                                 <% if(tuition.avLessonsRate < 0.25) { %>
                                     <span class="block-key">Learning Center</span>
-                                    <a href='/user/tuition' class="block-value -big-data -caution"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
+                                    <a href='/user/tuition' id="learning-center" class="block-value -big-data -caution"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
                                 <% } else { %>
                                     <% if(tuition.avLessonsRate < 0.85) { %>
                                         <span class="block-key">Learning Center</span>
-                                        <a href='/user/tuition' class="block-value -big-data -medium"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
+                                        <a href='/user/tuition' id="learning-center" class="block-value -big-data -medium"><%= Math.round(tuition.avLessonsRate*1000) / 10 %>% done</a>
                                     <% } else { %>
                                         <% if(tuition.avLessonsRate > 0.849) { %>
                                             <span class="block-key">Learning Center</span>
-                                            <a href='/user/tuition' class="block-value -big-data -trusted">Sufficient level</a>
+                                            <a href='/user/tuition' id="learning-center" class="block-value -big-data -trusted">Sufficient level</a>
                                         <% } else { %>
                                             <span class="block-key">Learning Center</span>
-                                            <a href='/user/tuition' class="block-value -big-data -warning">Unknown level</a>
+                                            <a href='/user/tuition' id="learning-center" class="block-value -big-data -warning">Unknown level</a>
                                         <% } %>
                                     <% } %>
                                 <% } %>
@@ -450,6 +451,18 @@
             document.querySelector('input[name="currentPassword"]').type = e.target.checked ? 'text' : 'password'
             document.querySelector('input[name="newPassword"]').type = e.target.checked ? 'text' : 'password'
         })
+
+        function scrollToElement(id) {
+            const el = document.querySelector(id)
+            if (!el) { return }
+            el.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
+            el.classList.add("-grow")
+            setTimeout(() => {
+                el.classList.remove("-grow")
+            }, 250)
+            // el.focus()
+        }
+
     </script>
 
 
