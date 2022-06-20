@@ -207,6 +207,7 @@ function getAuths() {
 
 module.exports = {
     //  constants
+    SCHOOL_DATA,
     appDomain,
     LOCATION,
     ISSUES,
