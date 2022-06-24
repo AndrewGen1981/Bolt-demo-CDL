@@ -13,8 +13,13 @@
 </head>
 <body>
 
-    <% function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' } %>
-    <% const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+    <% 
+        function formatDate(textDate) {
+            return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-'
+        }
+        
+        const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    %>
 
     <header>
         <!-- HOME element -->
@@ -109,7 +114,7 @@
                         <% if(locals.locations && locals.adminProfile) { %>
                             <% if(Object.keys(locations).length) { %>
                                 <select id="locationSelect" onchange="reloadStudentListWithQuery(locationSelect, enrollmentStatusSelect, reloadWithQuery)">
-                                    <% Object.values(locations).map(value => { %>
+                                    <% Object.values(locations).forEach(value => { %>
                                         <% if(value === locals.shownLocation) { %>
                                             <option value="<%= value %>" selected><%= value %></option>
                                         <% } else { %>
@@ -123,7 +128,7 @@
                         <!-- Enrollment Status -->
                         <% if(locals.enrollmentStatuses && locals.shownEnrollmentStatus) { %>
                             <select id="enrollmentStatusSelect" onchange="reloadStudentListWithQuery(locationSelect, enrollmentStatusSelect, reloadWithQuery)">
-                                <% enrollmentStatuses.map(enrollmentStatus => { %>
+                                <% enrollmentStatuses.forEach(enrollmentStatus => { %>
                                     <% if(enrollmentStatus.key === shownEnrollmentStatus) { %>
                                         <option value="<%= enrollmentStatus.key %>" selected><%= enrollmentStatus.value %></option>
                                     <% } else { %>
@@ -174,7 +179,7 @@
                 </div>  <!-- student-list-row -->
 
                 <section class="student-list-body">
-                    <% students.map((student, index) => { %>    <!-- main showing loop -->
+                    <% students.forEach((student, index) => { %>    <!-- main showing loop -->
     
                         <!-- dataset for all db changes (student, dataCol, agr) -->
                         <div class="student-list-row" id='student-row-<%= index %>' data-student='<%= student._id %>' data-dataColl='<%= student.user.dataCollection._id %>' data-agreement='<%= student.user.agreement._id %>' data-tuition='<%= student.tuition._id %>' data-scoring='<%= student.scoring ? student.scoring._id : "n/a" %>'>
@@ -203,21 +208,21 @@
                             <div class='field -TTT -fixed4'><%= Math.round(student.TTT) %></div>
     
                             <!-- calculating total cost -->
-                            <% let tuitionCost = parseFloat(student.user.agreement.tuitionCost) %>
-                            <% let regisrFee = parseFloat(student.user.agreement.regisrFee) %>
-                            <% let supplyFee = parseFloat(student.user.agreement.supplyFee) %>
-                            <% let otherFee = parseFloat(student.user.agreement.otherFee) %>
-                            <% let totalCost = tuitionCost + regisrFee + supplyFee + otherFee %>
-                            <!-- calculating payments -->
-                            <% let paid = 0 %>
-                            <% if(student.user.payments) { student.user.payments.map(pmt => { if(pmt.ammount > 0){ paid += pmt.ammount}  }) } %>
-                            <!-- calculating balance -->
-                            <% let balance = paid - totalCost %>
-                            <% let balanceMsg = usNumberFormat.format(balance) %>
-                            <!-- perc for gradient  -->
-                            <% let perc = Math.round(paid * 100 / totalCost)%>
-                            <!-- link for get into payments directly -->
-                            <% let pmtLink = `/admin/user/${student.user._id}?activatetab=3&open=payments` %>
+                            <% 
+                                let tuitionCost = parseFloat(student.user.agreement.tuitionCost)
+                                let regisrFee = parseFloat(student.user.agreement.regisrFee)
+                                let supplyFee = parseFloat(student.user.agreement.supplyFee)
+                                let otherFee = parseFloat(student.user.agreement.otherFee)
+                                let totalCost = tuitionCost + regisrFee + supplyFee + otherFee
+
+                                let paid = 0
+                                if(student.user.payments) { student.user.payments.forEach(pmt => { paid += pmt.ammount }) }
+                                let balance = paid - totalCost
+                                let balanceMsg = usNumberFormat.format(balance)
+                                
+                                let perc = Math.round(paid * 100 / totalCost)
+                                let pmtLink = `/admin/user/${student.user._id}?activatetab=3&open=payments`
+                            %>
     
                             <% if(balance < 0) { %>
                                 <a href='<%= pmtLink %>' class='field -balance -fixed5 balance-student-owe' style="--perc:<%= perc %>%;"><%= balanceMsg %></a>
@@ -241,10 +246,12 @@
                             <div class='field -supplyFee' data-amount='<%= student.user.agreement.supplyFee %>'><%= usNumberFormat.format(student.user.agreement.supplyFee) %></div>
                             <div class='field -otherFee' data-amount='<%= student.user.agreement.otherFee %>'><%= usNumberFormat.format(student.user.agreement.otherFee) %></div>
     
-                            <% let total = parseFloat(student.user.agreement.tuitionCost) %>
-                            <% total += parseFloat(student.user.agreement.regisrFee) %>
-                            <% total += parseFloat(student.user.agreement.supplyFee) %>
-                            <% total += parseFloat(student.user.agreement.otherFee) %>
+                            <% 
+                                let total = parseFloat(student.user.agreement.tuitionCost)
+                                total += parseFloat(student.user.agreement.regisrFee)
+                                total += parseFloat(student.user.agreement.supplyFee)
+                                total += parseFloat(student.user.agreement.otherFee)
+                            %>
     
                             <div class='field -totalCost' data-amount="<%= total %>"><%= usNumberFormat.format(total) %></div>
                             
@@ -293,10 +300,12 @@
                                     <!-- link to show the last done scoring of particulat type -->
                                     <% let GETLink = `/admin/inst/scoring-print?studentId=${student._id}&scoringType=${scorClasses[index]}&back=/admin/student/list` %>
                                     <% if(scor.length) { %>
-                                        <% let lastScor = scor[scor.length - 1] %>
-                                        <% let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>
-                                        <% let msg = lastScor.comment ? `[${date}] ${lastScor.instructor} says: ${lastScor.comment}` : `[${date}] ${lastScor.instructor}` %>
-                                        <% let passedClass = lastScor.result ? '-scoringPassed' : '-scoringFailed' %>
+                                        <% 
+                                            let lastScor = scor[scor.length - 1]
+                                            let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
+                                            let msg = lastScor.comment ? `[${date}] ${lastScor.instructor} says: ${lastScor.comment}` : `[${date}] ${lastScor.instructor}`
+                                            let passedClass = lastScor.result ? '-scoringPassed' : '-scoringFailed'
+                                        %>
                                         <div class='field -scoring'>
                                             <a href="<%= GETLink %>" class="<%= scorClasses[index] %> <%= passedClass %>" title='<%= msg %>'></a>
                                         </div>
@@ -384,9 +393,9 @@
         // listener on SCROLL adds/removes class 'isSticky'
         window.addEventListener('scroll', (e) => {
             if(fixedHeaders[2].getBoundingClientRect().left < 290) {
-                fixedHeaders.map(fixed => { fixed.classList.add('isSticky') })
+                fixedHeaders.forEach(fixed => { fixed.classList.add('isSticky') })
             } else {
-                fixedHeaders.map(fixed => { fixed.classList.remove('isSticky') })
+                fixedHeaders.forEach(fixed => { fixed.classList.remove('isSticky') })
             }
         })
 
@@ -398,7 +407,7 @@
             
             let result = 0
             if (updatedRow) {
-                costItems.map(item => {
+                costItems.forEach(item => {
                     result += parseFloat(updatedRow.getElementsByClassName(item)[0].dataset.amount)
                 })
             }
