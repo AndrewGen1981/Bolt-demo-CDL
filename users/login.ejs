@@ -46,7 +46,7 @@
                     <% if (locals.error) { %>
                         <p><%= (locals.error) %></p>
                     <% } %>
-                    <% if (locals.isThereErrors) { %>2>
+                    <% if (locals.isThereErrors) { %>
                         <ol type='1'>
                             <% errors.map(err => { %>
                                 <li><span><%= err.param.toUpperCase() %>:</span><strong><%= err.msg %></strong></li>
