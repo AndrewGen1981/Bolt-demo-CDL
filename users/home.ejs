@@ -375,7 +375,7 @@
                             <div class="skills-test-table-cell -first-col"><%= calendarTitles[appointment.appType] %></div>
                             <% 
                                 let y = appointment.appDate.getUTCFullYear()
-                                let m = leadingZero(appointment.appDate.getUTCMonth())
+                                let m = leadingZero(appointment.appDate.getUTCMonth() + 1)
                                 let d = leadingZero(appointment.appDate.getUTCDate())
                                 let h = leadingZero(appointment.appDate.getUTCHours())
                                 let mins = leadingZero(appointment.appDate.getUTCMinutes())
