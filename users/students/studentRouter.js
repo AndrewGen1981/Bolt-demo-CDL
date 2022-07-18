@@ -745,4 +745,80 @@ studentRouter.get("/expulsion", ifCanRead, async (req, res) => {
 })
 
 
+
+// @GET admin/student/fmcsa
+// covers 3 fmcsa's steps
+studentRouter.get("/fmcsa", ifCanReadOrInstructor, async(req, res) => {
+
+    try {
+        const minReq = {
+            ttt: 120,
+            lesRate: 0.96
+        }
+
+        const students = (await Student
+        .find({ graduate: "no" })
+        // .where("TTT").gte(minReq.ttt)
+        .select("created location TTT fmcsaSteps")
+        .populate({
+            path: "user", select: "_id",
+            populate: [
+                { path: "dataCollection", select: "firstName lastName middleName DOB -_id" },
+                { path: "application", select: "vehicle-license vehicle-license-state -_id" },
+                { path: "agreement", select: "class transmission -_id" }
+            ]
+        })
+        .populate({
+            path: "tuition",
+            select: "avLessonsRate -_id"
+        }))
+        .filter(student => {
+            if(student.tuition.avLessonsRate >= minReq.lesRate) { return student }
+        })
+
+        students.sort((a, b) => a.created - b.created)
+
+        // console.log(req.session.adminData.location)
+        return res.status(200).render(path.join(__dirname + "/fmcsa-list.ejs"), { students, minReq })
+
+    } catch (e) {
+        res.status(500).send(`Server issue: ${e.message}`)
+    }
+
+})
+
+
+// @PUT admin/student/fmcsa
+// updates from cliens side
+studentRouter.put("/fmcsa", ifCanReadOrInstructor, async(req, res) => {
+    const { id, newSteps } = req.body
+    const adminAdmin = await admin.findAdminById(req.session.adminData.id)
+    try {
+        const newFMCSASteps = newSteps.split(",")
+        const student = await Student.findById(id)
+        newFMCSASteps.forEach((newFMCSAStep, index) => {
+            if (!student.fmcsaSteps[index]) {
+                student.fmcsaSteps.push({
+                    check: newFMCSAStep,
+                    dateDone: new Date(),
+                    adminDone: "AUTO",
+                })
+            } else {
+                if (newFMCSAStep != student.fmcsaSteps[index].check) {
+                    student.fmcsaSteps[index].check = newFMCSAStep
+                    student.fmcsaSteps[index].dateDone = new Date()
+                    student.fmcsaSteps[index].adminDone = adminAdmin.name
+                }
+            }
+        })
+        // console.log(student.fmcsaSteps)
+        await student.save()
+        res.status(200).end()
+    } catch(e) {
+        res.status(500).json({ issue: `Server issue: ${e.message}` })
+    }
+})
+
+
+
 module.exports = studentRouter;

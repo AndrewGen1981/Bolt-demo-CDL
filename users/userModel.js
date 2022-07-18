@@ -143,6 +143,11 @@ const studentSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Schedule'
     },
+    fmcsaSteps: [{
+        check: { type: Boolean, default: false },
+        dateDone: Date,
+        adminDone: String
+    }],
 }, {
     collection: "Student List"
 })

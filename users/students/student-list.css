@@ -340,6 +340,14 @@ header {
 
 
 /* Header media */
+@media (max-width: 1250px) {
+    .header-nav-item span {
+        display: none;
+    }
+    .header-nav-item svg {
+        margin: 0 auto;
+    }
+}
 @media (max-width: 1025px) {
     .tool-bar-btn {
         width: 3.33rem;
@@ -357,19 +365,22 @@ header {
         display: none;
     }
 }
-@media (max-width: 800px) {
-    .header-nav-item span {
-        display: none;
-    }
-    .header-nav-item svg {
-        margin: 0 auto;
-    }
-}
 @media (max-width: 650px) {
     #locationSelect,
     #enrollmentStatusSelect {
         height: fit-content;
         font-size: 0.87rem;
+        min-width: unset;
+        max-width: unset;
+    }
+    .header-left-item {
+        padding: 0 0.5rem;
+    }
+    .nickname-search-box {
+        margin-right: 0;
+    }
+    .header-right-item {
+        margin-right: 0.5rem;
     }
 }
 @media (max-width: 550px) {
@@ -394,6 +405,27 @@ header {
     }
     .header-nav-item {
         margin: 0;
+    }
+    .admin-name {
+        display: none;
+    }
+}
+@media (max-width: 500px) {
+    .subheader {
+        padding: 0.5rem 0;
+
+        width: 100%;
+        height: auto;
+        min-height: var(--header-height);
+        
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    #locationSelect {
+        width: 10.5rem;
+    }
+    #enrollmentStatusSelect {
+        width: 11rem;
     }
 }
 

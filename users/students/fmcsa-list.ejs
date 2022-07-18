@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>BoltCDL | FMCSA Data Feed</title>
+
+    <link rel="shortcut icon" href="../../static/images/thumb.png">
+    <link rel="stylesheet" href="/users/students/fmcsa-list.css">
+
+</head>
+<body>
+
+    <% 
+        function formatDate(textDate) {
+            return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) : '-'
+        }
+        
+        const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        const usStates = {"ALASKA":"AK", "ALABAMA":"AL", "ARKANSAS":"AR", "AMERICANSAMOA":"AS", "ARIZONA":"AZ", "CALIFORNIA":"CA", "COLORADO":"CO", "CONNECTICUT":"CT", "DISTRICTOFCOLUMBIA":"DC", "DELAWARE":"DE", "FLORIDA":"FL", "GEORGIA":"GA", "GUAM":"GU", "HAWAII":"HI", "IOWA":"IA", "IDAHO":"ID", "ILLINOIS":"IL", "INDIANA":"IN", "KANSAS":"KS", "KENTUCKY":"KY", "LOUISIANA":"LA", "MASSACHUSETTS":"MA", "MARYLAND":"MD", "MAINE":"ME", "MICHIGAN":"MI", "MINNESOTA":"MN", "MISSOURI":"MO", "MISSISSIPPI":"MS", "MONTANA":"MT", "NORTHCAROLINA":"NC", "NORTHDAKOTA":"ND", "NEBRASKA":"NE", "NEWHAMPSHIRE":"NH", "NEWJERSEY":"NJ", "NEWMEXICO":"NM", "NEVADA":"NV", "NEWYORK":"NY", "OHIO":"OH", "OKLAHOMA":"OK", "OREGON":"OR", "PENNSYLVANIA":"PA", "PUERTORICO":"PR", "RHODEISLAND":"RI", "SOUTHCAROLINA":"SC", "SOUTHDAKOTA":"SD", "TENNESSEE":"TN", "TEXAS":"TX", "UTAH":"UT", "VIRGINIA":"VA", "VIRGINISLANDS":"VI", "VERMONT":"VT", "WASHINGTON":"WA", "WISCONSIN":"WI", "WESTVIRGINIA":"WV", "WYOMING":"WY"}
+
+        function getState(key) {
+            return usStates[key.toUpperCase().replace(/ /g, "")] || key
+        }
+    %>
+
+    <header>
+        <!-- HOME element -->
+        <a href="/admin/profile" class="header-left-item">
+            <img src="/static/images/logo-small.png" alt="BOLT logo small" class="bolt-home lighthouse">
+            <span class="item-home">Home</span>
+        </a>      <!-- header-left-item -->
+        <!-- CENTER element -->
+        <div class="header-center-item">
+            <div class="nav-left-side">
+                <a href="/admin/user-area" class="header-nav-item" title="Users Area">
+                    <svg width="25" height="18" viewBox="0 0 25 18">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.5 4.10959C10.7741 4.10959 9.375 5.33621 9.375 6.84932C9.375 8.36243 10.7741 9.58904 12.5 9.58904C14.2259 9.58904 15.625 8.36243 15.625 6.84932C15.625 5.33621 14.2259 4.10959 12.5 4.10959ZM7.8125 6.84932C7.8125 4.57965 9.91117 2.73973 12.5 2.73973C15.0888 2.73973 17.1875 4.57965 17.1875 6.84932C17.1875 9.11898 15.0888 10.9589 12.5 10.9589C9.91117 10.9589 7.8125 9.11898 7.8125 6.84932Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.08058 13.2487C9.25269 12.2211 10.8424 11.6438 12.5 11.6438C14.1576 11.6438 15.7473 12.2211 16.9194 13.2487C18.0915 14.2763 18.75 15.67 18.75 17.1233C18.75 17.5016 18.4002 17.8082 17.9688 17.8082H7.03125C6.82405 17.8082 6.62534 17.7361 6.47882 17.6076C6.33231 17.4792 6.25 17.3049 6.25 17.1233C6.25 15.67 6.90848 14.2763 8.08058 13.2487ZM12.5 13.0137C11.2568 13.0137 10.0645 13.4467 9.18544 14.2174C8.49271 14.8247 8.03919 15.6025 7.87804 16.4384H17.122C16.9608 15.6025 16.5073 14.8247 15.8146 14.2174C14.9355 13.4467 13.7432 13.0137 12.5 13.0137Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.8443 0.354968C17.5743 0.0701711 18.3752 -0.0463026 19.171 0.0166068C19.9668 0.0795162 20.731 0.31972 21.3911 0.71441C22.0512 1.1091 22.5853 1.64517 22.9426 2.27173C23.3 2.89828 23.4687 3.59451 23.4328 4.29431C23.3968 4.99411 23.1575 5.67424 22.7374 6.27013C22.3174 6.86602 21.7305 7.35787 21.0326 7.69899C20.3348 8.04012 19.549 8.21918 18.75 8.21918C18.3185 8.21918 17.9688 7.91253 17.9688 7.53425C17.9688 7.15597 18.3185 6.84932 18.75 6.84932C19.2827 6.84932 19.8065 6.72994 20.2718 6.50253C20.737 6.27511 21.1282 5.94721 21.4083 5.54995C21.6883 5.15269 21.8479 4.69927 21.8718 4.23274C21.8958 3.7662 21.7833 3.30205 21.5451 2.88435C21.3069 2.46665 20.9508 2.10926 20.5107 1.84614C20.0707 1.58301 19.5612 1.42287 19.0306 1.38093C18.5001 1.339 17.9662 1.41664 17.4795 1.60651C16.9928 1.79637 16.5696 2.09215 16.25 2.46575C15.9911 2.76838 15.5014 2.82971 15.1562 2.60274C14.8111 2.37577 14.7411 1.94646 15 1.64384C15.4794 1.08343 16.1143 0.639765 16.8443 0.354968Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9688 9.58904C17.9688 9.21077 18.3185 8.90411 18.75 8.90411C20.4076 8.90411 21.9973 9.48141 23.1694 10.509C24.3415 11.5366 25 12.9303 25 14.3836C25 14.7618 24.6502 15.0685 24.2188 15.0685H19.5312C19.0998 15.0685 18.75 14.7618 18.75 14.3836C18.75 14.0053 19.0998 13.6986 19.5312 13.6986H23.372C23.2108 12.8628 22.7573 12.085 22.0646 11.4776C21.1855 10.7069 19.9932 10.274 18.75 10.274C18.3185 10.274 17.9688 9.96732 17.9688 9.58904Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.82904 0.0166068C6.62482 -0.0463026 7.42574 0.0701711 8.15574 0.354968C8.88574 0.639765 9.52059 1.08343 10 1.64384C10.2589 1.94646 10.1889 2.37577 9.84375 2.60274C9.49857 2.82971 9.00888 2.76838 8.75 2.46575C8.43039 2.09215 8.00716 1.79637 7.5205 1.60651C7.03383 1.41664 6.49988 1.339 5.96936 1.38093C5.43883 1.42287 4.92934 1.58301 4.48927 1.84614C4.04919 2.10926 3.69314 2.46665 3.45491 2.88435C3.21669 3.30205 3.10422 3.7662 3.12816 4.23274C3.1521 4.69927 3.31167 5.15269 3.59172 5.54995C3.87176 5.94721 4.26298 6.27511 4.72824 6.50253C5.19349 6.72994 5.71732 6.84932 6.25 6.84932C6.68147 6.84932 7.03125 7.15597 7.03125 7.53425C7.03125 7.91253 6.68147 8.21918 6.25 8.21918C5.45098 8.21918 4.66523 8.04012 3.96735 7.69899C3.26948 7.35787 2.68264 6.86602 2.26257 6.27013C1.84251 5.67424 1.60315 4.99411 1.56724 4.29431C1.53132 3.59451 1.70004 2.89828 2.05737 2.27173C2.4147 1.64517 2.94878 1.1091 3.6089 0.71441C4.26901 0.31972 5.03325 0.0795162 5.82904 0.0166068Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.83058 10.509C3.00268 9.48141 4.5924 8.90411 6.25 8.90411C6.68147 8.90411 7.03125 9.21077 7.03125 9.58904C7.03125 9.96732 6.68147 10.274 6.25 10.274C5.0068 10.274 3.81451 10.7069 2.93544 11.4776C2.24271 12.085 1.78919 12.8628 1.62804 13.6986H5.46875C5.90022 13.6986 6.25 14.0053 6.25 14.3836C6.25 14.7618 5.90022 15.0685 5.46875 15.0685H0.78125C0.57405 15.0685 0.375336 14.9963 0.228823 14.8679C0.08231 14.7394 0 14.5652 0 14.3836C0 12.9303 0.65848 11.5366 1.83058 10.509Z" />
+                    </svg>
+                    <span>Users Area</span>
+                </a>
+                <a href="/admin/student/list" class="header-nav-item" title="Student List">
+                    <svg width="25" height="20" viewBox="0 0 25 20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1324 0.0928793C12.3621 -0.0309597 12.6379 -0.0309597 12.8676 0.0928793L24.5864 6.40867C24.841 6.54587 25 6.8137 25 7.10526C25 7.39682 24.841 7.66465 24.5864 7.80186L12.8676 14.1176C12.6379 14.2415 12.3621 14.2415 12.1324 14.1176L0.413603 7.80186C0.159022 7.66465 0 7.39682 0 7.10526C0 6.8137 0.159022 6.54587 0.413603 6.40867L12.1324 0.0928793ZM2.44141 7.10526L12.5 12.5263L22.5586 7.10526L12.5 1.68421L2.44141 7.10526Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.46875 8.8421C5.90022 8.8421 6.25 9.19556 6.25 9.63158V15C6.25 15.1967 6.34252 15.4921 6.6304 15.8592C6.91325 16.22 7.34774 16.6002 7.92148 16.948C9.0682 17.6433 10.6868 18.1579 12.5 18.1579C14.3132 18.1579 15.9318 17.6433 17.0785 16.948C17.6523 16.6002 18.0867 16.22 18.3696 15.8592C18.6575 15.4921 18.75 15.1967 18.75 15V9.63158C18.75 9.19556 19.0998 8.8421 19.5312 8.8421C19.9627 8.8421 20.3125 9.19556 20.3125 9.63158V15C20.3125 15.6717 20.0144 16.304 19.5943 16.8398C19.1691 17.382 18.5782 17.8801 17.8824 18.302C16.4901 19.1462 14.5931 19.7368 12.5 19.7368C10.4069 19.7368 8.50992 19.1462 7.11758 18.302C6.42179 17.8801 5.83089 17.382 5.40573 16.8398C4.9856 16.304 4.6875 15.6717 4.6875 15V9.63158C4.6875 9.19556 5.03728 8.8421 5.46875 8.8421Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24.2188 6.31579C24.6502 6.31579 25 6.66925 25 7.10526V17.3684C25 17.8044 24.6502 18.1579 24.2188 18.1579C23.7873 18.1579 23.4375 17.8044 23.4375 17.3684V7.10526C23.4375 6.66925 23.7873 6.31579 24.2188 6.31579Z" />
+                    </svg>
+                    <span>Student List</span>
+                </a>
+                <a href="/admin/student" class="header-nav-item" title="INs">
+                    <svg width="20" height="20" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.8286 11.6624C15.094 11.3705 15.5457 11.349 15.8376 11.6143L19.7662 15.1858C19.9151 15.3211 20 15.513 20 15.7143C20 15.9155 19.9151 16.1074 19.7662 16.2428L15.8376 19.8142C15.5457 20.0796 15.094 20.0581 14.8286 19.7662C14.5633 19.4743 14.5848 19.0225 14.8767 18.7572L18.2239 15.7143L14.8767 12.6714C14.5848 12.406 14.5633 11.9543 14.8286 11.6624Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 15.7143C0 15.3198 0.319797 15 0.714286 15H19.2857C19.6802 15 20 15.3198 20 15.7143C20 16.1088 19.6802 16.4286 19.2857 16.4286H0.714286C0.319797 16.4286 0 16.1088 0 15.7143Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.17139 0.23381C5.43675 0.525708 5.41524 0.977457 5.12334 1.24282L1.77615 4.28572L5.12334 7.32862C5.41524 7.59398 5.43675 8.04573 5.17139 8.33762C4.90602 8.62952 4.45428 8.65103 4.16238 8.38567L0.233805 4.81425C0.0848949 4.67887 0 4.48696 0 4.28572C0 4.08447 0.0848949 3.89256 0.233805 3.75719L4.16238 0.185762C4.45428 -0.0795999 4.90602 -0.0580881 5.17139 0.23381Z" />
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 4.28572C0 3.89123 0.319797 3.57143 0.714286 3.57143H19.2857C19.6802 3.57143 20 3.89123 20 4.28572C20 4.68021 19.6802 5 19.2857 5H0.714286C0.319797 5 0 4.68021 0 4.28572Z" />
+                    </svg>
+                    <span>INs</span>
+                </a>
+                <a href="/admin/student/fmcsa" class="header-nav-item active-item" title="FMCSA">
+                    <svg width="25" height="26" viewBox="0 0 259.06 263.26">
+                        <path d="M72.27,13.23C143.52-22.56,238.9,17.39,255,95.54c6.8,33-16.19,69.9-50.67,66.21-20.72-2.22-42.44-19.59-43.9-42.48C158.87,94.4,166.56,71.71,148,44.86,131.08,20.35,89.84,16.19,72.27,13.23"/><path class="cls-1" d="M259.06,140.2c-4.42,79.61-86.54,142.45-162.36,117.53-32-10.51-52.56-48.84-32.19-76.9C76.75,164,102.62,153.77,123.2,163.9c22.35,11,38.21,29,70.73,26.24,29.68-2.49,53.82-36.18,65.13-49.94"/><path class="cls-1" d="M53.8,236.32C-11,189.87-20,86.85,41.74,36.24c26-21.34,69.42-18.14,82.17,14.1C131.58,69.72,126.29,97,106.7,109c-21.28,13-44.94,16.69-60.1,45.6-13.83,26.38,1.65,64.83,7.2,81.76"/>
+                    </svg>
+                    <span>FMCSA Data</span>
+                </a>
+            </div>
+            <div class="nav-right-side">
+                <div class="nickname-search-box">
+                    <input type="search" class="nickname-search" placeholder="Student..." oninput="filterColumn(this, '.schema-col-name')">
+                    <svg width="20" height="20" viewBox="0 0 20 20" onclick="toggleSearch()">
+                        <path d="M19.5119 17.1552L15.281 12.9243C16.1552 11.6068 16.6668 10.0293 16.6668 8.33342C16.6668 3.73837 12.9285 0 8.33342 0C3.73837 0 0 3.73837 0 8.33342C0 12.9285 3.73837 16.6668 8.33342 16.6668C10.0293 16.6668 11.6068 16.1552 12.9243 15.281L17.1552 19.5119C17.8052 20.1627 18.8619 20.1627 19.5119 19.5119C20.1627 18.861 20.1627 17.806 19.5119 17.1552ZM2.50003 8.33342C2.50003 5.11672 5.11672 2.50003 8.33342 2.50003C11.5501 2.50003 14.1668 5.11672 14.1668 8.33342C14.1668 11.5501 11.5501 14.1668 8.33342 14.1668C5.11672 14.1668 2.50003 11.5501 2.50003 8.33342Z" />
+                    </svg>
+                </div>
+                <% if(locals.user) { %>
+                    <span class="admin-name"><%= user.name %></span>
+                    <span class="admin-separator">|</span>
+                    <span class="admin-email"><%= user.location %></span>
+                <% } %>
+            </div>
+        </div>      <!-- header-center-item -->
+        <!-- SIGN OUT element -->
+        <form class="header-right-item" action="/admin/logout" method="POST">
+            <button type="submit">
+                <svg width="25" height="21" viewBox="0 0 25 21">
+                    <path d="M10.2041 18.8964C10.2041 18.939 10.2094 19.0454 10.22 19.2156C10.2307 19.3859 10.2333 19.5268 10.228 19.6386C10.2227 19.7503 10.2067 19.8753 10.1802 20.0136C10.1536 20.1519 10.1004 20.2557 10.0207 20.3248C9.94101 20.394 9.83206 20.4286 9.69388 20.4286H4.59184C3.32696 20.4286 2.24543 19.979 1.34726 19.08C0.449086 18.1809 0 17.0983 0 15.8321V4.59643C0 3.33028 0.449086 2.24767 1.34726 1.3486C2.24543 0.449535 3.32696 0 4.59184 0H9.69388C9.83206 0 9.95164 0.0505394 10.0526 0.151618C10.1536 0.252697 10.2041 0.372396 10.2041 0.510714C10.2041 0.553274 10.2094 0.659673 10.22 0.829911C10.2307 1.00015 10.2333 1.14113 10.228 1.25285C10.2227 1.36456 10.2067 1.48958 10.1802 1.6279C10.1536 1.76622 10.1004 1.86996 10.0207 1.93912C9.94101 2.00828 9.83206 2.04286 9.69388 2.04286H4.59184C3.89031 2.04286 3.28975 2.29289 2.79018 2.79297C2.2906 3.29304 2.04082 3.8942 2.04082 4.59643V15.8321C2.04082 16.5344 2.2906 17.1355 2.79018 17.6356C3.28975 18.1357 3.89031 18.3857 4.59184 18.3857H9.56633L9.74968 18.4017L9.93304 18.4496L10.0606 18.5373L10.1722 18.681L10.2041 18.8964ZM25 10.2143C25 10.4909 24.899 10.7303 24.6971 10.9325L16.0236 19.6146C15.8216 19.8168 15.5825 19.9179 15.3061 19.9179C15.0298 19.9179 14.7906 19.8168 14.5886 19.6146C14.3867 19.4125 14.2857 19.1731 14.2857 18.8964V14.3H7.14286C6.8665 14.3 6.62734 14.1989 6.42538 13.9968C6.22343 13.7946 6.12245 13.5552 6.12245 13.2786V7.15C6.12245 6.87336 6.22343 6.63397 6.42538 6.43181C6.62734 6.22965 6.8665 6.12857 7.14286 6.12857H14.2857V1.53214C14.2857 1.25551 14.3867 1.01611 14.5886 0.813951C14.7906 0.611793 15.0298 0.510714 15.3061 0.510714C15.5825 0.510714 15.8216 0.611793 16.0236 0.813951L24.6971 9.49609C24.899 9.69825 25 9.93765 25 10.2143Z" />
+                </svg>
+            </button>
+        </form>     <!-- header-right-item -->
+    </header>
+
+    <div class="dummy"></div>
+
+    <menu type="toolbar" class="sub-header">
+        <span class="info">Selection min TTT=<%= locals.minReq.ttt %>, min Learning=<%= minReq.lesRate %> | <%= students.length %> record(s) found</span>
+    </menu>
+    
+    <section class="main-box">
+        <div class="unable-box -hidden"></div>
+        <% if (students) { %>
+            <div class="report-row -headers">
+                <span name="lastName">Last Name</span>
+                <span name="firstName">First Name</span>
+                <span name="middleName">Middle Name</span>
+                <span name="location">Location</span>
+                <span name="DOB">DOB</span>
+                <span name="vehicle-license">License</span>
+                <span name="vehicle-license-state">Issued</span>
+                <span name="class">Class</span>
+                <span name="transmission">Transmission</span>
+                <span name="created">Student Since</span>
+                <span name="TTT">TTTh</span>
+                <span name="tuition">Tuition</span>
+
+                <span name="step1">step1</span>
+                <span name="step2">step2</span>
+                <span name="step3">step3</span>
+                <span name="update">update</span>
+            </div>      <!-- report-row -->
+            <% students.forEach(student => { %>
+                <div class="report-row">
+                    <% const mid = student.user.dataCollection.middleName.toLowerCase() %>
+                    <a href="/admin/user/<%= student.user._id %>?activatetab=4&open=fmcsaSteps" name="lastName"><%= student.user.dataCollection.lastName %></a>
+                    <span name="firstName"><%= student.user.dataCollection.firstName %></span>
+                    <span name="middleName"><%= mid[0] != "n" && mid[mid.length-1] != "a" ? mid : "" %></span>
+                    <span name="location"><%= student.location %></span>
+                    <span name="DOB"><%= formatDate(student.user.dataCollection.DOB) %></span>
+
+                    <span name="vehicle-license"><%= student.user.application['vehicle-license'] %></span>
+                    
+                    <% let state = getState(student.user.application['vehicle-license-state']) %>
+                    <span name="vehicle-license-state" data-found="<%= state.length <= 2 %>"><%= state %></span>
+
+                    <span name="class"><%= student.user.agreement.class %></span>
+                    <span name="transmission"><%= student.user.agreement.transmission.split(" ")[0] %></span>
+
+                    <span name="created"><%= formatDate(student.created) %></span>
+
+                    <% if(student.TTT < (locals.minReq.ttt || 120)) { %>
+                        <span name="TTT" data-ttt="less"><%= Math.round(student.TTT * 10)/10 %></span>
+                    <% } else { %>
+                        <span name="TTT" data-ttt="normal"><%= Math.round(student.TTT) %></span>
+                    <% } %>
+
+                    <span name="tuition"><%= Math.round(student.tuition.avLessonsRate * 1000) / 10 %>%</span>
+
+                    <%
+                        function insertStep(aSteps, TTT, minTTT) {
+                            const steps = aSteps || []
+                            while (steps.length < 3) { steps.push({ check: false }) }
+                            return steps.map((step, i) => `<span class="input-box" name="step${i+1}"><input title='${step.adminDone ? step.adminDone+": " : ""}${step.dateDone ? formatDate(step.dateDone) : ""}' type="checkbox" ${step.check ? "checked" : "" } ${ (i+1) === steps.length ? TTT<minTTT ? "disabled" : "" : "" } /></span>`).join("")
+                        }
+
+                        function strStep(aSteps) {
+                            return aSteps ? aSteps.map(step => step.check).join(",") : ""
+                        }
+                    %>
+
+                    <%- insertStep(student.fmcsaSteps, student.TTT, locals.minReq.ttt || 120) %>
+
+                    <span name="update" class="updateSteps" data-id="<%= student._id %>" data-old="<%= strStep(student.fmcsaSteps) %>" onclick="updateStudentFMCSAData(this)">update</span>
+
+                </div>      <!-- report-row -->
+            <% }) %>
+            
+        <% } else { %>      <!-- students array is not OK -->
+            <h1>Cannot retrieve data from database...</h1>
+        <% } %>
+    </section>
+
+
+
+
+    <script>
+        
+        // working with filter
+        const rows = document.querySelectorAll('.report-row')
+        const lastNames = document.querySelectorAll("[name='lastName']")
+        const firstNames = document.querySelectorAll("[name='firstName']")
+        const middleNames = document.querySelectorAll("[name='middleName']")
+
+        function filterColumn(input) {
+            if (!input) { return }
+            const filter = input.value.toLowerCase()
+            if (!rows || !lastNames || !firstNames || !middleNames) { return }
+            if (rows.length < 2) { return }
+            for (let i=1; i<rows.length; i++) {
+                
+                let toShow = lastNames[i].textContent.toLowerCase().includes(filter)
+                || firstNames[i].textContent.toLowerCase().includes(filter)
+                || middleNames[i].textContent.toLowerCase().includes(filter)
+                
+                rows[i].classList.toggle('-hidden', !toShow)
+                rows[i].classList.toggle('-visible', toShow && filter)
+            }
+        }
+
+
+        function getInputsKey(row, clearChanges) {
+            const inputs = row.querySelectorAll("input")
+            if (!inputs) { return "" }
+            return Array.from(inputs)
+            .map(input => {
+                if (clearChanges) { input.classList.remove("changed") }
+                return input.checked
+            })
+            .join(",")
+        }
+
+
+        document.querySelectorAll("input").forEach(input => {
+            input.addEventListener("change", (e) => {
+                input.classList.toggle("changed")
+                const row = input.parentElement.parentElement
+                const update = row.querySelector(".updateSteps")
+                if (!update) { return }
+                update.classList.toggle("can-update", getInputsKey(row, false) !== update.dataset.old)
+            })
+        })
+
+
+        function updateStudentFMCSAData(update) {
+            if (!update) { return }
+            if (!update.classList.contains("can-update")) { return }
+
+            document.querySelector(".unable-box").classList.remove("-hidden")
+
+            const row = update.parentElement
+            const inputsKey = getInputsKey(row, true)
+
+            fetch("/admin/student/fmcsa", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: update.dataset.id,
+                    newSteps: inputsKey,
+                })
+            }).then(async(response) => {
+                if(response.status != 200) {
+                    res = await response.json()
+                    alert(`Can't update Student's data: ${ res.issue }`)
+                } else {
+                    update.dataset.old = inputsKey
+                    update.classList.remove("can-update")
+                }
+                document.querySelector(".unable-box").classList.add("-hidden")
+            })
+        }
+
+    </script>
+
+</body>
+</html>

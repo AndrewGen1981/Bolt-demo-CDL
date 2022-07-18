@@ -235,6 +235,86 @@
         <% } %>
 
 
+        <!-- FMCSA Steps -->
+        <% 
+            const steps = user.student.fmcsaSteps || []
+            while (steps.length < 3) {
+                steps.push({
+                    check: false,
+                    dateDone: new Date(),
+                    adminDone: "NOT SET"
+                })
+            }
+        %>
+
+        <details class="row-item" id="steps-details">
+            <summary>FMCSA Steps</summary>
+            <div class="steps-box">
+                <div class="steps-table">
+                    <% steps.forEach((step, index) => { %>
+                        <span>Step#<%= index + 1 %></span>
+                        <span class="check-box">
+                            <input type="checkbox" name="step<%= index + 1 %>" data-old="<%= step.check %>" <%= step.check ? "checked" : "" %> />
+                        </span>
+                        <span><%= new Date(step.dateDone).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %></span>
+                        <span><%= step.adminDone %></span>
+                    <% }) %>
+                </div>
+                <div class="steps-update" data-id="<%= user.student._id %>" data-old="<%= steps.map(step => step.check).join(",") %>">Update</div>
+            </div>
+
+            <script>
+
+                document.querySelectorAll(".check-box input").forEach(input => {
+                    input.addEventListener("change", (e) => {
+                        input.classList.toggle("-changed", input.checked.toString() != input.dataset.old)
+
+                        const update = document.querySelector(".steps-box .steps-update")
+                        const inputs = Array.from(document.querySelectorAll(".check-box input"))
+                        const inputsKey = inputs.map(step => step.checked).join(",")
+
+                        update.classList.toggle("steps-can-update", inputsKey != update.dataset.old)
+                    })
+                })
+
+                document.querySelector(".steps-update").addEventListener("click", (e) => {
+                    const update = e.target
+                    if (update.classList.contains("steps-can-update")) {
+                        const inputs = Array.from(document.querySelectorAll(".check-box input"))
+                        const inputsKey = inputs.map(step => {
+                            step.classList.remove("-changed")
+                            return step.checked
+                        }).join(",")
+
+                        // herer to forbid next update before done with current
+                        update.classList.remove("steps-can-update")
+
+                        fetch("/admin/student/fmcsa", {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                id: update.dataset.id,
+                                newSteps: inputsKey,
+                            })
+                        }).then(async(response) => {
+                            if(response.status != 200) {
+                                res = await response.json()
+                                alert(`Can't update Student's data: ${ res.issue }`)
+                            } else {
+                                update.dataset.old = inputsKey
+                                alert(`FMCSA steps updated`)
+                            }
+                        })
+
+                    }
+                })
+
+            </script>
+        </details>
+
+
         <!-- LEARNING Center Details -->
         <% if(user.student.tuition) { %>
             <% if(user.student.tuition.lessons.length) { %>     <!-- begun tuition -->

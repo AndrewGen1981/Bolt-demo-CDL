@@ -844,7 +844,8 @@ input[name="paymentAmount"] {
 .scoring-table *:not(.-table-header),
 .schedule-table *:not(.-table-header),
 .graduate-info-table *,
-.skills-test-table *:not(.-table-header) {
+.skills-test-table *:not(.-table-header),
+.steps-table *:not(.-table-header) {
     font-weight: 500;
     font-size: 0.87rem;
     line-height: 2.67rem;
@@ -857,7 +858,8 @@ input[name="paymentAmount"] {
 #tuition-details,
 #clocks-details,
 #scoring-details,
-#schedule-details {
+#schedule-details,
+#steps-details {
     width: 100%;
     background-color: #fff;
     margin-bottom: 1.47rem !important;
@@ -880,6 +882,45 @@ input[name="paymentAmount"] {
     outline: none;
 }
 
+
+/* Steps Table */
+.steps-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.steps-table {
+    width: 85%;
+    display: grid;
+    grid-template-columns: 1fr 3rem 1fr 1fr;
+}
+.steps-update {
+    width: 15%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 500;
+    font-size: 0.87rem;
+}
+.steps-can-update {
+    text-decoration: underline;
+    color: #4377B5;
+    cursor: pointer;
+}
+.steps-table input {
+    accent-color: #3789EB;
+    width: 1.33rem;
+    height: 1.33rem;
+}
+.steps-table input.-changed {
+    accent-color: #A2D092;
+}
+.steps-table .check-box {
+    display: flex;
+    align-items: center;
+}
 
 /* Tuition Table */
 .learning-table {
