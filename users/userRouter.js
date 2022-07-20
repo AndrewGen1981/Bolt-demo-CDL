@@ -134,12 +134,14 @@ userRouter.get('/home', redirectToLogin, async(req, res) => {
             // check if blocked
             if (user.student.status != "unblock") {
                 return res.render(path.join(__dirname+'/issue-page.ejs'), {
+                    name: user.student.fullName,
                     msg: "You are blocked. Refer to a school manager"
                 })
             }
             // check if graduate/withdraw
             if (user.student.graduate != "no") {
                 return res.render(path.join(__dirname+'/issue-page.ejs'), {
+                    name: user.student.fullName,
                     msg: `You status is "${user.student.enrollmentStatus}"`
                 })
             }
