@@ -367,8 +367,9 @@ header {
 .chart-sub-column:nth-last-child(1) {
     border-radius: 0 0 3px 3px;
 }
-
-
+.chart-sub-column-all-rounded {
+    border-radius: 3px !important;
+}
 
 
 /* main-admin-profile-right */

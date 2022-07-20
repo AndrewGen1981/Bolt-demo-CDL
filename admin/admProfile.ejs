@@ -207,13 +207,6 @@
 
 
 
-
-
-    
-
-
-
-
     <script defer>
 
         // @drawing chart
@@ -231,9 +224,15 @@
                 }
                 if (max) {
                     // setting values espectively to max                    
-                    for (let i=0; i<cols.length; i++) {
-                        cols[i].style.height = `${ parseInt(cols[i].dataset.value) * maxHeight / max }px`
-                    }
+                    cols.forEach(col => {
+                        col.style.height = `${ parseInt(col.dataset.value) * maxHeight / max }px`
+                        if (col.childElementCount === 1) {
+                            let subCol = col.querySelector(".chart-sub-column")
+                            if (subCol) {
+                                subCol.classList.add("chart-sub-column-all-rounded")
+                            }
+                        }
+                    })
                 }
             }
         }
