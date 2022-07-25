@@ -63,7 +63,8 @@ async function getCalendarData(req, schType, nDays) {
     students.forEach(student => {
         if(student.schedule) {
             student.schedule.appointments.forEach(appointment => {
-                if(appointment.appDate >= startDate && appointment.appDate <= endDate) {
+                if(appointment.appDate >= startDate && appointment.appDate <= endDate
+                    && appointment.appTransmission === calendarTransmission) {
                     scheduledAppointments.push({
                         appDate: appointment.appDate,
                         appType: appointment.appType,
