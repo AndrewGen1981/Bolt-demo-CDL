@@ -206,6 +206,29 @@
             }, 10000)
         }
 
+
+        // login enter
+        // .admin-box .sign-input
+        const adminSighInput = document.querySelector(".admin-box .sign-input")
+        if (adminSighInput) {
+            adminSighInput.addEventListener('focus', (event) => {
+                if (adminSighInput.value === "Admin") {
+                    adminSighInput.value = ""
+                }
+            })
+        }
+
+        // .sign-form-box .sign-input
+        const studentSighInput = document.querySelector(".sign-form-box .sign-input")
+        if (studentSighInput) {
+            studentSighInput.addEventListener('focus', (event) => {
+                if (studentSighInput.value === "@") {
+                    studentSighInput.value = ""
+                }
+            })
+        }
+
+
     </script>
 
 
