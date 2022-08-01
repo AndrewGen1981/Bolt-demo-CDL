@@ -302,6 +302,7 @@
                             if(response.status != 200) {
                                 res = await response.json()
                                 alert(`Can't update Student's data: ${ res.issue }`)
+                                window.location.reload()
                             } else {
                                 update.dataset.old = inputsKey
                                 alert(`FMCSA steps updated`)

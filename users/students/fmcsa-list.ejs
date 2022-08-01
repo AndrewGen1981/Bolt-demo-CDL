@@ -15,7 +15,7 @@
 
     <% 
         function formatDate(textDate) {
-            return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) : '-'
+            return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-'
         }
         
         const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -97,7 +97,14 @@
     <div class="dummy"></div>
 
     <menu type="toolbar" class="sub-header">
-        <span class="info">Selection min TTT=<%= locals.minReq.ttt %>, min Learning=<%= minReq.lesRate %> | <%= students.length %> record(s) found</span>
+        <span class="info-bold">Thresholds:</span>
+        <span class="info">Theory <%= Math.round(locals.minReq.theoryRate*100) %>%,</span>
+        <span class="info">Range <%= locals.minReq.rangeTTT %>h,</span>
+        <span class="info">Public Roads <%= locals.minReq.cityTTT %>h</span>
+        <span class="info">|</span>
+        <span class="info"><%= students.length %> record(s) found</span>
+        <span class="info">|</span>
+        <a class="info-link" href="/admin/student/fmcsa-credentials" class="renew-fmcsa">RENEW FMCSA Credentials</a>
     </menu>
     
     <section class="main-box">
@@ -117,9 +124,9 @@
                 <span name="TTT">TTTh</span>
                 <span name="tuition">Tuition</span>
 
-                <span name="step1">step1</span>
-                <span name="step2">step2</span>
-                <span name="step3">step3</span>
+                <span name="step1">Theory</span>
+                <span name="step2" title="BTW Range">Range</span>
+                <span name="step3" title="BTW Public Roads">Public</span>
                 <span name="update">update</span>
             </div>      <!-- report-row -->
             <% students.forEach(student => { %>
@@ -150,10 +157,25 @@
                     <span name="tuition"><%= Math.round(student.tuition.avLessonsRate * 1000) / 10 %>%</span>
 
                     <%
-                        function insertStep(aSteps, TTT, minTTT) {
+                        function insertStep(aSteps, TTT, req) {
                             const steps = aSteps || []
                             while (steps.length < 3) { steps.push({ check: false }) }
-                            return steps.map((step, i) => `<span class="input-box" name="step${i+1}"><input title='${step.adminDone ? step.adminDone+": " : ""}${step.dateDone ? formatDate(step.dateDone) : ""}' type="checkbox" ${step.check ? "checked" : "" } ${ (i+1) === steps.length ? TTT<minTTT ? "disabled" : "" : "" } /></span>`).join("")
+                            return steps.map((step, i) => {
+                                let title = step.adminDone ? `${step.adminDone}: ${step.dateDone ? formatDate(step.dateDone) : ""}` : ""
+                                let checked = step.check ? "checked" : ""
+                                let disabled = step.check ? "disabled" : ""
+                                if (disabled === "") {
+                                    if (i == 1) {   // range TTT
+                                        title = `${ req.rangeTTT }h of TTT is a threshold`
+                                        disabled = TTT < req.rangeTTT ? "disabled" : ""
+                                    }
+                                    if (i == 2) {   // public roads TTT
+                                        title = `${ req.cityTTT }h of TTT is a threshold`
+                                        disabled = TTT < req.cityTTT ? "disabled" : ""
+                                    }
+                                }
+                                return `<span class="input-box" name="step${ i+1 }"><input title="${ title }" type="checkbox" ${ checked } ${ disabled } /></span>`
+                            }).join("")
                         }
 
                         function strStep(aSteps) {
@@ -161,7 +183,7 @@
                         }
                     %>
 
-                    <%- insertStep(student.fmcsaSteps, student.TTT, locals.minReq.ttt || 120) %>
+                    <%- insertStep(student.fmcsaSteps, student.TTT, locals.minReq) %>
 
                     <span name="update" class="updateSteps" data-id="<%= student._id %>" data-old="<%= strStep(student.fmcsaSteps) %>" onclick="updateStudentFMCSAData(this)">update</span>
 
@@ -246,6 +268,7 @@
                 if(response.status != 200) {
                     res = await response.json()
                     alert(`Can't update Student's data: ${ res.issue }`)
+                    window.location.reload()
                 } else {
                     update.dataset.old = inputsKey
                     update.classList.remove("can-update")

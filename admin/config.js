@@ -57,6 +57,10 @@ const SCHOOL_DATA = {
     CITY: "Tacoma",
     STATE: "WA",
     ZIP: "98409",
+    // time-zone
+    tZONE: "America/Los_Angeles",
+    GMT: "-08:00",
+    GMTh: 8,
 }
 
 
@@ -195,7 +199,7 @@ async function allowOnlyOne_USER_ActiveSession(id) {
 
 
 function getAllLocations() {
-    return Object.values(LOCATION).filter(el => el !== LOCATION.All && LOCATION.Unset)
+    return Object.values(LOCATION).filter(el => (el !== LOCATION.All && el !== LOCATION.Unset))
 }
 function getLocations() {
     return Object.values(LOCATION).map(el => el)
