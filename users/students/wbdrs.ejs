@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoltCDL | WBDRS Report</title>
+    <title>BoltCDL | State Report</title>
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
     <link rel="stylesheet" href="/users/students/wbdrs.css">
@@ -108,7 +108,7 @@
     <!-- sub-header -->
     <menu type="toolbar" class="sub-header">
         <div class="sub-header-left">
-            <h2 class="sub-header-title">WBDRS<span><%= formatSlashDate(locals.startDate) %> - <%= formatSlashDate(locals.endDate) %></span></h2>
+            <h2 class="sub-header-title">Annual State Report<span><%= formatSlashDate(locals.startDate) %> - <%= formatSlashDate(locals.endDate) %></span></h2>
             <div class="years-box">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M16.1538 20H3.84615C2.82609 20 1.84781 19.5948 1.12651 18.8735C0.405219 18.1522 0 17.1739 0 16.1538V5.38462C0 4.36455 0.405219 3.38627 1.12651 2.66497C1.84781 1.94368 2.82609 1.53846 3.84615 1.53846H16.1538C17.1739 1.53846 18.1522 1.94368 18.8735 2.66497C19.5948 3.38627 20 4.36455 20 5.38462V16.1538C20 17.1739 19.5948 18.1522 18.8735 18.8735C18.1522 19.5948 17.1739 20 16.1538 20ZM3.84615 3.07692C3.23412 3.07692 2.64715 3.32005 2.21437 3.75283C1.78159 4.18561 1.53846 4.77258 1.53846 5.38462V16.1538C1.53846 16.7659 1.78159 17.3529 2.21437 17.7856C2.64715 18.2184 3.23412 18.4615 3.84615 18.4615H16.1538C16.7659 18.4615 17.3529 18.2184 17.7856 17.7856C18.2184 17.3529 18.4615 16.7659 18.4615 16.1538V5.38462C18.4615 4.77258 18.2184 4.18561 17.7856 3.75283C17.3529 3.32005 16.7659 3.07692 16.1538 3.07692H3.84615Z" fill="#AAAAAA"/>
@@ -174,7 +174,7 @@
         </div>
 
         <% if(locals.students) { %>
-            <% students.map((student, index) => { %>
+            <% students.forEach((student, index) => { %>
                 <% if(student.user) { %>
                     <% if(student.user.agreement && student.user.dataCollection) { %>
                         <div class="table-row" id="table-row-<%= student._id %>">
@@ -290,7 +290,7 @@
             })
 
             a.setAttribute("href", 'data:text/csv;charset=utf-8,' + encodeURI(csv))
-            a.setAttribute("download", "WBDRS.csv")
+            a.setAttribute("download", "STATEREPORT.csv")
         }
 
 
