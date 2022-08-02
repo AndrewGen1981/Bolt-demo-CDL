@@ -23,11 +23,11 @@
             return a.length < 2 ? `0${a}` : a
         }
         function getYYYYMMDD(date) {
-            const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/');
+            const a = new Date(date).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }).split('/');
             return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`
         }
         function getHHMMSS(time) {
-            const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':');
+            const a = new Date(time).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }).replace(' ',':').split(':');
             return `${leadZero(a[0])}:${leadZero(a[1])}`
         }
     %>

@@ -183,7 +183,7 @@
                             <h3 class="field-title">College:</h3>
                             <p class="field-value"><%= user.application['education-colledge'] %></p>
                         </div>
-                        <% const comp = user.application.highSchoolGrade.toUpperCase() === 'YES' ? 'completion date is '+ new Date(user.application['education-grade-date']).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : "" %>
+                        <% const comp = user.application.highSchoolGrade.toUpperCase() === 'YES' ? 'completion date is '+ new Date(user.application['education-grade-date']).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) : "" %>
                         <div class="field-box">
                             <h3 class="field-title">High School Graduate?</h3>
                             <p class="field-value"><%= user.application.highSchoolGrade %> <%= comp %></p>
@@ -226,7 +226,7 @@
                             <% }) %>
                             <div class="field-box">
                                 <h3 class="field-title">Date of Discharge</h3>
-                                <p class="field-value"><%= new Date(user.application['military-discharge-date']).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                                <p class="field-value"><%= new Date(user.application['military-discharge-date']).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
                             </div>
                         </div>  <!-- section-fields -->
                     </section>  <!-- Military info -->
@@ -352,7 +352,7 @@
                     <div class="section-fields -fields-side-by-side">
                         <div class="field-box">
                             <h3 class="field-title">Date of signing</h3>
-                            <p class="field-value"><%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                            <p class="field-value"><%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
                         </div>
                         <div class="field-box">
                             <h3 class="field-title">Applicant signature</h3>

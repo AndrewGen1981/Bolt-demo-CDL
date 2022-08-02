@@ -162,8 +162,8 @@
                 examinerId: "<%= examiner.id %>",
                 examinerName: "<%= examiner.name %>",
                 examinerLocation: "<%= examiner.location %>",
-                examDate: new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }),
-                examTime: new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }),
+                examDate: new Date().toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }),
+                examTime: new Date().toLocaleTimeString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }),
 
                 maxPoints,
                 receivedPoints,

@@ -77,7 +77,7 @@ tuitionRouter.get('/', async(req, res) => {
             ])
             if (student.tuition) {
                 if (student.tuition.isAllowed) {
-                    return res.render(path.join(__dirname+'/tuition-center.ejs'), { 
+                    return res.render(path.join(__dirname + '/tuition-center.ejs'), {
                         listOfLessons, listOfTitles,
                         tuition: student.tuition,
                         fullName: student.fullName,

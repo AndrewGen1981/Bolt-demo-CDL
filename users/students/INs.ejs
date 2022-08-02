@@ -13,19 +13,19 @@
 <body>
     
     <% 
-        function printTime24(date) { return new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).split(':') }
+        function printTime24(date) { return new Date(date).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }).split(':') }
         function leadingZero(digit) { return parseInt(digit) < 10 ? `0${digit}` : digit }
 
         function usYYYYMMDD(date) { 
-            const d = date ? new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
-            : new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
+            const d = date ? new Date(date).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE })
+            : new Date().toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE });
             let arr = d.split('/')
             return arr.length > 1 ? `${arr[2]}-${leadingZero(arr[0])}-${leadingZero(arr[1])}` : false
         }
 
         function usDate(date) { 
-            return date ? new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
-            : new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
+            return date ? new Date(date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE })
+            : new Date().toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE });
         }
     %>
 
@@ -373,7 +373,7 @@
                                                 } else {
                                                     elOUT.removeAttribute("href")
                                                 }
-                                                elOUT.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false })
+                                                elOUT.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>", hour12: false })
                                                 elOUT.classList.add('-not-present')
                                             } else {
                                                 if (!isNaN(lastClock.lat) && !isNaN(lastClock.lon)) {
@@ -381,7 +381,7 @@
                                                 } else {
                                                     elIN.removeAttribute("href")
                                                 }
-                                                elIN.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false })
+                                                elIN.textContent = new Date(lastClock.date).toLocaleTimeString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>", hour12: false })
                                                 elOUT.textContent ='...'    // if returned back
                                                 elOUT.removeAttribute("href")
                                                 elOUT.classList.remove('-not-present')

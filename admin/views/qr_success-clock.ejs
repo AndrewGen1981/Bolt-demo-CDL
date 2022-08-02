@@ -106,7 +106,7 @@
                 <div class="separator-box">
                     <div class="separator-title">today's activity</div>
                     <div class="separator-line"></div>
-                    <div class="separator-date"><%= new Date(TODClocks.lastClock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                    <div class="separator-date"><%= new Date(TODClocks.lastClock.date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
                 </div>
                 <% let durationForToday = 0 %>
                 <% TODClocks.todayClocks.forEach((clock, index) => { %>
@@ -114,7 +114,7 @@
                     <div class="grid-table">
                         <span class="clock-index">#<%= index + 1 %>.</span>
                         <span class="clock-inout <%= lastClock %>"><%= clock.type %></span>
-                        <span class='clock-time'><%= new Date(clock.date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></span>
+                        <span class='clock-time'><%= new Date(clock.date).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %></span>
                         <% if (!isNaN(clock.lat) && !isNaN(clock.lon)) { %>
                             <a class="clock-coord" href="http://www.google.com/maps/place/<%= clock.lat %>,<%= clock.lon %>" target="_blank">
                                 <%= Math.round(clock.lat * 10000) / 10000 %>,

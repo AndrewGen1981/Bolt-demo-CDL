@@ -397,6 +397,9 @@ header {
     transform: scale(0.9);
 }
 
+.-learning-center {
+    margin: 0.5rem 0;
+}
 
 /* 
     Attendance Info
@@ -490,60 +493,6 @@ header {
 .-failed {
     color: #F27878;
     text-transform: capitalize;
-}
-
-
-/* FOOTER */
-footer {
-    margin-top: 10rem;
-    padding: 0.93rem 1.33rem;
-    width: 100%;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background: #0F1C2F;
-}
-.footer-left {
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    color: #657389;
-}
-.footer-center {
-    width: calc(var(--max-width) * 0.6);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-around;
-}
-.footer-item {
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    text-transform: uppercase;
-    text-decoration: none;
-
-    color: #FFFFFF;
-}
-.footer-right span {
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    color: #657389;
-}
-.footer-right a {
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    text-transform: uppercase;
-
-    color: #FFFFFF;
 }
 
 
@@ -693,11 +642,11 @@ footer {
     .-learning-center {
         width: 100%;
         display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
     }
-    .-learning-center a {
-        width: min-content;
+    .-learning-center #learning-center {
+        align-self: center;
     }
 
     .scoring-table {
@@ -712,18 +661,6 @@ footer {
 
     .skills-test-table {
         grid-template-columns: 1fr 1fr 0.5fr;
-    }
-
-    footer {
-        margin-top: 6.5rem;
-        display: flex;
-        flex-direction: column;
-    }
-    .footer-center {
-        margin: 2rem 0;
-        width: var(--max-width);
-        display: grid;
-        grid-template-columns: 1fr 1fr;
     }
 
     .email-not-verified-box {

@@ -39,11 +39,12 @@ const { qrCONFIG } = require('../admin/config-qr')
 // @UserSchema for mongoose
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    email: { type: String, lowercase: true, required: true },
+    email: { type: String, lowercase: true, required: true, unique: true },
     password: { type: String, required: true },
     created: { type: Date, default: new Date },
     lastSESS: { type: Date, default: new Date },
     token: { type: String, default: "not sent" },
+    tokenDetails: { type: String, default: "via email" },       //  will include admin's ID if verified manually
 
     // payments should be here, because not only Student can pay, User can pay too
     payments: [{
@@ -71,6 +72,9 @@ const userSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Student'
     },
+
+    // comment
+    comment: String,
 }, {
     collection: 'users'
 })
@@ -170,19 +174,20 @@ const scheduleSchema = new mongoose.Schema({
 })
 
 
+const { SCHOOL_DATA } = require("../admin/config")
 
 
 // @TOOLS SECTION
 function getDatePrefix(date) {
     //  returns date-prefix due to LA time zone
     // used for clock INs & OUTs
-    const timezoneOffset = (12 - 8) * 3600000       //  8h diff with LA time zone
+    const timezoneOffset = (12 - SCHOOL_DATA.GMTh) * 3600000       //  8h diff with LA time zone
     const diffTime = Math.abs(date - new Date("1900-01-01T00:00:00+00:00")) + timezoneOffset
     return Math.round(1 + diffTime / 86400000)
 }
 function getDatePrefixZeroZone(date) {
     //  returns date-prefix for clock update operations
-    // ignore time zones, because -08:00 is hardcoded at server side
+    //  time zone is hardcoded at server side
     const diffTime = Math.abs(date - new Date("1900-01-01T00:00:00+00:00"))
     return Math.round(2 + diffTime / 86400000)
 }

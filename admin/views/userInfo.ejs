@@ -86,61 +86,108 @@
 
     <div class="main-box">
         <% if(locals.user) { %>
-            <div class="student-top-info-box">
-                <%
-                    let fullName = "New User"
-                    if (user.dataCollection) {
-                        fullName = user.dataCollection.firstName.toLowerCase() !== "n/a" ? user.dataCollection.firstName + " " : ""
-                        fullName += user.dataCollection.middleName.toLowerCase() !== "n/a" ? user.dataCollection.middleName + " " : ""
-                        fullName += user.dataCollection.lastName.toLowerCase() !== "n/a" ? user.dataCollection.lastName + " " : ""
+            <section class="main-box-header">
+                <div class="student-top-info-box">
+                    <%
+                        let fullName = "New User"
+                        if (user.dataCollection) {
+                            fullName = user.dataCollection.firstName.toLowerCase() !== "n/a" ? user.dataCollection.firstName + " " : ""
+                            fullName += user.dataCollection.lastName.toLowerCase() !== "n/a" ? user.dataCollection.lastName + " " : ""
+                        }
+                    %>
+                    <h2 class="student-full-name"><%= fullName %></h2>
+                    
+                    <div class="student-top-inner-box">
+                        <div class="student-top-info-item">
+                            <span class="student-top-info-title">Nickname</span>
+                            <span class="student-top-info-value"><%= user.name.charAt(0).toUpperCase() + user.name.slice(1).toLowerCase() %></span>
+                        </div>
+                        <div class="student-top-info-item">
+                            <span class="student-top-info-title">Profile created</span>
+                            <span class="student-top-info-value"><%= new Date(user.created).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
+                        </div>
+                        <div class="student-top-info-item">
+                            <span class="student-top-info-title">Last session</span>
+                            <span class="student-top-info-value"><%= new Date(user.lastSESS).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %>, <%= new Date(user.lastSESS).toLocaleTimeString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %></span>
+                        </div>
+                    </div>      <!-- student-top-inner-box -->
+    
+                    <!-- hidden back link, for getting back -->
+                    <a class="-hidden" id="for-getting-back" href="/admin/user/<%= user._id %>" data-user="<%= user._id %>"></a>  <!-- this link is used for getting back to correct PAGE after PUT request -->
+    
+                    <!-- toolbar: block/unblock/delete -->
+                    <menu type="toolbar" class="toolbar-box">
+                        <div class="toolbar-btn" onclick="menuAction('unblock')" title="Unblock student (Allow Clocking)">
+                            <svg width="13" height="18" viewBox="0 0 13 18">
+                                <path d="M13 9L0 0V18L13 9Z" />
+                            </svg>
+                        </div>
+                        <div class="toolbar-btn" onclick="menuAction('block')" title="Block student (Unable Clocking)">
+                            <svg width="14" height="17" viewBox="0 0 14 17">
+                                <rect x="0" width="6" height="17" />
+                                <rect x="8" width="6" height="17" />
+                            </svg>
+                        </div>
+                        <div class="toolbar-btn" onclick="menuAction('archive')" id="archive-menu-item" title="Move to Archive">
+                            <svg width="22" height="17" viewBox="0 0 22 17">
+                                <path d="M0 0H22V3.92308H0V0Z" />
+                                <path d="M6.875 6.53846H1.375V17H20.625V6.53846H15.125V9.15385H6.875V6.53846Z" />
+                            </svg>
+                        </div>
+                        <div class="toolbar-btn -delete" onclick="menuAction('delete')" title="Delete without Archiving">
+                            <svg width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M17.9195 3.84876L12.8021 8.96613L17.9534 14.1174L14.1595 17.9113L9.00823 12.76L3.92027 17.848L0.223503 14.1512L5.31146 9.06328L0.160227 3.91204L3.95414 0.118126L9.10538 5.26936L14.2227 0.151993L17.9195 3.84876Z" />
+                            </svg>
+                        </div>
+                    </menu>
+                </div>      <!-- student-top-info-box -->
+
+                <div class="main-box-comment">
+                    <textarea id="mainComment" type="text" data-oldvalue="<%= user.comment %>" oninput="checkInput(this, mainSaveComment)" placeholder="comment"><%= user.comment %></textarea>
+                    <span id="mainSaveComment" class="show-edit-btn" onclick="saveComment(mainComment, this)">Save</span>
+                </div>  <!-- firstName -->
+
+                <!-- script for comments managing -->
+                <script defer>
+                    // show if changed
+                    function checkInput(comment, btn) {
+                        if (!comment) { return }
+                        comment.classList.toggle("-changed", comment.value != comment.dataset.oldvalue)
+                        if (btn) {
+                            btn.classList.toggle("-changed", comment.value != comment.dataset.oldvalue)
+                        }
                     }
-                %>
-                <h2 class="student-full-name"><%= fullName %></h2>
-                
-                <div class="student-top-inner-box">
-                    <div class="student-top-info-item">
-                        <span class="student-top-info-title">Nickname</span>
-                        <span class="student-top-info-value"><%= user.name.charAt(0).toUpperCase() + user.name.slice(1).toLowerCase() %></span>
-                    </div>
-                    <div class="student-top-info-item">
-                        <span class="student-top-info-title">Profile created</span>
-                        <span class="student-top-info-value"><%= new Date(user.created).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %></span>
-                    </div>
-                    <div class="student-top-info-item">
-                        <span class="student-top-info-title">Last session</span>
-                        <span class="student-top-info-value"><%= new Date(user.lastSESS).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %>, <%= new Date(user.lastSESS).toLocaleTimeString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) %></span>
-                    </div>
-                </div>      <!-- student-top-inner-box -->
+                    // fetch PUT to save comment
+                    async function saveComment(comment, btn) {
+                        if (!comment) { return }
+                        if (!comment.value) { return }
+                        if (comment.value === comment.dataset.oldvalue) { return }
+                        const response = await fetch("/admin/user", {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                userId: "<%= user._id %>",
+                                comment: comment.value,
+                                action: "update-comment"
+                            })
+                        })
+                        if (response.status > 200) {
+                            response.json()
+                            .then(res => {
+                                alert(`Issue: ${res.issue}`)
+                            })
+                        } else {
+                            alert("Your comment has been saved")
+                            comment.dataset.oldvalue = comment.value
+                            comment.classList.remove("-changed")
+                            if (btn) {
+                                btn.classList.remove("-changed")
+                            }
+                        }
+                    }
+                </script>
 
-                <!-- hidden back link, for getting back -->
-                <a class="-hidden" id="for-getting-back" href="/admin/user/<%= user._id %>" data-user="<%= user._id %>"></a>  <!-- this link is used for getting back to correct PAGE after PUT request -->
-
-                <!-- toolbar: block/unblock/delete -->
-                <menu type="toolbar" class="toolbar-box">
-                    <div class="toolbar-btn" onclick="menuAction('unblock')" title="Unblock student (Allow Clocking)">
-                        <svg width="13" height="18" viewBox="0 0 13 18">
-                            <path d="M13 9L0 0V18L13 9Z" />
-                        </svg>
-                    </div>
-                    <div class="toolbar-btn" onclick="menuAction('block')" title="Block student (Unable Clocking)">
-                        <svg width="14" height="17" viewBox="0 0 14 17">
-                            <rect x="0" width="6" height="17" />
-                            <rect x="8" width="6" height="17" />
-                        </svg>
-                    </div>
-                    <div class="toolbar-btn" onclick="menuAction('archive')" id="archive-menu-item" title="Move to Archive">
-                        <svg width="22" height="17" viewBox="0 0 22 17">
-                            <path d="M0 0H22V3.92308H0V0Z" />
-                            <path d="M6.875 6.53846H1.375V17H20.625V6.53846H15.125V9.15385H6.875V6.53846Z" />
-                        </svg>
-                    </div>
-                    <div class="toolbar-btn -delete" onclick="menuAction('delete')" title="Delete without Archiving">
-                        <svg width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M17.9195 3.84876L12.8021 8.96613L17.9534 14.1174L14.1595 17.9113L9.00823 12.76L3.92027 17.848L0.223503 14.1512L5.31146 9.06328L0.160227 3.91204L3.95414 0.118126L9.10538 5.26936L14.2227 0.151993L17.9195 3.84876Z" />
-                        </svg>
-                    </div>
-                </menu>
-            </div>      <!-- student-top-info-box -->
+            </section>      <!-- main-box-header -->
         <% } %>
 
 
@@ -319,6 +366,7 @@
                                     <span class="email-unsafe">!</span>
                                 <% } else { %>
                                     <% if (user.token === "verified") { %>
+                                        <span class="field-value"><%= user.tokenDetails %></span>
                                         <a class="field-link" href="mailto:<%= user.email %>"><%= user.email %></a>
                                     <% } else { %>
                                         <div class="field-link -unsafe"><%= user.email %></div>
@@ -333,6 +381,7 @@
                         <section class="row-item">
                             <div class="fields-set">
                                 <div class="field-title">Date of birth</div>
+                                <!-- DOB without timeZone, because of specific of saving -->
                                 <div class="field-value"><%= new Date(user.dataCollection.DOB).toLocaleDateString("en-CA") %></div>
                             </div>
                             <div class="edit-set -hidden" name="data-coll-edits" data-id="DOB">
@@ -472,14 +521,14 @@
                         <!-- @SIGNATURE -->
                         <section class="row-item">
                             <div class="field-title">completed as of</div>
-                            <div class="field-value"><%= new Date(user.dataCollection.created).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %> (<%= new Date(user.dataCollection.created).toLocaleTimeString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) %>)</div>
+                            <div class="field-value -left-just"><%= new Date(user.dataCollection.created).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %> (<%= new Date(user.dataCollection.created).toLocaleTimeString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %>)</div>
                         </section>
                         <!-- @ADMIN CHANGED -->
                         <% if(user.dataCollection.updatedAdmin) { %>
                             <%
                                 let updater = user.dataCollection.updatedAdmin + " "
-                                updater += new Date(user.dataCollection.updatedDate).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" })
-                                updater += "(" + new Date(user.dataCollection.updatedDate).toLocaleTimeString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) + ")"
+                                updater += new Date(user.dataCollection.updatedDate).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE })
+                                updater += "(" + new Date(user.dataCollection.updatedDate).toLocaleTimeString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) + ")"
                             %>
                             <section class="row-item">
                                 <div class="field-title">updated by</div>
@@ -847,7 +896,7 @@
                             <section class="row-item">
                                 <div class="fields-set">
                                     <div class="field-title">Graduation or GED Completion Date</div>
-                                    <div class="field-value"><%= new Date(user.application["education-grade-date"]).toLocaleDateString("en-US", { timeZone: "America/Los_Angeles" }) %></div>
+                                    <div class="field-value"><%= new Date(user.application["education-grade-date"]).toLocaleDateString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
                                 </div>
                                 <div class="edit-set -hidden" name="appl-edits" data-id="education-grade-date">
                                     <input class="input-box" type="date" name="education-grade-date" id="education-grade-date">
@@ -1290,15 +1339,15 @@
                         <!-- @SIGNATURE -->
                         <section class="row-item">
                             <div class="field-title">completed as of</div>
-                            <div class="field-value"><%= new Date(user.application.created).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %> (<%= new Date(user.application.created).toLocaleTimeString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) %>)</div>
+                            <div class="field-value -left-just"><%= new Date(user.application.created).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %> (<%= new Date(user.application.created).toLocaleTimeString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %>)</div>
                         </section>
 
                         <!-- @ADMIN CHANGED -->
                         <% if(user.application.updatedAdmin) { %>
                             <% 
                                 let updater = user.application.updatedAdmin + " "
-                                updater += new Date(user.application.updatedDate).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) + " "
-                                updater += "("+new Date(user.application.updatedDate).toLocaleTimeString("en-US", { timeZone: "America/Los_Angeles", hour12: false }) + ")"
+                                updater += new Date(user.application.updatedDate).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) + " "
+                                updater += "("+new Date(user.application.updatedDate).toLocaleTimeString("en-US", { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) + ")"
                             %>
                             <section class="row-item">
                                 <div class="field-title">updated by</div>

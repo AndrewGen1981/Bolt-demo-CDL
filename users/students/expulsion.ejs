@@ -16,7 +16,7 @@
     <% 
         function formatDate(textDate) {
             return textDate 
-            ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
+            ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE })
             : ''
         }
         

@@ -140,7 +140,7 @@
                     <a class='schema-col-name' id='name-<%=item._id %>' data-location="<%= item.student != undefined %>" href='/admin/user/<%= item._id %>'><%= capitalize(item.name) %></a>
                     <a class='schema-col-email' id='email-<%= item._id %>' href='mailto:<%= item.email %>'><%= item.email %></a>
         
-                    <% let msg = new Date(item.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>
+                    <% let msg = new Date(item.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %>
 
                     <% if (item.token === 'not sent') { %>
                         <div class='schema-col-token token-not-sent' id='token-<%= item._id %>' title="created <%= msg %>">not sent</div>
@@ -148,14 +148,14 @@
                         <% if (item.token === 'verified') { %>
                             <div class='schema-col-token token-verified' id='token-<%= item._id %>' title="created <%= msg %>">trusted</div>
                         <% } else { %>
-                            <div class='schema-col-token token-not-confirmed' id='token-<%= item._id %>' title="created <%= msg %>">unsafe</div>
+                            <div class='schema-col-token token-not-confirmed' id='token-<%= item._id %>' title="created <%= msg %>" onclick="verifyManualy('<%= item._id %>')">unsafe</div>
                         <% } %>
                     <% } %>
-        
+
                     <div class='schema-col-created' id='created-<%= item._id %>'><%= msg %></div>
                     <div class='schema-col-lastSESS' id='lastSESS-<%= item._id %>'>
-                        <span class="last-date"><%= new Date(item.lastSESS).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></span>
-                        <span class="last-time"><%= new Date(item.lastSESS).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></span>
+                        <span class="last-date"><%= new Date(item.lastSESS).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
+                        <span class="last-time"><%= new Date(item.lastSESS).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %></span>
                     </div>
 
                     <div class="schema-col-dataCollection" id='dataCollection-<%= item._id %>'>
@@ -216,10 +216,10 @@
 
                         if (fields.name) { document.querySelector(`#name-${id}`).textContent = fields.name }
                         if (fields.email) { document.querySelector(`#email-${id}`).textContent = fields.email }
-                        if (fields.created) { document.querySelector(`#created-${id}`).textContent = new Date(fields.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) }
+                        if (fields.created) { document.querySelector(`#created-${id}`).textContent = new Date(fields.created).toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }) }
                         if (fields.lastSESS) { 
-                            document.querySelector(`#lastSESS-${id} .last-date`).textContent = new Date(fields.lastSESS).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
-                            document.querySelector(`#lastSESS-${id} .last-time`).textContent = new Date(fields.lastSESS).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false })
+                            document.querySelector(`#lastSESS-${id} .last-date`).textContent = new Date(fields.lastSESS).toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" })
+                            document.querySelector(`#lastSESS-${id} .last-time`).textContent = new Date(fields.lastSESS).toLocaleTimeString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>", hour12: false })
                         }
                         if (fields.token) {
                             const token = document.querySelector(`#token-${id}`)
@@ -341,6 +341,25 @@
                 headerRightSide.style.width = "50%"
                 searchInput.style.display = "flex"
             }
+        }
+
+
+        function verifyManualy(id) {
+            if(!confirm("Would you like to approve Applicant's email manually?\n\n*This approach is dangerous, as it will give the Applicant access to the system, but email will remain unverified and maybe invalid")) { return }
+            fetch("/admin/student/token", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({id})
+            })
+            .then(async(res) => {
+                if(res.status != 200) {
+                    const badresp = await res.json()
+                    alert(`Unsuccessfully: ${ badresp.issue }`)
+                } else {
+                    alert("Success: Applicat's email was approved manually")
+                    window.location.reload()
+                }
+            })
         }
 
 

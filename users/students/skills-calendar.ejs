@@ -18,8 +18,8 @@
         const daysOfWeekShort = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
         const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
-        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) : '-' }
-        function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-CA', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' }
+        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-' }
+        function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE })+' - '+new Date(textDate).toLocaleTimeString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE, hour24: false }) : '-' }
         function dayColorClass(num) { return (num === 0 || num === 6) ? "-weekend" : num === 1 ? "-monday" : "-day-of-week" }
     
         function getLocColor(searchLocation) {

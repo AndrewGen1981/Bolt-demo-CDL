@@ -15,7 +15,7 @@
     <% 
         const usNumberFormat = new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
         
-        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) : '-' }
+        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-' }
 
         function getHistory(student) {
             let history = 'Scheduled Tests'
@@ -528,6 +528,7 @@
         const lastNames = document.querySelectorAll('.-lastName')
         const firstNames = document.querySelectorAll('.-firstName')
         const middleNames = document.querySelectorAll('.-middleName')
+        const studentKeys = document.querySelectorAll('.-key')
 
         function filterColumn(input) {
             if (!input) { return }
@@ -539,6 +540,7 @@
                 let toShow = lastNames[i].textContent.toLowerCase().includes(filter)
                 || firstNames[i].textContent.toLowerCase().includes(filter)
                 || middleNames[i].textContent.toLowerCase().includes(filter)
+                || studentKeys[i].textContent.toLowerCase().includes(filter)
                 
                 rows[i].classList.toggle('-hidden', !toShow)
                 rows[i].classList.toggle('-visible', toShow && filter)
@@ -688,7 +690,7 @@
                     endorsements: addedRow.querySelector('.-m-endorsements select').value,
                     brakes: addedRow.querySelector('.-m-brakes select').value,
                     strf: addedRow.querySelector('.-m-strf select').value,
-                    scheduledDate: new Date(addedRow.querySelector('.-m-preferred-date').textContent.replace("\n","T")+":00-08:00"),
+                    scheduledDate: new Date(addedRow.querySelector('.-m-preferred-date').textContent.replace("\n","T")+":00<%= locals.SCHOOL_DATA.DeltaGMT %>"),
                 }
                 skillsTestData.students.push(student)
             })

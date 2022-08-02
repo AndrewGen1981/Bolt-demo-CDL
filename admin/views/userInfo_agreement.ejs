@@ -174,12 +174,8 @@
         <div class="block-box-left">
             <% if(user.agreement.schoolSignRep) { %>        <!-- Agreement signed, show fields for editing -->
                 <section class="row-item -no-borders">
-                    <div class="field-title">Agreement is Signed on CDLSchool's behalf by:</div>
-                    <!-- uses signer.name instead of user.agreement.schoolSignRep(just an ID) because it defined already from server side -->
-                    <div class="field-value"><%= signer.name %> <%= new Date(user.agreement.schoolSignDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
-                </section>
-                <section class="row-item -no-borders">
-                    <div class="field-title">Admins can change financials terms of Agreement</div>
+                    <div class="field-title">Signed on CDLSchool's behalf by:</div>
+                    <div class="field-value -left-just"><%= signer.name %> <%= new Date(user.agreement.schoolSignDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
                 </section>
                 <!-- Tuition Cost -->
                 <section class="row-item">
@@ -234,14 +230,14 @@
             <!-- @SIGNATURE -->
             <section class="row-item">
                 <div class="field-title">completed as of</div>
-                <div class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %> (<%= new Date(user.agreement.created).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %>)</div>
+                <div class="field-value -left-just"><%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %> (<%= new Date(user.agreement.created).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %>)</div>
             </section>
             <!-- @UPDATED by whom and when -->
             <% if(user.agreement.updatedAdmin) { %>
                 <% 
                     let updater = user.agreement.updatedAdmin + ' '
-                    updater += new Date(user.agreement.updatedDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' })
-                    updater += '(' + new Date(user.agreement.updatedDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) + ')'
+                    updater += new Date(user.agreement.updatedDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE })
+                    updater += '(' + new Date(user.agreement.updatedDate).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) + ')'
                 %>
                 <section class="row-item">
                     <div class="field-title">updated by</div>
@@ -269,11 +265,17 @@
 
     <!-- Payments section -->
     <%
-        function leadZero(a) {return a.length < 2 ? `0${a}` : a}
-        function getYYYYMMDD(date) { const a = new Date(date).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }).split('/'); return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`}
+        function leadZero(a) {
+            return a.length < 2 ? `0${a}` : a
+        }
         
-        function getHHMMSS(time) {
-            const a = new Date(time).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }).replace(' ',':').split(':');
+        function getYYYYMMDD(date) {
+            const a = new Date(date).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }).split('/');
+            return `${a[2]}-${leadZero(a[0])}-${leadZero(a[1])}`
+        }
+        
+        function getHHMMSS(time) { 
+            const a = new Date(time).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }).replace(' ',':').split(':');
             return `${leadZero(a[0])}:${leadZero(a[1])}`
         }
     %>
@@ -292,6 +294,7 @@
                     <p class='-table-header -to-hide-500'>Action</p>
                     
                     <% if(user.payments) { %>
+                        <input type="hidden" id="pmtsQty" value="<%= user.payments.length %>" />
                         <% user.payments.forEach((payment, index) => { %>
                             <select name="paymentType" id="paymentType<%= index %>" data-was="<%= payment.type %>" onchange="changeTypeIco(this)">
                                 <optgroup label="Personal">
@@ -314,6 +317,7 @@
                                     <option value="Wire">Wire</option>
                                 </optgroup>
                                 <optgroup label="Other">
+                                    <option value="Stripe">Stripe</option>
                                     <option value="triumphPay">triumphPay</option>
                                     <option value="uShip">uShip</option>
                                     <option value="other">other</option>
@@ -323,7 +327,7 @@
                             <!-- don't know -->
                             <% let timedate = `${getYYYYMMDD(payment.whenPaid)}T${getHHMMSS(payment.whenPaid)}` %>
                             <input type="datetime-local" data-was="<%= timedate %>" name="paymentDate" id="paymentDate<%= index %>" value="<%= timedate %>" />
-                            <input type="number" data-was="<%= payment.ammount %>" min=0 step=.01 name="paymentAmount" id="paymentAmount<%= index %>" value="<%= payment.ammount %>" oninput="recalculateBalance()" />
+                            <input type="number" data-was="<%= payment.ammount %>" step=.01 name="paymentAmount" id="paymentAmount<%= index %>" value="<%= payment.ammount %>" class="<%= payment.ammount < 0 ? '-refund' : '-pmt' %>" oninput="recalculateBalance()" />
                             <input class="-to-hide-500" type="text" data-was="<%= payment.notes %>" name="paymentNotes" id="paymentNotes<%= index %>" value="<%= payment.notes %>" />
                             <div class="pmt-ico -fa-minus -to-hide-500" data-index="<%= index %>" id='paymentMinus<%= index %>' onclick="delPayment(this)"></div>
                         <% }) %>
@@ -358,14 +362,14 @@
                     </select>
                     <div class="-to-hide-500" name="payment-ico" id="paymentIco-last"></div>
                     <input type="datetime-local" data-was="" name="paymentDate" id="paymentDate-last">
-                    <input type="number" data-was="" min=0 step=.01 name="paymentAmount" id="paymentAmount-last" oninput="recalculateBalance()" />
+                    <input type="number" data-was="" step=.01 name="paymentAmount" id="paymentAmount-last" oninput="recalculateBalance()" />
                     <input class="-to-hide-500" type="text" data-was="" name="paymentNotes" id="paymentNotes-last">
                     <div class="pmt-ico -fa-plus -to-hide-500" onclick="addPayment(this)"></div>
                 </div>  <!-- payment-table -->
 
                 <p class="payments-info"></p>
                 <div class="row-buttons-center">
-                    <button type='submit' class='-btn'>Update Payments</button>
+                    <button type='submit' class='-btn -large-btn'>Update Payments</button>
                 </div>
             </section>
         <% } %>
@@ -467,13 +471,13 @@
 
                 const totalCost = (tuitionCost || 0) + (regisrFee || 0) + (supplyFee || 0) + (otherFee || 0)
 
-
                 let totalPaid = 0
                 
                 const payments = document.getElementsByName('paymentAmount')
                 for (let i=0; i < payments.length; i++) {
                     if (payments[i].value) {
                         totalPaid += parseFloat(payments[i].value)
+                        payments[i].classList.toggle("-refund", parseFloat(payments[i].value) < 0)
                     }
                 }
 
@@ -626,6 +630,11 @@
                 pmtAmount.remove()
                 pmtNotes.remove()
                 minus.remove()
+                // mark that pmt was deleted
+                const pmtsQty = document.querySelector("#pmtsQty")
+                if (pmtsQty) {
+                    pmtsQty.value = "pmt was deleted"
+                }
                 // changing order of all pmtInputs, except last one
                 const pmtInputs = document.getElementsByName("paymentType")
                 for (let i=0; i < pmtInputs.length - 1; i++) {   // except last one, which is for adding (blank)
@@ -660,7 +669,7 @@
             const pmtDate = document.querySelector(`#paymentDate-last`)
             const pmtAmount = document.querySelector(`#paymentAmount-last`)
             const pmtNotes = document.querySelector(`#paymentNotes-last`)
-            if (parseFloat(pmtAmount.value) > 0) {
+            if (parseFloat(pmtAmount.value) > 0 || parseFloat(pmtAmount.value) < 0) {
                 if(!pmtType.value || !pmtDate.value || !pmtNotes.value) {
                     showInfo(document.querySelector('.payments-info'), 'Check last payment, amount added, but some fields left blank')
                     return e.preventDefault()
@@ -688,9 +697,15 @@
                     theSame = checkIfSame(pmtInputs[i], 'paymentNotes')
                     if (!theSame) { break }
                 }
+                // check if something was deleted or added
+                if (theSame) {
+                    const pmtsQty = document.querySelector("#pmtsQty")
+                    const oldPmtsQty = pmtsQty ? pmtsQty.value : 0
+                    theSame = oldPmtsQty == pmtInputs.length - 1
+                }
             }
 
-            if (theSame) { 
+            if (theSame) {
                 showInfo(document.querySelector('.payments-info'), 'No changes found')
                 return e.preventDefault()
             }
@@ -709,13 +724,13 @@
     <div class="field-info">Agreement was not signed on user's behalf yet.</div>
 
     <% if(user.dataCollection) { %>
-        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
     <% } else { %>
         <div class="field-warning">#1 Data Collection hasn't been completed by User.</div>
     <% } %>
     
     <% if(user.application) { %>
-        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
     <% } else { %>
         <div class="field-warning">#2 Application form is not ready yet.</div>
     <% } %>

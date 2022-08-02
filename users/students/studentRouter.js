@@ -1,110 +1,111 @@
 // Handles all admin/students routes
 // used in ADMIN.JS
 
-const express = require("express");
-const studentRouter = express.Router();
-const path = require("path");
+const express = require("express")
+const studentRouter = express.Router()
+const path = require("path")
 
 // CONFIG
-const admin = require("../../admin/config");
+const admin = require("../../admin/config")
 
 // MODELS for mongoose
-const { User, Student, StudentCONFIG, tools } = require("../userModel");
-const { Tuition } = require("../tuition/tuitionModel");
-const chart = require("../../admin/adminProfileCharts");
+const { User, Student, StudentCONFIG, tools } = require("../userModel")
+const { Tuition } = require("../tuition/tuitionModel")
+const chart = require("../../admin/adminProfileCharts")
 
 
 // @Auth check middleware
 function ifCanRead (req, res, next) {
-  // check Admin's Auth - if can READ
-  if (!admin.checkAdminsAuth(req.session.adminData, 'read')) {
-      return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read" })
-  } else { next() }
+    // check Admin's Auth - if can READ
+    if (!admin.checkAdminsAuth(req.session.adminData, 'read')) {
+        return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read" })
+    } else { next() }
 }
 function ifCanWrite (req, res, next) {
-  // check Admin's Auth - if can WRITE
-  if (!admin.checkAdminsAuth(req.session.adminData, 'write')) {
-      return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "write" })
-  } else { next() }
+    // check Admin's Auth - if can WRITE
+    if (!admin.checkAdminsAuth(req.session.adminData, 'write')) {
+        return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "write" })
+    } else { next() }
 }
 function ifCanReadOrInstructor (req, res, next) {
-  // check Admin's Auth - if INSTRUCTOR
-  if (admin.checkAdminsAuth(req.session.adminData, 'read')) { return next() }
-  if (admin.checkAdminsAuth(req.session.adminData, 'instructor')) { return next() }
-  return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read or instructor" })
+    // check Admin's Auth - if INSTRUCTOR
+    if (admin.checkAdminsAuth(req.session.adminData, 'read')) { return next() }
+    if (admin.checkAdminsAuth(req.session.adminData, 'instructor')) { return next() }
+    return res.render(path.join(global.__basedir + "/static/general-pages/NEA/NEA.ejs"), { auth: "read or instructor" })
 }
 
 
 // @Students ROUTES
 // tool to get students for INs
 async function getStudentsForINs(date, location) {
-  const filter = location === admin.LOCATION.All ? {} : { location }
-  filter.status = "unblock"
-  filter.graduate = "no"
-  try {
-    const students = await Student
-    .find(filter)
-    .select("key fullName TTT clocks location user")
-    .populate({ path: "scoring", select: "scoringsInCab scoringsOutCab scoringsBacking scoringsCity" })
-    .sort("location")    //  .sort({ location: 1, key: 1 })
+    const filter = location === admin.LOCATION.All ? {} : { location }
+    filter.status = "unblock"
+    filter.graduate = "no"
+    try {
+        const students = await Student
+        .find(filter)
+        .select("key fullName TTT clocks location user")
+        .populate({ path: "scoring", select: "scoringsInCab scoringsOutCab scoringsBacking scoringsCity" })
+        .sort("location")    //  .sort({ location: 1, key: 1 })
 
-    let inStudents = []
-    const today = tools.getDatePrefix(date).toString()
+        let inStudents = []
+        const today = tools.getDatePrefix(date).toString()
 
-    students.forEach((student) => {
-      let todayClocks = student.clocks.filter((clock) => {
-        return clock.key == today
-      })
-      if (todayClocks.length) {
-        student.clocks = todayClocks
-        inStudents.push(student)
-      }
-    })
-    return inStudents
-  } catch (e) {
-    console.log(`Error on getting students fot INs list: ${e.message}`)
-    return []
-  }
+        students.forEach((student) => {
+            let todayClocks = student.clocks.filter((clock) => {
+                return clock.key == today
+            })
+            if (todayClocks.length) {
+                student.clocks = todayClocks
+                inStudents.push(student)
+            }
+        })
+        return inStudents
+    } catch (e) {
+        console.log(`Error on getting students fot INs list: ${e.message}`)
+        return []
+    }
 }
 
 
 // INs route is a root one
 studentRouter.get("/", ifCanReadOrInstructor, async (req, res) => {
-  const adminProfile = req.session.adminData
-  const inStudents = await getStudentsForINs(new Date(), adminProfile.location)
-  res.render(path.join(__dirname + "/INs.ejs"), { inStudents, today: true })
+    const adminProfile = req.session.adminData
+    const inStudents = await getStudentsForINs(new Date(), adminProfile.location)
+    res.render(path.join(__dirname + "/INs.ejs"), { inStudents, today: true })
 })
 
 
 // INs route for not today's date
 studentRouter.post("/", ifCanReadOrInstructor, async (req, res) => {
-  const { clockedAsOf } = req.body;
-  if (!clockedAsOf) {
-    // date to retrieve not passed, just redirecting to ordinary GET INs
-    return res.status(400).redirect("/admin/student");
-  }
+    const { clockedAsOf } = req.body
+    if (!clockedAsOf) {
+        // date to retrieve not passed, just redirecting to ordinary GET INs
+        return res.status(400).redirect("/admin/student")
+    }
+    // for using calendar picker in INs
+    const date = `${ clockedAsOf }T00:00:00${ admin.getTimeDelta_with_SchoolSpecific(new Date(clockedAsOf)) || admin.SCHOOL_DATA.GMT }`
+    const adminProfile = req.session.adminData
+    const inStudents = await getStudentsForINs(new Date(date), adminProfile.location)
+    const today = tools.getDatePrefix(new Date(date)).toString() === tools.getDatePrefix(new Date()).toString()
 
-  const date = `${clockedAsOf}T00:00:00-08:00`;
-  const adminProfile = req.session.adminData
-  const inStudents = await getStudentsForINs(new Date(date), adminProfile.location)
-  const today = tools.getDatePrefix(new Date(date)).toString() === tools.getDatePrefix(new Date()).toString();
-
-  res.render(path.join(__dirname + "/INs.ejs"), { inStudents, today, date });
-});
+    res.render(path.join(__dirname + "/INs.ejs"), { inStudents, today, date })
+})
 
 
 // Student List populate constants
-const studentPopulated = "key TTT created status location";
+const studentPopulated = "key TTT created status location"
 const studentListPopulate = [
-  { path: "user", select: "payments",
-    populate: [
-      { path: "dataCollection", select: "firstName lastName middleName" },
-      { path: "agreement", select: "program class transmission visiting tuitionCost regisrFee supplyFee otherFee payment thirdPartyList schoolSignRep" },
-    ]
-  },
-  { path: "tuition", select: "isAllowed avLessonsRate" },
-  { path: "scoring", select: "isAllowed scoringsInCab scoringsOutCab scoringsBacking scoringsCity" },
-];
+    { path: "user", select: "payments",
+        populate: [
+            { path: "dataCollection", select: "firstName lastName middleName" },
+            { path: "agreement", select: "program class transmission visiting tuitionCost regisrFee supplyFee otherFee payment thirdPartyList schoolSignRep" },
+        ]
+    },
+    { path: "tuition", select: "isAllowed avLessonsRate" },
+    { path: "scoring", select: "isAllowed scoringsInCab scoringsOutCab scoringsBacking scoringsCity" },
+]
+
 
 // @GET admin/student/list
 studentRouter.get("/list", ifCanReadOrInstructor, async (req, res) => {
@@ -114,30 +115,30 @@ studentRouter.get("/list", ifCanReadOrInstructor, async (req, res) => {
     const defaulLocationFilter =
         adminProfile.location === admin.LOCATION.All
         ? {}
-        : { location: [adminProfile.location, admin.LOCATION.Unset] };
+        : { location: [adminProfile.location, admin.LOCATION.Unset] }
     // location can be passed in a query
-    const requestedLocation = req.query.location;
-    let requestedLocationFilter = {}; // All as default
+    const requestedLocation = req.query.location
+    let requestedLocationFilter = {} // All as default
     if (requestedLocation) {
         if (requestedLocation != admin.LOCATION.All) {
             // if not All, then specify
-            requestedLocationFilter = { location: requestedLocation };
+            requestedLocationFilter = { location: requestedLocation }
         }
     }
     // 'shownLocation' is a parament to set locations selected property to what was realy shown
     const shownLocation = requestedLocation
         ? requestedLocation
-        : adminProfile.location;
+        : adminProfile.location
     //    adding location to a filter
     const filter = requestedLocation
         ? requestedLocationFilter
-        : defaulLocationFilter;
+        : defaulLocationFilter
     // adding enrollment status to a filter
-    filter.graduate = req.query.graduate || "no";
+    filter.graduate = req.query.graduate || "no"
     // DB query
     const students = await Student.find(filter)
-        .select(studentPopulated)
-        .populate(studentListPopulate);
+    .select(studentPopulated)
+    .populate(studentListPopulate)
     res.render(path.join(__dirname + "/student-list.ejs"), {
         students,
         adminProfile,
@@ -145,29 +146,29 @@ studentRouter.get("/list", ifCanReadOrInstructor, async (req, res) => {
         locations: admin.LOCATION,
         shownEnrollmentStatus: req.query.graduate || "no",
         enrollmentStatuses: tools.enrollmentStatusesArray,
-    });
-});
+    })
+})
 
 
 // for showing a shorter Student List variants, for exapmle when click on admin-profile-chart-columns
 // or when clicking on graduates charts column
 studentRouter.get("/shortlist", ifCanReadOrInstructor, async (req, res) => {
-    const year = req.query.year;
-    const month = req.query.month;
-    const location = req.query.location;
-    const graduate = req.query.graduate;
+    const year = req.query.year
+    const month = req.query.month
+    const location = req.query.location
+    const graduate = req.query.graduate
     if (year && month && location) {
         // TOOL: leading zero
         function leadingZero(n) { return n < 10 ? `0${n}` : `${n}` }
         // calculating period for request
-        const n1 = chart.monthNames.indexOf(month) + 1;
-        const n2 = (n1 + 1) % 12;
+        const n1 = chart.monthNames.indexOf(month) + 1
+        const n2 = (n1 + 1) % 12
         // receiving start-year and end-year
-        const startYear = parseInt(year);
-        const endYear = startYear + Math.trunc((n1 + 1) / 12);
+        const startYear = parseInt(year)
+        const endYear = startYear + Math.trunc((n1 + 1) / 12)
         // receiving start-date and end-date
-        const startDate = `${startYear}-${leadingZero(n1)}-01T00:00:00Z`;
-        const endDate = `${endYear}-${leadingZero(n2)}-01T00:00:00Z`;
+        const startDate = `${startYear}-${leadingZero(n1)}-01T00:00:00Z`
+        const endDate = `${endYear}-${leadingZero(n2)}-01T00:00:00Z`
         // defining admin and searching Students
         const adminProfile = req.session.adminData
         const isLocation = 
@@ -175,41 +176,41 @@ studentRouter.get("/shortlist", ifCanReadOrInstructor, async (req, res) => {
         location === admin.LOCATION.Unset ||
         location === adminProfile.location
         if (isLocation) {
-        const filter = { location }
-        // add graduate to a filter if was passed
-        if (graduate) {
-            filter.enrollmentStatusUpdate = { $gte: startDate, $lte: endDate }
-            filter.graduate = graduate
-        } else {
-            filter.created = { $gte: startDate, $lte: endDate }
-        }
-        // get students with filter
-        const students = await Student
-            .find(filter)
-            .select(studentPopulated)
-            .populate(studentListPopulate);
-        // form object to pass into engine
-        const passedLocals = {
-            students,
-            adminProfile,
-            shownLocation: location,
-            locations: admin.LOCATION,
-        }
-        // add graduate if needed. If NOT should be not passed to engine at all
-        if (graduate) {
-            passedLocals.shownEnrollmentStatus = graduate
-            passedLocals.enrollmentStatuses = tools.enrollmentStatusesArray
-        }
-        return res.render(path.join(__dirname + "/student-list.ejs"), passedLocals);
+            const filter = { location }
+            // add graduate to a filter if was passed
+            if (graduate) {
+                filter.enrollmentStatusUpdate = { $gte: startDate, $lte: endDate }
+                filter.graduate = graduate
+            } else {
+                filter.created = { $gte: startDate, $lte: endDate }
+            }
+            // get students with filter
+            const students = await Student
+                .find(filter)
+                .select(studentPopulated)
+                .populate(studentListPopulate)
+            // form object to pass into engine
+            const passedLocals = {
+                students,
+                adminProfile,
+                shownLocation: location,
+                locations: admin.LOCATION,
+            }
+            // add graduate if needed. If NOT should be not passed to engine at all
+            if (graduate) {
+                passedLocals.shownEnrollmentStatus = graduate
+                passedLocals.enrollmentStatuses = tools.enrollmentStatusesArray
+            }
+            return res.render(path.join(__dirname + "/student-list.ejs"), passedLocals)
         }
     }
-    res.redirect("/admin/profile");
-});
+    res.redirect("/admin/profile")
+})
 
 
 // @POST admin/student/new/id
 studentRouter.post("/new/:id", ifCanWrite, async (req, res) => {
-    const userId = req.params.id; // receiving user _id from posting form
+    const userId = req.params.id // receiving user _id from posting form
     try {
         const user = await User.findById(userId).populate({ path: "dataCollection", select: "firstName lastName" })     // finds a user with given _id
         if (!user) { return res.status(404).send(`Cannot find user with id: ${userId}`) }
@@ -238,60 +239,60 @@ studentRouter.post("/new/:id", ifCanWrite, async (req, res) => {
 
         // saving backlink in a User model on new Student
         user.student = student._id
-        await user.save();
+        await user.save()
         // creating new Tuition record for this Student
         const tuition = await new Tuition({
             key: lastStudentKey,
             email: user.email,
             student_id_string: student._id,
-        }).save();
+        }).save()
         // saving ref in Student for its lessons
-        student.tuition = tuition._id;
-        await student.save();
+        student.tuition = tuition._id
+        await student.save()
     } catch (e) {
-        return res.status(500).send(`Issue when saving a new sudent: ${e.message}`);
+        return res.status(500).send(`Issue when saving a new sudent: ${e.message}`)
     }
-    res.status(200).redirect("/admin/user-area"); // ok, redirecting to users area
-});
+    res.status(200).redirect("/admin/user-area") // ok, redirecting to users area
+})
 
 
 // Updates Location
 studentRouter.post("/update-location", ifCanWrite, async (req, res) => {
-    const { userId, studentId, location } = req.body;
+    const { userId, studentId, location } = req.body
     if (!userId || !studentId || !location) {
-        return res.status(404).send(`Location updating isssue: ${userId}, ${studentId}, ${location}`);
+        return res.status(404).send(`Location updating isssue: ${userId}, ${studentId}, ${location}`)
     }
     try {
-        const student = await Student.findById(studentId);
+        const student = await Student.findById(studentId)
         if (!student) {
-            return res.status(404).send(`Cannot find student with ID: ${studentId}`);
+            return res.status(404).send(`Cannot find student with ID: ${studentId}`)
         }
         if (student.location != location) {
-            student.location = location;
-            await student.save();
+            student.location = location
+            await student.save()
         }
-        res.redirect(`/admin/user/${userId}?activatetab=4`);
+        res.redirect(`/admin/user/${userId}?activatetab=4`)
     } catch (e) {
-        return res.status(500).send(`Location updating isssue: ${e.message}`);
+        return res.status(500).send(`Location updating isssue: ${e.message}`)
     }
-});
+})
 
 
 // Updates Learning Center Access
 studentRouter.get("/allow-tuition/:id", ifCanWrite, async (req, res) => {
     // Allows tuition for an existing Student
     // auth is good
-    const studentId = req.params.id; // receiving student _id from client-side
-    const student = await Student.findById(studentId).select(["key", "email", "user", "tuition"]);
+    const studentId = req.params.id // receiving student _id from client-side
+    const student = await Student.findById(studentId).select(["key", "email", "user", "tuition"])
 
     if (studentId && student) {
         try {
-            let tuition = await Tuition.findOne({ student_id_string: studentId });
+            let tuition = await Tuition.findOne({ student_id_string: studentId })
             // doing the next NOT depending if student has a tuition record already or not. Because records can be not mutually referred
             // double check if there is not tuition record for this student
             if (tuition) {
                 //  if there is a tuition record for this student
-                student.tuition = tuition._id;
+                student.tuition = tuition._id
             } else {
                 //  if there is NO tuition record for this student
                 // creating new Tuition record for this Student
@@ -299,173 +300,169 @@ studentRouter.get("/allow-tuition/:id", ifCanWrite, async (req, res) => {
                     key: student.key,
                     email: student.email,
                     student_id_string: student._id,
-                }).save();
+                }).save()
                 // saving ref in Student for its lessons
-                student.tuition = tuition._id;
+                student.tuition = tuition._id
             }
-            await student.save();
-            return res.status(200).redirect(`/admin/user/${student.user}?activatetab=4`);
+            await student.save()
+            return res.status(200).redirect(`/admin/user/${student.user}?activatetab=4`)
         } catch (e) {
-            return res.status(500).send(`Server issue: ${e.message}`);
+            return res.status(500).send(`Server issue: ${e.message}`)
         }
     }
-    return res.status(400).send(`Cannot find Student with id: ${studentId}`);
-});
+    return res.status(400).send(`Cannot find Student with id: ${studentId}`)
+})
 
 
 studentRouter.get("/change-tuition-access/:id", ifCanWrite, async (req, res) => {
     // Forbids tuition for an existing Student
     // auth is good
-    const studentId = req.params.id; // receiving student _id from client-side
-    const action = req.query.action;
-    const student = await Student.findById(studentId).select(["user", "tuition"]);
-
+    const studentId = req.params.id // receiving student _id from client-side
+    const action = req.query.action
+    const student = await Student.findById(studentId).select(["user", "tuition"])
     if (student) {
-      if (student.tuition) {
-        const tuition = await Tuition.findById(student.tuition).select("isAllowed");
-        if (tuition) {
-          if (action === "enable") {
-            tuition.isAllowed = true;
-          }
-          if (action === "disable") {
-            tuition.isAllowed = false;
-          }
-          if (action === "enable" || action === "disable") {
-            try {
-              await tuition.save();
-              return res.status(200).redirect(`/admin/user/${student.user}?activatetab=4`);
-            } catch (e) {
-              return res.status(500).send(`Cannot save tuition record: ${e.message}`);
+        if (student.tuition) {
+            const tuition = await Tuition.findById(student.tuition).select("isAllowed")
+            if (tuition) {
+                if (action === "enable") {
+                    tuition.isAllowed = true
+                }
+                if (action === "disable") {
+                    tuition.isAllowed = false
+                }
+                if (action === "enable" || action === "disable") {
+                    try {
+                        await tuition.save()
+                        return res.status(200).redirect(`/admin/user/${student.user}?activatetab=4`)
+                    } catch (e) {
+                        return res.status(500).send(`Cannot save tuition record: ${e.message}`)
+                    }
+                }
             }
-          }
+            return res.status(404).end()
         }
-        return res.status(404).end();
-      }
     }
-    return res.status(400).send(`Cannot find Student with id: ${studentId}`);
+    return res.status(400).send(`Cannot find Student with id: ${studentId}`)
   }
-);
+)
+
 
 // @POST admin/student/print-bulk-qr
 studentRouter.post("/print-bulk-qr", ifCanRead, (req, res) => {
     // BULK QRs printing
     let { qrsToPrint, qrsNamesToPrint, qrsKeysToPrint, qrsClassesToPrint } = req.body
-
     if (!Array.isArray(qrsToPrint)) {
-        qrsToPrint = [qrsToPrint];
-        qrsNamesToPrint = [qrsNamesToPrint];
-        qrsKeysToPrint = [qrsKeysToPrint];
-        qrsClassesToPrint = [qrsClassesToPrint];
+        qrsToPrint = [qrsToPrint]
+        qrsNamesToPrint = [qrsNamesToPrint]
+        qrsKeysToPrint = [qrsKeysToPrint]
+        qrsClassesToPrint = [qrsClassesToPrint]
     }
-
     res.render(path.join(__dirname + "/qr_bulk-print.ejs"), {
         qrsToPrint, qrsNamesToPrint, qrsKeysToPrint, qrsClassesToPrint,
         appDomain: admin.appDomain
     })
 })
 
+
 // bringing skills test location names and color schemes for initial tests and retests
-const skillsTestLocations = require("./skills-test-config");
+const skillsTestLocations = require("./skills-test-config")
+
 
 // @GET admin/student/skills-test
 // ?TTT=100
 studentRouter.get("/skills-test", ifCanRead, async (req, res) => {
-  const minTTT = req.query.TTT || 100;
-  try {
-    const students = await Student
-      .where("TTT").gte(parseFloat(minTTT))
-      .where("status").equals("unblock")
-      .where("graduate").equals("no")   //  this prevents graduates to be shown in skills-test
-      .select("key TTT created location skillsTest")
-      .populate([
-        {
-          path: "user",
-          populate: {
-            path: "dataCollection",
-            select: "firstName lastName middleName DOB phone",
-          },
-        },
-        {
-          path: "user",
-          populate: {
-            path: "application",
-            select: "vehicle-license",
-          },
-        },
-        {
-          path: "user",
-          select: "balance payments",
-          populate: {
-            path: "agreement",
-            select: "class transmission tuitionCost regisrFee supplyFee otherFee",
-          },
-        },
-        { path: "tuition", select: "avLessonsRate" },
-        {
-          path: "scoring",
-          select: "scoringsInCab scoringsOutCab scoringsBacking scoringsCity",
-        },
-      ])
-      .sort({ location: 1, TTT: -1 });
-    res.status(200).render(path.join(__dirname + "/skills-test.ejs"), {
-      students,
-      minTTT,
-      skillsTestLocations,
-    });
-  } catch (e) {
-    res.status(500).send(`Server issue: ${e.message}`);
-  }
-});
+    const minTTT = req.query.TTT || 100
+    try {
+        const students = await Student
+        .where("TTT").gte(parseFloat(minTTT))
+        .where("status").equals("unblock")
+        .where("graduate").equals("no")   //  this prevents graduates to be shown in skills-test
+        .select("key TTT created location skillsTest")
+        .populate([
+            {
+                path: "user",
+                populate: {
+                    path: "dataCollection",
+                    select: "firstName lastName middleName DOB phone",
+                },
+            },
+            {
+                path: "user",
+                populate: {
+                    path: "application",
+                    select: "vehicle-license",
+                },
+            },
+            {
+                path: "user",
+                select: "balance payments",
+                populate: {
+                    path: "agreement",
+                    select: "class transmission tuitionCost regisrFee supplyFee otherFee",
+                },
+            },
+            { path: "tuition", select: "avLessonsRate" },
+            {
+                path: "scoring",
+                select: "scoringsInCab scoringsOutCab scoringsBacking scoringsCity",
+            },
+        ])
+        .sort({ location: 1, TTT: -1 })
+        res.status(200).render(path.join(__dirname + "/skills-test.ejs"), { students, minTTT, skillsTestLocations })
+    } catch (e) {
+        res.status(500).send(`Server issue: ${e.message}`)
+    }
+})
+
 
 // @PUT Updates data about skills test inside Student
 studentRouter.put("/skills-test", ifCanWrite, async (req, res) => {
     try {
-        const skillsData = req.body;
+        const skillsData = req.body
         if (!skillsData || !skillsData.students) {
-        res.status(404).end();
+            res.status(404).end()
         }
         skillsData.students.map(async (student) => {
-        if (student && student.studentId) {
-            let grad = await Student.findById(student.studentId);
-            grad.skillsTest.push({
-            testLocation: skillsData.testLocation,
-            testType: student.testType,
-            vehicleType: student.vehicleType,
-            endorsements: student.endorsements,
-            brakes: student.brakes,
-            strf: student.strf,
-            scheduledDate: student.scheduledDate,
-            });
-            await grad.save();
-        }
-        });
-        res.status(200).end();
+            if (student && student.studentId) {
+                let grad = await Student.findById(student.studentId)
+                grad.skillsTest.push({
+                    testLocation: skillsData.testLocation,
+                    testType: student.testType,
+                    vehicleType: student.vehicleType,
+                    endorsements: student.endorsements,
+                    brakes: student.brakes,
+                    strf: student.strf,
+                    scheduledDate: student.scheduledDate,
+                })
+                await grad.save()
+            }
+        })
+        res.status(200).end()
     } catch (e) {
-        res.status(500).send(`Server issue: ${e.message}`);
+        res.status(500).send(`Server issue: ${e.message}`)
     }
-});
+})
+
 
 // @DEL Deletes a specific skills test inside Student record
 // skills test _id should be passed in body
 studentRouter.delete("/skills-test/:id", ifCanWrite, async (req, res) => {
     try {
-        const dataStr = req.params.id;
+        const dataStr = req.params.id
         if (dataStr) {
-        params = dataStr.split("&"); // params[0] - student._id; params[1] - test._id`
-        if (params.length === 2) {
-            const student = await Student.findById(params[0]);
-            if (student.skillsTest) {
-            student.skillsTest = student.skillsTest.filter(
-                (test) => test._id != params[1]
-            );
-            await student.save();
-            return res.status(200).json({ newTests: student.skillsTest });
+            params = dataStr.split("&") // params[0] - student._id; params[1] - test._id`
+            if (params.length === 2) {
+                const student = await Student.findById(params[0])
+                if (student.skillsTest) {
+                    student.skillsTest = student.skillsTest.filter((test) => test._id != params[1])
+                    await student.save()
+                    return res.status(200).json({ newTests: student.skillsTest })
+                }
             }
         }
-        }
-        return res.status(400).send("Wrong parametrs sent");
+        return res.status(400).send("Wrong parametrs sent")
     } catch (e) {
-        res.status(500).send(`Server issue: ${e.message}`);
+        res.status(500).send(`Server issue: ${e.message}`)
     }
 })
 
@@ -474,16 +471,16 @@ studentRouter.delete("/skills-test/:id", ifCanWrite, async (req, res) => {
 // ?year=2022&month=2
 studentRouter.get("/skills-calendar", ifCanWrite, async (req, res) => {
     // backlink to skills-test (setting a minTTT like it was before)
-    const minTTT = req.query.backtoTTT;
+    const minTTT = req.query.backtoTTT
     // parsing query for year and month
-    const date = new Date();
+    const date = new Date()
     // start date year and month
-    let year = parseInt(req.query.year || date.getFullYear());
-    year = year > 2000 ? year : date.getFullYear();
-    const month = parseInt(req.query.month || date.getMonth() + 1);
+    let year = parseInt(req.query.year || date.getFullYear())
+    year = year > 2000 ? year : date.getFullYear()
+    const month = parseInt(req.query.month || date.getMonth() + 1)
 
-    const startDate = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)); //  00:00:00Z
-    const endDate = new Date(Date.UTC(year, month, 0, 23, 59, 59)); //  day = 0 - last day of prev.month
+    const startDate = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)) //  00:00:00Z
+    const endDate = new Date(Date.UTC(year, month, 0, 23, 59, 59)) //  day = 0 - last day of prev.month
 
     try {
         // select for NON-EMPTY arrays in record ONLY!!!
@@ -491,120 +488,113 @@ studentRouter.get("/skills-calendar", ifCanWrite, async (req, res) => {
         .find({ skillsTest: {$exists: true, $ne: []} })
         .where("graduate").equals("no")     //  this prevents graduates to be shown in skills-calendar
         .select("key skillsTest graduate")
-        .populate({ path: "user", select: "name" });
+        .populate({ path: "user", select: "name" })
         // check selection was successful
         if (!students) {
-        res.status(404).send("No students found");
+            res.status(404).send("No students found")
         }
         // array of days (between start and end dates) will be passed to an engine
         // creating array of blank days - days without any appointments
-        const days = [];
-        let currentDate = new Date(startDate);
+        const days = []
+        let currentDate = new Date(startDate)
         while (currentDate <= endDate) {
-        // NOT including endDate
-        days.push({ date: new Date(currentDate), students: [] });
-        currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1));
+            // NOT including endDate
+            days.push({ date: new Date(currentDate), students: [] })
+            currentDate = new Date(currentDate.setDate(currentDate.getDate() + 1))
         }
         // students is an array of ALL students with skill tests, but I need only those who are in this particular date frame
-        const studentsKeys = [];
-        const studentsInRange = [];
+        const studentsKeys = []
+        const studentsInRange = []
         // moving though students selection to get those, which are in [startDate - endDate] range
-        students.map((student) => {
-        student.skillsTest.map((test) => {
-            if (test.scheduledDate >= startDate && test.scheduledDate <= endDate) {
-            // if skills-test date is in range, then calc. position of element in array to update one
-            let index = Math.trunc((test.scheduledDate - startDate) / 86400000); // (24*60*60*1000) = 86400000
-            // updating a day record
-            days[index].students.push({
-                // general student data
-                studentId: student._id,
-                userId: student.user._id,
-                key: student.key,
-                name: student.user.name,
-                // graduate
-                graduate: student.graduate,
-                // skills-test data
-                testId: test._id,
-                testLocation: test.testLocation,
-                testDateTime: test.scheduledDate,
-                testType: test.testType,
-                vehicleType: test.vehicleType,
-                endorsements: test.endorsements,
-                brakes: test.brakes,
-                strf: test.strf,
-            });
-            // adding this student to studentsKeys if not there yet
-            if (!studentsKeys.includes(student.key)) {
-                // to make it easier in ejs, passing students' data few arrays
-                studentsKeys.push(student.key);
-                studentsInRange.push({
-                studentId: student._id,
-                userId: student.user._id,
-                name: student.user.name,
-                short: getShortName(student.user.name),
-                allSkillsTests: student.skillsTest,
-                });
-            }
-            }
-        }); //  skill-tests.map
-        }); // students.map
-
+        students.forEach((student) => {
+            student.skillsTest.forEach((test) => {
+                if (test.scheduledDate >= startDate && test.scheduledDate <= endDate) {
+                    // if skills-test date is in range, then calc. position of element in array to update one
+                    let index = Math.trunc((test.scheduledDate - startDate) / 86400000) // (24*60*60*1000) = 86400000
+                    // updating a day record
+                    days[index].students.push({
+                        // general student data
+                        studentId: student._id,
+                        userId: student.user._id,
+                        key: student.key,
+                        name: student.user.name,
+                        // graduate
+                        graduate: student.graduate,
+                        // skills-test data
+                        testId: test._id,
+                        testLocation: test.testLocation,
+                        testDateTime: test.scheduledDate,
+                        testType: test.testType,
+                        vehicleType: test.vehicleType,
+                        endorsements: test.endorsements,
+                        brakes: test.brakes,
+                        strf: test.strf,
+                    })
+                    // adding this student to studentsKeys if not there yet
+                    if (!studentsKeys.includes(student.key)) {
+                        // to make it easier in ejs, passing students' data few arrays
+                        studentsKeys.push(student.key)
+                        studentsInRange.push({
+                            studentId: student._id,
+                            userId: student.user._id,
+                            name: student.user.name,
+                            short: getShortName(student.user.name),
+                            allSkillsTests: student.skillsTest,
+                        })
+                    }
+                }
+            }) //  skill-tests.forEach
+        }) // students.forEach
         res.status(200).render(path.join(__dirname + "/skills-calendar.ejs"), {
-        minTTT,
-        days,
-        studentsKeys,
-        studentsInRange,
-        skillsTestLocations,
-        });
+            minTTT,
+            days,
+            studentsKeys,
+            studentsInRange,
+            skillsTestLocations,
+        })
     } catch (e) {
-        res.status(500).send(`Server issue: ${e.message}`);
+        res.status(500).send(`Server issue: ${e.message}`)
     }
-});
+})
+
 
 // tool - creating short names, like GA from Gen And
 function getShortName(name) {
     const arr = name.replace(/[^a-z\s]/gi, "") // remove all spec.symbols and digits
     .toUpperCase() // upper case
     .split(" ") // to array
-    .filter((el) => el); // delete all empty elements (when space at the end and etc.)
+    .filter((el) => el) // delete all empty elements (when space at the end and etc.)
 
-      if (!arr || !arr.length) { return }
+    if (!arr || !arr.length) { return }
 
     if (arr.length === 1) {
-        return arr[0][0];
+        return arr[0][0]
     } else {
-        return `${arr[0][0]}${arr[arr.length - 1][0]}`;
+        return `${arr[0][0]}${arr[arr.length - 1][0]}`
     }
 }
-
 
 
 // @GET skills-details
 // ?year=2022&month=2
 studentRouter.get("/skills-details", ifCanRead, async (req, res) => {
     // parsing query for year and month
-    const date = new Date();
+    const date = new Date()
     // start date year and month
-    let year = parseInt(req.query.year || date.getFullYear());
-    year = year > 2000 ? year : date.getFullYear();
-    
-    const month = parseInt(req.query.month || date.getMonth() + 1);
-
-    const startDate = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)); //  00:00:00Z
-    const endDate = new Date(Date.UTC(year, month, 0, 23, 59, 59)); //  day = 0 - last day of prev.month
-
+    let year = parseInt(req.query.year || date.getFullYear())
+    year = year > 2000 ? year : date.getFullYear()
+    const month = parseInt(req.query.month || date.getMonth() + 1)
+    const startDate = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0)) //  00:00:00Z
+    const endDate = new Date(Date.UTC(year, month, 0, 23, 59, 59)) //  day = 0 - last day of prev.month
     try {
         const students = await Student
         .find({ skillsTest: {$exists: true, $ne: []} })
         .select("fullName user location skillsTest enrollmentStatus graduate")
-
         // check selection was successful
         if (!students) {
             return res.status(404).send("No students found")
         }
-
         const graduates = []
-
         students.forEach(student => {
             for (i=0; i < student.skillsTest.length; i++) {
                 if(student.skillsTest[i].scheduledDate >= startDate && student.skillsTest[i].scheduledDate <= endDate) {
@@ -613,442 +603,138 @@ studentRouter.get("/skills-details", ifCanRead, async (req, res) => {
                 }
             }
         })
-
         graduates.sort((a, b) => a.location > b.location ? -1 : 1)
-
         res.status(200).render(path.join(__dirname + "/skills-details.ejs"), { graduates, year, month })
     } catch (e) {
-        res.status(500).send(`Server issue: ${e.message}`);
+        res.status(500).send(`Server issue: ${e.message}`)
     }
 })
-
 
 
 // @GET wbdrs annual report
 // ?year=2022
 studentRouter.get("/wbdrs", ifCanRead, async (req, res) => {
-  const reportYear = parseInt(req.query.year) || new Date().getFullYear();
-  // reposrt has to be prepared since July 1st prev. year till June 30th of report year + all currently styding
-  const startDate = `${reportYear - 1}-07-01T00:00:00-08:00`;
-  const endDate = `${reportYear}-06-30T23:59:59-08:00`;
-  // what to search
-  const studentData = "location created enrollmentStatus enrollmentStatusUpdate graduate";
-  const userDataPopulated = [
-    {
-      path: "user",
-      select: "agreement",
-      populate: {
-        path: "agreement",
-        select: "class",
-      }
-    },
-    {
-      path: "user",
-      select: "dataCollection",
-      populate: {
-        path: "dataCollection",
-        select: "-__v -created",
-      },
-    },
-  ];
-
-  try {
-    const students = await Student.where("created")
-      .gte(startDate)
-      .lte(endDate)
-      .populate(userDataPopulated)
-      .select(studentData);
-
-    return res.status(200).render(path.join(__dirname + "/wbdrs.ejs"), { 
-        students, reportYear,
-        startDate, endDate
-    });
-  } catch (e) {
-    res.status(500).send(`Server issue: ${e.message}`);
-  } 
-});
+    const reportYear = parseInt(req.query.year) || new Date().getFullYear()
+    // report has to be prepared since July 1st prev. year till June 30th of report year + all currently styding
+    // dates without exac time
+    const date1 = `${reportYear - 1}-07-01`
+    const date2 = `${reportYear}-06-30`
+    // need midnights, calculate with TimeDelta
+    const startDate = `${ date1 }T00:00:00${ admin.getTimeDelta_with_SchoolSpecific(new Date(date1)) || admin.SCHOOL_DATA.GMT }`
+    const endDate = `${ date2 }T00:00:00${ admin.getTimeDelta_with_SchoolSpecific(new Date(date2)) || admin.SCHOOL_DATA.GMT }`
+    // what to search
+    const studentData = "location created enrollmentStatus enrollmentStatusUpdate graduate"
+    const userDataPopulated = [
+        {
+            path: "user",
+            select: "agreement",
+            populate: {
+                path: "agreement",
+                select: "class",
+            }
+        },
+        {
+            path: "user",
+            select: "dataCollection",
+            populate: {
+                path: "dataCollection",
+                select: "-__v -created",
+            },
+        },
+    ]
+    try {
+        const students = await Student.where("created")
+        .gte(startDate)
+        .lte(endDate)
+        .populate(userDataPopulated)
+        .select(studentData)
+        return res.status(200).render(path.join(__dirname + "/wbdrs.ejs"), { 
+            students, reportYear,
+            startDate, endDate
+        })
+    } catch (e) {
+        res.status(500).send(`Server issue: ${e.message}`)
+    } 
+})
 
 
 // @GET expulsion
 studentRouter.get("/expulsion", ifCanRead, async (req, res) => {
-  try {
-    const adminProfile = req.session.adminData
-    // filter to find Students due to LOCATION: All - can see All, else - only assigned to location + UNSET
-    let filter = adminProfile.location === admin.LOCATION.All ? {} : { location: [adminProfile.location, admin.LOCATION.Unset] }
-    filter.graduate = "no"
-
-    const students = await Student.find(filter)
-    .select('created key email TTT location clocks')
-    .populate({
-      path: "user", select: "lastSESS balance",
-      populate: { path: "dataCollection", select: "firstName lastName phone -_id" }
-    })
-
-    if (!students) { res.status(404).send("No students found") }
- 
-    const today = new Date()
-    const date1 = new Date(Date.UTC(today.getFullYear(), today.getMonth() - 2, 1, 0, 0, 0))
-    const date2 = new Date(Date.UTC(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0))
-    const date3 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), 1, 0, 0, 0))
-
-    const activeStudents = []
-
-    students.map(student => {
-      let expulsionStudentInfo = {
-        userId: student.user._id,
-        // general data
-        fullName: `${student.user.dataCollection.firstName} ${student.user.dataCollection.lastName}`,
-        key: student.key,
-        location: student.location,
-        phone: student.user.dataCollection.phone,
-        email: student.email,
-        balance: student.user.balance,
-        TTT: student.TTT,
-        // general dates
-        tuitionStartDate: student.created,
-        lastVisitedDate: student.clocks.length ? student.clocks[student.clocks.length - 1].date : false,
-        lastSessionDate: student.user.lastSESS,
-        // clock's info
-        totalClocks: student.clocks.length,
-        month1Clocks: 0,
-        month2Clocks: 0,
-        month3Clocks: 0,
-        // attendFlags
-        month1attendFlag: student.created < date2,
-        month2attendFlag: student.created < date3,
-        month3attendFlag: student.created < today,
-      }
-      let dateKey = ""
-      student.clocks.forEach(clock => {
-        if (clock.date >= date1 && clock.date < date2 && clock.key != dateKey) {
-          expulsionStudentInfo.month1Clocks += 1
-          dateKey = clock.key     // to calculate days, but not clocks
-        } else {
-          if (clock.date >= date2 && clock.date < date3 && clock.key != dateKey) {
-            expulsionStudentInfo.month2Clocks += 1
-            dateKey = clock.key     // to calculate days, but not clocks
-          } else {
-            if (clock.date >= date3 && clock.date <= today && clock.key != dateKey) {
-              expulsionStudentInfo.month3Clocks += 1
-              dateKey = clock.key     // to calculate days, but not clocks
-            }
-          }
-        }
-      })
-      activeStudents.push(expulsionStudentInfo)
-    })
-
-    return res.status(200).render(path.join(__dirname + "/expulsion.ejs"), { activeStudents, date1, date2, date3 })
-  } catch (e) {
-    res.status(500).send(`Server issue: ${e.message}`)
-  } 
-})
-
-
-
-// -------------  FMCSA  -------------
-const crypto = require("crypto-js")
-const fetch = require('node-fetch')
-const jwt = require("jsonwebtoken")
-const { FMCSAModel } = require("./fmcsaModel")
-
-
-// Middleware, checking if credentials exists
-async function checkFMCSACredentials (req, res, next) {
     try {
-        const FMCSA = await FMCSAModel.find()
-        const allLocation = admin.getAllLocations()
+        const adminProfile = req.session.adminData
+        // filter to find Students due to LOCATION: All - can see All, else - only assigned to location + UNSET
+        let filter = adminProfile.location === admin.LOCATION.All ? {} : { location: [adminProfile.location, admin.LOCATION.Unset] }
+        filter.graduate = "no"
 
-        if (FMCSA) {
-            if (FMCSA.length) {
-                const lastFMCSARecord = FMCSA[FMCSA.length - 1]
-                if (lastFMCSARecord.pemCertificate
-                    && lastFMCSARecord.idTPR
-                    && lastFMCSARecord.idLocations) {
-                    // verifing saved FMCSA record
-                    if (allLocation.length === lastFMCSARecord.idLocations.length) {
-                        const titles = lastFMCSARecord.idLocations.map(loc => loc.title)
-                        // check arrays idenity with reduce
-                        if (allLocation.reduce((a, b) => a && titles.includes(b), true)) {
-                            // save FMCSA object in locals for GET/PUT /fmcsa
-                            res.locals.FMCSA = {
-                                pemCertificate: crypto.AES.decrypt(lastFMCSARecord.pemCertificate, process.env.MONGO_URI_USERS).toString(crypto.enc.Utf8),
-                                idTPR: crypto.AES.decrypt(lastFMCSARecord.idTPR, process.env.MONGO_URI_USERS).toString(crypto.enc.Utf8),
-                                idLocations: lastFMCSARecord.idLocations,
-                                updatedAt: lastFMCSARecord.updatedAt,
-                            }
-                            return next()
-                        }
-                    }
-                }
-            }
-        }
+        const students = await Student.find(filter)
+        .select('created key email TTT location clocks')
+        .populate({
+            path: "user", select: "lastSESS balance",
+            populate: { path: "dataCollection", select: "firstName lastName phone -_id" }
+        })
+
+        if (!students) { res.status(404).send("No students found") }
     
-        if(req.method === "PUT") {
-            return res.status(403).json({ issue: 'You have to enter your FMCSA credentials first. Launch a "FMCSA Report" from the "Student List"' })
-        }
-        // defaul is for GET method
-        return res.render(path.join(__dirname + "/fmcsa-getCredentials.ejs"), { 
-            credentials: false,
-            locations: allLocation
-        })
-    } catch(e) {
-        if(req.method === "PUT") {
-            res.status(500).json({ issue: `Reading FMCSA credentials issue: ${ e.message }` })
-        } else {
-            res.status(500).send(`Reading FMCSA credentials issue: ${ e.message }`)
-        }
-    }
-}
+        const today = new Date()
+        const date1 = new Date(Date.UTC(today.getFullYear(), today.getMonth() - 2, 1, 0, 0, 0))
+        const date2 = new Date(Date.UTC(today.getFullYear(), today.getMonth() - 1, 1, 0, 0, 0))
+        const date3 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), 1, 0, 0, 0))
 
+        const activeStudents = []
 
-// GET
-// RENEW FMCSA credentials
-studentRouter.get("/fmcsa-credentials", ifCanWrite, checkFMCSACredentials, async(req, res) => {
-    return res.render(path.join(__dirname + "/fmcsa-getCredentials.ejs"), { 
-        credentials: res.locals.FMCSA != undefined,
-        locations: admin.getAllLocations()
-    })
-})
-
-
-// POST
-// ENTER new FMCSA Credentials
-studentRouter.post("/fmcsa-credentials", ifCanWrite, async(req, res) => {
-    const { pemCertificate, idTPR, idLocations, idTitles } = req.body
-    try {
-        if (pemCertificate && idTPR && idLocations && idTitles) {
-            // Encrypt
-            const pemCertificateHashed = crypto.AES.encrypt(pemCertificate, process.env.MONGO_URI_USERS).toString()
-            const idTPRHashed = crypto.AES.encrypt(idTPR, process.env.MONGO_URI_USERS).toString()
-            // converting to arrays
-            const ids = Array.from(idLocations)     // can be just 1
-            const titles = Array.from(idTitles)     // can be just 1
-            // deleting all prev. and create new one
-            await FMCSAModel.deleteMany({})
-            await new FMCSAModel({
-                pemCertificate: pemCertificateHashed,
-                idTPR: idTPRHashed,
-                idLocations: ids.map((id, index) => {
-                    return {
-                        title: titles[index],
-                        id
-                    }
-                })
-            }).save()
-        }
-    } catch(e) {
-        res.status(500).send(`Saving FMCSA credentials issue: ${e.message}`)
-    }
-    return res.redirect("/admin/student/fmcsa")
-})
-
-
-// @GET admin/student/fmcsa
-// covers 3 fmcsa's steps
-studentRouter.get("/fmcsa", ifCanReadOrInstructor, checkFMCSACredentials, async(req, res) => {
-    try {
-        const minReq = {
-            theoryRate: 0.96,
-            rangeTTT: 102,
-            cityTTT: 102 + 18,
-        }
-
-        const students = (await Student
-        .find({ graduate: "no" })
-        .select("created location TTT fmcsaSteps")
-        .populate({
-            path: "user", select: "_id",
-            populate: [
-                { path: "dataCollection", select: "firstName lastName middleName DOB -_id" },
-                { path: "application", select: "vehicle-license vehicle-license-state -_id" },
-                { path: "agreement", select: "class transmission -_id" }
-            ]
-        })
-        .populate({
-            path: "tuition",
-            select: "avLessonsRate -_id"
-        }))
-        .filter(student => {
-            if(student.tuition.avLessonsRate >= minReq.theoryRate) { return student }
-        })
-
-        students.sort((a, b) => a.created - b.created)
-        return res.status(200).render(path.join(__dirname + "/fmcsa-list.ejs"), { students, minReq })
-
-    } catch (e) {
-        res.status(500).send(`Server issue: ${e.message}`)
-    }
-
-})
-
-
-// @PUT admin/student/fmcsa
-// updates from cliens side
-studentRouter.put("/fmcsa", ifCanWrite, checkFMCSACredentials, async(req, res) => {
-    // TOOLS
-        function formatDate(textDate) {
-            return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: res.locals.SCHOOL_DATA.tZONE }) : '-'
-        }
-        
-        const usStates = {"ALASKA":"AK", "ALABAMA":"AL", "ARKANSAS":"AR", "AMERICANSAMOA":"AS", "ARIZONA":"AZ", "CALIFORNIA":"CA", "COLORADO":"CO", "CONNECTICUT":"CT", "DISTRICTOFCOLUMBIA":"DC", "DELAWARE":"DE", "FLORIDA":"FL", "GEORGIA":"GA", "GUAM":"GU", "HAWAII":"HI", "IOWA":"IA", "IDAHO":"ID", "ILLINOIS":"IL", "INDIANA":"IN", "KANSAS":"KS", "KENTUCKY":"KY", "LOUISIANA":"LA", "MASSACHUSETTS":"MA", "MARYLAND":"MD", "MAINE":"ME", "MICHIGAN":"MI", "MINNESOTA":"MN", "MISSOURI":"MO", "MISSISSIPPI":"MS", "MONTANA":"MT", "NORTHCAROLINA":"NC", "NORTHDAKOTA":"ND", "NEBRASKA":"NE", "NEWHAMPSHIRE":"NH", "NEWJERSEY":"NJ", "NEWMEXICO":"NM", "NEVADA":"NV", "NEWYORK":"NY", "OHIO":"OH", "OKLAHOMA":"OK", "OREGON":"OR", "PENNSYLVANIA":"PA", "PUERTORICO":"PR", "RHODEISLAND":"RI", "SOUTHCAROLINA":"SC", "SOUTHDAKOTA":"SD", "TENNESSEE":"TN", "TEXAS":"TX", "UTAH":"UT", "VIRGINIA":"VA", "VIRGINISLANDS":"VI", "VERMONT":"VT", "WASHINGTON":"WA", "WISCONSIN":"WI", "WESTVIRGINIA":"WV", "WYOMING":"WY"}
-
-        function getState(key) {
-            return usStates[key.toUpperCase().replace(/ /g, "")] || key
-        }
-    // end of tools
-    const { id, newSteps } = req.body
-    const adminAdmin = await admin.findAdminById(req.session.adminData.id)
-    try {
-        const newFMCSASteps = newSteps.split(",")
-
-        const student = await Student.findById(id)
-        .select("location fmcsaSteps")
-        .populate({
-            path: "user", select: "_id",
-            populate: [
-                { path: "dataCollection", select: "firstName lastName DOB -_id" },
-                { path: "application", select: "vehicle-license vehicle-license-state -_id" },
-                { path: "agreement", select: "class transmission -_id" }
-            ]
-        })
-        .populate({
-            path: "tuition",
-            select: "avLessonsRate -_id"
-        })
-
-        // FMCSA
-        const FMCSA = res.locals.FMCSA      // passed from checkFMCSACredentials
-        if (FMCSA) {
-            const payload = {
-                "nbf": new Date().getTime(),
-                // "exp": end,          //  just does not see this, wants expiration to be in options
-                "iss": FMCSA.idTPR,
-                "sub": "BoltCDL"
+        students.forEach(student => {
+            let expulsionStudentInfo = {
+                userId: student.user._id,
+                // general data
+                fullName: `${student.user.dataCollection.firstName} ${student.user.dataCollection.lastName}`,
+                key: student.key,
+                location: student.location,
+                phone: student.user.dataCollection.phone,
+                email: student.email,
+                balance: student.user.balance,
+                TTT: student.TTT,
+                // general dates
+                tuitionStartDate: student.created,
+                lastVisitedDate: student.clocks.length ? student.clocks[student.clocks.length - 1].date : false,
+                lastSessionDate: student.user.lastSESS,
+                // clock's info
+                totalClocks: student.clocks.length,
+                month1Clocks: 0,
+                month2Clocks: 0,
+                month3Clocks: 0,
+                // attendFlags
+                month1attendFlag: student.created < date2,
+                month2attendFlag: student.created < date3,
+                month3attendFlag: student.created < today,
             }
-            const privateKEY = FMCSA.pemCertificate
-            const options = {
-                expiresIn:  "1m",
-                algorithm:  "RS256"
-            }
-            // generating jwtoken with PEM
-            const jwtToken = jwt.sign(payload, privateKEY, options)
-
-            // verifing data
-            if (!student.user.application['vehicle-license']) {
-                return res.status(403).json({ issue: `Driver license if undefined` })
-            }
-            // drv lic.issued state has to be changed
-            const state = getState(student.user.application['vehicle-license-state'])
-            if (state.length > 2) {
-                return res.status(403).json({ issue: `Cannot identify driver license issuer - ${ state }` })
-            }
-            if (!student.user.dataCollection.firstName || !student.user.dataCollection.lastName) {
-                return res.status(403).json({ issue: `Cannot identify student's first or last name` })
-            }
-            
-            const tpmClass = student.user.agreement.class.toUpperCase()
-            const classEndorsementCode = tpmClass.includes("CLASS A") ? "A"
-            : tpmClass.includes("CLASS B") ? "B"
-            : undefined
-            if (!classEndorsementCode) {
-                return res.status(403).json({ issue: `Cannot identify "classEndorsementCode" for ${ student.user.agreement.class }` })
-            }
-
-            const applicationType = tpmClass.includes("UPGRADE") ? "Upgrade" : "New"
-
-            const providerLocation = FMCSA.idLocations.filter(idLocation => idLocation.title === student.location)
-            if (!providerLocation[0].id) {
-                return res.status(403).json({ issue: `Cannot identify "providerLocationId" for ${ student.location }` })
-            }
-
-            const studentObject = {
-                "Number": student.user.application['vehicle-license'],
-                "State": `US-${ state }`,
-                "FirstName": student.user.dataCollection.firstName,
-                "LastName": student.user.dataCollection.lastName,
-                "DateOfBirth": formatDate(student.user.dataCollection.DOB),
-                "ClassEndorsementCode": classEndorsementCode,
-                "ApplicationType": applicationType,
-                "ProviderLocationId": providerLocation[0].id,
-                "TrainingElements": []
-            }
-
-            newFMCSASteps.forEach((newFMCSAStep, index) => {
-                // init step, if not inited yet
-                // create a spot for this step; false as defaul
-                if (!student.fmcsaSteps[index]) {
-                    student.fmcsaSteps.push({
-                        check: false,
-                        dateDone: new Date(),
-                        adminDone: "AUTO",
-                    })
-                } 
-
-                // when newFMCSAStep = true, then step has to be saved
-                // but only if it where not saved before
-                if (newFMCSAStep === "true") {
-                    if (!student.fmcsaSteps[index].check) {
-                        if (index === 0) {
-                            // Theory
-                            studentObject.TrainingElements.push({
-                                "TrainingType": "Theory",
-                                "CompletionDate": formatDate(new Date()),
-                                "TrainingMethod": "Online",
-                                "Score": Math.round(student.tuition.avLessonsRate * 100)
-                            })
+            let dateKey = ""
+            student.clocks.forEach(clock => {
+                if (clock.date >= date1 && clock.date < date2 && clock.key != dateKey) {
+                    expulsionStudentInfo.month1Clocks += 1
+                    dateKey = clock.key     // to calculate days, but not clocks
+                } else {
+                    if (clock.date >= date2 && clock.date < date3 && clock.key != dateKey) {
+                        expulsionStudentInfo.month2Clocks += 1
+                        dateKey = clock.key     // to calculate days, but not clocks
+                    } else {
+                        if (clock.date >= date3 && clock.date <= today && clock.key != dateKey) {
+                            expulsionStudentInfo.month3Clocks += 1
+                            dateKey = clock.key     // to calculate days, but not clocks
                         }
-                        if (index === 1) {
-                            // Range
-                            studentObject.TrainingElements.push({
-                                "TrainingType": "Range",
-                                "CompletionDate": formatDate(new Date()),
-                                "Hours": 102,
-                                "InternalId": student.location
-                            })
-                        }
-                        if (index === 2) {
-                            // PublicRoad
-                            studentObject.TrainingElements.push({
-                                "TrainingType": "PublicRoad",
-                                "CompletionDate": formatDate(new Date()),
-                                "Hours": 18,
-                                "InternalId": student.location
-                            })
-                        }
-                        student.fmcsaSteps[index].check = true
-                        student.fmcsaSteps[index].dateDone = new Date()
-                        student.fmcsaSteps[index].adminDone = adminAdmin.name
                     }
                 }
             })
-
-            // if there if something to update
-            if(studentObject.TrainingElements.length) {
-                const response = await fetch("https://tpr.fmcsa.dot.gov/api/Training/Add", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${ jwtToken }`
-                    },
-                    body: JSON.stringify(studentObject)
-                })
-
-                if (response.status === 201) {
-                    await student.save()
-                    return res.status(200).end()
-                } else {
-                    const text = await response.text()
-                    res.status(response.status).json({ issue: `FMCSA response: ${ text }` })
-                }
-            }
-        }
-        
-    } catch(e) {
-        res.status(500).json({ issue: `Server issue: ${e.message}` })
-    }
+            activeStudents.push(expulsionStudentInfo)
+        })
+        return res.status(200).render(path.join(__dirname + "/expulsion.ejs"), { activeStudents, date1, date2, date3 })
+    } catch (e) {
+        res.status(500).send(`Server issue: ${e.message}`)
+    } 
 })
 
 
+// -------------  FMCSA  -------------
+studentRouter.use("/fmcsa", ifCanWrite, require("./fmcsaRouter"))
 
-module.exports = studentRouter;
+
+module.exports = studentRouter

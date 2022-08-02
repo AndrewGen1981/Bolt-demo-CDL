@@ -1,5 +1,5 @@
 /* @GENERAL */
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@500;600;700&family=WindSong:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;600;700&family=WindSong:wght@400;500&display=swap');
 
 
 *, *::before, *::after {
@@ -131,6 +131,16 @@ li {
     margin-bottom: 2rem;
 }
 
+.section-flex {
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 0.35rem;
+}
+
 .section-fields {
     width: 100%;
     
@@ -209,12 +219,24 @@ li {
     text-transform: uppercase;
     border-bottom: 1px solid #2d393e;
 }
+
 .field-signature {
     min-width: 200px;
     font-family: 'WindSong', cursive;
     font-size: 3rem;
+    position: relative;
+}
+.field-signature::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    
+    bottom: 1.07rem;
     border-bottom: 1px solid #2d393e;
 }
+
+
 .check-mark {
     width: 1.5rem;
     height: 1.5rem;
@@ -226,6 +248,16 @@ li {
     fill: #2d393e;
 }
 
+.pro-descr {
+    font-weight: 400;
+    font-size: 0.87rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+    color: #6a6a6a;
+}
 
 /* TABLE */
 table {

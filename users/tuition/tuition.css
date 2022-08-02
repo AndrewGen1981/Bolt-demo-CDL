@@ -181,60 +181,6 @@ header {
 }
 
 
-/* FOOTER */
-footer {
-    margin-top: 10rem;
-    padding: 0.93rem 1.33rem;
-    width: 100%;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background: #0F1C2F;
-}
-.footer-left {
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    color: #657389;
-}
-.footer-center {
-    width: calc(var(--max-width) * 0.6);
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-around;
-}
-.footer-item {
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    text-transform: uppercase;
-    text-decoration: none;
-
-    color: #FFFFFF;
-}
-.footer-right span {
-    font-weight: 500;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    color: #657389;
-}
-.footer-right a {
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 1.2rem;
-
-    text-transform: uppercase;
-
-    color: #FFFFFF;
-}
-
-
 .-show-if-450 {
     display: none;
 }
@@ -400,16 +346,6 @@ footer {
         flex-direction: column;
         margin-bottom: 1.67rem;
     }
-    footer {
-        margin-top: 3.5rem;
-        display: flex;
-        flex-direction: column;
-    }
-    .footer-center {
-        margin: 1rem auto;
-        width: 95%;
-        display: flex;
-    }
 }
 @media (max-width: 615px) {
     :root {
@@ -436,11 +372,6 @@ footer {
     }
     .test-box {
         margin-bottom: 0.5rem;
-    }
-    .footer-center {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        row-gap: 1rem;
     }
 }
 @media (max-width: 450px) {
@@ -881,10 +812,6 @@ footer {
 
     .submitQuizze {
         margin-top: 5rem;
-    }
-
-    #player-footer {
-        margin-top: 2.65rem;
     }
 }
 

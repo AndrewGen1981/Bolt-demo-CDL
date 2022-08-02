@@ -2,7 +2,7 @@
 <!-- included into userInfo.ejs -->
 
 <!-- TOOL: function printDateTime() -->
-<% function getDateTime(date) { const d = new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }); const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }); return `${d} (${t})` } %>
+<% function getDateTime(date) { const d = new Date(date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }); const t = new Date(date).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }); return `${d} (${t})` } %>
 
 
 <% if(locals.user.student) { %>

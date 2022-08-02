@@ -385,6 +385,18 @@ admRouter.put('/user', redirectToLogin, ifCanWrite, async(req, res) => {
         }
     }
 
+    // updating comment
+    if (action === "update-comment") {
+        const { comment } = req.body
+        try {
+            if (!userId) { return res.status(400).json({ issue: "User ID wasn't passed" }) }
+            await User.findByIdAndUpdate(userId, { comment })
+            return res.status(200).end()
+        } catch(e) {
+            return res.status(500).json({ issue: e.message })
+        }
+    }
+
     // action was not found
     res.status(404).json({ issue: "Action is not defined" })
 })
@@ -728,10 +740,9 @@ admRouter.post('/clocks', redirectToLogin, ifCanWrite, async(req, res) => {
 
 
 // Calculating 'timeZoneHourDiff'
-// Pacific Standard Time varies between UTC-08 and UTC-07
-// this function defines exac hour difference 'America/Los_Angeles' from UTC-Z
+// function defines exac hour difference SCHOOL-UTC from UTC-Z
 function timeZoneHourDiff(date) {
-    const iso = `${date.toLocaleString('en-CA', { timeZone: 'America/Los_Angeles', hour12: false }).replace(', ', 'T')}.000Z`
+    const iso = `${date.toLocaleString('en-CA', { timeZone: admin.SCHOOL_DATA.tZONE, hour12: false }).replace(', ', 'T')}.000Z`
     const lie = new Date(iso)
     return -(lie - date) / 3600000
 }
@@ -751,7 +762,7 @@ admRouter.post('/clocks-update', redirectToLogin, ifCanWrite, async(req, res) =>
     function settime(dateString, timeString) {
         if (timeString.length < 6) { timeString += ':00' }
         // calculating timeZone difference due to summer/winter time
-        const timeZoneDiff = timeZoneHourDiff(new Date(`${dateString}T${timeString}-08:00`))
+        const timeZoneDiff = timeZoneHourDiff(new Date(`${ dateString }T${ timeString }${ admin.SCHOOL_DATA.GMT }`))
         return new Date(`${dateString}T${timeString}-0${timeZoneDiff}:00`)
     }
 
@@ -816,7 +827,7 @@ admRouter.post('/update-payments', redirectToLogin, ifCanWrite, async(req, res) 
     const newPaymentsArray = []
     arrPmtAmounts.forEach((amount, index) => {
         // calculating timeZone difference due to summer/winter time
-        let timeZoneDiff = timeZoneHourDiff(new Date(`${arrPmtDates[index]}:00-08:00`))
+        let timeZoneDiff = timeZoneHourDiff(new Date(`${arrPmtDates[index]}:00${ admin.SCHOOL_DATA.GMT }`))
         if(parseFloat(amount)) {
             newPaymentsArray.push({
                 type: arrPmtTypes[index],

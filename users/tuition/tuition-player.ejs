@@ -160,22 +160,8 @@
         <% } %>
     </div>      <!-- main-container -->
 
-    <footer id="player-footer">
-        <div class="footer-left">
-            <span>© BoltCDL</span>
-        </div>
-        <div class="footer-center">
-            <span class="footer-item">About Us</span>
-            <a class="footer-item" href="/cdl-courses">CDL Programs</a>
-            <a class="footer-item" href="/faq">FAQs</a>
-            <a class="footer-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
-            <span class="footer-item">Contact Us</span>
-        </div>
-        <div class="footer-right">
-            <span>designed by</span>
-            <a href="https://www.boltcdl.com" target="_blank">BOLT</a>
-        </div>
-    </footer>
+        
+    <%- include("../../static/_partial_layouts/__student-profile-footer.ejs") %>
 
 
     <script>
@@ -460,7 +446,7 @@
                         testQuestionBlock = document.getElementById('Q-block<%= Q %>')
                         testQuestionBlock.classList.remove('--block-true')
                         testQuestionBlock.classList.remove('--block-false')
-                        answersBlock = testQuestionBlock.querySelector('.answers-block')
+                        answersBlock = testQuestionBlock.querySelector('.answers-box')
                         '<% question.answers.forEach((answer, A) => { %>'
                             // shufling one more time
                             studentAnswer = document.getElementById('Q<%= Q %>A<%= A %>')

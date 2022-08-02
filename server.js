@@ -25,6 +25,9 @@ global.__basedir = __dirname
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI_USERS)
 
+// for /catalog
+const { SCHOOL_DATA } = require("./admin/config")
+
 
 // set the view engine to ejs
 app.set('view engine', 'ejs')
@@ -39,7 +42,7 @@ app.get('/', (req, res) => {
 })
 // company catalog
 app.get('/catalog', (req, res) => {
-    res.sendFile(path.join(__dirname+'/static/catalog/Toro Catalog WA 2021 Dec17.pdf'))
+    res.sendFile(path.join(__dirname + SCHOOL_DATA.CATALOG))
 })
 
 // USERS (Applicants and Students) ROUTES

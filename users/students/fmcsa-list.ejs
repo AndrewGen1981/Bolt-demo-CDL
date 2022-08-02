@@ -104,7 +104,7 @@
         <span class="info">|</span>
         <span class="info"><%= students.length %> record(s) found</span>
         <span class="info">|</span>
-        <a class="info-link" href="/admin/student/fmcsa-credentials" class="renew-fmcsa">RENEW FMCSA Credentials</a>
+        <a class="info-link" href="/admin/student/fmcsa/credentials" class="renew-fmcsa">RENEW FMCSA Credentials</a>
     </menu>
     
     <section class="main-box">
@@ -136,7 +136,8 @@
                     <span name="firstName"><%= student.user.dataCollection.firstName %></span>
                     <span name="middleName"><%= mid[0] != "n" && mid[mid.length-1] != "a" ? mid : "" %></span>
                     <span name="location"><%= student.location %></span>
-                    <span name="DOB"><%= formatDate(student.user.dataCollection.DOB) %></span>
+                    <!-- DOB without timeZone, because of specific of saving -->
+                    <span name="DOB"><%= new Date(student.user.dataCollection.DOB).toLocaleDateString("en-CA") %></span>
 
                     <span name="vehicle-license"><%= student.user.application['vehicle-license'] %></span>
                     
@@ -228,7 +229,10 @@
             if (!inputs) { return "" }
             return Array.from(inputs)
             .map(input => {
-                if (clearChanges) { input.classList.remove("changed") }
+                if (clearChanges) {
+                    input.classList.remove("changed")
+                    input.disabled = true
+                }
                 return input.checked
             })
             .join(",")
@@ -265,11 +269,13 @@
                     newSteps: inputsKey,
                 })
             }).then(async(response) => {
-                if(response.status != 200) {
-                    res = await response.json()
+                //  reading response details
+                const res = await response.json()
+                if(response.status != 200 && response.status != 201) {
                     alert(`Can't update Student's data: ${ res.issue }`)
                     window.location.reload()
                 } else {
+                    alert("Data sent to FMCSA" + `${ res.text ? '. Details: ' + res.text : '' }`)
                     update.dataset.old = inputsKey
                     update.classList.remove("can-update")
                 }

@@ -60,8 +60,8 @@
                 </li>
                 <li>
                     <span class="info-title">Date</span>
-                    <span class="info-value scoring-date"><%= new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></span>
-                    <span class="info-value scoring-date">(<%= new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %>)</span>
+                    <span class="info-value scoring-date"><%= new Date().toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
+                    <span class="info-value scoring-date">(<%= new Date().toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %>)</span>
                 </li>
             </ul>
         </header>
@@ -70,8 +70,8 @@
         <!-- TOOL: function printDateTime() -->
         <% 
             function printDateTime(date) {
-                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
-                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false });
+                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE });
+                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false });
                 return `${d} (${t})`
             }
         %>

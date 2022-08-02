@@ -4,17 +4,17 @@
 <% if (!user.dataCollection || !user.application || !user.agreement) { %>
     <div class="field-info">Student Section is unavailable, because enrollment forms are not completed yet</div>
     <% if(user.dataCollection) { %>
-        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
     <% } else { %>
         <div class="field-warning">#1 Data Collection hasn't been completed by User.</div>
     <% } %>
     <% if(user.application) { %>
-        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
     <% } else { %>
         <div class="field-warning">#2 Application form is not ready yet.</div>
     <% } %>
     <% if(user.agreement) { %>
-        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
         <% if(!user.agreement.schoolSignRep) { %>
             <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
         <% } else { %>
@@ -26,9 +26,9 @@
 <% } else { %>
 
     <% if(!user.student) { %>
-        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
-        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
-        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+        <div class="field-info1">#1 Data Collection has been completed by User <%= new Date(user.dataCollection.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
+        <div class="field-info1">#2 Application has been completed by User <%= new Date(user.application.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
+        <div class="field-info1">#3 Agreement has been signed by User <%= new Date(user.agreement.created).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
 
         <% if(!user.agreement.schoolSignRep) { %>
             <div class="field-warning">Agreement hasn't been signed by School's manager!!!</div>
@@ -55,8 +55,8 @@
             }
         
             function printDateTime(date) {
-                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
-                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false });
+                const d = new Date(date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE });
+                const t = new Date(date).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false });
                 return `${d} (${t})`
             }
         
@@ -138,9 +138,6 @@
             %>
             <div class="location-input-box">
                 <select name='location' id='location'>
-                    <% if (location === 'UNSET') { %>
-                        <option value='UNSET' selected >UNSET</option>
-                    <% } %>
                     <% locs.forEach(loc => { %>
                         <% if (location === loc) { %>
                             <option value='<%= loc %>' selected ><%= loc %></option>
@@ -254,9 +251,9 @@
                     <% steps.forEach((step, index) => { %>
                         <span>Step#<%= index + 1 %></span>
                         <span class="check-box">
-                            <input type="checkbox" name="step<%= index + 1 %>" data-old="<%= step.check %>" <%= step.check ? "checked" : "" %> />
+                            <input type="checkbox" name="step<%= index + 1 %>" data-old="<%= step.check %>" <%= step.check ? "checked" : "" %> <%= step.check ? "disabled" : "" %> />
                         </span>
-                        <span><%= new Date(step.dateDone).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %></span>
+                        <span><%= new Date(step.dateDone).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
                         <span><%= step.adminDone %></span>
                     <% }) %>
                 </div>
@@ -283,12 +280,12 @@
                         const inputs = Array.from(document.querySelectorAll(".check-box input"))
                         const inputsKey = inputs.map(step => {
                             step.classList.remove("-changed")
+                            if (step.checked) { step.disabled = true }
                             return step.checked
                         }).join(",")
-
                         // herer to forbid next update before done with current
                         update.classList.remove("steps-can-update")
-
+                        // fetch PUT
                         fetch("/admin/student/fmcsa", {
                             method: "PUT",
                             headers: {
@@ -299,16 +296,16 @@
                                 newSteps: inputsKey,
                             })
                         }).then(async(response) => {
-                            if(response.status != 200) {
-                                res = await response.json()
+                            //  reading response details
+                            const res = await response.json()
+                            if(response.status != 200 && response.status != 201) {
                                 alert(`Can't update Student's data: ${ res.issue }`)
                                 window.location.reload()
                             } else {
                                 update.dataset.old = inputsKey
-                                alert(`FMCSA steps updated`)
+                                alert("Data sent to FMCSA" + `${ res.text ? '. Details: ' + res.text : '' }`)
                             }
                         })
-
                     }
                 })
 
@@ -331,8 +328,8 @@
                         <% user.student.tuition.lessons.forEach((lesson, index) => { %>
                             <p class="-hide-if-small"><%= `Module ${ index < 9 ? '0' + (index + 1) : (index + 1) }` %></p>
                             <p><%= lesson.lessonTitle %></p>
-                            <p class="-to-hide-500"><%= new Date(lesson.watchDate).toLocaleDateString("en-CA", { timeZone: "America/Los_Angeles" }) %></p>
-                            <p class="-time-to-hide"><%= new Date(lesson.watchDate).toLocaleTimeString("en-CA", { timeZone: "America/Los_Angeles",  hour12: false }) %></p>
+                            <p class="-to-hide-500"><%= new Date(lesson.watchDate).toLocaleDateString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
+                            <p class="-time-to-hide"><%= new Date(lesson.watchDate).toLocaleTimeString("en-CA", { timeZone: locals.SCHOOL_DATA.tZONE,  hour12: false }) %></p>
                             <!-- PROGRESS -->
                             <% if(lesson.videoProgress > 0.05) { %>
                                 <p><%= floatToPercent(lesson.videoProgress) %></p>
@@ -369,10 +366,10 @@
                     <% verClocks.forEach(clock => { %>
                         <% let duration = clock.duration / (1000 * 60 *60) %>
                         <!-- Date, key -->
-                        <div><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                        <div><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
                         <div class="-cell-not-done -hide-if-small"><%= clock.dateKey %></div>
                         <!-- IN & coord -->
-                        <div><%= new Date(clock.in).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></div>
+                        <div><%= new Date(clock.in).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %></div>
                         <% if (!isNaN(clock.inlat) && !isNaN(clock.inlon)) { %>
                             <a class="-coord -hide-if-small" href="http://www.google.com/maps/place/<%= clock.inlat %>,<%= clock.inlon %>" target="_blank"><%= normCOORD(clock.inlat) %>,<%= normCOORD(clock.inlon) %></a>
                         <% } else { %>
@@ -380,7 +377,7 @@
                         <% } %>
                         <!-- OUT & coord -->
                         <% if( !isNaN(clock.out) ) { %>
-                            <div><%= new Date(clock.out).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false }) %></div>
+                            <div><%= new Date(clock.out).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) %></div>
                         <% } else { %>
                             <div class="-no-clockout">NO</div>
                         <% } %>

@@ -20,9 +20,9 @@
         const prompt = locals.user ? `${locals.user.name}` : ''
         const balance = locals.user.balance = !undefined ? `${usCurrencyFormat.format(user.balance)}` : 'no data'
 
-        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
-        function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })+' - '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour24: false }) : '-' }
-        function formatTime(textDate) { return textDate ? new Date(textDate).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour12: false, hour: '2-digit', minute:'2-digit'}) : 'NO' }
+        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-' }
+        function formatDateTime(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE })+', '+new Date(textDate).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false }) : '-' }
+        function formatTime(textDate) { return textDate ? new Date(textDate).toLocaleTimeString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE, hour12: false, hour: '2-digit', minute:'2-digit'}) : 'NO' }
 
         function strTTT(TTT) { const H = Math.trunc(TTT); const M = Math.round(60*(TTT % 1)); return M > 9 ? `${H}h:${M}m` : `${H}h:0${M}m` }
         function normTTT(TTT) { return `${ Math.round(TTT * 100) / 100 }h` }
@@ -124,7 +124,7 @@
                     </p>
                     <p class="block-item">
                         <span class="block-key">Profile Created</span>
-                        <span class="block-value"><%= new Date(user.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %> • <%= new Date(user.created).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }) %></span>
+                        <span class="block-value"><%= new Date(user.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %> • <%= new Date(user.created).toLocaleTimeString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
                     </p>
                     <p class="block-item">
                         <span class="block-key">Email</span>
@@ -240,7 +240,7 @@
                     </section>
                     <section class="profile-info-right -flex-right">
                         <div class="right-position-block">
-                            <% if (verTTT) { %>
+                            <% if (locals.verTTT) { %>
                                 <div class="block-item">    <!-- TTT -->
                                     <span class="block-key">Total Tuition Time</span>
                                     <span class="block-value"><%= strTTT(verTTT) %> | <%= normTTT(verTTT) %></span>
@@ -263,7 +263,7 @@
                         <div class="clocks-table-cell -header">Duration</div>
                         <% verClocks.forEach(clock => { %>
                             <% let duration = clock.duration / (1000 * 60 *60) %>
-                            <div class="clocks-table-cell -first-col"><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></div>
+                            <div class="clocks-table-cell -first-col"><%= new Date(clock.date).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></div>
                             <div class="clocks-table-cell"><%= formatTime(clock.in) %></div>
                             <% if( !isNaN(clock.out) ) { %>
                                 <div class="clocks-table-cell"><%= formatTime(clock.out) %></div>
@@ -379,7 +379,7 @@
                                 let d = leadingZero(appointment.appDate.getUTCDate())
                                 let h = leadingZero(appointment.appDate.getUTCHours())
                                 let mins = leadingZero(appointment.appDate.getUTCMinutes())
-                                let txtDate = `${d}/${m}/${y} - ${h}:${mins}`
+                                let txtDate = `${y}-${m}-${d}, ${h}:${mins}`
                             %>
                             <div class="skills-test-table-cell"><%= txtDate %></div>
                             <div class="skills-test-table-cell"><%= appointment.appLocation %></div>
@@ -424,22 +424,8 @@
     </div>  <!--- profile-box -->
 
 
-    <footer>
-        <div class="footer-left">
-            <span>© BoltCDL</span>
-        </div>
-        <div class="footer-center">
-            <span class="footer-item">About Us</span>
-            <a class="footer-item" href="/cdl-courses">CDL Programs</a>
-            <a class="footer-item" href="/faq">FAQs</a>
-            <a class="footer-item" href="https://www.nstschool.com/clp" target="_blank">CLP</a>
-            <span class="footer-item">Contact Us</span>
-        </div>
-        <div class="footer-right">
-            <span>designed by</span>
-            <a href="https://www.boltcdl.com" target="_blank">BOLT</a>
-        </div>
-    </footer>
+
+    <%- include("../static/_partial_layouts/__student-profile-footer.ejs") %>
 
 
   
@@ -455,7 +441,7 @@
         function scrollToElement(id) {
             const el = document.querySelector(id)
             if (!el) { return }
-            el.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" })
+            el.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" })
             el.classList.add("-grow")
             setTimeout(() => {
                 el.classList.remove("-grow")

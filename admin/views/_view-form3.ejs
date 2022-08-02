@@ -79,38 +79,19 @@
                 <% if(user.agreement) { %>
 
                     <section class="section-box">
-                        <h2 class="section-title">Tuition program consists of:</h2>
-                        <p class="section-note">(the object of the contract is tuition services)</p>
+                        <h2 class="section-title">Tuition program consists of</h2>
+                        <p class="section-note">The object of the Contract is tuition services. The school agrees to provide the following training (Available Classes):</p>
                         <div class="section-fields-2 -box90">
-
-                            <% items = ['4 weeks * 40 hours/week = 160 total hours', '2 weeks * 40 hours/week = 80 total hours'] %>
-
-                            <% if (user.agreement.class === "CDL Class A") { %>
-                                <div class="field-box">
-                                    <svg class="check-mark">
-                                        <use xlink:href="#checked"></use> 
-                                    </svg>
-                                    <h3 class="field-title"><%= items[0] %></h3>
-                                </div>
-                                <div class="field-box">
-                                    <svg class="check-mark">
-                                        <use xlink:href="#unchecked"></use> 
-                                    </svg>
-                                    <h3 class="field-title"><%= items[1] %></h3>
-                                </div>
-                            <% } else { %>
-                                <div class="field-box">
-                                    <svg class="check-mark">
-                                        <use xlink:href="#unchecked"></use> 
-                                    </svg>
-                                    <h3 class="field-title"><%= items[0] %></h3>
-                                </div>
-                                <div class="field-box">
-                                    <svg class="check-mark">
-                                        <use xlink:href="#checked"></use> 
-                                    </svg>
-                                    <h3 class="field-title"><%= items[1] %></h3>
-                                </div>
+                            <% if (locals.SCHOOL_DATA) { %>
+                                <% SCHOOL_DATA.PROGRAMS.forEach(pro => { %>
+                                    <div class="field-box">
+                                        <svg class="check-mark">
+                                            <use xlink:href="<%= user.agreement.class === pro.title ? '#checked' : '#unchecked' %>"></use> 
+                                        </svg>
+                                        <h3 class="field-title"><%= pro.title %></h3>
+                                    </div>
+                                    <small class="pro-descr"><%= pro.descr %></small>
+                                <% }) %>
                             <% } %>
                         </div>  <!-- section-fields -->
                         
@@ -123,43 +104,16 @@
                                 </div>
                             </div>  <!-- section-fields -->
                         </section>  <!-- Visiting info -->
-
                     </section>  <!-- Program Info -->
 
 
                     <section class="section-box">
-                        <h2 class="section-title">The school agrees to provide the following training:</h2>
-                        <p class="section-note">Available Classes</p>
-                        <div class="section-fields-2 -box80">
-
-                            <% items = ['CDL Class A', 'CDL Class B', 'Upgrade to Class A', 'Endorsements'] %>
-
-                            <% items.map(item => { %>
-                                <div class="field-box">
-                                    <% if (item.toUpperCase() != user.agreement.class.toUpperCase()) { %>
-                                        <svg class="check-mark">
-                                            <use xlink:href="#unchecked"></use> 
-                                        </svg>
-                                    <% } else { %>
-                                        <svg class="check-mark">
-                                            <use xlink:href="#checked"></use> 
-                                        </svg>
-                                    <% } %>
-                                    <h3 class="field-title"><%= item %></h3>
-                                </div>
-                            <% }) %>
-                        </div>  <!-- section-fields -->
-                    </section>  <!-- Class Info -->
-
-
-                    <section class="section-box">
                         <h2 class="section-title">Transmission Type</h2>
-                        <!-- <p class="section-note"></p> -->
                         <div class="section-fields-2 -box80">
 
                             <% items = ['Automatic Transmission', 'Manual Transmission'] %>
 
-                            <% items.map(item => { %>
+                            <% items.forEach(item => { %>
                                 <div class="field-box">
                                     <% if (item.toUpperCase() != user.agreement.transmission.toUpperCase()) { %>
                                         <svg class="check-mark">
@@ -187,7 +141,7 @@
                             <% items = ['tuitionCost', 'regisrFee', 'supplyFee', 'otherFee'] %>
                             <% let summ = 0 %>
 
-                            <% items.map((item, index) => { %>
+                            <% items.forEach((item, index) => { %>
                                 <div class="field-box">
                                         <h3 class="field-title"><%= headers[index] %></h3>
                                         <% let num = Number.isNaN(parseFloat(user.agreement[item])) ? 0 : parseFloat(user.agreement[item]) %>
@@ -219,7 +173,7 @@
                             <% items = ['Cash', 'Credit Card', 'Scholarship', 'Financial Aid', 'Third Party'] %>
                             <% let applItems = user.agreement.payment.split(',') %>
 
-                            <% items.map((item, i) => { %>
+                            <% items.forEach((item, i) => { %>
                                 <div class="field-box">
                                     <% if  (applItems.some(applItem => item.toUpperCase() === applItem.toUpperCase()) ) { %>
                                         <svg class="check-mark">
@@ -250,7 +204,7 @@
                             <% headers = ['Down Payment', 'Monthly Payment(s)', 'Loan Payment (if applicable)'] %>
                             <% items = ['downPayment', 'monthlyPayment', 'loanPayment'] %>
 
-                            <% items.map((item, index) => { %>
+                            <% items.forEach((item, index) => { %>
                                 <div class="field-box">
                                         <h3 class="field-title"><%= headers[index] %></h3>
                                         <% let num = Number.isNaN(parseFloat(user.agreement[item])) ? 0 : parseFloat(user.agreement[item]) %>
@@ -353,7 +307,7 @@
                         <div class="section-fields -fields-side-by-side">
                             <div class="field-box">
                                 <h3 class="field-title">Yes, I certify the above</h3>
-                                <p class="field-value">(Date of signing <%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %>)</p>
+                                <p class="field-value">(Date of signing <%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %>)</p>
                             </div>
                             <div class="field-box">
                                 <h3 class="field-title">Applicant signature</h3>
@@ -383,7 +337,7 @@
                     <section class="section-box">
                         <h2 class="section-title-hgh">Authorized School Representative:</h2>
                         <p class="section-note">As the authorized representative of the school, I hereby agree the conditions set forth here in.</p>
-                        <div class="section-fields-2">
+                        <div class="section-flex">
                             <div class="field-box">
                                 <h3 class="field-title">Authorized Representative</h3>
                                 <p class="field-value"><%= signer.name %></p>
@@ -392,22 +346,25 @@
                                 <h3 class="field-title">Representative Title</h3>
                                 <p class="field-value"><%= signer.title %></p>
                             </div>
+                        </div>
+                        <div class="section-flex">
                             <div class="field-box">
                                 <h3 class="field-title">Date</h3>
-                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
                             </div>
                             <div class="field-box">
                                 <h3 class="field-title">Signature</h3>
                                 <p class="field-signature"><%= signer.last %> <%= signer.first %></p>
                             </div>
                         </div>
+                        <br>
                         <div class="section-fields -fields-center">
                             This school is licensed under Chapter 28C.10 RCW. Inquiries or complaints regarding this private vocational school may be made to:<br>
                             Workforce Training and Education Coordinating Board 128 – 10th Avenue SW<br>
                             Olympia, Washington 98501<br><br>
-                            <span>Phone: 360-709-4600</span>
-                            <span>Email: pvsa@wtb.wa.gov</span>
-                            <span>Web: wtb.wa.gov</span>
+                            <span>Phone: 360-709-4600,</span>
+                            <span>Email: pvsa@wtb.wa.gov,</span>
+                            <span>Web: wtb.wa.gov,</span>
                         </div>
                     </section>
 
@@ -442,7 +399,7 @@
                         <div class="section-fields -fields-side-by-side">
                             <div class="field-box">
                                 <h3 class="field-title">Date of signing</h3>
-                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                                <p class="field-value"><%= new Date(user.agreement.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
                             </div>
                             <div class="field-box">
                                 <h3 class="field-title">Applicant signature</h3>

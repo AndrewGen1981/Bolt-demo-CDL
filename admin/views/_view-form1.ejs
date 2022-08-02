@@ -254,7 +254,7 @@
                     <div class="section-fields -fields-side-by-side">
                         <div class="field-box">
                             <h3 class="field-title">Date of signing</h3>
-                            <p class="field-value"><%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) %></p>
+                            <p class="field-value"><%= new Date(user.dataCollection.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) %></p>
                         </div>
                         <div class="field-box">
                             <h3 class="field-title">Applicant signature</h3>

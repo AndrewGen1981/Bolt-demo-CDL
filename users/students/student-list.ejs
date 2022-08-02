@@ -15,9 +15,8 @@
 
     <% 
         function formatDate(textDate) {
-            return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-'
+            return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-'
         }
-        
         const usNumberFormat =  new Intl.NumberFormat('us-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     %>
 
@@ -308,7 +307,7 @@
                                     <% if(scor.length) { %>
                                         <% 
                                             let lastScor = scor[scor.length - 1]
-                                            let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
+                                            let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE })
                                             let msg = lastScor.comment ? `[${date}] ${lastScor.instructor} says: ${lastScor.comment}` : `[${date}] ${lastScor.instructor}`
                                             let passedClass = lastScor.result ? '-scoringPassed' : '-scoringFailed'
                                         %>
@@ -459,7 +458,7 @@
                                         el.textContent = `${ Math.round(value) }'`
                                     break
                                     case 'created':
-                                        el.textContent = value ? new Date(value).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-'
+                                        el.textContent = value ? new Date(value).toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }) : '-'
                                     break
                                     default: el.textContent = value
                                 }
@@ -483,12 +482,7 @@
                         for (const [key, value] of Object.entries(fields)) {
                             let el = updatedRow.getElementsByClassName(`-${key}`)[0]
                             if (el) {
-                                switch (key) {
-                                    case 'DOB':
-                                        el.textContent = value ? new Date(value).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-'
-                                    break
-                                    default: el.textContent = value
-                                }
+                                el.textContent = value
                             }
                         }
                     }   // updatedRow != null
@@ -526,7 +520,7 @@
                                     break
 
                                     case 'updatedDate':
-                                        el.textContent = value ? new Date(value).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-'
+                                        el.textContent = value ? new Date(value).toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }) : '-'
                                     break
 
                                     default: el.textContent = value
@@ -585,7 +579,7 @@
                                             el.classList.remove('-scoringFailed')
                                         } else {    // added or updated
                                             let lastScor = value[value.length - 1]
-                                            let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' })
+                                            let date = new Date(lastScor.created).toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" })
                                             el.title = lastScor.comment ? `[${date}] ${lastScor.instructor} says: ${lastScor.comment}` : `[${date}] ${lastScor.instructor}`
                                             el.classList.remove('-hidden')
                                             

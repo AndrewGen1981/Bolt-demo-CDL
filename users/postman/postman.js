@@ -4,6 +4,8 @@
 const fetch = require('node-fetch')
 const { getCompressedTokenLetter, getCompressedPasswordResetLetter } = require('./letterTemplates')
 
+const { SCHOOL_DATA } = require("../../admin/config")
+
 
 async function sendALetter(letter) {
     // FETCH is async, but we send POST, so reply will not come
@@ -16,7 +18,7 @@ async function sendALetter(letter) {
             html: letter.HTML,
             title: letter.title,
             body: letter.body,
-            sender: "[BoltCDL] BoltCDL Software"
+            sender: SCHOOL_DATA.TITLE || "[BoltCDL] BoltCDL Software"
         })
     })
 }

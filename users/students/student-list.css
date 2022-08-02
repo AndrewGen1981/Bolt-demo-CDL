@@ -338,7 +338,6 @@ header {
 }
 
 
-
 /* Header media */
 @media (max-width: 1250px) {
     .header-nav-item span {
@@ -546,6 +545,8 @@ header {
     padding-left: 1rem;
 
     font-size: 1rem;
+    text-transform: capitalize;
+    
     color: #4377B5;
 }
 .student-list-row:nth-child(odd) .-lastName {

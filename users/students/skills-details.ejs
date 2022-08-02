@@ -97,7 +97,7 @@
                                 <li>
                                     <span class="test-index"><%= index + 1 %>.</span>
                                     <span class="test-type"><%= test.testType %></span>
-                                    <span class="test-date"><%= new Date(test.scheduledDate).toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' }) %></span>
+                                    <span class="test-date"><%= new Date(test.scheduledDate).toLocaleDateString('en-CA', { timeZone: locals.SCHOOL_DATA.tZONE }) %></span>
                                     <span class="test-location" title="<%= test.testLocation %>"><%= test.testLocation %></span>
                                 </li>
                             <% }) %>

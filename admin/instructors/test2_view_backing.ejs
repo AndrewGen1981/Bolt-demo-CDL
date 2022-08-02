@@ -125,20 +125,16 @@
                 e.preventDefault()
                 return
             }
-
             if (!confirm('Do you want to finish a scoring with current result?')) { 
                 e.preventDefault()
                 return
             }
-            
             // scoringResult calc algorithm: counts all block's results if block is not N/A
             let scoringResult = true
             for (let i=0; i < results.length; i++) {
                 scoringResult &&= results[i].dataset.correct <= persOfPass
             }
-
             const maxPoints = parseInt(document.querySelector('#max-result').textContent)
-            
             const jsonScoring = {
                 studentName: "<%= student.user.dataCollection.firstName %> <%= student.user.dataCollection.middleName %> <%= student.user.dataCollection.lastName %>",
                 studentEmail: "<%= student.user.email %>",
@@ -155,8 +151,8 @@
                 examinerId: "<%= examiner.id %>",
                 examinerName: "<%= examiner.name %>",
                 examinerLocation: "<%= examiner.location %>",
-                examDate: new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }),
-                examTime: new Date().toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }),
+                examDate: new Date().toLocaleDateString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }),
+                examTime: new Date().toLocaleTimeString('en-US', { timeZone: "<%= locals.SCHOOL_DATA.tZONE %>" }),
 
                 maxPoints,
                 receivedPoints,

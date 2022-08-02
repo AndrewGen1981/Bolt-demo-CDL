@@ -7,11 +7,11 @@
     
     <title>BoltCDL | ENROLLMENT AGREEMENT</title>
 
-    <meta name="description" content="CDL SchoolEnrollment Agreement">
+    <meta name="description" content="CDL School Enrollment Agreement">
     <meta name="keywords" content="cdl school agreement, cdl agreement">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
-    <meta name="author" content="CDL School Team">
+    <meta name="author" content="BoltCDL Team">
 
     <link rel="shortcut icon" href="../../static/images/thumb.png">
     <link rel="stylesheet" href="/users/applicants/forms-styles.css">
@@ -22,7 +22,7 @@
     <form action="/user/form3" method="POST" class='applicant-form'>
         <h1 class='form-title'>ENROLLMENT AGREEMENT</h1>
         
-        <h2 class='form-subtitle'>This enrollment agreement is between the CDL School and:</h2>
+        <h2 class='form-subtitle'>This enrollment agreement is between the CDL Trucking School and:</h2>
 
         <section class='form-block-with-note'>
             <h2 class='section-title'>Applicant</h2>
@@ -75,25 +75,15 @@
         <section class='form-radio-block' id="form3-programm">
             <h3 class='section-title'>The school agrees to<br>provide the following<br>training</h3>
             <div class='form-radio-box'>
-                <label class='-one-row' for="class-Choice1">
-                    <input type="radio" id="class-Choice1" name="class" value="CDL Class A" required>
-                    <span>CDL Class A(160h)</span>
-                </label>
-
-                <label class='-one-row' for="class-Choice2">
-                    <input type="radio" id="class-Choice2" name="class" value="CDL Class B" required>
-                    <span>CDL Class B(80h)</span>
-                </label>
-
-                <label class='-one-row' for="class-Choice3">
-                    <input type="radio" id="class-Choice3" name="class" value="Upgrade to Class A" required>
-                    <span>Upgrade to Class A(80h)</span>
-                </label>
-
-                <label class='-one-row' for="class-Choice4">
-                    <input type="radio" id="class-Choice4" name="class" value="Endorsements" required>
-                    <span>Endorsements(80h)</span>
-                </label>
+                <% if (locals.SCHOOL_DATA) { %>
+                    <% SCHOOL_DATA.PROGRAMS.forEach((pro, index) => { %>
+                        <label class='-one-row' for="class-Choice<%= index + 1 %>">
+                            <input type="radio" id="class-Choice<%= index + 1 %>" name="class" value="<%= pro.title %>" required>
+                            <span><%= pro.title %></span>
+                        </label>
+                        <small class="pro-descr"><%= pro.descr %></small>
+                    <% }) %>
+                <% } %>
             </div>
         </section>      <!-- the school agrees to provide the following training -->
 

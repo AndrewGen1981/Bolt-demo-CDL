@@ -17,7 +17,7 @@
         <% } else { %>
             <% qrsToPrint.forEach((qr, index) => { %>
                 <div class="qr-card">
-                    <div class="qr-card-title">Bolt CDL</div>
+                    <div class="qr-card-title"><%= locals.SCHOOL_DATA.TITLE_SHORT || "Bolt CDL" %></div>
                     <div class="qr-card-title-line"></div>
                     <div class="qr-card-subtitle">Trucking School</div>
                     <div class="qr-card-name"><%= qrsNamesToPrint[index] %></div>

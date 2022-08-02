@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/static/_partial_layouts/__student-profile-footer.css">
+
+<footer>
+    <div class="footer-left">
+        <span>© BoltCDL</span>
+    </div>
+    <div class="footer-center">
+
+        <% if(locals.SCHOOL_DATA) { %>
+            <% if(locals.SCHOOL_DATA.LINKS) { %>
+                <% SCHOOL_DATA.LINKS.forEach(link => { %>
+                    <a class="footer-item" href="<%= link.href %>" target="<%= link.href ? '_blank' : '_parent' %>"><%= link.text %></a>
+                <% }) %>
+            <% } else { %>
+                <span class="footer-item -no-data">About Us</span>
+                <span class="footer-item -no-data">CDL Programs</span>
+                <span class="footer-item -no-data">FAQs</span>
+                <span class="footer-item -no-data">CLP</span>
+                <span class="footer-item -no-data">Contact Us</span>
+            <% } %>
+        <% } else { %>
+            <span class="footer-item -no-data">About Us</span>
+            <span class="footer-item -no-data">CDL Programs</span>
+            <span class="footer-item -no-data">FAQs</span>
+            <span class="footer-item -no-data">CLP</span>
+            <span class="footer-item -no-data">Contact Us</span>
+        <% } %>
+    </div>
+    <div class="footer-right">
+        <span>designed by</span>
+        <a href="https://www.boltcdl.com" target="_blank">BOLT</a>
+    </div>
+</footer>

@@ -15,7 +15,7 @@
     <% 
         const colorArray = ['#AAAAAA', '#F27878', '#FDC865', '#A2D092', '#F9E960', '#B6D363', '#9CD9E7', '#80B4D9', '#C9A7EB', '#F29D78', '#92D0C5', '#9CA5F4', '#D6A5D4', '#ECBBCC']
     
-        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' }) : '-' }
+        function formatDate(textDate) { return textDate ? new Date(textDate).toLocaleDateString('en-US', { timeZone: locals.SCHOOL_DATA.tZONE }) : '-' }
         function formatToPercents(ratio) { return `${percFormat.format(Math.round(ratio * 1000) / 10)}%` }
         
         const usCurrencyFormat = new Intl.NumberFormat('us-US', { style: 'currency', currency: 'USD' })

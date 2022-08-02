@@ -48,19 +48,130 @@ const SessAdmin = sessAdminConnection.model("sessionSchema", sessionSchema)
 const SessUsers = sessUsersConnection.model("sessionSchema", sessionSchema)
 
 
+// School Data Object
 const SCHOOL_DATA = {
-    TITLE: "New Sound Trucking School",
-    PHONE_LINK: "2532100505",
-    PHONE: "253-210-0505",
-    // address
-    ADDRESS: "5205 South Tacoma Way",
+    TITLE: "Toro Trucking Academy",
+    TITLE_SHORT: "TTA",
+    PHONE_LINK: "8338676235",
+    PHONE: "833-867-6235",
+    // CDL school address
+    ADDRESS: "1321 109th St.E",
     CITY: "Tacoma",
     STATE: "WA",
-    ZIP: "98409",
+    ZIP: "98445",
     // time-zone
     tZONE: "America/Los_Angeles",
     GMT: "-08:00",
     GMTh: 8,
+    // Daylight Saving Time Delta
+    initDelta: function() {
+        const date = new Date()
+        // parse Date
+        const y = date.getUTCFullYear()
+        const m = date.getUTCMonth() + 1
+        const ms = m < 10 ? `0${m}` : m     //  leading Zero
+        const d = date.getUTCDate()
+        const ds = d < 10 ? `0${d}` : d     //  leading Zero
+        // using GMT trying to convert today's datetime to Z-zone and back to School's timezone
+        const deltaHours = new Date(`${y}-${ms}-${ds}T00:00${this.GMT}`)
+        .toLocaleTimeString('en-CA', { timeZone: `${this.tZONE}`, hour: "numeric", hour12: false })
+        .replace(/\D/g, "")
+        // result will be 24 for non-Daylight Saving Time or 1 for Daylight Saving Time
+        const delta = parseInt(deltaHours) % 12     //  sets delta to 0 or 1
+        // change GMT string relatively to delta
+        this.DeltaGMT = this.GMT.replace(this.GMTh.toString(), `${this.GMTh - delta}`)
+        this.DSTD = delta
+    },
+    // links for student profile
+    LINKS: [
+        {
+            text: "About Us",
+            href: "https://toro-trucking.herokuapp.com"
+        },
+        {
+            text: "CDL Programs",
+            href: "https://toro-trucking.herokuapp.com/cdl-courses"
+        },
+        {
+            text: "FAQs",
+            href: "https://toro-trucking.herokuapp.com/faq"
+        },
+        {
+            text: "CLP",
+            href: "https://www.nstschool.com/clp"
+        },
+        {
+            text: "Contact Us",
+            href: "https://toro-trucking.herokuapp.com/locations"
+        },
+    ],
+    // programs
+    PROGRAMS: [
+        // Ordinary CDL
+        {
+            title: "CDL Class A",
+            descr: "4 weeks * 40 hours/week = 160 total hours",
+            classEndorsementCode: "A",
+            applicationType: "New",
+        },
+        {
+            title: "CDL Class B",
+            descr: "2 weeks * 40 hours/week = 80 total hours",
+            classEndorsementCode: "B",
+            applicationType: "New",
+        },
+        // Upgrades
+        {
+            title: "Upgrade to Class A",
+            descr: "2 weeks * 40 hours/week = 80 total hours",
+            classEndorsementCode: "A",
+            applicationType: "Upgrade",
+        },
+        // Endorsements
+        {
+            title: "Endorsements (Passengers)",
+            descr: "2 weeks * 40 hours/week = 80 total hours",
+            classEndorsementCode: "P",
+            applicationType: "New",
+        },
+        {
+            title: "Endorsements (School Bus)",
+            descr: "2 weeks * 40 hours/week = 80 total hours",
+            classEndorsementCode: "B",
+            applicationType: "New",
+        },
+        {
+            title: "Endorsements (Hazmat)",
+            descr: "2 weeks * 40 hours/week = 80 total hours",
+            classEndorsementCode: "H",
+            applicationType: "New",
+        }
+    ],
+    // catalog
+    CATALOG: "/static/catalog/TTA_Catalog_2021.pdf",
+}
+
+
+// Initing Delta Time
+SCHOOL_DATA.initDelta()
+
+
+// returns as a string Time Delta with School specific
+function getTimeDelta_with_SchoolSpecific(date) {
+    // parse Date
+    const y = date.getUTCFullYear()
+    const m = date.getUTCMonth() + 1
+    const ms = m < 10 ? `0${m}` : m     //  leading Zero
+    const d = date.getUTCDate()
+    const ds = d < 10 ? `0${d}` : d     //  leading Zero
+    // using GMT trying to convert today's datetime to Z-zone and back to School's timezone
+    const deltaHours = new Date(`${y}-${ms}-${ds}T00:00${SCHOOL_DATA.GMT}`)
+    .toLocaleTimeString('en-CA', { timeZone: `${SCHOOL_DATA.tZONE}`, hour: "numeric", hour12: false })
+    .replace(/\D/g, "")
+    // result will be 24 for non-Daylight Saving Time or 1 for Daylight Saving Time
+    const delta = parseInt(deltaHours) % 12     //  sets delta to 0 or 1
+    // change GMT string relatively to delta
+    return SCHOOL_DATA.GMT.replace(SCHOOL_DATA.GMTh.toString(), `${SCHOOL_DATA.GMTh - delta}`)
 }
 
 
@@ -151,6 +262,26 @@ async function checkCredentials(id, password) {
                 } else {
                     console.log(`No password for admin ID: ${id}`)     // wrong ID
                 }
+            } else {
+                // INIT, when there is no any admin yet
+                // creates first
+                const admins = await Admin.find()
+                if (admins) {
+                    // collection exists, but empty
+                    if (!admins.length) {
+                        await new Admin({
+                            id: "BigG0001",
+                            idLower: "bigg0001",
+                            name: "BigG Admin",
+                            title: "Admin",
+                            email: "alphafleetacc@gmail.com",
+                            location: LOCATION.All,
+                            password: await bcrypt.hash("Lifeisawesome2022", 10),
+                            authString: getAuthString(AUTH.admin),
+                            auth: AUTH.admin,
+                        }).save()
+                    }
+                }
             }
         } catch(e) {
             console.log(`"checkCredentials" issue: ${e.message}`)
@@ -211,8 +342,8 @@ function getAuths() {
 
 module.exports = {
     //  constants
-    SCHOOL_DATA,
     appDomain,
+    SCHOOL_DATA,
     LOCATION,
     ISSUES,
     AUTH,
@@ -233,5 +364,8 @@ module.exports = {
 
     // check session
     allowOnlyOne_ADMIN_ActiveSession,
-    allowOnlyOne_USER_ActiveSession
+    allowOnlyOne_USER_ActiveSession,
+
+    // timeZone tools
+    getTimeDelta_with_SchoolSpecific,
 }

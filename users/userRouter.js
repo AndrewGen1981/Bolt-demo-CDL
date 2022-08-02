@@ -38,7 +38,7 @@ const {
     NODE_ENV = 'development',
 
     SESS_NAME = 'sid',
-    SESS_SECRET = 'NoWarEverIn-a-World2022!',
+    SESS_SECRET = 'CDLSchoolSecretString2022!',
     SESS_LIFETIME = SESS_DURATION
 } = process.env
 
@@ -556,7 +556,7 @@ userRouter.get('/token/:token', async (req, res) => {
 })
 
 
-userRouter.post('/token/:token', async (req, res) => { 
+userRouter.post('/token/:token', async(req, res) => { 
     const { email, token } = req.body
     
     if (email && token) {
